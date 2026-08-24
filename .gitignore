@@ -19,6 +19,10 @@ payload.db-*
 # payload.db above: real content, not source, and in production it lives in
 # Vercel Blob instead (see payload.config.ts), not this folder.
 /media/
+# Full content dump used by scripts/export-content.mjs +
+# import-content.mjs to move real data onto a fresh production DB — real
+# content, not source, regenerate with `npm run export-content`.
+/scripts/content-export.json
 
 # env
 .env

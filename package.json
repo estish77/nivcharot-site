@@ -9,12 +9,14 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "payload generate:types && next build",
     "start": "next start",
     "lint": "eslint .",
     "generate:types": "payload generate:types",
     "migrate": "payload migrate",
-    "create-admin": "payload run scripts/create-admin-user.mjs"
+    "create-admin": "payload run scripts/create-admin-user.mjs",
+    "export-content": "payload run scripts/export-content.mjs",
+    "import-content": "payload run scripts/import-content.mjs"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.87.0",
