@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&amp;family=Heebo:wght@400;600;800&amp;display=swap">
+<link rel="stylesheet" href="_ds/modernist-4af26cd8-2c1a-41a5-8255-ca9cd22d2b28/styles.css">
+<script src="image-slot.js"></script>
+<script src="posts-data.js"></script>
+<style>
+:root { --font-heading: "Archivo","Heebo",system-ui,sans-serif; --font-body: "Archivo","Heebo",system-ui,sans-serif;
+  --color-text: #2e3840;
+  --color-accent: #ff0305; --color-accent-600: #e00204; --color-accent-700: #b00204;
+  --color-neutral-800: #4b5661; --color-neutral-700: #5f6a75; --color-neutral-600: #7d8791;
+  --color-neutral-300: #ded3c6; --color-neutral-200: #f3ece2;
+  --color-divider: #d6cabb; --color-bg: #fdf7f0;
+  --niv-cream: #f9dabb; --niv-cream-deep: #e9c9a6; --niv-slate: #2e3840;
+  --tint-cream: #fbf0e3; --tint-slate: #eef1f2; }
+body { margin: 0; }
+a { color: var(--color-accent-700); }
+a:hover { color: var(--color-accent-600); }
+html { scroll-behavior: smooth; }
+.btn, button, a { transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease; }
+.btn-primary:hover, .btn-primary:focus-visible, .btn-primary:active { background: var(--niv-slate); color: #fff; }
+.btn-secondary:hover, .btn-secondary:focus-visible, .btn-ghost:hover, .btn-ghost:focus-visible { background: var(--niv-slate); color: #fff; border-color: var(--niv-slate); }
+image-slot, figure img { transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+figure:hover img { transform: scale(1.03); }
+[data-ring] { transition: outline-color 0.3s cubic-bezier(0.22, 0.61, 0.36, 1); outline: 2px solid transparent; outline-offset: 3px; }
+[data-story]:hover [data-ring] { outline-color: var(--color-accent); }
+[data-stories]::-webkit-scrollbar { height: 4px; }
+[data-stories]::-webkit-scrollbar-thumb { background: var(--color-divider); }
+[data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1); }
+[data-reveal][data-reveal-shown] { opacity: 1; transform: none; }
+@media print { [data-reveal] { opacity: 1 !important; transform: none !important; } }
+@keyframes nivCellBreathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes nivRingLight {
+  0%, 100% { background: #4a6d8c; box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 0%, transparent); }
+  22%, 45% { background: var(--color-accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 18%, transparent); }
+}
+[data-ring] { animation: nivRingLight 7.2s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+[data-story]:nth-child(1) [data-ring] { animation-delay: 0s; }
+[data-story]:nth-child(2) [data-ring] { animation-delay: 1.2s; }
+[data-story]:nth-child(3) [data-ring] { animation-delay: 2.4s; }
+[data-story]:nth-child(4) [data-ring] { animation-delay: 3.6s; }
+[data-story]:nth-child(5) [data-ring] { animation-delay: 4.8s; }
+[data-story]:nth-child(6) [data-ring] { animation-delay: 6s; }
+@media (prefers-reduced-motion: reduce) { [data-ring] { animation: none !important; } }
+[data-cell]:hover { animation: nivCellBreathe 2.6s ease-in-out infinite; }
+summary::-webkit-details-marker { display: none; }
+details summary:hover { color: var(--color-accent-700); }
+[data-arch-toggle] { flex: 0 0 auto; color: var(--color-accent); transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.25s ease; }
+[data-arch-toggle]::before, [data-arch-toggle]::after { content: ""; position: absolute; inset: 0; margin: auto; background: currentColor; }
+[data-arch-toggle]::before { width: 13px; height: 1.5px; }
+[data-arch-toggle]::after { width: 1.5px; height: 13px; }
+details summary:hover [data-arch-toggle] { color: var(--color-accent-700); }
+details[open] [data-arch-toggle] { transform: rotate(45deg); color: var(--color-accent-700); }
+@media (prefers-reduced-motion: reduce) { [data-arch-toggle] { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [data-cell]:hover { animation: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+@media (max-width: 860px) {
+  [style*="grid-template-columns:repeat(3, 1fr)"] { grid-template-columns: minmax(0, 1fr) !important; }
+  [style*="grid-template-columns:repeat(4, 1fr)"] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  [style*="grid-template-columns:7fr 5fr"] { grid-template-columns: minmax(0, 1fr) !important; }
+  [style*="grid-template-columns:132px 1fr"] { grid-template-columns: minmax(0, 1fr) !important; gap: 8px !important; }
+  h1 { font-size: clamp(30px, 9vw, 46px) !important; }
+  h2 { font-size: clamp(24px, 7vw, 34px) !important; }
+  [style*="padding:0 32px"] { padding-inline: 18px !important; }
+}
+@media (max-width: 560px) {
+  [style*="grid-template-columns:repeat(4, 1fr)"] { grid-template-columns: minmax(0, 1fr) !important; }
+}
+</style>
+</helmet>
+<sc-if value="{{ isHe }}" hint-placeholder-val="{{ true }}">
+<div dir="rtl" style="min-height:100vh; display:flex; flex-direction:column; background:var(--color-bg)">
+  <header style="display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px 32px; border-bottom:2px solid var(--color-divider); flex-wrap:wrap">
+    <a href="Home.dc.html" style="text-decoration:none; color:var(--color-text); display:flex; align-items:center">
+      <img src="assets/nivcharot-logo.png" alt="נבחרות, תנועת נשים חרדיות" style="height:46px; width:auto; display:block">
+    </a>
+    <nav style="display:flex; gap:20px; align-items:center">
+      <span style="display:flex; align-items:center; gap:9px">
+        <button onClick="{{ setHe }}" style="border:0; background:transparent; cursor:pointer; padding:2px 0; font-family:var(--font-heading); font-size:12.5px; letter-spacing:0.05em; line-height:1.2; transition:color 0.2s ease, border-color 0.2s ease; font-weight:700; color:var(--color-text); border-bottom:1.5px solid var(--color-accent)">עב</button>
+        <span style="width:1px; height:11px; background:var(--color-divider)"></span>
+        <button onClick="{{ setEn }}" style="border:0; background:transparent; cursor:pointer; padding:2px 0; font-family:var(--font-heading); font-size:12.5px; letter-spacing:0.05em; line-height:1.2; transition:color 0.2s ease, border-color 0.2s ease; font-weight:500; color:var(--color-neutral-600); border-bottom:1.5px solid transparent" style-hover="color: var(--color-text)">EN</button>
+      </span>
+      <x-import component-from-global-scope="niv-menu" from="./niv-menu.js" lang="he" hint-size="auto,44px"></x-import>
+    </nav>
+  </header>
+  <main style="flex:1">
+    <section data-reveal="" style="border-bottom:2px solid var(--color-divider); background:var(--tint-cream)">
+      <div style="max-width:1240px; margin:0 auto; padding:17px 32px 26px">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px">
+          <div style="font-family:var(--font-heading); font-weight:800; font-size:11.5px; letter-spacing:0.14em; color:var(--color-neutral-600)">אורחות ואורחים · הפרקים האחרונים</div>
+          <a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA/shorts" style="font-weight:600; font-size:13px">לכל השורטס ←</a>
+        </div>
+        <div data-stories="" style="display:flex; gap:22px; overflow-x:auto; padding:7px 0 10px">
+          <sc-for list="{{ stories }}" as="s" hint-placeholder-count="6">
+            <a data-story="" href="{{ s.href }}" style="flex:0 0 auto; width:104px; text-decoration:none; color:var(--color-text); display:flex; flex-direction:column; align-items:center; gap:9px">
+              <span data-ring="" style="display:block; width:92px; height:92px; border-radius:50%; padding:3px; background:#4a6d8c; box-sizing:border-box">
+                <span style="display:block; width:86px; height:86px; border-radius:50%; overflow:hidden; background:var(--tint-cream)">
+                  <image-slot id="{{ s.slot }}" shape="circle" placeholder="{{ s.ph }}" style="width:86px; min-width:0; height:86px; border:0"></image-slot>
+                </span>
+              </span>
+              <span style="font-size:12px; line-height:1.35; text-align:center; font-weight:600">{{ s.label }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    <section data-reveal="" style="max-width:1240px; margin:0 auto; padding:56px 32px 48px; display:grid; grid-template-columns:7fr 5fr; gap:48px; align-items:center">
+      <div>
+        <div style="font-family:var(--font-heading); font-weight:800; font-size:13px; letter-spacing:0.08em; color:var(--color-accent); margin-bottom:14px">הפודקאסט של נבחרות</div>
+        <h1 style="font-size:clamp(38px, 5vw, 60px); line-height:1.05; margin:0 0 20px">חרדית מדוברת</h1>
+        <p style="font-size:17px; line-height:1.7; max-width:600px; margin:0 0 28px">אסתי שושן בשיחות בגובה העיניים, בלי צנזורה, על העולם החרדי, על דת ומדינה, קונפליקטים והזדמנויות, עם מיטב אנשי ונשות רוח, אקטיביזם, תקשורת, משפט, הגות ותרבות מהעולם החרדי ובממשק אליו.</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap">
+          <a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" class="btn btn-primary" style="font-size:15px; padding:12px 22px">יוטיוב</a>
+          <a href="https://open.spotify.com/show/7HwVj9J7rnUFqoiUDtc1oL" class="btn btn-secondary" style="font-size:15px; padding:12px 22px">ספוטיפיי</a>
+          <a href="https://podcasts.apple.com/il/podcast/id1767223746" class="btn btn-secondary" style="font-size:15px; padding:12px 22px">אפל פודקאסטס</a>
+        </div>
+      </div>
+      <figure class="grayscale" style="margin:0">
+        <image-slot id="pod-cover" shape="rect" style="width:100%; height:380px" placeholder="עטיפת הפודקאסט / אסתי באולפן"></image-slot>
+      </figure>
+    </section>
+    <section data-reveal="" style="background:var(--niv-slate); border-block:2px solid var(--color-divider)">
+      <div style="max-width:1240px; margin:0 auto; padding:60px 32px 64px">
+        <h6 style="color:var(--color-accent); margin:0 0 10px">ואל תשכחו לשים עוקב</h6>
+        <h2 style="margin:0 0 30px; color:var(--niv-cream)">חרדית מדוברת - מה קורה לאחרונה?</h2>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0">
+          <sc-for list="{{ eps3 }}" as="e" hint-placeholder-count="3">
+            <div data-cell="" style="padding-inline:26px; padding-block:8px; border-inline-end:{{ e.border }}; display:flex; flex-direction:column; gap:12px">
+              <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-accent)">{{ e.date }}</span>
+              <h3 style="font-size:23px; margin:0; color:var(--niv-cream); line-height:1.25">{{ e.label }}</h3>
+              <div style="font-size:13.5px; font-weight:600; color:#e3ded7">{{ e.guestLine }}</div>
+              <p style="font-size:14.5px; line-height:1.7; margin:0; color:rgba(227,222,215,0.86)">{{ e.summary }}</p>
+              <a href="{{ e.href }}" style="color:var(--niv-cream); font-weight:600; font-size:14px; margin-top:auto; padding-top:10px; text-decoration:none" style-hover="color: var(--color-accent)">להאזנה ←</a>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    <section data-reveal="" style="background:var(--color-bg); border-block:2px solid var(--color-divider)">
+      <div style="max-width:1240px; margin:0 auto; padding:58px 32px 62px">
+        <h6 style="color:var(--color-accent); margin:0 0 12px">הפרק האחרון שעלה השבוע</h6>
+        <h2 style="margin:0 0 10px; max-width:900px">{{ latestLabel }}</h2>
+        <div style="font-family:var(--font-heading); font-weight:800; font-size:13px; letter-spacing:0.06em; color:var(--color-neutral-700); margin-bottom:16px">{{ latestMeta }}</div>
+        <p style="font-size:15.5px; line-height:1.75; color:var(--color-neutral-800); max-width:780px; margin:0 0 26px">{{ latestFull }}</p>
+        <iframe title="חרדית מדוברת, נגן ספוטיפיי" src="https://open.spotify.com/embed/show/7HwVj9J7rnUFqoiUDtc1oL?theme=0" height="352" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="width: 100%; border: 2px solid var(--niv-slate); background: var(--color-bg); display: block; border-color: var(--color-accent-2-100)"></iframe>
+        <div style="display:flex; flex-wrap:wrap; gap:0; border-block:2px solid var(--color-divider); margin-top:26px">
+        <a href="https://open.spotify.com/show/7HwVj9J7rnUFqoiUDtc1oL" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.24-.899-.6-.12-.421.24-.781.6-.901 4.561-1.021 8.52-.6 11.64 1.32.42.18.479.66.241 1.082zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg></a>
+        <a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M23.499 6.203a3.008 3.008 0 00-2.089-2.089C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.41.614A3.008 3.008 0 00.501 6.203C0 8.11 0 12 0 12s0 3.89.501 5.797a3.008 3.008 0 002.089 2.089C4.495 20.5 12 20.5 12 20.5s7.505 0 9.41-.614a3.008 3.008 0 002.089-2.089C24 15.89 24 12 24 12s0-3.89-.501-5.797zM9.75 15.568V8.432L15.818 12 9.75 15.568z"></path></svg></a>
+        <a href="https://podcasts.apple.com/il/podcast/id1767223746" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.377-2.376-1.897-.13-3.5 1.052-4.623 1.052zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"></path></svg></a>
+        <a href="https://www.instagram.com/esty_shushan/" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a>
+        <a href="https://www.facebook.com/profile.php?id=61565500745331" aria-label="Facebook" title="Facebook" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a>
+        <a href="https://x.com/estyshushan" aria-label="X" title="X" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
+        <a href="https://www.tiktok.com/@estybittonshushan" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg></a>
+        </div>
+      </div>
+    </section>
+    <section data-reveal="" style="max-width:1240px; margin:0 auto; padding:48px 32px">
+      <h6 style="color:var(--color-accent); margin-bottom:10px">כל הפרקים</h6>
+      <h2 style="margin:0 0 24px">הארכיון</h2>
+      <div style="border-top:2px solid var(--color-divider)">
+        <sc-for list="{{ epsPage }}" as="e" hint-placeholder-count="10">
+          <details style="border-bottom:2px solid var(--color-divider)">
+            <summary style="display:grid; grid-template-columns:132px 1fr; gap:24px; padding:20px 0; cursor:pointer; list-style:none">
+              <span style="display:flex; flex-direction:column; gap:3px">
+                <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-neutral-600); letter-spacing:0.06em">{{ e.date }}</span>
+                <span style="font-family:var(--font-heading); font-weight:700; font-size:11.5px; color:var(--color-neutral-500); letter-spacing:0.04em">{{ e.dateJew }}</span>
+              </span>
+              <span style="display:flex; flex-direction:column; align-items:flex-start; gap:10px">
+                <span style="font-family:var(--font-heading); font-weight:800; font-size:19px; line-height:1.35">{{ e.label }}</span>
+                <span data-arch-toggle="" aria-hidden="true" style="width:15px; height:15px; display:block; position:relative"></span>
+              </span>
+            </summary>
+            <div style="display:grid; grid-template-columns:132px 1fr; gap:24px; padding:0 0 22px">
+              <span></span>
+              <div>
+                <p style="font-size:14.5px; line-height:1.7; margin:0 0 12px; color:var(--color-neutral-800); max-width:760px">{{ e.full }}</p>
+                <div style="display:flex; gap:10px; flex-wrap:wrap">
+                  <a href="{{ e.hrefYt }}" target="_blank" rel="noopener" style="font-family:var(--font-heading); font-weight:800; font-size:13px; text-decoration:none; padding:8px 14px; border:2px solid var(--color-divider); color:var(--color-text)" style-hover="border-color: var(--color-accent); color: var(--color-accent-700)">יוטיוב</a>
+                  <a href="{{ e.hrefSp }}" target="_blank" rel="noopener" style="font-family:var(--font-heading); font-weight:800; font-size:13px; text-decoration:none; padding:8px 14px; border:2px solid var(--color-divider); color:var(--color-text)" style-hover="border-color: var(--color-accent); color: var(--color-accent-700)">ספוטיפיי</a>
+                  <a href="{{ e.hrefApple }}" target="_blank" rel="noopener" style="font-family:var(--font-heading); font-weight:800; font-size:13px; text-decoration:none; padding:8px 14px; border:2px solid var(--color-divider); color:var(--color-text)" style-hover="border-color: var(--color-accent); color: var(--color-accent-700)">אפל פודקאסטס</a>
+                </div>
+              </div>
+            </div>
+          </details>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; justify-content: space-around">
+        <button onClick="{{ prevPage }}" disabled="{{ atFirst }}" style="font-family: var(--font-heading); font-weight: 800; font-size: 14px; padding: 10px 18px; background: transparent; border: 2px solid var(--color-text); color: var(--color-text); cursor: pointer; border-color: var(--color-accent-2-100)">→ הקודם</button>
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-neutral-700)">{{ pageLabel }}</span>
+        <button onClick="{{ nextPage }}" disabled="{{ atLast }}" style="font-family: var(--font-heading); font-weight: 800; font-size: 14px; padding: 10px 18px; background: transparent; border: 2px solid var(--color-text); color: var(--color-text); cursor: pointer; border-color: var(--color-accent-2-100)">הבא ←</button>
+      </div>
+    </section>
+    <section data-reveal="" style="max-width:1240px; margin:0 auto; padding:56px 32px 72px">
+      <div style="display:flex; flex-direction:column; align-items:flex-start; gap:12px; margin-bottom:22px">
+        <h2 style="margin:0">מהארכיון · מגזין ווידאו</h2>
+        <a href="Media.dc.html#archive" style="font-weight:600; font-size:14px">לארכיון המלא ←</a>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-inline-end:-2px">
+        <sc-for list="{{ arch }}" as="a" hint-placeholder-count="4">
+          <a href="{{ a.href }}" style="text-decoration:none; color:var(--color-text); padding-inline:22px; padding-block:24px; border-inline-end:{{ a.border }}; display:flex; flex-direction:column; gap:8px" style-hover="background: var(--color-neutral-200)">
+            <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-accent)">{{ a.date }}</span>
+            <span style="font-family:var(--font-heading); font-weight:800; font-size:17px; line-height:1.35">{{ a.title }}</span>
+            <span style="font-size:13.5px; line-height:1.6; color:var(--color-neutral-700)">{{ a.lead }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+  <footer style="border-top:2px solid var(--color-divider); padding:34px 24px 28px">
+    <div style="max-width:1240px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap">
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-start">
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">נבחרות</span>
+        <span style="display:flex; align-items:center; gap:4px">
+          <a href="https://www.facebook.com/NoVoiceNoVote/" aria-label="Facebook" title="Facebook" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a>
+          <a href="https://www.instagram.com/nivcharot/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a>
+          <a href="mailto:estish@nivcharot.com" aria-label="Email" title="Email" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M1.5 4.5h21v15h-21zM1.5 4.5 12 13.5l10.5-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg></a>
+        </span>
+        <span style="width:1px; height:16px; background:var(--color-divider); margin:0 2px"></span>
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">חרדית מדוברת</span>
+        <span style="display:flex; align-items:center; gap:4px">
+          <a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" aria-label="YouTube" title="YouTube" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M23.499 6.203a3.008 3.008 0 00-2.089-2.089C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.41.614A3.008 3.008 0 00.501 6.203C0 8.11 0 12 0 12s0 3.89.501 5.797a3.008 3.008 0 002.089 2.089C4.495 20.5 12 20.5 12 20.5s7.505 0 9.41-.614a3.008 3.008 0 002.089-2.089C24 15.89 24 12 24 12s0-3.89-.501-5.797zM9.75 15.568V8.432L15.818 12 9.75 15.568z"></path></svg></a>
+          <a href="https://open.spotify.com/show/7HwVj9J7rnUFqoiUDtc1oL" aria-label="Spotify" title="Spotify" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.24-.899-.6-.12-.421.24-.781.6-.901 4.561-1.021 8.52-.6 11.64 1.32.42.18.479.66.241 1.082zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg></a>
+          <a href="https://podcasts.apple.com/il/podcast/id1767223746" aria-label="Apple Podcasts" title="Apple Podcasts" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.377-2.376-1.897-.13-3.5 1.052-4.623 1.052zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"></path></svg></a>
+          <a href="https://www.instagram.com/esty_shushan/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=61565500745331" aria-label="Facebook" title="Facebook" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a>
+          <a href="https://x.com/estyshushan" aria-label="X" title="X" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
+        </span>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-end; font-size:12px; letter-spacing:0.01em; color:var(--color-neutral-700); text-align:end; margin-top:0"><a href="Shop.dc.html" style="font-weight:600; text-decoration:none; border-bottom:1px solid var(--color-divider); padding-bottom:2px">לתרומה</a><span>כל הזכויות שמורות לנבחרות (ע״ר) 580619120</span></div>
+    </div>
+  </footer>
+</div>
+</sc-if>
+<sc-if value="{{ isEn }}" hint-placeholder-val="{{ false }}">
+<div dir="ltr" style="min-height:100vh; display:flex; flex-direction:column; background:var(--color-bg)">
+  <header style="display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px 32px; border-bottom:2px solid var(--color-divider); flex-wrap:wrap">
+    <a href="Home.dc.html" style="text-decoration:none; color:var(--color-text); display:flex; align-items:center">
+      <img src="assets/nivcharot-logo-en.png" alt="Nivcharot, Haredi women's movement" style="width:230px; height:auto; display:block">
+    </a>
+    <nav style="display:flex; gap:20px; align-items:center">
+      <span style="display:flex; align-items:center; gap:9px">
+        <button onClick="{{ setHe }}" style="border:0; background:transparent; cursor:pointer; padding:2px 0; font-family:var(--font-heading); font-size:12.5px; letter-spacing:0.05em; line-height:1.2; transition:color 0.2s ease, border-color 0.2s ease; font-weight:500; color:var(--color-neutral-600); border-bottom:1.5px solid transparent" style-hover="color: var(--color-text)">עב</button>
+        <span style="width:1px; height:11px; background:var(--color-divider)"></span>
+        <button onClick="{{ setEn }}" style="border:0; background:transparent; cursor:pointer; padding:2px 0; font-family:var(--font-heading); font-size:12.5px; letter-spacing:0.05em; line-height:1.2; transition:color 0.2s ease, border-color 0.2s ease; font-weight:700; color:var(--color-text); border-bottom:1.5px solid var(--color-accent)">EN</button>
+      </span>
+      <x-import component-from-global-scope="niv-menu" from="./niv-menu.js" lang="en" hint-size="auto,44px"></x-import>
+    </nav>
+  </header>
+  <main style="flex:1">
+    <section data-reveal="" style="border-bottom:2px solid var(--color-divider); background:var(--tint-cream)">
+      <div style="max-width:1240px; margin:0 auto; padding:17px 32px 26px">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px">
+          <div style="font-family:var(--font-heading); font-weight:800; font-size:11.5px; letter-spacing:0.14em; color:var(--color-neutral-600)">GUESTS · LATEST SHORTS</div>
+          <a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA/shorts" style="font-weight:600; font-size:13px">→ All shorts</a>
+        </div>
+        <div data-stories="" style="display:flex; gap:22px; overflow-x:auto; padding:7px 0 10px">
+          <sc-for list="{{ stories }}" as="s" hint-placeholder-count="6">
+            <a data-story="" href="{{ s.href }}" style="flex:0 0 auto; width:104px; text-decoration:none; color:var(--color-text); display:flex; flex-direction:column; align-items:center; gap:9px">
+              <span data-ring="" style="display:block; width:92px; height:92px; border-radius:50%; padding:3px; background:#4a6d8c; box-sizing:border-box">
+                <span style="display:block; width:86px; height:86px; border-radius:50%; overflow:hidden; background:var(--tint-cream)">
+                  <image-slot id="{{ s.slot }}" shape="circle" placeholder="{{ s.ph }}" style="width:86px; min-width:0; height:86px; border:0"></image-slot>
+                </span>
+              </span>
+              <span style="font-size:12px; line-height:1.35; text-align:center; font-weight:600">{{ s.label }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    <section data-reveal="" style="max-width:1240px; margin:0 auto; padding:56px 32px 48px; display:grid; grid-template-columns:7fr 5fr; gap:48px; align-items:center">
+      <div>
+        <div style="font-family:var(--font-heading); font-weight:800; font-size:13px; letter-spacing:0.08em; color:var(--color-accent); margin-bottom:14px">THE NIVCHAROT PODCAST</div>
+        <h1 style="font-size:clamp(38px, 5vw, 60px); line-height:1.05; margin:0 0 20px">Haredit Meduberet</h1>
+        <p style="font-size:17px; line-height:1.7; max-width:600px; margin:0 0 28px">Esty Shushan in candid, uncensored conversations about the Haredi world, religion and state, conflicts and opportunities, with leading thinkers, activists, journalists, jurists and artists from Haredi society and its edges. The episodes are in Hebrew.</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap">
+          <a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" class="btn btn-primary" style="font-size:15px; padding:12px 22px">YouTube</a>
+          <a href="https://open.spotify.com/show/7HwVj9J7rnUFqoiUDtc1oL" class="btn btn-secondary" style="font-size:15px; padding:12px 22px">Spotify</a>
+          <a href="https://podcasts.apple.com/il/podcast/id1767223746" class="btn btn-secondary" style="font-size:15px; padding:12px 22px">Apple Podcasts</a>
+        </div>
+      </div>
+      <figure class="grayscale" style="margin:0">
+        <image-slot id="pod-cover" shape="rect" style="width:100%; height:380px" placeholder="Podcast cover / Esty in the studio"></image-slot>
+      </figure>
+    </section>
+    <section data-reveal="" style="background:var(--niv-slate); border-block:2px solid var(--color-divider)">
+      <div style="max-width:1240px; margin:0 auto; padding:60px 32px 64px">
+        <h6 style="color:var(--color-accent); margin:0 0 10px">AND DO FOLLOW US</h6>
+        <h2 style="margin:0 0 30px; color:var(--niv-cream)">Haredit Meduberet, recently</h2>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0">
+          <sc-for list="{{ eps3 }}" as="e" hint-placeholder-count="3">
+            <div data-cell="" style="padding-inline:26px; padding-block:8px; border-inline-end:{{ e.border }}; display:flex; flex-direction:column; gap:12px">
+              <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-accent)">{{ e.date }}</span>
+              <h3 style="font-size:23px; margin:0; color:var(--niv-cream); line-height:1.25">{{ e.label }}</h3>
+              <div style="font-size:13.5px; font-weight:600; color:#e3ded7">{{ e.guestLine }}</div>
+              <p style="font-size:14.5px; line-height:1.7; margin:0; color:rgba(227,222,215,0.86)">{{ e.summary }}</p>
+              <a href="{{ e.href }}" style="color:var(--niv-cream); font-weight:600; font-size:14px; margin-top:auto; padding-top:10px; text-decoration:none" style-hover="color: var(--color-accent)">→ Listen</a>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    <section data-reveal="" style="background:var(--color-bg); border-block:2px solid var(--color-divider)">
+      <div style="max-width:1240px; margin:0 auto; padding:58px 32px 62px">
+        <h6 style="color:var(--color-accent); margin:0 0 12px">THIS WEEK’S EPISODE</h6>
+        <h2 style="margin:0 0 10px; max-width:900px">{{ latestLabel }}</h2>
+        <div style="font-family:var(--font-heading); font-weight:800; font-size:13px; letter-spacing:0.06em; color:var(--color-neutral-700); margin-bottom:16px">{{ latestMeta }}</div>
+        <p style="font-size:15.5px; line-height:1.75; color:var(--color-neutral-800); max-width:780px; margin:0 0 26px">{{ latestFull }}</p>
+        <iframe title="Haredit Meduberet, Spotify player" src="https://open.spotify.com/embed/show/7HwVj9J7rnUFqoiUDtc1oL?theme=0" height="352" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="width: 100%; border: 2px solid var(--niv-slate); background: var(--color-bg); display: block; border-color: var(--color-accent-2-100)"></iframe>
+        <div style="display:flex; flex-wrap:wrap; gap:0; border-block:2px solid var(--color-divider); margin-top:26px">
+        <a href="https://open.spotify.com/show/7HwVj9J7rnUFqoiUDtc1oL" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.24-.899-.6-.12-.421.24-.781.6-.901 4.561-1.021 8.52-.6 11.64 1.32.42.18.479.66.241 1.082zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg></a>
+        <a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M23.499 6.203a3.008 3.008 0 00-2.089-2.089C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.41.614A3.008 3.008 0 00.501 6.203C0 8.11 0 12 0 12s0 3.89.501 5.797a3.008 3.008 0 002.089 2.089C4.495 20.5 12 20.5 12 20.5s7.505 0 9.41-.614a3.008 3.008 0 002.089-2.089C24 15.89 24 12 24 12s0-3.89-.501-5.797zM9.75 15.568V8.432L15.818 12 9.75 15.568z"></path></svg></a>
+        <a href="https://podcasts.apple.com/il/podcast/id1767223746" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.377-2.376-1.897-.13-3.5 1.052-4.623 1.052zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"></path></svg></a>
+        <a href="https://www.instagram.com/esty_shushan/" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a>
+        <a href="https://www.facebook.com/profile.php?id=61565500745331" aria-label="Facebook" title="Facebook" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a>
+        <a href="https://x.com/estyshushan" aria-label="X" title="X" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
+        <a href="https://www.tiktok.com/@estybittonshushan" style="flex:0 0 auto; padding:16px 20px; text-decoration:none; color:var(--color-text); font-family:var(--font-heading); font-weight:800; font-size:14.5px; display:flex; align-items:center; gap:10px; border-inline-end:2px solid var(--color-divider)" style-hover="background: var(--color-neutral-200); color: var(--color-accent-700)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="display:block; flex:none"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg></a>
+        </div>
+      </div>
+    </section>
+    <section data-reveal="" style="max-width:1240px; margin:0 auto; padding:48px 32px">
+      <h6 style="color:var(--color-accent); margin-bottom:10px">ALL EPISODES</h6>
+      <h2 style="margin:0 0 24px">The archive</h2>
+      <div style="border-top:2px solid var(--color-divider)">
+        <sc-for list="{{ epsPage }}" as="e" hint-placeholder-count="10">
+          <details style="border-bottom:2px solid var(--color-divider)">
+            <summary style="display:grid; grid-template-columns:132px 1fr; gap:24px; padding:20px 0; cursor:pointer; list-style:none">
+              <span style="display:flex; flex-direction:column; gap:3px">
+                <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-neutral-600); letter-spacing:0.06em">{{ e.date }}</span>
+                <span style="font-family:var(--font-heading); font-weight:700; font-size:11.5px; color:var(--color-neutral-500); letter-spacing:0.04em">{{ e.dateJew }}</span>
+              </span>
+              <span style="display:flex; flex-direction:column; align-items:flex-start; gap:10px">
+                <span style="font-family:var(--font-heading); font-weight:800; font-size:19px; line-height:1.35">{{ e.label }}</span>
+                <span data-arch-toggle="" aria-hidden="true" style="width:15px; height:15px; display:block; position:relative"></span>
+              </span>
+            </summary>
+            <div style="display:grid; grid-template-columns:132px 1fr; gap:24px; padding:0 0 22px">
+              <span></span>
+              <div>
+                <p style="font-size:14.5px; line-height:1.7; margin:0 0 12px; color:var(--color-neutral-800); max-width:760px">{{ e.full }}</p>
+                <div style="display:flex; gap:10px; flex-wrap:wrap">
+                  <a href="{{ e.hrefYt }}" target="_blank" rel="noopener" style="font-family:var(--font-heading); font-weight:800; font-size:13px; text-decoration:none; padding:8px 14px; border:2px solid var(--color-divider); color:var(--color-text)" style-hover="border-color: var(--color-accent); color: var(--color-accent-700)">YouTube</a>
+                  <a href="{{ e.hrefSp }}" target="_blank" rel="noopener" style="font-family:var(--font-heading); font-weight:800; font-size:13px; text-decoration:none; padding:8px 14px; border:2px solid var(--color-divider); color:var(--color-text)" style-hover="border-color: var(--color-accent); color: var(--color-accent-700)">Spotify</a>
+                  <a href="{{ e.hrefApple }}" target="_blank" rel="noopener" style="font-family:var(--font-heading); font-weight:800; font-size:13px; text-decoration:none; padding:8px 14px; border:2px solid var(--color-divider); color:var(--color-text)" style-hover="border-color: var(--color-accent); color: var(--color-accent-700)">Apple Podcasts</a>
+                </div>
+              </div>
+            </div>
+          </details>
+        </sc-for>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; justify-content: space-around">
+        <button onClick="{{ prevPage }}" disabled="{{ atFirst }}" style="font-family: var(--font-heading); font-weight: 800; font-size: 14px; padding: 10px 18px; background: transparent; border: 2px solid var(--color-text); color: var(--color-text); cursor: pointer; border-color: var(--color-accent-2-100)">← Previous</button>
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-neutral-700)">{{ pageLabel }}</span>
+        <button onClick="{{ nextPage }}" disabled="{{ atLast }}" style="font-family: var(--font-heading); font-weight: 800; font-size: 14px; padding: 10px 18px; background: transparent; border: 2px solid var(--color-text); color: var(--color-text); cursor: pointer; border-color: var(--color-accent-2-100)">Next →</button>
+      </div>
+    </section>
+    <section data-reveal="" style="max-width:1240px; margin:0 auto; padding:56px 32px 72px">
+      <div style="display:flex; flex-direction:column; align-items:flex-start; gap:12px; margin-bottom:22px">
+        <h2 style="margin:0">From the archive · magazine and video</h2>
+        <a href="Media.dc.html#archive" style="font-weight:600; font-size:14px">→ Full archive</a>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-inline-end:-2px">
+        <sc-for list="{{ arch }}" as="a" hint-placeholder-count="4">
+          <a href="{{ a.href }}" style="text-decoration:none; color:var(--color-text); padding-inline:22px; padding-block:24px; border-inline-end:{{ a.border }}; display:flex; flex-direction:column; gap:8px" style-hover="background: var(--color-neutral-200)">
+            <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-accent)">{{ a.date }}</span>
+            <span style="font-family:var(--font-heading); font-weight:800; font-size:17px; line-height:1.35">{{ a.title }}</span>
+            <span style="font-size:13.5px; line-height:1.6; color:var(--color-neutral-700)">{{ a.lead }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+  <footer style="border-top:2px solid var(--color-divider); padding:34px 24px 28px">
+    <div style="max-width:1240px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap">
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-start">
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">NIVCHAROT</span>
+        <span style="display:flex; align-items:center; gap:4px">
+          <a href="https://www.facebook.com/NoVoiceNoVote/" aria-label="Facebook" title="Facebook" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a>
+          <a href="https://www.instagram.com/nivcharot/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a>
+          <a href="mailto:estish@nivcharot.com" aria-label="Email" title="Email" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M1.5 4.5h21v15h-21zM1.5 4.5 12 13.5l10.5-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg></a>
+        </span>
+        <span style="width:1px; height:16px; background:var(--color-divider); margin:0 2px"></span>
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">HAREDIT MEDUBERET</span>
+        <span style="display:flex; align-items:center; gap:4px">
+          <a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" aria-label="YouTube" title="YouTube" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M23.499 6.203a3.008 3.008 0 00-2.089-2.089C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.41.614A3.008 3.008 0 00.501 6.203C0 8.11 0 12 0 12s0 3.89.501 5.797a3.008 3.008 0 002.089 2.089C4.495 20.5 12 20.5 12 20.5s7.505 0 9.41-.614a3.008 3.008 0 002.089-2.089C24 15.89 24 12 24 12s0-3.89-.501-5.797zM9.75 15.568V8.432L15.818 12 9.75 15.568z"></path></svg></a>
+          <a href="https://open.spotify.com/show/7HwVj9J7rnUFqoiUDtc1oL" aria-label="Spotify" title="Spotify" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.24-.899-.6-.12-.421.24-.781.6-.901 4.561-1.021 8.52-.6 11.64 1.32.42.18.479.66.241 1.082zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg></a>
+          <a href="https://podcasts.apple.com/il/podcast/id1767223746" aria-label="Apple Podcasts" title="Apple Podcasts" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.377-2.376-1.897-.13-3.5 1.052-4.623 1.052zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"></path></svg></a>
+          <a href="https://www.instagram.com/esty_shushan/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=61565500745331" aria-label="Facebook" title="Facebook" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a>
+          <a href="https://x.com/estyshushan" aria-label="X" title="X" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
+        </span>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-end; font-size:12px; letter-spacing:0.01em; color:var(--color-neutral-700); text-align:end; margin-top:0"><a href="Shop.dc.html" style="font-weight:600; text-decoration:none; border-bottom:1px solid var(--color-divider); padding-bottom:2px">Donate</a><span>All rights reserved to Nivcharot (NGO) 580619120</span></div>
+    </div>
+  </footer>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang: (typeof localStorage !== 'undefined' && localStorage.getItem('nivLang')) || 'he' };
+  setLang(l) { try { localStorage.setItem('nivLang', l); } catch (e) {} this.setState({ lang: l }); }
+  componentDidMount() { this.__nivMotion(); this.__waitForData(0); }
+  componentDidUpdate() { this.__nivMotion(); }
+  __waitForData(n) {
+    if (typeof window === 'undefined') return;
+    if (window.NIV_POSTS && window.NIV_POSTS.length) { this.forceUpdate(); return; }
+    if (n > 40) return;
+    setTimeout(() => this.__waitForData(n + 1), 60);
+  }
+  __nivMotion() {
+    if (typeof document === 'undefined') return;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const frozen = !document.timeline || !document.timeline.currentTime;
+    if (reduced || frozen || typeof IntersectionObserver === 'undefined') {
+      document.querySelectorAll('[data-reveal]').forEach((el) => el.setAttribute('data-reveal-shown', ''));
+      return;
+    }
+    if (!this.__nivIo) {
+      this.__nivIo = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting || e.boundingClientRect.bottom < 0) {
+            e.target.setAttribute('data-reveal-shown', '');
+            this.__nivIo.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -6% 0px', threshold: 0.06 });
+      const sweep = () => this.__sweep();
+      window.addEventListener('scroll', sweep, { passive: true });
+      window.addEventListener('resize', sweep, { passive: true });
+      setTimeout(sweep, 2000);
+    }
+    document.querySelectorAll('[data-reveal]:not([data-reveal-seen])').forEach((el) => {
+      el.setAttribute('data-reveal-seen', '');
+      this.__nivIo.observe(el);
+    });
+    this.__sweep();
+  }
+  __sweep() {
+    document.querySelectorAll('[data-reveal]:not([data-reveal-shown])').forEach((el) => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.94) el.setAttribute('data-reveal-shown', '');
+    });
+  }
+  // Live episode list from the show's official Apple Podcasts feed (id 1767223746),
+  // so the page refreshes itself every week. FALLBACK keeps real content if the fetch fails.
+  __loadEpisodes() {
+    if (this.__epsAsked || typeof fetch === 'undefined') return;
+    this.__epsAsked = true;
+    fetch('https://itunes.apple.com/lookup?id=1767223746&country=IL&media=podcast&entity=podcastEpisode&limit=40')
+      .then((r) => r.json())
+      .then((d) => {
+        const eps = (d.results || [])
+          .filter((x) => x.wrapperType === 'podcastEpisode' || x.kind === 'podcast-episode')
+          .map((x) => ({
+            id: String(x.trackId || x.episodeGuid || ''),
+            title: x.trackName || '',
+            desc: (x.description || x.shortDescription || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
+            date: x.releaseDate || ''
+          }))
+          .sort((p, q) => (p.date < q.date ? 1 : -1));
+        if (eps.length) this.setState({ eps: eps });
+      })
+      .catch(() => {});
+  }
+  __episodes() {
+    const FALLBACK = [
+      { id: '1000779519370', date: '2026-08-02', title: 'אבא מסתכל מלמעלה ותמיד אוהב אותי - אסתי שושן מארחת את אופיר טובול', desc: '"אבא מסתכל מלמעלה" הייתה סיסמת הבחירות של ש"ס, "השם יתברך תמיד אוהב אותי" הפך להמנון המלחמה. שיחה עם אופיר טובול, חוקר תרבות ומוזיקה, משפטן וראש בית כולנא, על המאבק על הקול המסורתי־מזרחי לקראת הבחירות.' },
+      { id: '1000778389982', date: '2026-07-26', title: 'בסביבה שלי לא רוצים לדעת מה אני עושה | אסתי שושן מארחת את ציפי הורביץ', desc: 'ציפי הורביץ, אישה חרדית שעובדת באגף השיקום של משרד הביטחון ומלווה פצועי מלחמה, על מה זה להביט יום יום בעיניים של מי שחירף נפשו, ולחזור הביתה אל קהילה שמעדיפה לא לדעת.' },
+      { id: '1000777411417', date: '2026-07-19', title: 'משחקי הכס באוליגרכיה החרדית - אסתי שושן מארחת את אלי ביתאן', desc: 'בפרק מסדרת "חרדית מדוברת בוחרת": הפרשן והעיתונאי אלי ביתאן על מגמות הבחירות ברחוב החרדי, הקרע בש"ס, השיתוק המנהיגותי הליטאי והחסידים שתופסים עצמאות מול המדינה.' },
+      { id: '1000776445006', date: '2026-07-12', title: 'עזרת נשים באקדמיה - אסתי שושן מארחת את מלכי רוטנר', desc: 'על הצעת החוק שתרחיב את הלימודים בהפרדה באקדמיה גם לתארים מתקדמים. אסתי שושן ומלכי רוטנר לוקחות בחזרה דיון שתמיד נעשה מעל הראש של הנשים החרדיות.' },
+      { id: '1000775503560', date: '2026-07-05', title: 'מאמינים במחלוקת - אסתי שושן מארחת את הרב ספי גלדצהלר', desc: 'מה מפריד בין החרדים לציונות הדתית, ומאיפה באים הרעיונות המשיחיים שמעצבים את שניהם. שיחה עם הרב ספי גלדצהלר, ראש בית המדרש "הרוח הגדולה".' },
+      { id: '1000774532131', date: '2026-06-28', title: 'מסלול עוקף בית יעקב - אסתי שושן מארחת את יהודית יפרח', desc: 'יהודית יפרח לא למדה בבית יעקב וגם לא בעלת תשובה. שיחה על זהות, תרבות ואהבה שמנצחת, על מסע החיים שלה בתוך החברה החרדית ועל השאלות שבאו עם המלחמה.' }
+    ];
+    const raw = (this.state && this.state.eps && this.state.eps.length) ? this.state.eps : FALLBACK;
+    const MONTHS = ['בינואר', 'בפברואר', 'במרץ', 'באפריל', 'במאי', 'ביוני', 'ביולי', 'באוגוסט', 'בספטמבר', 'באוקטובר', 'בנובמבר', 'בדצמבר'];
+    return raw.map((e) => {
+      const d = new Date(e.date);
+      const dateHe = isNaN(d) ? '' : d.getDate() + ' ' + MONTHS[d.getMonth()];
+      const pad = (v) => (v < 10 ? '0' + v : '' + v);
+      const dateFull = isNaN(d) ? '' : pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(-2);
+      let dateJew = '';
+      if (!isNaN(d)) {
+        try {
+          dateJew = new Intl.DateTimeFormat('he-u-ca-hebrew-nu-hebr', { month: 'long', year: 'numeric', numberingSystem: 'hebr' }).format(d);
+          if (/\d/.test(dateJew)) {
+            const parts = new Intl.DateTimeFormat('he-u-ca-hebrew', { month: 'long', year: 'numeric' }).formatToParts(d);
+            const mo = (parts.find((p) => p.type === 'month') || {}).value || '';
+            const yr = parseInt((parts.find((p) => p.type === 'year') || {}).value, 10);
+            dateJew = (mo + ' ' + this.__heNum(yr)).trim();
+          }
+        } catch (err) { dateJew = ''; }
+      }
+      const t = e.title || '';
+      const gm = t.match(/מארחת את\s+(.+)$/) || t.match(/מארחת\s+(.+)$/) || t.match(/משוחחת עם\s+(.+)$/);
+      const guest = gm ? gm[1].replace(/[|,-]\s*$/, '').trim() : '';
+      let label = t.split(/\s*[|]\s*|\s+[--]\s*|\s*-\s*אסתי|\s*אסתי שושן/)[0].trim();
+      if (!label) label = t;
+      label = label.replace(/[\s,·-]+$/, '');
+      if (guest) label = label + ' - עם ' + guest;
+      let full = (e.desc || '').trim();
+      // every summary names the guest
+      if (guest && full.indexOf(guest) === -1) full = 'עם ' + guest + ': ' + full;
+      const summary = full.length > 190 ? full.slice(0, 190).trim() + '…' : full;
+      return {
+        id: e.id, label: label, guest: guest, dateHe: dateHe, dateFull: dateFull, dateJew: dateJew, summary: summary, full: full,
+        href: 'https://podcasts.apple.com/il/podcast/id1767223746?i=' + e.id,
+        hrefApple: 'https://podcasts.apple.com/il/podcast/id1767223746?i=' + e.id,
+        hrefYt: 'https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA/search?query=' + encodeURIComponent(label),
+        hrefSp: 'https://open.spotify.com/search/' + encodeURIComponent(label) + '/episodes'
+      };
+    });
+  }
+  __heNum(n) {
+    if (!n || isNaN(n)) return '';
+    let v = n % 1000; // תשפ"ו - בלי האלפים
+    const map = [[400, 'ת'], [300, 'ש'], [200, 'ר'], [100, 'ק'], [90, 'צ'], [80, 'פ'], [70, 'ע'], [60, 'ס'], [50, 'נ'], [40, 'מ'], [30, 'ל'], [20, 'כ'], [10, 'י'], [9, 'ט'], [8, 'ח'], [7, 'ז'], [6, 'ו'], [5, 'ה'], [4, 'ד'], [3, 'ג'], [2, 'ב'], [1, 'א']];
+    let out = '';
+    for (const [val, ch] of map) { while (v >= val) { out += ch; v -= val; } }
+    out = out.replace('יה', 'טו').replace('יו', 'טז');
+    if (out.length > 1) out = out.slice(0, -1) + '״' + out.slice(-1);
+    else if (out.length === 1) out += '׳';
+    return out;
+  }
+  renderVals() {
+    const eps = this.__episodes();
+    this.__loadEpisodes();
+    const stories = eps.slice(0, 6).map((e) => ({
+      href: e.href,
+      label: e.guest || (e.label.length > 26 ? e.label.slice(0, 26).trim() + '…' : e.label),
+      guest: e.guest || e.label,
+      slot: 'pod-guest-' + e.id,
+      ph: this.state.lang === 'en' ? 'Short' : 'שורט'
+    }));
+    const eps3 = eps.slice(0, 3).map((e, i) => ({
+      date: e.dateHe, label: e.label, guestLine: e.guest ? 'עם ' + e.guest : '',
+      summary: e.summary, href: e.href,
+      border: i === 2 ? 'none' : '2px solid rgba(249,218,187,0.28)'
+    }));
+    const first = eps[0] || {};
+    const epsAll = eps.slice().reverse().map((e) => ({ date: e.dateFull, dateJew: e.dateJew, label: e.label, summary: e.summary, full: e.full, href: e.href, hrefApple: e.hrefApple, hrefYt: e.hrefYt, hrefSp: e.hrefSp }));
+    const PER = 10;
+    const pages = Math.max(1, Math.ceil(epsAll.length / PER));
+    const page = Math.min(this.state.page || 0, pages - 1);
+    const epsPage = epsAll.slice(page * PER, page * PER + PER);
+    const cats = ['כתבות וידאו', 'מהמגזין שלנו'];
+    const all = (typeof window !== 'undefined' && window.NIV_POSTS) || [];
+    const pool = all.filter((p) => (p.cats || []).some((c) => cats.indexOf(c) > -1));
+    const arch = pool.slice(0, 4).map((p, i, list) => ({
+      date: p.date,
+      title: p.title,
+      lead: (p.body && p.body[0] ? p.body[0] : '').slice(0, 115).trim() + '…',
+      href: 'Post.dc.html?p=' + encodeURIComponent(p.slug || ''),
+      border: i === list.length - 1 ? 'none' : '2px solid var(--color-divider)'
+    }));
+    return {
+      arch: arch, stories: stories, eps3: eps3, epsAll: epsAll, epsPage: epsPage,
+      pageLabel: this.state.lang === 'en' ? ('Page ' + (page + 1) + ' of ' + pages) : ('עמוד ' + (page + 1) + ' מתוך ' + pages),
+      isHe: this.state.lang === 'he',
+      isEn: this.state.lang === 'en',
+      setHe: () => this.setLang('he'),
+      setEn: () => this.setLang('en'),
+      atFirst: page === 0, atLast: page >= pages - 1,
+      prevPage: () => this.setState({ page: Math.max(0, page - 1) }),
+      nextPage: () => this.setState({ page: Math.min(pages - 1, page + 1) }),
+      latestLabel: first.label || '', latestSummary: first.summary || '', latestFull: first.full || '',
+      latestMeta: [first.dateHe, first.guest ? 'עם ' + first.guest : ''].filter(Boolean).join(' · ')
+    };
+  }
+}
+</script>
+</body>
+</html>

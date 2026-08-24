@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Heebo:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="_ds/modernist-4af26cd8-2c1a-41a5-8255-ca9cd22d2b28/styles.css">
+<script src="image-slot.js"></script>
+<script src="posts-data.js"></script>
+<style>
+:root { --font-heading: "Archivo","Heebo",system-ui,sans-serif; --font-body: "Archivo","Heebo",system-ui,sans-serif;
+  --color-text: #2e3840;
+  --color-accent: #ff0305; --color-accent-600: #e00204; --color-accent-700: #b00204;
+  --color-neutral-800: #4b5661; --color-neutral-700: #5f6a75; --color-neutral-600: #7d8791;
+  --color-neutral-300: #ded3c6; --color-neutral-200: #f3ece2;
+  --color-divider: #d6cabb; --color-bg: #fdf7f0;
+  --niv-cream: #f9dabb; --niv-cream-deep: #e9c9a6; --niv-slate: #2e3840; }
+body { margin: 0; }
+a { color: var(--color-accent-700); }
+a:hover { color: var(--color-accent-600); }
+html { scroll-behavior: smooth; }
+.btn, button, a { transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease; }
+.btn-primary:hover, .btn-primary:focus-visible, .btn-primary:active { background: var(--niv-slate); color: #fff; }
+.btn-secondary:hover, .btn-secondary:focus-visible, .btn-ghost:hover, .btn-ghost:focus-visible { background: var(--niv-slate); color: #fff; border-color: var(--niv-slate); }
+image-slot, figure img { transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+figure:hover img { transform: scale(1.03); }
+[data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1); }
+[data-reveal][data-reveal-shown] { opacity: 1; transform: none; }
+@media print { [data-reveal] { opacity: 1 !important; transform: none !important; } }
+@keyframes nivBreathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes nivCellBreathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+[data-cell]:hover { animation: nivCellBreathe 2.6s ease-in-out infinite; }
+[data-quotes]::-webkit-scrollbar { display: none; height: 0; }
+@media (prefers-reduced-motion: reduce) { [data-cell]:hover { animation: none !important; } }
+@keyframes nivFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  [style*="nivBreathe"] { animation: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [style*="nivFloat"] { animation: none !important; }
+  }
+</style>
+<style>
+  /* Mobile: collapse the modular grid to a single column. Targets the inline
+     grid declarations directly, so no markup or class changes are needed. */
+  @media (max-width: 860px) {
+    [style*="grid-template-columns:repeat(4, 1fr)"],
+    [style*="grid-template-columns:repeat(3, 1fr)"],
+    [style*="grid-template-columns:repeat(3, minmax(0, 1fr))"] {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    [style*="grid-template-columns:1fr 1fr"],
+    [style*="grid-template-columns:repeat(2, 1fr)"],
+    [style*="grid-template-columns:4fr 8fr"],
+    [style*="grid-template-columns:7fr 5fr"],
+    [style*="grid-template-columns:6fr 5fr"],
+    [style*="grid-template-columns:1fr 180px"],
+    [style*="grid-template-columns:minmax(320px, 44%) 1fr"],
+    [style*="grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))"] {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+    [style*="grid-template-columns:130px 1fr"],
+    [style*="grid-template-columns:110px 1fr"],
+    [style*="grid-template-columns:150px 1fr"] {
+      grid-template-columns: minmax(0, 1fr) !important;
+      gap: 8px !important;
+    }
+    [style*="grid-template-columns:110px 1fr 30px"] {
+      grid-template-columns: minmax(0, 1fr) auto !important;
+    }
+    /* the sticky timeline panel has nothing to stick to in one column */
+    aside[style*="position:sticky"] { display: none !important; }
+    h1 { font-size: clamp(30px, 9vw, 46px) !important; }
+    h2 { font-size: clamp(24px, 7vw, 34px) !important; }
+    h3 { font-size: clamp(19px, 5.2vw, 24px) !important; }
+    [style*="padding:0 32px"], [style*="padding-inline:32px"] { padding-inline: 18px !important; }
+    header[style*="padding:18px 32px"] { padding: 14px 18px !important; }
+    footer[style*="padding:44px 32px 26px"] { padding: 30px 18px 20px !important; }
+    [style*="font-size:clamp"] { line-height: 1.08 !important; }
+  }
+  @media (max-width: 560px) {
+    [style*="grid-template-columns:repeat(4, 1fr)"],
+    [style*="grid-template-columns:repeat(3, 1fr)"],
+    [style*="grid-template-columns:repeat(3, minmax(0, 1fr))"] {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+  }
+</style>
+</helmet>
+<sc-if value="{{ isHe }}" hint-placeholder-val="{{ true }}">
+<div dir="rtl" style="min-height:100vh; display:flex; flex-direction:column; background:var(--color-bg)">
+  <header style="display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px 32px; border-bottom:2px solid var(--color-divider); flex-wrap:wrap">
+    <a href="Home.dc.html" style="text-decoration:none; color:var(--color-text); display:flex; align-items:center">
+      <img src="assets/nivcharot-logo.png" alt="נבחרות, תנועת נשים חרדיות" style="height:46px; width:auto; display:block" />
+    </a>
+    <nav style="display:flex; gap:20px; align-items:center">
+      <span style="display:flex; align-items:center; gap:9px">
+        <button onClick="{{ setHe }}" style="border:0; background:transparent; cursor:pointer; padding:2px 0; font-family:var(--font-heading); font-size:12.5px; letter-spacing:0.05em; line-height:1.2; transition:color 0.2s ease, border-color 0.2s ease; font-weight:700; color:var(--color-text); border-bottom:1.5px solid var(--color-accent)">עב</button>
+        <span style="width:1px; height:11px; background:var(--color-divider)"></span>
+        <button onClick="{{ setEn }}" style="border:0; background:transparent; cursor:pointer; padding:2px 0; font-family:var(--font-heading); font-size:12.5px; letter-spacing:0.05em; line-height:1.2; transition:color 0.2s ease, border-color 0.2s ease; font-weight:500; color:var(--color-neutral-600); border-bottom:1.5px solid transparent" style-hover="color: var(--color-text)">EN</button>
+      </span>
+      <x-import component-from-global-scope="niv-menu" from="./niv-menu.js" lang="he" hint-size="auto,44px"></x-import>
+    </nav>
+  </header>
+  <main style="flex:1">
+    <section data-reveal style="background:var(--niv-cream); background-image:radial-gradient(var(--niv-cream-deep) 1.5px, transparent 1.6px); background-size:14px 14px; border-bottom:2px solid var(--niv-slate)">
+      <div style="max-width:1240px; margin:0 auto; padding:64px 32px 52px; display:grid; grid-template-columns:7fr 5fr; gap:56px; align-items:center">
+        <div>
+          <img src="assets/hanivcheret-logo.png" alt="הנבחרת, עתודת מנהיגות חרדיות, מבית תנועת נבחרות" style="width:100%; max-width:470px; height:auto; display:block; margin-bottom:26px" />
+          <p style="font-size:17.5px; line-height:1.7; max-width:600px; margin:0 0 12px; color:var(--niv-slate)">תוכנית ההכשרה הציבורית, החברתית והפוליטית של נבחרות: מסע שנתי של ידע, כלים וקהילה לנשים חרדיות שרוצות להוביל שינוי, בשכונה, ברשות המקומית, בתקשורת ובחברה האזרחית.</p>
+          <p style="font-size:15px; line-height:1.7; max-width:600px; color:var(--color-neutral-700); margin:0 0 28px">מאז המחזור הראשון ב־2018 עברו בתוכנית תשעה מחזורים ומעל מאה בוגרות.</p>
+          <a href="Join.dc.html" style="display:inline-block; font-family:var(--font-heading); font-weight:800; font-size:15px; text-decoration:none; padding:13px 26px; background:var(--niv-slate); color:var(--niv-cream); white-space:nowrap" style-hover="background: var(--color-accent); color: #000">אשמח להצטרף למחזור העשירי</a>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:center; min-width:0; padding-block:8px">
+          <div onMouseMove="{{ moveHall }}" onMouseEnter="{{ moveHall }}" style="position:relative; width:100%; cursor:crosshair">
+            <svg viewBox="0 0 1000 500" role="img" aria-label="מושבי הכנסת, הכיסאות שממתינים לנשים חרדיות" style="width:100%; height:auto; max-height:100%; display:block; overflow:visible">
+              <sc-for list="{{ hallSeats }}" as="s" hint-placeholder-count="156">
+                <circle data-seat="" cx="{{ s.cx }}" cy="{{ s.cy }}" r="{{ s.r }}" fill="{{ s.fill }}" style="{{ s.style }}"></circle>
+              </sc-for>
+              {{ hallLetters }}
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section data-reveal style="max-width:1240px; margin:0 auto; padding:44px 32px 8px">
+      <sc-if value="{{ showVideo }}" hint-placeholder-val="{{ true }}">
+        <div style="border:2px solid var(--niv-slate); background:#141210; aspect-ratio:16 / 9">
+          <iframe title="סרטון, הנבחרת" src="{{ embedUrl }}" style="width:100%; height:100%; border:0; display:block" allow="encrypted-media; picture-in-picture" allowFullScreen="allowfullscreen"></iframe>
+        </div>
+      </sc-if>
+      <sc-if value="{{ showImage }}" hint-placeholder-val="{{ false }}">
+        <figure class="grayscale" style="margin:0">
+          <image-slot id="niv-hero" shape="rect" style="width:100%; height:400px" placeholder="תמונה, מפגש הנבחרת"></image-slot>
+        </figure>
+      </sc-if>
+    </section>
+    <section data-reveal style="max-width:1240px; margin:0 auto; padding:48px 32px">
+      <h6 style="color:var(--color-accent); margin-bottom:24px">מה בתוכנית</h6>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-inline-end:-2px">
+        <div data-cell style="padding-inline:20px; padding-block:24px; border-inline-end:2px solid var(--color-divider)">
+          <h4 style="margin-bottom:8px">ידע</h4>
+          <p style="font-size:14px; line-height:1.6; color:var(--color-neutral-800)">פוליטיקה ישראלית, שלטון מקומי, מגדר והלכה, תקשורת ותקציבים, עם מיטב המרצות והמרצים.</p>
+        </div>
+        <div data-cell style="padding-inline:20px; padding-block:24px; border-inline-end:2px solid var(--color-divider)">
+          <h4 style="margin-bottom:8px">כלים</h4>
+          <p style="font-size:14px; line-height:1.6; color:var(--color-neutral-800)">הופעה מול קהל ומצלמה, כתיבת עמדה, קמפיינים, ארגון קהילה ועבודה מול מוסדות.</p>
+        </div>
+        <div data-cell style="padding-inline:20px; padding-block:24px; border-inline-end:2px solid var(--color-divider)">
+          <h4 style="margin-bottom:8px">קהילה</h4>
+          <p style="font-size:14px; line-height:1.6; color:var(--color-neutral-800)">קבוצת עמיתות של נשים חזקות מכל גוני החברה החרדית, חברויות שנמשכות הרבה אחרי סיום המחזור.</p>
+        </div>
+        <div data-cell style="padding-inline:20px; padding-block:24px; border-inline-end:2px solid var(--color-divider)">
+          <h4 style="margin-bottom:8px">עשייה</h4>
+          <p style="font-size:14px; line-height:1.6; color:var(--color-neutral-800)">כל משתתפת יוצאת עם מיזם או זירת פעולה משלה, מוועדות הכנסת ועד יוזמות מקומיות.</p>
+        </div>
+      </div>
+    </section>
+    <section data-reveal style="max-width:1240px; margin:0 auto; padding:48px 32px">
+      <h6 style="color:var(--color-accent); margin-bottom:24px">בוגרות מספרות</h6>
+      <div data-quotes="" style="display:flex; gap:24px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; scroll-behavior:smooth">
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"ביטחון לדבר במרחב הציבורי החרדי, וחברויות שאני עדיין שומרת עליהן."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">שם הבוגרת · בוגרת מחזור 2</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"שיש לי את הכוח להשפיע, ושכוח פוליטי עבור מודרים אינו נוגד חיים מבוססי תורה."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">שם הבוגרת · בוגרת מחזור 4</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"שאישה יכולה לחצוב באבן."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">שם הבוגרת · בוגרת מחזור 5</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"למדתי לקרוא תקציב עירוני, ופתאום הבנתי שאני יכולה לשאול שאלות בוועדה ולא רק להתלונן בבית."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">שם הבוגרת · בוגרת מחזור 6</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"הגעתי בטוחה שאני היחידה שחושבת ככה. יצאתי עם עשרים נשים שחושבות ככה."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">שם הבוגרת · בוגרת מחזור 7</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"הכי מפתיע היה לגלות שהקול שלי לא מפריע לאף אחד. פשוט לא שמעו אותו קודם."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">שם הבוגרת · בוגרת מחזור 9</div>
+        </blockquote>
+      </div>
+    </section>
+  </main>
+  <footer style="border-top:2px solid var(--color-divider); padding:34px 24px 28px">
+    <div style="max-width:1240px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap">
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-start">
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">נבחרות</span>
+        <span style="display:flex; align-items:center; gap:4px"><a href="https://www.facebook.com/NoVoiceNoVote/" aria-label="Facebook" title="Facebook" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a><a href="https://www.instagram.com/nivcharot/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a><a href="mailto:estish@nivcharot.com" aria-label="Email" title="Email" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M1.5 4.5h21v15h-21zM1.5 4.5 12 13.5l10.5-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg></a></span>
+        <span style="width:1px; height:16px; background:var(--color-divider); margin:0 2px"></span>
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">חרדית מדוברת</span>
+        <span style="display:flex; align-items:center; gap:4px"><a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" aria-label="YouTube" title="YouTube" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M23.499 6.203a3.008 3.008 0 00-2.089-2.089C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.41.614A3.008 3.008 0 00.501 6.203C0 8.11 0 12 0 12s0 3.89.501 5.797a3.008 3.008 0 002.089 2.089C4.495 20.5 12 20.5 12 20.5s7.505 0 9.41-.614a3.008 3.008 0 002.089-2.089C24 15.89 24 12 24 12s0-3.89-.501-5.797zM9.75 15.568V8.432L15.818 12 9.75 15.568z"></path></svg></a><a href="https://open.spotify.com/show/1n2xdgVAKlIhcJqBiVfHFY" aria-label="Spotify" title="Spotify" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.24-.899-.6-.12-.421.24-.781.6-.901 4.561-1.021 8.52-.6 11.64 1.32.42.18.479.66.241 1.082zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg></a><a href="https://podcasts.apple.com/il/podcast/id1767223746" aria-label="Apple Podcasts" title="Apple Podcasts" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.377-2.376-1.897-.13-3.5 1.052-4.623 1.052zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"></path></svg></a><a href="https://www.instagram.com/haredit_meduberet/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a></span>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-end; font-size:12px; letter-spacing:0.01em; color:var(--color-neutral-700); text-align:end; margin-top:0"><a href="Shop.dc.html" style="font-weight:600; text-decoration:none; border-bottom:1px solid var(--color-divider); padding-bottom:2px">לתרומה</a><span>כל הזכויות שמורות לנבחרות (ע״ר) 580619120</span></div>
+    </div>
+  </footer>
+</div>
+</sc-if>
+<sc-if value="{{ isEn }}" hint-placeholder-val="{{ false }}">
+<div dir="ltr" style="min-height:100vh; display:flex; flex-direction:column; background:var(--color-bg)">
+  <header style="display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px 32px; border-bottom:2px solid var(--color-divider); flex-wrap:wrap">
+    <a href="Home.dc.html" style="text-decoration:none; color:var(--color-text); display:flex; align-items:center">
+      <img src="assets/nivcharot-logo-en.png" alt="Nivcharot, Haredi women's movement" style="width:230px; height:auto; display:block" />
+    </a>
+    <nav style="display:flex; gap:20px; align-items:center">
+      <span style="display:flex; align-items:center; gap:9px">
+        <button onClick="{{ setHe }}" style="border:0; background:transparent; cursor:pointer; padding:2px 0; font-family:var(--font-heading); font-size:12.5px; letter-spacing:0.05em; line-height:1.2; transition:color 0.2s ease, border-color 0.2s ease; font-weight:500; color:var(--color-neutral-600); border-bottom:1.5px solid transparent" style-hover="color: var(--color-text)">עב</button>
+        <span style="width:1px; height:11px; background:var(--color-divider)"></span>
+        <button onClick="{{ setEn }}" style="border:0; background:transparent; cursor:pointer; padding:2px 0; font-family:var(--font-heading); font-size:12.5px; letter-spacing:0.05em; line-height:1.2; transition:color 0.2s ease, border-color 0.2s ease; font-weight:700; color:var(--color-text); border-bottom:1.5px solid var(--color-accent)">EN</button>
+      </span>
+      <x-import component-from-global-scope="niv-menu" from="./niv-menu.js" lang="en" hint-size="auto,44px"></x-import>
+    </nav>
+  </header>
+  <main style="flex:1">
+    <section data-reveal style="max-width:1240px; margin:0 auto; padding:64px 32px 48px; display:grid; grid-template-columns:7fr 5fr; gap:48px; align-items:center">
+      <div>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px">
+          <span class="tag tag-accent">Flagship</span>
+          <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; letter-spacing:0.08em; color:var(--color-accent)">LEADERSHIP PROGRAM</span>
+        </div>
+        <h1 style="font-size:clamp(38px, 5vw, 60px); line-height:1.05; margin:0 0 20px">HaNivcheret</h1>
+        <p style="font-size:17px; line-height:1.7; max-width:600px; margin:0 0 12px">Nivcharot's public, social and political leadership program: a year-long journey of knowledge, tools and community for Haredi women who want to lead change, in their neighborhood, municipality, the media and civil society.</p>
+        <p style="font-size:15px; line-height:1.7; max-width:600px; color:var(--color-neutral-700); margin:0 0 28px">The ninth cohort has finished and there is no open registration right now. Leave your details and we will be in touch when the call for the tenth cohort opens. Since the first cohort in 2018, nine cohorts and over a hundred alumnae have passed through the program.</p>
+        <a href="Join.dc.html" class="btn btn-primary" style="font-size:15px; padding:12px 22px">Join the tenth cohort mailing list</a>
+      </div>
+      <div>
+        <sc-if value="{{ showVideo }}" hint-placeholder-val="{{ true }}">
+          <div style="border:2px solid var(--color-divider); background:#141210; height:400px">
+            <iframe title="Video, HaNivcheret" src="{{ embedUrl }}" style="width:100%; height:100%; border:0" allow="encrypted-media; picture-in-picture" allowFullScreen="allowfullscreen"></iframe>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showImage }}" hint-placeholder-val="{{ false }}">
+          <figure class="grayscale" style="margin:0">
+            <image-slot id="niv-hero" shape="rect" style="width:100%; height:400px" placeholder="Image, a HaNivcheret session"></image-slot>
+          </figure>
+        </sc-if>
+      </div>
+    </section>
+    <section data-reveal style="max-width:1240px; margin:0 auto; padding:48px 32px">
+      <h6 style="color:var(--color-accent); margin-bottom:24px">Inside the program</h6>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-inline-end:-2px">
+        <div data-cell style="padding-inline:20px; padding-block:24px; border-inline-end:2px solid var(--color-divider)">
+          <h4 style="margin-bottom:8px">Knowledge</h4>
+          <p style="font-size:14px; line-height:1.6; color:var(--color-neutral-800)">Israeli politics, local government, gender and halacha, media and budgets, with leading lecturers.</p>
+        </div>
+        <div data-cell style="padding-inline:20px; padding-block:24px; border-inline-end:2px solid var(--color-divider)">
+          <h4 style="margin-bottom:8px">Tools</h4>
+          <p style="font-size:14px; line-height:1.6; color:var(--color-neutral-800)">Public speaking and camera work, position writing, campaigns, community organizing and working with institutions.</p>
+        </div>
+        <div data-cell style="padding-inline:20px; padding-block:24px; border-inline-end:2px solid var(--color-divider)">
+          <h4 style="margin-bottom:8px">Community</h4>
+          <p style="font-size:14px; line-height:1.6; color:var(--color-neutral-800)">A peer group of strong women from across Haredi society, friendships that last long after the cohort ends.</p>
+        </div>
+        <div data-cell style="padding-inline:20px; padding-block:24px; border-inline-end:2px solid var(--color-divider)">
+          <h4 style="margin-bottom:8px">Action</h4>
+          <p style="font-size:14px; line-height:1.6; color:var(--color-neutral-800)">Every participant leaves with a project or arena of her own, from Knesset committees to local initiatives.</p>
+        </div>
+      </div>
+    </section>
+    <section data-reveal style="max-width:1240px; margin:0 auto; padding:48px 32px">
+      <h6 style="color:var(--color-accent); margin-bottom:24px">Alumnae voices</h6>
+      <div data-quotes="" style="display:flex; gap:24px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; scroll-behavior:smooth">
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"Confidence to speak in the Haredi public sphere, and friendships I still keep."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">Name · Cohort 2 alumna</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"I have the power to influence, and political power for the excluded does not contradict a Torah life."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">Name · Cohort 4 alumna</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"That a woman can carve through stone."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">Name · Cohort 5 alumna</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"I learned to read a municipal budget, and suddenly I could ask questions in committee instead of complaining at home."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">Name · Cohort 6 alumna</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"I arrived certain I was the only one who thought this way. I left with twenty women who think this way."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">Name · Cohort 7 alumna</div>
+        </blockquote>
+        <blockquote data-quote="" style="margin:0; flex:0 0 calc(33.333% - 16px); min-width:260px; scroll-snap-align:start; border-inline-start:2px solid var(--color-accent); padding-inline-start:18px">
+          <p style="font-size:16px; line-height:1.65; font-weight:600; margin-bottom:8px">"The surprise was finding that my voice bothers no one. It simply had not been heard before."</p>
+          <div style="font-size:13px; color:var(--color-neutral-600)">Name · Cohort 9 alumna</div>
+        </blockquote>
+      </div>
+    </section>
+  </main>
+  <footer style="border-top:2px solid var(--color-divider); padding:34px 24px 28px">
+    <div style="max-width:1240px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap">
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-start">
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">NIVCHAROT</span>
+        <span style="display:flex; align-items:center; gap:4px"><a href="https://www.facebook.com/NoVoiceNoVote/" aria-label="Facebook" title="Facebook" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a><a href="https://www.instagram.com/nivcharot/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a><a href="mailto:estish@nivcharot.com" aria-label="Email" title="Email" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M1.5 4.5h21v15h-21zM1.5 4.5 12 13.5l10.5-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg></a></span>
+        <span style="width:1px; height:16px; background:var(--color-divider); margin:0 2px"></span>
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">HAREDIT MEDUBERET</span>
+        <span style="display:flex; align-items:center; gap:4px"><a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" aria-label="YouTube" title="YouTube" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M23.499 6.203a3.008 3.008 0 00-2.089-2.089C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.41.614A3.008 3.008 0 00.501 6.203C0 8.11 0 12 0 12s0 3.89.501 5.797a3.008 3.008 0 002.089 2.089C4.495 20.5 12 20.5 12 20.5s7.505 0 9.41-.614a3.008 3.008 0 002.089-2.089C24 15.89 24 12 24 12s0-3.89-.501-5.797zM9.75 15.568V8.432L15.818 12 9.75 15.568z"></path></svg></a><a href="https://open.spotify.com/show/1n2xdgVAKlIhcJqBiVfHFY" aria-label="Spotify" title="Spotify" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.24-.899-.6-.12-.421.24-.781.6-.901 4.561-1.021 8.52-.6 11.64 1.32.42.18.479.66.241 1.082zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg></a><a href="https://podcasts.apple.com/il/podcast/id1767223746" aria-label="Apple Podcasts" title="Apple Podcasts" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.377-2.376-1.897-.13-3.5 1.052-4.623 1.052zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"></path></svg></a><a href="https://www.instagram.com/haredit_meduberet/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a></span>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-end; font-size:12px; letter-spacing:0.01em; color:var(--color-neutral-700); text-align:end; margin-top:0"><a href="Shop.dc.html" style="font-weight:600; text-decoration:none; border-bottom:1px solid var(--color-divider); padding-bottom:2px">Donate</a><span>All rights reserved to Nivcharot (NGO) 580619120</span></div>
+    </div>
+  </footer>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;heroVideo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;הסיפור האישי של אסתי&quot;,&quot;חרדית מדוברת, ניסים ליאון&quot;,&quot;על מנהיגות לא טיפוסית&quot;,&quot;ללא סרטון (תמונה)&quot;],&quot;default&quot;:&quot;הסיפור האישי של אסתי&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;סרטון&quot;},&quot;customVideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://www.youtube.com/watch?v=NP5bxt-xksM&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;סרטון&quot;}}">
+class Component extends DCLogic {
+  state = { lang: (typeof localStorage !== 'undefined' && localStorage.getItem('nivLang')) || 'he' };
+  componentDidMount() { this.__nivMotion(); this.__waitForData(0); this.__hallInit(); this.__quotesInit(); }
+  componentWillUnmount() { clearInterval(this.__ambient); clearInterval(this.__ringTimer); clearInterval(this.__qTimer); }
+  __quotesInit() {
+    if (this.__qTimer || typeof document === 'undefined') return;
+    this.__qTimer = setInterval(() => {
+      document.querySelectorAll('[data-quotes]').forEach((el) => {
+        if (el.matches(':hover')) return;
+        const card = el.querySelector('[data-quote]');
+        if (!card) return;
+        const step = card.getBoundingClientRect().width + 24;
+        const rtl = getComputedStyle(el).direction === 'rtl';
+        const max = el.scrollWidth - el.clientWidth - 4;
+        const at = Math.abs(el.scrollLeft);
+        if (at >= max) el.scrollTo({ left: 0, behavior: 'smooth' });
+        else el.scrollBy({ left: rtl ? -step : step, behavior: 'smooth' });
+      });
+    }, 4200);
+  }
+  __hallInit() {
+    this.__seats = [];
+    [140, 185, 230, 275, 320, 365, 410, 455].forEach((r) => {
+      const n = Math.round(Math.PI * r / 47);
+      for (let i = 0; i < n; i++) {
+        const a = Math.PI - (i / (n - 1)) * Math.PI;
+        this.__seats.push({ cx: +(500 + Math.cos(a) * r).toFixed(1), cy: +(470 - Math.sin(a) * r).toFixed(1) });
+      }
+    });
+    const seed = {};
+    while (Object.keys(seed).length < 4) seed[Math.floor(Math.random() * this.__seats.length)] = 1;
+    this.setState({ lit: seed });
+    this.__ambient = setInterval(() => {
+      this.setState((s) => {
+        const lit = Object.assign({}, s.lit || {});
+        const total = this.__seats.length;
+        const keys = Object.keys(lit);
+        if (keys.length >= Math.floor(total * 0.5)) {
+          const drain = 3 + Math.floor(Math.random() * 3);
+          for (let k = 0; k < drain && keys.length; k++) {
+            const j = Math.floor(Math.random() * keys.length);
+            delete lit[keys[j]];
+            keys.splice(j, 1);
+          }
+        } else if (keys.length < 4) {
+          lit[Math.floor(Math.random() * total)] = 1;
+        } else if (keys.length < 7 && Math.random() < 0.3) {
+          lit[Math.floor(Math.random() * total)] = 1;
+        } else if (keys.length > 7 && Math.random() < 0.2) {
+          delete lit[keys[Math.floor(Math.random() * keys.length)]];
+        } else { return null; }
+        return { lit: lit };
+      });
+    }, 1100);
+  }
+  __hallVals() {
+    const seats = this.__seats || [];
+    const lit = this.state.lit || {};
+    const SENT_HE = 'את רוצה להיות שם כשזה יקרה';
+    const SENT_EN = 'BE THERE WHEN IT HAPPENS';
+    const SENT = this.state.lang === 'he' ? SENT_HE : SENT_EN;
+    if (!this.__ringTimer) {
+      this.__ringTimer = setInterval(() => {
+        this.setState((st) => {
+          const sent = st.lang === 'he' ? SENT_HE : SENT_EN;
+          const n = st.letterN || 0;
+          if (n < sent.length) return { letterN: n + 1 };
+          const hold = (st.letterHold || 0) + 1;
+          if (hold < 22) return { letterHold: hold };
+          let queue = st.outQueue;
+          if (!queue) {
+            queue = [];
+            for (let k = 0; k < sent.length; k++) if (sent[k] !== ' ') queue.push(k);
+            for (let i = queue.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              const t = queue[i]; queue[i] = queue[j]; queue[j] = t;
+            }
+          }
+          if (!queue.length) return { letterN: 0, letterHold: 0, outQueue: null, outSet: null };
+          const rest = queue.slice();
+          const next = rest.shift();
+          const outSet = Object.assign({}, st.outSet || {});
+          outSet[next] = 1;
+          return { outQueue: rest, outSet: outSet };
+        });
+      }, 130);
+    }
+    const RING_SHIFT = 2;
+    const outerStart = Math.max(0, seats.length - 30);
+    const outer = [];
+    for (let i = outerStart; i < seats.length; i++) outer.push({ slot: seats[i], idx: i });
+    const ring = (this.state.lang === 'he' ? outer.slice().reverse() : outer.slice()).slice(RING_SHIFT);
+    const shown = this.state.letterN || 0;
+    const ringHidden = {};
+    const ringLetterEls = [];
+    for (let k = 0; k < Math.min(SENT.length, ring.length); k++) {
+      const ch = SENT[k];
+      if (ch === ' ') continue;
+      const slot = ring[k].slot;
+      const on = k < shown && !(this.state.outSet && this.state.outSet[k]);
+      if (on) ringHidden[ring[k].idx] = 1;
+      const ang = Math.atan2(470 - slot.cy, slot.cx - 500) * 180 / Math.PI;
+      const hotL = (this.state.hotLetter === k);
+      ringLetterEls.push(React.createElement('text', {
+        key: k, x: slot.cx, y: slot.cy + 12, textAnchor: 'middle',
+        fontFamily: 'var(--font-heading)', fontSize: 34, fontWeight: 800,
+        fill: hotL ? 'var(--color-accent)' : 'var(--niv-slate)',
+        onMouseEnter: on ? () => this.setState({ hotLetter: k }) : null,
+        onMouseLeave: on ? () => this.setState((st) => (st.hotLetter === k ? { hotLetter: null } : null)) : null,
+        style: {
+          opacity: on ? 1 : 0,
+          cursor: on ? 'pointer' : 'default',
+          pointerEvents: on ? 'auto' : 'none',
+          transform: 'rotate(' + (90 - ang).toFixed(1) + 'deg) ' + (on ? 'scale(1)' : 'scale(0.4)'),
+          transformOrigin: slot.cx + 'px ' + slot.cy + 'px',
+          transformBox: 'view-box',
+          transition: 'opacity 0.32s ease-out, fill 0.14s ease-out, transform 0.32s cubic-bezier(0.22,0.61,0.36,1)'
+        }
+      }, ch));
+    }
+    const hallLetters = React.createElement('g', null, ringLetterEls);
+    const hallSeats = seats.map((s, i) => ({
+      cx: s.cx, cy: s.cy, r: ringHidden[i] ? 0 : (lit[i] ? 12 : 11),
+      fill: lit[i] ? 'var(--color-accent)' : 'var(--niv-slate)',
+      style: {
+        opacity: ringHidden[i] ? 0 : 1,
+        transition: 'fill 0.55s cubic-bezier(0.22,0.61,0.36,1), r 0.32s cubic-bezier(0.22,0.61,0.36,1), opacity 0.28s ease-out',
+        transformOrigin: 'center', transformBox: 'fill-box'
+      }
+    }));
+    const moveHall = (e) => {
+      const svg = e.currentTarget.querySelector('svg');
+      if (!svg) return;
+      const r = svg.getBoundingClientRect();
+      const px = ((e.clientX - r.left) / r.width) * 1000;
+      const py = ((e.clientY - r.top) / r.height) * 500;
+      const cap = Math.floor(seats.length * 0.5);
+      this.setState((st) => {
+        const next = Object.assign({}, st.lit);
+        const order = (st.litOrder || []).filter((k) => next[k]);
+        Object.keys(next).forEach((k) => { if (order.indexOf(+k) === -1) order.push(+k); });
+        const dark = [];
+        seats.forEach((s, i) => {
+          if (next[i]) return;
+          const d = Math.hypot(s.cx - px, s.cy - py);
+          if (d < 110) dark.push({ i: i, d: d });
+        });
+        if (!dark.length) return null;
+        dark.sort((a, b) => a.d - b.d);
+        const take = Math.min(dark.length, 3);
+        for (let k = 0; k < take; k++) {
+          const idx = dark[k].i;
+          next[idx] = 1;
+          order.push(idx);
+          while (order.length > cap) {
+            const gone = order.shift();
+            delete next[gone];
+          }
+        }
+        return { lit: next, litOrder: order };
+      });
+    };
+    return { hallSeats: hallSeats, hallLetters: hallLetters, moveHall: moveHall };
+  }
+  __waitForData(n) {
+    if (typeof window === 'undefined') return;
+    if (window.NIV_POSTS && window.NIV_POSTS.length) { this.forceUpdate(); return; }
+    if (n > 40) return;
+    setTimeout(() => this.__waitForData(n + 1), 60);
+  }
+  componentDidUpdate() { this.__nivMotion(); }
+  __nivReveal(el) {
+    if (el.getAttribute('data-reveal-shown') !== null) return;
+    el.setAttribute('data-reveal-shown', '');
+  }
+  __nivSweep() {
+    document.querySelectorAll('[data-reveal]:not([data-reveal-shown])').forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.94) this.__nivReveal(el, 0);
+    });
+  }
+  __nivMotion() {
+    if (typeof document === 'undefined') return;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const frozen = !document.timeline || !document.timeline.currentTime;
+    if (reduced || frozen || typeof IntersectionObserver === 'undefined') {
+      document.querySelectorAll('[data-reveal]').forEach((el) => el.setAttribute('data-reveal-shown', ''));
+      return;
+    }
+    if (!this.__nivIo) {
+      this.__nivIo = new IntersectionObserver((entries) => {
+        let i = 0;
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            this.__nivReveal(e.target, i * 90);
+            i++;
+          } else if (e.boundingClientRect.bottom < 0) {
+            this.__nivReveal(e.target, 0);
+          } else {
+            return;
+          }
+          this.__nivIo.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -6% 0px', threshold: 0.06 });
+      const sweep = () => this.__nivSweep();
+      window.addEventListener('scroll', sweep, { passive: true });
+      window.addEventListener('resize', sweep, { passive: true });
+      setTimeout(sweep, 2000);
+    }
+    document.querySelectorAll('[data-reveal]:not([data-reveal-seen])').forEach((el) => {
+      el.setAttribute('data-reveal-seen', '');
+      const r = el.getBoundingClientRect();
+      this.__nivIo.observe(el);
+    });
+    this.__nivSweep();
+  }
+  setLang(l) { try { localStorage.setItem('nivLang', l); } catch (e) {} this.setState({ lang: l }); }
+  __renderValsOrig() {
+    const vids = { 'הסיפור האישי של אסתי': 'C2SQgyVKo_c', 'חרדית מדוברת, ניסים ליאון': 'RXdFa9ghP4U', 'על מנהיגות לא טיפוסית': 'Io2XwQxpKcM' };
+    const choice = this.props.heroVideo ?? 'הסיפור האישי של אסתי';
+    let vid = vids[choice] || 'C2SQgyVKo_c';
+    const custom = (this.props.customVideoUrl || '').trim();
+    if (custom) {
+      const m = custom.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
+      if (m) vid = m[1];
+    }
+    return {
+      showVideo: choice !== 'ללא סרטון (תמונה)',
+      showImage: choice === 'ללא סרטון (תמונה)',
+      embedUrl: 'https://www.youtube.com/embed/' + vid + '?rel=0',
+      isHe: this.state.lang === 'he',
+      isEn: this.state.lang === 'en',
+      setHe: () => this.setLang('he'),
+      setEn: () => this.setLang('en')
+    };
+  }
+
+  __eqInit() {
+    if (this.__eqTimer) return;
+    const pick = () => {
+      const idx = [0, 1, 2, 3, 4, 5];
+      for (let i = idx.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = idx[i]; idx[i] = idx[j]; idx[j] = t;
+      }
+      return idx.slice(0, 3).sort();
+    };
+    this.__pickEq = pick;
+    const n = (this.__eqTones || []).length;
+    const seed = {};
+    for (let i = 0; i < n; i++) seed[i] = pick();
+    this.setState({ eq: seed, eqTick: 0 });
+    this.__eqTimer = setInterval(() => {
+      this.setState((s) => {
+        const t = (s.eqTick || 0) + 1;
+        const eq = Object.assign({}, s.eq);
+        for (let i = 0; i < n; i++) {
+          if (s.eqHot === i || (t + i) % 3 === 0) eq[i] = pick();
+        }
+        return { eqTick: t, eq: eq };
+      });
+    }, 900);
+  }
+  __eqEl(i) {
+    const tone = (this.__eqTones || [])[i] || 'light';
+    const base = tone === 'accent' ? 'var(--niv-slate)' : (tone === 'slate' ? 'var(--niv-cream)' : 'var(--niv-slate)');
+    const on = tone === 'accent' ? '#fff' : 'var(--color-accent)';
+    const red = (this.state.eq && this.state.eq[i]) || [0, 2, 4];
+    const hot = this.state.eqHot === i;
+    const dots = [];
+    for (let k = 0; k < 6; k++) {
+      const lit = red.indexOf(k) > -1;
+      dots.push(React.createElement('span', {
+        key: k,
+        style: {
+          width: '8px', height: '8px', borderRadius: '50%', flex: '0 0 auto',
+          backgroundColor: lit ? on : base,
+          transform: hot ? (lit ? 'scale(2.05)' : 'scale(0.72)') : 'scale(1)',
+          transition: 'background-color ' + (hot ? '0.09s' : '0.5s') + ' ease-out, transform 0.3s cubic-bezier(0.22,0.61,0.36,1)'
+        }
+      }));
+    }
+    return React.createElement('span', {
+      'aria-hidden': 'true',
+      onMouseEnter: () => this.setState((s) => ({
+        eqHot: i, eq: Object.assign({}, s.eq, { [i]: this.__pickEq() })
+      })),
+      onMouseLeave: () => this.setState({ eqHot: null }),
+      style: {
+        display: 'inline-flex', alignItems: 'center', gap: '10px',
+        flex: '0 0 auto', cursor: 'crosshair'
+      }
+    }, dots);
+  }
+  __eqVals() {
+    this.__eqInit();
+    const o = {};
+    const n = (this.__eqTones || []).length;
+    for (let i = 0; i < n; i++) o['eq' + i] = this.__eqEl(i);
+    return o;
+  }
+  renderVals() {
+    return Object.assign(this.__eqVals(), this.__renderValsOrig(), this.__hallVals());
+  }
+  __eqTones = ["light","light","light","light","light"];
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Heebo:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="_ds/modernist-4af26cd8-2c1a-41a5-8255-ca9cd22d2b28/styles.css">
+<script src="gallery-data.js"></script>
+<style>
+:root { --font-heading: "Archivo","Heebo",system-ui,sans-serif; --font-body: "Archivo","Heebo",system-ui,sans-serif;
+  --color-text: #2e3840;
+  --color-accent: #ff0305; --color-accent-600: #e00204; --color-accent-700: #b00204;
+  --color-neutral-800: #4b5661; --color-neutral-700: #5f6a75; --color-neutral-600: #7d8791;
+  --color-neutral-300: #ded3c6; --color-neutral-200: #f3ece2;
+  --color-divider: #d6cabb; --color-bg: #fdf7f0;
+  --niv-cream: #f9dabb; --niv-cream-deep: #e9c9a6; --niv-slate: #2e3840; }
+body { margin: 0; }
+a { color: var(--color-accent-700); }
+a:hover { color: var(--color-accent-600); }
+.btn, button, a { transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease; }
+.btn-primary:hover, .btn-primary:focus-visible, .btn-primary:active { background: var(--niv-slate); color: #fff; }
+.btn-secondary:hover, .btn-secondary:focus-visible, .btn-ghost:hover, .btn-ghost:focus-visible { background: var(--niv-slate); color: #fff; border-color: var(--niv-slate); }
+.grayscale img { transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+figure:hover img { transform: scale(1.04); }
+</style>
+<style>
+  /* Mobile: collapse the modular grid to a single column. Targets the inline
+     grid declarations directly, so no markup or class changes are needed. */
+  @media (max-width: 860px) {
+    [style*="grid-template-columns:repeat(4, 1fr)"],
+    [style*="grid-template-columns:repeat(3, 1fr)"],
+    [style*="grid-template-columns:repeat(3, minmax(0, 1fr))"] {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    [style*="grid-template-columns:1fr 1fr"],
+    [style*="grid-template-columns:repeat(2, 1fr)"],
+    [style*="grid-template-columns:4fr 8fr"],
+    [style*="grid-template-columns:7fr 5fr"],
+    [style*="grid-template-columns:6fr 5fr"],
+    [style*="grid-template-columns:1fr 180px"],
+    [style*="grid-template-columns:minmax(320px, 44%) 1fr"],
+    [style*="grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))"] {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+    [style*="grid-template-columns:130px 1fr"],
+    [style*="grid-template-columns:110px 1fr"],
+    [style*="grid-template-columns:150px 1fr"] {
+      grid-template-columns: minmax(0, 1fr) !important;
+      gap: 8px !important;
+    }
+    [style*="grid-template-columns:110px 1fr 30px"] {
+      grid-template-columns: minmax(0, 1fr) auto !important;
+    }
+    /* the sticky timeline panel has nothing to stick to in one column */
+    aside[style*="position:sticky"] { display: none !important; }
+    h1 { font-size: clamp(30px, 9vw, 46px) !important; }
+    h2 { font-size: clamp(24px, 7vw, 34px) !important; }
+    h3 { font-size: clamp(19px, 5.2vw, 24px) !important; }
+    [style*="padding:0 32px"], [style*="padding-inline:32px"] { padding-inline: 18px !important; }
+    header[style*="padding:18px 32px"] { padding: 14px 18px !important; }
+    footer[style*="padding:44px 32px 26px"] { padding: 30px 18px 20px !important; }
+    [style*="font-size:clamp"] { line-height: 1.08 !important; }
+  }
+  @media (max-width: 560px) {
+    [style*="grid-template-columns:repeat(4, 1fr)"],
+    [style*="grid-template-columns:repeat(3, 1fr)"],
+    [style*="grid-template-columns:repeat(3, minmax(0, 1fr))"] {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+  }
+</style>
+</helmet>
+<div dir="rtl" style="min-height:100vh; display:flex; flex-direction:column; background:var(--color-bg)">
+  <header style="display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px 32px; border-bottom:2px solid var(--color-divider); flex-wrap:wrap">
+    <a href="Home.dc.html" style="text-decoration:none; color:var(--color-text); display:flex; align-items:center">
+      <img src="assets/nivcharot-logo.png" alt="נבחרות, תנועת נשים חרדיות" style="height:46px; width:auto; display:block" />
+    </a>
+    <nav style="display:flex; gap:14px; align-items:center; flex-wrap:wrap; font-size:14px; font-weight:600">
+      <x-import component-from-global-scope="niv-menu" from="./niv-menu.js" lang="he" hint-size="auto,44px"></x-import>
+    </nav>
+  </header>
+  <main style="flex:1">
+    <sc-if value="{{ found }}" hint-placeholder-val="{{ true }}">
+      <section style="max-width:1240px; margin:0 auto; padding:52px 32px 32px">
+        <a href="Media.dc.html#events" style="font-size:13px; font-weight:600; display:inline-block; margin-bottom:26px">→ חזרה לכנסים ולאירועים</a>
+        <div style="font-family:var(--font-heading); font-weight:800; font-size:44px; color:var(--color-accent); line-height:1; margin-bottom:14px">{{ year }}</div>
+        <h1 style="font-size:clamp(28px, 3.6vw, 44px); line-height:1.15; margin:0 0 16px; max-width:900px">{{ title }}</h1>
+        <div style="display:flex; gap:18px; flex-wrap:wrap; font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-neutral-600); padding-bottom:26px; border-bottom:2px solid var(--color-divider)">
+          <span>{{ countLine }}</span>
+          <span>{{ credit }}</span>
+        </div>
+      </section>
+      <section style="max-width:1240px; margin:0 auto; padding:0 32px 56px">
+        <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-inline-end:-2px">
+          <sc-for list="{{ photos }}" as="ph" hint-placeholder-count="12">
+            <a href="{{ ph.full }}" target="_blank" rel="noopener" style="display:block; text-decoration:none">
+              <figure class="grayscale" style="margin:0; overflow:hidden; border:2px solid var(--color-divider); aspect-ratio:325 / 220; background:var(--color-neutral-200)">
+                <img src="{{ ph.thumb }}" alt="{{ ph.alt }}" loading="lazy" style="width:100%; height:100%; object-fit:cover; display:block" />
+              </figure>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+      <section style="max-width:1240px; margin:0 auto; padding:0 32px 64px">
+        <h6 style="color:var(--color-accent); margin:0 0 22px">גלריות נוספות</h6>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); margin-inline-end:-2px">
+          <sc-for list="{{ others }}" as="o" hint-placeholder-count="3">
+            <a href="{{ o.href }}" style="text-decoration:none; color:var(--color-text); padding-inline:22px; padding-block:24px; border-inline-end:{{ o.border }}; display:flex; flex-direction:column; gap:8px" style-hover="background: var(--color-neutral-200)">
+              <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-accent)">{{ o.year }}</span>
+              <span style="font-family:var(--font-heading); font-weight:800; font-size:16px; line-height:1.35">{{ o.title }}</span>
+              <span style="font-size:12.5px; font-weight:600; color:var(--color-neutral-600)">{{ o.count }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+    <sc-if value="{{ missing }}" hint-placeholder-val="{{ false }}">
+      <section style="max-width:760px; margin:0 auto; padding:80px 32px">
+        <h1 style="font-size:clamp(28px, 3.5vw, 40px); margin:0 0 14px">הגלריה הזו לא נמצאה</h1>
+        <p style="font-size:16px; line-height:1.7; color:var(--color-neutral-800); margin:0 0 24px">כל הכנסים והאירועים מרוכזים בעמוד תקשורת ומדיה.</p>
+        <a href="Media.dc.html#events" class="btn btn-primary" style="white-space:nowrap">לכל הגלריות</a>
+      </section>
+    </sc-if>
+  </main>
+  <footer style="border-top:2px solid var(--color-divider); padding:34px 24px 28px">
+    <div style="max-width:1240px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap">
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-start">
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">נבחרות</span>
+        <span style="display:flex; align-items:center; gap:4px"><a href="https://www.facebook.com/NoVoiceNoVote/" aria-label="Facebook" title="Facebook" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a><a href="https://www.instagram.com/nivcharot/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a><a href="mailto:estish@nivcharot.com" aria-label="Email" title="Email" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M1.5 4.5h21v15h-21zM1.5 4.5 12 13.5l10.5-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg></a></span>
+        <span style="width:1px; height:16px; background:var(--color-divider); margin:0 2px"></span>
+        <span style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">חרדית מדוברת</span>
+        <span style="display:flex; align-items:center; gap:4px"><a href="https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA" aria-label="YouTube" title="YouTube" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M23.499 6.203a3.008 3.008 0 00-2.089-2.089C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.41.614A3.008 3.008 0 00.501 6.203C0 8.11 0 12 0 12s0 3.89.501 5.797a3.008 3.008 0 002.089 2.089C4.495 20.5 12 20.5 12 20.5s7.505 0 9.41-.614a3.008 3.008 0 002.089-2.089C24 15.89 24 12 24 12s0-3.89-.501-5.797zM9.75 15.568V8.432L15.818 12 9.75 15.568z"></path></svg></a><a href="https://open.spotify.com/show/1n2xdgVAKlIhcJqBiVfHFY" aria-label="Spotify" title="Spotify" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.24-.899-.6-.12-.421.24-.781.6-.901 4.561-1.021 8.52-.6 11.64 1.32.42.18.479.66.241 1.082zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg></a><a href="https://podcasts.apple.com/il/podcast/id1767223746" aria-label="Apple Podcasts" title="Apple Podcasts" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.377-2.376-1.897-.13-3.5 1.052-4.623 1.052zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"></path></svg></a><a href="https://www.instagram.com/haredit_meduberet/" aria-label="Instagram" title="Instagram" style="color:var(--color-neutral-700); display:flex; align-items:center; justify-content:center; width:32px; height:32px" style-hover="color: var(--color-accent)"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.899.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.9 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.9-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm7.846-10.405a1.441 1.441 0 01-2.88 0 1.44 1.44 0 012.88 0z"></path></svg></a></span>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-end; font-size:12px; letter-spacing:0.01em; color:var(--color-neutral-700); text-align:end; margin-top:0"><a href="Shop.dc.html" style="font-weight:600; text-decoration:none; border-bottom:1px solid var(--color-divider); padding-bottom:2px">לתרומה</a><span>כל הזכויות שמורות לנבחרות (ע״ר) 580619120</span></div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { this.__waitForData(0); }
+  __waitForData(n) {
+    if (typeof window === 'undefined') return;
+    if (window.NIV_GALLERIES && window.NIV_GALLERIES.length) { this.forceUpdate(); return; }
+    if (n > 40) return;
+    setTimeout(() => this.__waitForData(n + 1), 60);
+  }
+  renderVals() {
+    const all = (typeof window !== 'undefined' && window.NIV_GALLERIES) || [];
+    const base = (typeof window !== 'undefined' && window.NIV_MEDIA_BASE) || '';
+    let slug = '';
+    if (typeof window !== 'undefined') {
+      const m = /[?&]e=([^&#]+)/.exec(window.location.search + window.location.hash);
+      if (m) slug = decodeURIComponent(m[1]);
+    }
+    const g = all.find((x) => x.slug === slug) || null;
+    if (!g) return { found: false, missing: all.length > 0, photos: [], others: [] };
+
+    const photos = (g.files || []).map((f, i) => ({
+      thumb: base + f + (g.thumbSuffix || '-325x220') + '.jpg',
+      full: base + f + '.jpg',
+      alt: g.title + ', תמונה ' + (i + 1)
+    }));
+    const others = all.filter((x) => x.slug !== g.slug).slice(0, 3).map((x, i, list) => ({
+      href: 'Event.dc.html?e=' + encodeURIComponent(x.slug),
+      year: x.year,
+      title: x.title.length > 70 ? x.title.slice(0, 70).trim() + '…' : x.title,
+      count: (x.files || []).length + ' תמונות',
+      border: i === list.length - 1 ? 'none' : '2px solid var(--color-divider)'
+    }));
+    return {
+      found: true,
+      missing: false,
+      year: g.year,
+      title: g.title,
+      credit: g.credit || '',
+      countLine: photos.length + ' תמונות',
+      photos,
+      others
+    };
+  }
+}
+</script>
+</body>
+</html>

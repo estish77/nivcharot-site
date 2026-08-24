@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&amp;family=Heebo:wght@400;600;800&amp;display=swap">
+<link rel="stylesheet" href="_ds/modernist-4af26cd8-2c1a-41a5-8255-ca9cd22d2b28/styles.css">
+<script src="posts-data.js"></script>
+<style>
+:root { --font-heading: "Archivo","Heebo",system-ui,sans-serif; --font-body: "Archivo","Heebo",system-ui,sans-serif;
+  --color-text: #2e3840;
+  --color-accent: #ff0305; --color-accent-600: #e00204; --color-accent-700: #b00204;
+  --color-neutral-800: #4b5661; --color-neutral-700: #5f6a75; --color-neutral-600: #7d8791;
+  --color-neutral-300: #ded3c6; --color-neutral-200: #f3ece2;
+  --color-divider: #d6cabb; --color-bg: #fdf7f0;
+  --niv-cream: #f9dabb; --niv-slate: #2e3840; --tint-cream: #fbf0e3; }
+body { margin: 0; }
+a { color: var(--color-accent-700); }
+a:hover { color: var(--color-accent-600); }
+.btn-primary:hover { background: var(--niv-slate); color: #fff; }
+@media (max-width: 860px) {
+  [style*="grid-template-columns:1fr 96px"] { grid-template-columns: minmax(0, 1fr) !important; }
+  h1 { font-size: clamp(30px, 9vw, 44px) !important; }
+}
+</style>
+</helmet>
+<div dir="rtl" style="min-height:100vh; display:flex; flex-direction:column; background:var(--color-bg)">
+  <header style="display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px 32px; border-bottom:2px solid var(--color-divider); flex-wrap:wrap">
+    <a href="Home.dc.html" style="text-decoration:none; color:var(--color-text); display:flex; align-items:center">
+      <img src="assets/nivcharot-logo.png" alt="נבחרות, תנועת נשים חרדיות" style="height:46px; width:auto; display:block">
+    </a>
+    <nav style="display:flex; gap:18px; align-items:center; flex-wrap:wrap; font-size:14px; font-weight:600">
+      <a href="Media.dc.html" style="color:var(--color-text); text-decoration:none">תקשורת ומדיה</a>
+      <a href="Media.dc.html#archive" style="color:var(--color-text); text-decoration:none">ארכיון הכתבות</a>
+      <a href="Review.dc.html" style="color:var(--color-accent-700); text-decoration:underline; text-underline-offset:4px">חומר לבדיקה</a>
+    </nav>
+  </header>
+  <main style="flex:1">
+    <section style="max-width:1080px; margin:0 auto; padding:56px 32px 36px">
+      <div style="font-family:var(--font-heading); font-weight:800; font-size:13px; letter-spacing:0.08em; color:var(--color-accent); margin-bottom:14px">עבודה פנימית · לא לפרסום</div>
+      <h1 style="font-size:clamp(34px, 4.6vw, 52px); line-height:1.08; margin:0 0 20px">חומר לבדיקה.</h1>
+      <p style="font-size:17px; line-height:1.7; max-width:700px; color:var(--color-neutral-800); margin:0 0 14px">כל הפריטים שיובאו מהאתר הקיים, מסודרים לפי אורך הטקסט. הדף הזה קיים כדי להחליט יחד מה נשאר, מה מתאחד ומה יורד: פריטים קצרים מאוד הם בדרך כלל קטעי פוסטים או מחשבות שלא נסגרו, ופריטים ארוכים הם בדרך כלל טורים או ניירות עמדה שראויים לעמוד בפני עצמם.</p>
+      <p style="font-size:15px; line-height:1.7; max-width:700px; color:var(--color-neutral-700); margin:0">ההצעה בכל שורה היא הצעה בלבד. אפשר להעיר על כל פריט כאן, ולפי ההערות נעדכן את הארכיון.</p>
+    </section>
+    <section style="max-width:1080px; margin:0 auto; padding:0 32px 24px">
+      <div style="display:flex; flex-wrap:wrap; border-block:2px solid var(--color-divider); border-inline-start:2px solid var(--color-divider)">
+        <div style="flex:1 1 160px; padding:20px 22px; border-inline-end:2px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading); font-weight:800; font-size:34px; line-height:1; color:var(--color-accent)">{{ nTotal }}</div>
+          <div style="font-size:13px; margin-top:8px; color:var(--color-neutral-700)">פריטים בארכיון</div>
+        </div>
+        <div style="flex:1 1 160px; padding:20px 22px; border-inline-end:2px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading); font-weight:800; font-size:34px; line-height:1; color:var(--color-accent)">{{ nShort }}</div>
+          <div style="font-size:13px; margin-top:8px; color:var(--color-neutral-700)">חשודים כקטעי פוסטים</div>
+        </div>
+        <div style="flex:1 1 160px; padding:20px 22px; border-inline-end:2px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading); font-weight:800; font-size:34px; line-height:1; color:var(--color-accent)">{{ nMid }}</div>
+          <div style="font-size:13px; margin-top:8px; color:var(--color-neutral-700)">צריכים החלטה</div>
+        </div>
+        <div style="flex:1 1 160px; padding:20px 22px; border-inline-end:2px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading); font-weight:800; font-size:34px; line-height:1; color:var(--color-accent)">{{ nLong }}</div>
+          <div style="font-size:13px; margin-top:8px; color:var(--color-neutral-700)">שווים להשאיר</div>
+        </div>
+      </div>
+    </section>
+    <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+      <section style="max-width:1080px; margin:0 auto; padding:36px 32px 8px">
+        <h6 style="color:var(--color-accent); margin:0 0 8px">{{ g.kicker }}</h6>
+        <h2 style="margin:0 0 8px">{{ g.title }}</h2>
+        <p style="font-size:15px; line-height:1.7; color:var(--color-neutral-800); max-width:660px; margin:0 0 22px">{{ g.note }}</p>
+        <div style="border-top:2px solid var(--color-divider)">
+          <sc-for list="{{ g.items }}" as="p" hint-placeholder-count="6">
+            <div style="display:grid; grid-template-columns:1fr 96px; gap:20px; align-items:start; padding:20px 4px; border-bottom:2px solid var(--color-divider)">
+              <div style="min-width:0">
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:6px">
+                  <span style="font-family:var(--font-heading); font-weight:800; font-size:12px; color:var(--color-neutral-600)">{{ p.date }}</span>
+                  <span style="font-size:12px; color:var(--color-neutral-600)">{{ p.cats }}</span>
+                </div>
+                <h4 style="margin:0 0 6px"><a href="{{ p.href }}" style="text-decoration:none; color:var(--color-text)" style-hover="color: var(--color-accent-700)">{{ p.title }}</a></h4>
+                <p style="font-size:13.5px; line-height:1.65; margin:0; color:var(--color-neutral-700); max-width:660px">{{ p.lead }}</p>
+                <div style="font-family:var(--font-heading); font-weight:800; font-size:11.5px; letter-spacing:0.08em; color:var(--color-accent-700); margin-top:10px">{{ p.suggestion }}</div>
+              </div>
+              <div style="text-align:center; border-inline-start:2px solid var(--color-divider); padding-inline-start:14px">
+                <div style="font-family:var(--font-heading); font-weight:800; font-size:24px; line-height:1; color:var(--color-text)">{{ p.words }}</div>
+                <div style="font-size:11px; color:var(--color-neutral-600); margin-top:4px">מילים</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-for>
+    <section style="max-width:1080px; margin:0 auto; padding:44px 32px 72px">
+      <div style="background:var(--tint-cream); border:2px solid var(--color-divider); padding:28px 26px">
+        <h3 style="margin:0 0 10px; font-size:21px">איך ממשיכים מכאן</h3>
+        <ol style="margin:0; padding-inline-start:20px; display:flex; flex-direction:column; gap:8px; font-size:14.5px; line-height:1.7; color:var(--color-neutral-800)">
+          <li>עוברים על הקבוצה הראשונה ומסמנים מה יורד. פריט שאין לו מקור, תאריך או טקסט מלא, לרוב לא שווה עמוד.</li>
+          <li>בקבוצה השנייה מחליטים מה מתאחד: כמה פריטים על אותו נושא יכולים להיות עמוד אחד חזק.</li>
+          <li>לכל פריט שנשאר משלימים מקור: שם הכלי, תאריך וקישור. עדיפות לטורים ולכתבות בכלי תקשורת רשמיים.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+  <footer style="border-top:2px solid var(--color-divider); padding:34px 24px 28px">
+    <div style="max-width:760px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:10px">
+      <div style="font-family:var(--font-heading); font-weight:800; font-size:11px; letter-spacing:0.12em; color:var(--color-neutral-600)">דף עבודה פנימי · נבחרות</div>
+      <div style="font-size:12px; color:var(--color-neutral-700); text-align:center">כל הזכויות שמורות לנבחרות (ע״ר) 580619120</div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { this.__wait(0); }
+  __wait(n) {
+    if (typeof window === 'undefined') return;
+    if (window.NIV_POSTS && window.NIV_POSTS.length) { this.forceUpdate(); return; }
+    if (n > 40) return;
+    setTimeout(() => this.__wait(n + 1), 60);
+  }
+  renderVals() {
+    const all = (typeof window !== 'undefined' && window.NIV_POSTS) || [];
+    const rows = all.map((p) => {
+      const body = (p.body || []).join(' ');
+      const words = body.split(/\s+/).filter(Boolean).length;
+      return {
+        title: p.title,
+        date: p.date,
+        cats: (p.cats || []).join(' · '),
+        words: words,
+        lead: body.slice(0, 150).trim() + (body.length > 150 ? '…' : ''),
+        href: 'Post.dc.html?p=' + encodeURIComponent(p.slug || '')
+      };
+    }).sort((a, b) => a.words - b.words);
+    const short = rows.filter((r) => r.words < 70);
+    const mid = rows.filter((r) => r.words >= 70 && r.words < 160);
+    const long = rows.filter((r) => r.words >= 160);
+    const tag = (r, s) => Object.assign({}, r, { suggestion: s });
+    const groups = [
+      {
+        kicker: 'קבוצה א',
+        title: 'קצר מדי לעמוד',
+        note: 'פחות מ־70 מילים. בדרך כלל אלה קטעי פוסטים, כותרות בלי גוף, או מחשבות שלא נסגרו. ההצעה: להסיר, או לאחד עם פריט אחר על אותו נושא.',
+        items: short.map((r) => tag(r, 'מוצע: להסיר או לאחד'))
+      },
+      {
+        kicker: 'קבוצה ב',
+        title: 'צריך החלטה',
+        note: '70 עד 160 מילים. יש כאן גוף טקסט, אבל לא בטוח שהוא עומד לבד. ההצעה: להחליט אם להרחיב, לאחד או להשאיר כידיעה קצרה בארכיון.',
+        items: mid.map((r) => tag(r, 'מוצע: להרחיב, לאחד או להשאיר כידיעה'))
+      },
+      {
+        kicker: 'קבוצה ג',
+        title: 'שווה עמוד',
+        note: 'מעל 160 מילים. טורים, ניירות עמדה וכתבות מלאות. ההצעה: להשאיר, ולהשלים לכל אחד מקור וקישור.',
+        items: long.map((r) => tag(r, 'מוצע: להשאיר, להשלים מקור'))
+      }
+    ];
+    return {
+      groups: groups,
+      nTotal: rows.length,
+      nShort: short.length,
+      nMid: mid.length,
+      nLong: long.length
+    };
+  }
+}
+</script>
+</body>
+</html>

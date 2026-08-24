@@ -1,0 +1,315 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens — verbatim from the mockups (docs/*.dc.html <style> blocks).
+ * Never invent colors here; every value below must trace back to that
+ * source.
+ *
+ * Tokens whose canonical mockup name already carries a Tailwind v4 theme
+ * prefix (--color-*, --font-*) are declared ONCE, directly inside @theme:
+ * that block emits them as real :root custom properties (so plain
+ * `var(--color-text)` keeps working exactly like in the mockups' inline
+ * styles) AND generates matching utilities (bg-bg, text-accent,
+ * border-divider, font-heading, ...).
+ *
+ * The --niv-* / --tint-* tokens do NOT carry that prefix in the mockups
+ * (they're used as raw `var(--niv-slate)` in keyframes/inline styles), so
+ * they're declared once on plain :root, then re-exposed under Tailwind's
+ * --color-* namespace via var() indirection (bg-niv-cream etc.) — this is
+ * NOT circular since the two custom property names differ.
+ */
+:root {
+  --niv-cream: #f9dabb;
+  --niv-cream-deep: #e9c9a6;
+  /*
+   * The real brand slate, sampled from public/assets/nivcharot-logo-*.svg
+   * (fill #314451). The early mockups used a slightly different placeholder
+   * (#2e3840) before the final logo existed — this replaces it as the
+   * single source of truth for "brand slate" everywhere the token is used
+   * (page background sections, --color-text, the seat-hall JS constants).
+   */
+  --niv-slate: #314451;
+  --tint-cream: #fbf0e3;
+  --tint-slate: #eef1f2;
+}
+
+@theme {
+  /*
+   * Bilingual font stack — the literal `Archivo` here is deliberate.
+   *
+   * `var(--font-archivo)` does NOT expand to just "Archivo": next/font emits
+   * `Archivo, "Archivo Fallback"`, where the fallback is a metric-matched
+   * LOCAL system font. System fonts carry Hebrew glyphs, so using the
+   * variable produces
+   *     Archivo, "Archivo Fallback", Heebo, ...
+   * and every Hebrew character is served by the fallback before the browser
+   * ever reaches Heebo — Heebo then never downloads, and the whole Hebrew
+   * site silently renders in Arial/Segoe instead of the brand typeface.
+   * (`adjustFontFallback: false` on the loader does not prevent this.)
+   *
+   * Naming Archivo directly keeps Latin on Archivo while letting Hebrew fall
+   * through to Heebo, which is exactly what the mockups specify:
+   *     --font-heading: "Archivo","Heebo",system-ui,sans-serif
+   */
+  --font-heading: Archivo, var(--font-heebo), system-ui, sans-serif;
+  --font-body: Archivo, var(--font-heebo), system-ui, sans-serif;
+
+  /*
+   * Brand palette — sampled directly from the real logo files
+   * (public/assets/nivcharot-logo-{he,en}.svg: fills #d8252f and #314451).
+   * The early mockups used placeholder colors (#ff0305 accent, #2e3840
+   * text/slate) drafted before the final logo existed; those are replaced
+   * here with the authentic brand values.
+   *
+   * -600/-700/-700 are NOT arbitrary — they're the same brand red darkened
+   * by a fixed ratio (matching the mockups' own accent/accent-600/
+   * accent-700 scale relationship), computed to keep every WCAG AA pairing
+   * already verified across the site (zero axe-core violations) intact or
+   * improved:
+   *   base   #d8252f  white text/on-white text  4.97:1  (passes on its own)
+   *   600    #be2129  a:hover default             6.11:1
+   *   700    #971a21  button/tag/tab backgrounds,
+   *                   "safe" text-on-light color  8.45:1
+   */
+  --color-text: #314451;
+  --color-accent: #d8252f;
+  --color-accent-600: #be2129;
+  --color-accent-700: #971a21;
+  /*
+   * Light tint of the SAME brand red, for red text sitting ON the dark
+   * slate bands. The brand red on brand slate measures 2.04:1 and fails
+   * WCAG AA; going darker (accent-700) makes it worse on a dark ground, so
+   * this goes the other way. #efa8ac on #314451 = 5.23:1.
+   */
+  --color-accent-300: #efa8ac;
+  --color-neutral-800: #4b5661;
+  --color-neutral-700: #5f6a75;
+  --color-neutral-600: #7d8791;
+  --color-neutral-300: #ded3c6;
+  --color-neutral-200: #f3ece2;
+  --color-divider: #d6cabb;
+  --color-bg: #fdf7f0;
+
+  --color-niv-cream: var(--niv-cream);
+  --color-niv-cream-deep: var(--niv-cream-deep);
+  --color-niv-slate: var(--niv-slate);
+  --color-tint-cream: var(--tint-cream);
+  --color-tint-slate: var(--tint-slate);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  /* h1/h2/h3 sizes are the recovered _ds/styles.css base typography. h4-h6
+     are left to each component (h6 in particular is used as a visual eyebrow
+     in the mockups — render eyebrows as a styled <p>, not a real heading). */
+  h1 {
+    font-size: clamp(40px, 5.2vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+  }
+
+  h2 {
+    font-size: clamp(28px, 3.6vw, 44px);
+    line-height: 1.1;
+  }
+
+  h3 {
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  a {
+    /*
+     * accent-700, not the raw brand accent: as TEXT the real brand red only
+     * reliably clears WCAG AA on --color-bg (4.67:1). Links render across
+     * every section tint on the site — including --tint-cream (4.42:1),
+     * --tint-slate (4.38:1) and --niv-cream (3.73:1) — all of which fail.
+     * accent-700 clears all of them. Solid-fill backgrounds (buttons, tags,
+     * tabs) don't have this problem and use the raw brand accent directly.
+     */
+    color: var(--color-accent-700);
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--color-accent-600);
+  }
+}
+
+@layer components {
+  /*
+   * Buttons — the source _ds/styles.css is missing; base properties below
+   * are the inferred set the project spec fixes. Per-instance padding and
+   * font-size are intentionally NOT baked in here: every mockup usage sets
+   * its own inline (e.g. style="font-size:15px; padding:12px 22px"), so
+   * callers add sizing utilities (or the Payload-driven equivalent) themselves.
+   */
+  .btn {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    text-decoration: none;
+    display: inline-block;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+  .btn-primary {
+    /*
+     * The real, un-darkened brand red (sampled from the logo files):
+     * white text on #d8252f measures 4.97:1, which already clears WCAG AA
+     * on its own — unlike the earlier placeholder #ff0305 (3.98:1, failed),
+     * there's no need to darken this one for button-sized text.
+     */
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus-visible {
+    background: var(--niv-slate);
+    color: #fff;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border-color: var(--color-text);
+    color: var(--color-text);
+  }
+
+  .btn-secondary:hover,
+  .btn-secondary:focus-visible {
+    background: var(--niv-slate);
+    color: #fff;
+    border-color: var(--niv-slate);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border-color: transparent;
+    color: var(--color-text);
+  }
+
+  .btn-ghost:hover,
+  .btn-ghost:focus-visible {
+    background: var(--niv-slate);
+    color: #fff;
+  }
+
+  /*
+   * Tags — "small pill" per spec: 800 weight, 12px, 4px 10px padding.
+   * Base fill/border per variant is inferred (missing stylesheet) to mirror
+   * the .btn-primary/.btn-secondary pattern; hover mirrors .btn-secondary/
+   * .btn-ghost (bg niv-slate, white text) on every variant.
+   */
+  .tag {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    display: inline-block;
+    text-decoration: none;
+    border: 2px solid transparent;
+    background: var(--color-neutral-200);
+    color: var(--color-text);
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+  .tag:hover,
+  .tag:focus-visible {
+    background: var(--niv-slate);
+    color: #fff;
+  }
+
+  .tag-outline {
+    background: transparent;
+    border-color: var(--color-text);
+    color: var(--color-text);
+  }
+
+  .tag-outline:hover,
+  .tag-outline:focus-visible {
+    background: var(--niv-slate);
+    color: #fff;
+    border-color: var(--niv-slate);
+  }
+
+  .tag-accent {
+    /* Same reasoning as .btn-primary — the real brand red already passes AA. */
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  .tag-accent:hover,
+  .tag-accent:focus-visible {
+    background: var(--niv-slate);
+    color: #fff;
+  }
+
+  /* Removed on hover/focus, per spec. */
+  .grayscale {
+    filter: grayscale(1);
+    transition: filter 0.25s ease;
+  }
+
+  .grayscale:hover,
+  .grayscale:focus-within {
+    filter: grayscale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .grayscale,
+  .grayscale:hover,
+  .grayscale:focus-within {
+    transition: none;
+  }
+}
+
+/*
+ * Scroll-reveal safety net (ported from the mockups' own `@media print`
+ * override). Revealed sections start at opacity 0 and are animated in by
+ * motion on the client, so any context where that animation never runs would
+ * otherwise render them invisible. `!important` is required because motion
+ * writes the starting opacity as an inline style.
+ */
+@media print {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

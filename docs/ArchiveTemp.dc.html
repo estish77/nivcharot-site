@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Heebo:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="_ds/modernist-4af26cd8-2c1a-41a5-8255-ca9cd22d2b28/styles.css">
+<script src="posts-data.js"></script>
+<script src="gallery-data.js"></script>
+<style>
+:root { --font-heading: "Archivo","Heebo",system-ui,sans-serif; --font-body: "Archivo","Heebo",system-ui,sans-serif;
+  --color-text: #2e3840;
+  --color-accent: #ff0305; --color-accent-600: #e00204; --color-accent-700: #b00204;
+  --color-neutral-800: #4b5661; --color-neutral-700: #5f6a75; --color-neutral-600: #7d8791;
+  --color-neutral-300: #ded3c6; --color-neutral-200: #f3ece2;
+  --color-divider: #d6cabb; --color-bg: #fdf7f0; --niv-slate: #2e3840; }
+body { margin: 0; }
+a { color: var(--color-accent-700); }
+a:hover { color: var(--color-accent-600); }
+@media (max-width: 860px) {
+  [style*="grid-template-columns:repeat(3, 1fr)"] { grid-template-columns: minmax(0, 1fr) !important; }
+  [style*="grid-template-columns:110px 1fr 30px"] { grid-template-columns: minmax(0, 1fr) auto !important; }
+}
+</style>
+</helmet>
+<div dir="rtl" style="min-height:100vh; display:flex; flex-direction:column; background:var(--color-bg)">
+  <header style="display:flex; align-items:center; justify-content:space-between; gap:24px; padding:18px 32px; border-bottom:2px solid var(--color-divider); flex-wrap:wrap">
+    <a href="Home.dc.html" style="text-decoration:none; color:var(--color-text); display:flex; align-items:center">
+      <img src="assets/nivcharot-logo.png" alt="נבחרות, תנועת נשים חרדיות" style="height:46px; width:auto; display:block" />
+    </a>
+    <nav style="display:flex; gap:18px; align-items:center; flex-wrap:wrap; font-size:14px; font-weight:600">
+      <a href="Media.dc.html" style="color:var(--color-text); text-decoration:none">תקשורת ומדיה</a>
+      <a href="Review.dc.html" style="color:var(--color-text); text-decoration:none">חומר לבדיקה</a>
+      <a href="Home.dc.html" class="btn btn-primary" style="white-space:nowrap">חזרה לאתר</a>
+    </nav>
+  </header>
+  <main style="flex:1">
+    <section style="max-width:1240px; margin:0 auto; padding:56px 32px 24px">
+      <div style="font-family:var(--font-heading); font-weight:800; font-size:13px; letter-spacing:0.08em; color:var(--color-accent); margin-bottom:14px">דף עבודה זמני</div>
+      <h1 style="font-size:clamp(32px, 4.4vw, 48px); line-height:1.08; margin:0 0 18px">הארכיון מהאתר הישן</h1>
+      <p style="font-size:16px; line-height:1.7; max-width:660px; color:var(--color-neutral-800)">כל מה שנאסף מאתר נבחרות הקיים: רשומות, פוסטים, גלריות וכנסים. הדף הזה זמני, כדי להחליט מה עובר לאתר החדש ומה יורד. דף תקשורת ומדיה מכיל מעכשיו רק כתבות רשמיות ממקורות חיצוניים.</p>
+    </section>
+    <section style="max-width:1240px; margin:0 auto; padding:24px 32px">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:28px; flex-wrap:wrap; margin-bottom:22px">
+        <h2 style="margin:0">רשומות מהאתר</h2>
+        <div style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-neutral-600); white-space:nowrap">{{ countLabel }}</div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; padding-bottom:18px; border-bottom:2px solid var(--color-divider)">
+        <sc-for list="{{ catChips }}" as="c" hint-placeholder-count="6">
+          <button onClick="{{ c.pick }}" style="cursor:pointer; border:2px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.fg }}; padding:8px 15px; font-family:var(--font-heading); font-weight:800; font-size:13px">{{ c.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; padding:18px 0 26px">
+        <sc-for list="{{ yearChips }}" as="y" hint-placeholder-count="5">
+          <button onClick="{{ y.pick }}" style="cursor:pointer; border:0; border-bottom:2px solid {{ y.border }}; background:transparent; color:{{ y.fg }}; padding:4px 2px; font-family:var(--font-heading); font-weight:800; font-size:15px">{{ y.label }}</button>
+        </sc-for>
+      </div>
+      <div>
+        <sc-for list="{{ posts }}" as="p" hint-placeholder-count="8">
+          <a href="{{ p.href }}" style="border-bottom:2px solid var(--color-divider); text-decoration:none; color:var(--color-text); padding-inline:16px; padding-block:24px; display:grid; grid-template-columns:110px 1fr 30px; gap:20px; align-items:baseline" style-hover="background: var(--color-neutral-200)">
+            <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-neutral-600)">{{ p.date }}</span>
+            <span>
+              <span style="display:block; font-family:var(--font-heading); font-weight:800; font-size:19px; line-height:1.3; margin-bottom:6px; color:var(--color-text)">{{ p.title }}</span>
+              <span style="display:block; font-size:14.5px; line-height:1.7; color:var(--color-neutral-800); margin-bottom:8px; max-width:640px">{{ p.lead }}</span>
+              <span style="display:block; font-size:12.5px; font-weight:600; color:var(--color-accent-700); letter-spacing:0.02em">{{ p.catLine }}{{ p.linkNote }}</span>
+            </span>
+            <span style="font-family:var(--font-heading); font-weight:800; font-size:20px; color:var(--color-accent); text-align:center">←</span>
+          </a>
+        </sc-for>
+      </div>
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <p style="font-size:15px; color:var(--color-neutral-700); padding:28px 0">אין רשומות בחיתוך הזה. נסו קטגוריה או שנה אחרת.</p>
+      </sc-if>
+    </section>
+    <section style="max-width:1240px; margin:0 auto; padding:64px 32px 72px">
+      <h2 style="margin:0 0 10px">כנסים, הקרנות וגלריות</h2>
+      <p style="font-size:15.5px; line-height:1.7; color:var(--color-neutral-800); margin:0 0 26px">כל אירוע והגלריה שלו, כפי שנאספו מהאתר.</p>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:28px">
+        <sc-for list="{{ events }}" as="e" hint-placeholder-count="6">
+          <a href="{{ e.href }}" style="border:2px solid var(--color-divider); display:flex; flex-direction:column; text-decoration:none; color:var(--color-text)" style-hover="background: var(--color-neutral-200)">
+            <figure class="grayscale" style="margin:0; border-bottom:2px solid var(--color-divider); height:200px; overflow:hidden; background:var(--color-neutral-200)">
+              <img src="{{ e.cover }}" alt="{{ e.title }}" loading="lazy" style="width:100%; height:100%; object-fit:cover; display:block" />
+            </figure>
+            <div style="padding:18px 20px 22px; display:flex; flex-direction:column; gap:8px; flex:1">
+              <span style="font-family:var(--font-heading); font-weight:800; font-size:26px; color:var(--color-accent); line-height:1">{{ e.year }}</span>
+              <h3 style="font-size:17px; line-height:1.35; margin:0; flex:1">{{ e.title }}</h3>
+              <span style="font-size:12.5px; font-weight:600; color:var(--color-neutral-600)">{{ e.meta }}</span>
+              <span style="font-family:var(--font-heading); font-weight:800; font-size:13px; color:var(--color-accent)">← לגלריה המלאה</span>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+  <footer style="border-top:2px solid var(--color-divider); padding:26px 32px">
+    <div style="max-width:1240px; margin:0 auto; font-size:12px; color:var(--color-neutral-700)">דף עבודה פנימי, לא מקושר מהתפריט הראשי.</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { cat: 'הכול', year: 'הכול' };
+  componentDidMount() { this.__wait(0); }
+  __wait(n) {
+    if (typeof window === 'undefined') return;
+    if (window.NIV_POSTS && window.NIV_POSTS.length) { this.forceUpdate(); return; }
+    if (n > 40) return;
+    setTimeout(() => this.__wait(n + 1), 60);
+  }
+  renderVals() {
+    const ALL = 'הכול';
+    const all = (typeof window !== 'undefined' && window.NIV_POSTS) || [];
+    const cats = (typeof window !== 'undefined' && window.NIV_CATS) || [];
+    const evs = (typeof window !== 'undefined' && window.NIV_EVENTS) || [];
+    const S = this.state;
+    const dark = 'var(--color-text)';
+
+    const byCat = S.cat === ALL ? all : all.filter((p) => (p.cats || []).indexOf(S.cat) > -1);
+    const filtered = S.year === ALL ? byCat : byCat.filter((p) => String(p.year) === String(S.year));
+    const d = (x) => { const t = String(x.date || '').split('.'); return new Date(+t[2] || x.year, (+t[1] || 1) - 1, +t[0] || 1).getTime(); };
+    const sorted = filtered.slice().sort((a, b) => d(b) - d(a));
+
+    const chip = (label, active, pick) => ({
+      label, pick,
+      bg: active ? dark : 'transparent',
+      fg: active ? 'var(--color-bg)' : 'var(--color-text)',
+      border: active ? dark : 'var(--color-divider)'
+    });
+    const catChips = [chip(ALL + ' (' + all.length + ')', S.cat === ALL, () => this.setState({ cat: ALL }))].concat(
+      cats.map((c) => {
+        const n = all.filter((p) => (p.cats || []).indexOf(c) > -1).length;
+        return chip(c + ' (' + n + ')', S.cat === c, () => this.setState({ cat: c }));
+      }).filter((c) => c.label.indexOf('(0)') === -1)
+    );
+
+    const years = [];
+    byCat.forEach((p) => { if (years.indexOf(p.year) === -1) years.push(p.year); });
+    years.sort((a, b) => b - a);
+    const yearChips = [{ label: 'כל השנים', pick: () => this.setState({ year: ALL }), fg: S.year === ALL ? 'var(--color-accent-700)' : 'var(--color-neutral-600)', border: S.year === ALL ? 'var(--color-accent)' : 'transparent' }].concat(
+      years.map((y) => ({
+        label: String(y),
+        pick: () => this.setState({ year: y }),
+        fg: String(S.year) === String(y) ? 'var(--color-accent-700)' : 'var(--color-neutral-600)',
+        border: String(S.year) === String(y) ? 'var(--color-accent)' : 'transparent'
+      }))
+    );
+
+    const posts = sorted.map((p) => {
+      const first = (p.body && p.body[0]) || '';
+      const lead = first.length > 190 ? first.slice(0, 190).trim() + '…' : first;
+      const nLinks = (p.links || []).length;
+      return {
+        date: p.date, title: p.title, lead,
+        catLine: (p.cats || []).join(' · '),
+        linkNote: nLinks ? ' · ' + (nLinks === 1 ? 'קישור למקור' : nLinks + ' קישורים למקור') : '',
+        href: 'Post.dc.html?p=' + encodeURIComponent(p.slug || '')
+      };
+    });
+
+    const gals = (typeof window !== 'undefined' && window.NIV_GALLERIES) || [];
+    const base = (typeof window !== 'undefined' && window.NIV_MEDIA_BASE) || '';
+    const events = (gals.length ? gals : evs).map((e) => ({
+      year: e.year, title: e.title,
+      href: 'Event.dc.html?e=' + encodeURIComponent(e.slug || ''),
+      cover: base + ((e.files && e.files[0]) || '') + (e.thumbSuffix || '-325x220') + '.jpg',
+      meta: [(e.files || []).length + ' תמונות', e.credit].filter(Boolean).join(' · ')
+    }));
+
+    return {
+      catChips, yearChips, posts, events,
+      isEmpty: posts.length === 0,
+      countLabel: posts.length + ' רשומות מתוך ' + all.length
+    };
+  }
+}
+</script>
+</body>
+</html>
