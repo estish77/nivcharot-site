@@ -34,6 +34,13 @@ export function PostCard({ post, locale }: PostCardProps) {
             {cat.name}
           </Tag>
         ))}
+        {locale === 'en' ? (
+          // Real, never-translated archive material (src/content/media.ts) — flag it
+          // here too, not just on the detail page, so readers know before they click.
+          <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-600">
+            In Hebrew
+          </span>
+        ) : null}
         <span aria-hidden="true" className="ms-auto font-heading text-[15px] font-extrabold text-accent-700">
           {arrowForward(locale)}
         </span>

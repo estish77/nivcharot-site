@@ -40,11 +40,11 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
       <EmptyState
         title={t(locale, { he: 'הגלריה הזו לא נמצאה', en: "This gallery wasn't found" })}
         body={t(locale, {
-          he: 'כל הכנסים והאירועים מרוכזים בעמוד תקשורת ומדיה.',
-          en: 'Every conference and event lives on the media page.',
+          he: 'כל הכנסים והאירועים מרוכזים בעמוד הפעילות.',
+          en: 'Every conference and event lives on the advocacy page.',
         })}
         ctaLabel={t(locale, { he: 'לכל הגלריות', en: 'View all galleries' })}
-        ctaHref={`/${locale}/media#events`}
+        ctaHref={`/${locale}/activism#gatherings`}
       />
     )
   }
@@ -56,18 +56,26 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
       <Reveal as="section">
         <Section as="div" paddingBlockStart="52px" paddingBlockEnd="32px">
           <a
-            href={`/${locale}/media#events`}
+            href={`/${locale}/activism#gatherings`}
             className="mb-[26px] inline-block text-[13px] font-semibold no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             {arrowBack(locale)} {t(locale, { he: 'חזרה לכנסים ולאירועים', en: 'Back to conferences & events' })}
           </a>
           <div className="mb-3.5 font-heading text-[44px] leading-none text-accent-700">{gallery.year}</div>
           <h1 className="mb-4 max-w-[900px] text-[clamp(28px,3.6vw,44px)] leading-[1.15]">{gallery.title}</h1>
-          <div className="flex flex-wrap gap-[18px] border-b-2 border-divider pb-[26px] font-heading text-[13px] font-extrabold text-neutral-700">
+          <div className="flex flex-wrap items-center gap-[18px] border-b-2 border-divider pb-[26px] font-heading text-[13px] font-extrabold text-neutral-700">
             <span>
               {t(locale, { he: `${gallery.photos.length} תמונות`, en: `${gallery.photos.length} photos` })}
             </span>
             {gallery.credit ? <span>{gallery.credit}</span> : null}
+            {locale === 'en' ? (
+              // The gallery title above is real archive material, never translated
+              // (see src/content/media.ts's file header) — same honest heads-up as
+              // the post-detail template, PostPrevNext's Hebrew titles below, etc.
+              <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-700">
+                Title in Hebrew
+              </span>
+            ) : null}
           </div>
         </Section>
       </Reveal>

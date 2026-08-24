@@ -77,8 +77,18 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
             <Eyebrow className="mb-3.5">{categoryLine(post.categories)}</Eyebrow>
           ) : null}
           <h1 className="mb-4 text-[clamp(30px,4vw,46px)] leading-[1.12]">{post.title}</h1>
-          <div className="border-b-2 border-divider pb-6 font-heading text-[13px] font-extrabold text-neutral-600">
-            {formatArchiveDate(post.date)} · {t(locale, { he: 'מהארכיון של נבחרות', en: 'from the Nivcharot archive' })}
+          <div className="flex flex-wrap items-center gap-2 border-b-2 border-divider pb-6 font-heading text-[13px] font-extrabold text-neutral-600">
+            <span>
+              {formatArchiveDate(post.date)} · {t(locale, { he: 'מהארכיון של נבחרות', en: 'from the Nivcharot archive' })}
+            </span>
+            {locale === 'en' ? (
+              // Real archive material, researched and verified but never translated
+              // (see src/content/media.ts's file header) — an honest heads-up for
+              // English readers, same visual pattern as PressItemCard's language badge.
+              <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-600">
+                In Hebrew
+              </span>
+            ) : null}
           </div>
           {post.cover ? (
             <Figure grayscale className="relative mt-7 aspect-video overflow-hidden border-2 border-divider bg-neutral-200">

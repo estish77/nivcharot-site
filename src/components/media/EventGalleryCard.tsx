@@ -6,7 +6,7 @@ import type { EventGallery } from '@/content/media'
 
 export type EventGalleryCardProps = { gallery: EventGallery; locale: Locale }
 
-/** One event/gallery card in the `/media#events` grid (docs/ArchiveTemp.dc.html's `events` cards, restyled onto the shared `Figure`/`ImageSlot` primitives). */
+/** One event/gallery card in the `/activism#gatherings` grid (docs/ArchiveTemp.dc.html's `events` cards, restyled onto the shared `Figure`/`ImageSlot` primitives). */
 export function EventGalleryCard({ gallery, locale }: EventGalleryCardProps) {
   const photoCount = gallery.photos.length
 
@@ -24,6 +24,8 @@ export function EventGalleryCard({ gallery, locale }: EventGalleryCardProps) {
         <span className="text-[12.5px] font-semibold text-neutral-700">
           {t(locale, { he: `${photoCount} תמונות`, en: `${photoCount} photos` })}
           {gallery.credit ? ` · ${gallery.credit}` : ''}
+          {/* Title above is real, never-translated archive material (src/content/media.ts) — flag it for English readers, same call as the detail page. */}
+          {locale === 'en' ? ' · Title in Hebrew' : ''}
         </span>
         <span className="font-heading text-[13px] font-extrabold text-accent-700">
           {t(locale, { he: 'לגלריה המלאה', en: 'View full gallery' })} {arrowForward(locale)}
