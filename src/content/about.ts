@@ -167,7 +167,7 @@ export const aboutContent = {
     eyebrow: { he: `צוות`, en: `Team` } satisfies Localized,
     body: {
       he: `לצד אסתי פועלות מנהלות, מנחות ופעילות שטח, וקהילת בוגרות רחבה. הצוות המלא מופיע למעלה.`,
-      en: `Alongside Esty work managers, facilitators and field activists, and a broad alumnae community. The full team is below.`,
+      en: `Managers, facilitators and field activists work alongside Esty, together with a broad alumnae community. The full team is below.`,
     } satisfies Localized,
   },
 

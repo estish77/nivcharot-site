@@ -33,7 +33,7 @@ export const donateHero: {
   eyebrow: { he: 'תומכים.ות בנבחרות', en: 'SUPPORT NIVCHAROT' },
   title: {
     he: 'השינוי הזה קורה בזכותך!',
-    en: 'This change runs on standing orders.',
+    en: 'This change is happening thanks to you!',
   },
   body: {
     he: 'נבחרות פועלת מכספי תרומות. תמיכה חודשית קבועה היא מה שמאפשר לנו לתכנן קדימה: הכשרת מנהיגות, פעילות משפטית, לובי בכנסת ועבודת שטח בקהילה.',
