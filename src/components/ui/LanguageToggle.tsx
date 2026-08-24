@@ -43,8 +43,19 @@ export function LanguageToggle({ locale, className }: LanguageToggleProps) {
           <Link
             href={withLocale(pathname, l)}
             aria-current={l === locale ? 'true' : undefined}
+            // pt/pb + matching negative -mt/-mb: grows the actual tap target
+            // to a comfortable ~44px height (up from the ~22px the bare
+            // 12.5px text produced) without shifting where the text/border
+            // visually sits — the negative margin cancels the padding's
+            // layout effect, it only enlarges the hit area itself. (Kept as
+            // separate -mt-/-mb- rather than the -my- shorthand: mixing a
+            // shorthand with single-side overrides like pb-[13px] is
+            // cascade-order-dependent in Tailwind, not reliably "last one
+            // wins".) Horizontal growth is kept modest (4px/side) so the
+            // two links' hit areas never overlap each other or the divider
+            // between them.
             className={cn(
-              'border-b-[1.5px] pb-0.5 font-heading text-[12.5px] tracking-[0.05em] transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+              'block -mx-1 -mt-[11px] -mb-[13px] border-b-[1.5px] px-1 pt-[11px] pb-[13px] font-heading text-[12.5px] tracking-[0.05em] transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
               l === locale
                 ? 'border-accent font-bold text-text'
                 : 'border-transparent font-medium text-neutral-700 hover:text-text focus-visible:text-text',

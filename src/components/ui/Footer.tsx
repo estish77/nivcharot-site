@@ -147,7 +147,13 @@ export function Footer({ locale, donateHref, contactEmail, social, className }: 
         <div className="flex flex-wrap items-center justify-end gap-4 text-end text-xs tracking-[0.01em] text-neutral-700">
           <Link
             href={donateHref ?? `/${locale}/donate`}
-            className="border-b border-divider pb-0.5 font-semibold no-underline hover:text-accent-700 focus-visible:text-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            // pt/pb + matching negative -mt/-mb grows the tap target to a
+            // comfortable ~44px height (up from ~19px) without shifting the
+            // visible text/border — see the identical technique (and the
+            // note on why -mt-/-mb- rather than the -my- shorthand) in
+            // LanguageToggle.tsx. Room to grow into comes from this row's
+            // own gap-6 to the icon row above and the footer's pb-7 below.
+            className="-mx-2 -mt-3 -mb-[14px] block border-b border-divider px-2 pt-3 pb-[14px] font-semibold no-underline hover:text-accent-700 focus-visible:text-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             {dict.donate[locale]}
           </Link>
