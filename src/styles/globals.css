@@ -119,6 +119,22 @@
     font-weight: 800;
     color: var(--color-text);
     margin: 0;
+    /*
+     * Safety net for narrow phones (found at 320px width on the EN home
+     * hero, docs/2026-08-19 mobile QA): h1's font-size clamp has a hard
+     * 40px floor that never shrinks further no matter how narrow the
+     * viewport gets, and English copy sometimes contains one long
+     * unbreakable word ("representation," in the hero title) that's wider
+     * than the available column at that floor size. Normal wrapping can't
+     * break a word without a hyphen, so that single line pushed past the
+     * viewport edge and caused real horizontal scroll — invisible on every
+     * wider viewport tested (375px+) since the word fit fine there, and
+     * invisible on Hebrew copy (different word lengths). This doesn't
+     * change how any heading renders as long as every word already fits;
+     * it only kicks in as the fallback for the rare word/viewport
+     * combination that wouldn't otherwise fit at all.
+     */
+    overflow-wrap: break-word;
   }
 
   /* h1/h2/h3 sizes are the recovered _ds/styles.css base typography. h4-h6
