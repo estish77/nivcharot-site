@@ -107,6 +107,17 @@
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);
+    /*
+     * Same defensive fallback as the h1-h6 rule below (see its comment for
+     * the real overflow this caught), extended to all body copy: content
+     * here is still being actively edited, and any future paragraph/link
+     * text containing one long unbroken token (a URL, a long email, a
+     * hyphen-free compound word) at a narrow phone width could cause the
+     * identical horizontal-scroll bug outside headings. Inherited, so this
+     * alone would cover h1-h6 too; kept separate there since that fix
+     * predates this one and its comment documents the specific bug found.
+     */
+    overflow-wrap: break-word;
   }
 
   h1,
