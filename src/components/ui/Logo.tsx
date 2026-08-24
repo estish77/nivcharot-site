@@ -1,4 +1,5 @@
 import { t, type Locale } from '@/lib/i18n'
+import { cn } from './cn'
 
 export type LogoProps = {
   locale: Locale
@@ -44,8 +45,17 @@ export function Logo({ locale, className }: LogoProps) {
     <img
       src="/assets/nivcharot-logo-en.png"
       alt={label}
-      className={className}
-      style={{ width: 230, height: 'auto', display: 'block' }}
+      // Fixed-width per the mockup rule, but not a single fixed width: at
+      // 230px (the mockup/desktop value) the English wordmark alone is
+      // wider than the available header row on every phone width from 320
+      // to 430px once the language toggle + menu button are accounted for
+      // (header padding 2*32px + gap-6 24px + nav ~118px), forcing the
+      // header onto two lines — unlike the Hebrew mark, which is narrow
+      // enough to never wrap. Scaling the width down at narrow viewports
+      // keeps the header on one line through the whole phone range;
+      // min-[440px] restores the exact original 230px once there's room.
+      className={cn('w-[110px] min-[356px]:w-[150px] min-[440px]:w-[230px]', className)}
+      style={{ height: 'auto', display: 'block' }}
     />
   )
 }
