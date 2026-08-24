@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 
 import '@/styles/globals.css'
 import { fontVariables } from '@/lib/fonts'
-import { dict, dirOf, isLocale, locales } from '@/lib/i18n'
+import { defaultLocale, dict, dirOf, isLocale, locales } from '@/lib/i18n'
 import { siteUrl } from '@/lib/site'
 import { SiteNotice } from '@/components/ui'
 
@@ -28,12 +28,29 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: 'נבחרות | Nivcharot',
-    template: '%s | נבחרות',
-  },
+/**
+ * A static `metadata` export can't see the `locale` route param, so every
+ * page's `<title>` — regardless of locale — got suffixed with the bare
+ * Hebrew "נבחרות" (e.g. an English page rendered as `About | נבחרות`, with
+ * no English brand name at all). `generateMetadata` fixes that: the title
+ * template now follows the active locale, matching the bilingual default
+ * this already used for the untitled/root case.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params
+  const locale = isLocale(rawLocale) ? rawLocale : defaultLocale
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: 'נבחרות | Nivcharot',
+      template: locale === 'en' ? '%s | Nivcharot' : '%s | נבחרות',
+    },
+  }
 }
 
 export default async function LocaleLayout({
