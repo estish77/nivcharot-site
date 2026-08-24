@@ -6,6 +6,7 @@ import '@/styles/globals.css'
 import { fontVariables } from '@/lib/fonts'
 import { dict, dirOf, isLocale, locales } from '@/lib/i18n'
 import { siteUrl } from '@/lib/site'
+import { SiteNotice } from '@/components/ui'
 
 /**
  * This layout is the ROOT layout for every `/{locale}/...` route — there is
@@ -69,6 +70,7 @@ export default async function LocaleLayout({
         >
           {dict.skipToContent[locale]}
         </a>
+        <SiteNotice locale={locale} />
         {children}
       </body>
     </html>

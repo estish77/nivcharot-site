@@ -24,6 +24,9 @@ export type { NavMenuProps, NavLink } from './NavMenu'
 export { Header } from './Header'
 export type { HeaderProps } from './Header'
 
+export { SiteNotice } from './SiteNotice'
+export type { SiteNoticeProps } from './SiteNotice'
+
 export { Footer } from './Footer'
 export type { FooterProps } from './Footer'
 
