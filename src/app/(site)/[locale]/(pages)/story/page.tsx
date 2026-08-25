@@ -9,6 +9,7 @@ import { EqualizerDots } from '@/components/story/EqualizerDots'
 import { Timeline } from '@/components/story/Timeline'
 import { storyContent, timelineMilestones } from '@/content/story'
 import { pressArchiveItemsSorted, pressItemHref } from '@/content/press-archive'
+import { getStoryContent } from '@/lib/cms'
 import { arrowForward, isLocale, locales, t, type Locale } from '@/lib/i18n'
 
 export function generateStaticParams() {
@@ -52,6 +53,7 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
+  const hero = await getStoryContent(locale)
 
   const tabs: TabBarItem[] = [
     { label: t(locale, { he: 'אודות', en: 'About' }), href: `/${locale}/about` },
@@ -66,12 +68,12 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
       {/* Hero */}
       <Reveal as="section">
         <Section as="div" maxWidth={1080} paddingBlockStart="64px" paddingBlockEnd="40px">
-          <Eyebrow className="mb-3.5">{t(locale, storyContent.hero.eyebrow)}</Eyebrow>
-          <h1 className="m-0 mb-5 text-[clamp(36px,5vw,60px)] leading-[1.08]">{withLineBreaks(t(locale, storyContent.hero.title))}</h1>
+          <Eyebrow className="mb-3.5">{hero.eyebrow}</Eyebrow>
+          <h1 className="m-0 mb-5 text-[clamp(36px,5vw,60px)] leading-[1.08]">{withLineBreaks(hero.title)}</h1>
           <p className="m-0 mb-5 max-w-[520px] text-[clamp(17px,2vw,22px)] font-heading font-extrabold leading-[1.4] text-accent-700">
             {t(locale, storyContent.hero.kicker)}
           </p>
-          <p className="m-0 max-w-[640px] text-[17px] leading-[1.65] text-neutral-800">{withLineBreaks(t(locale, storyContent.hero.lead))}</p>
+          <p className="m-0 max-w-[640px] text-[17px] leading-[1.65] text-neutral-800">{withLineBreaks(hero.body)}</p>
         </Section>
       </Reveal>
 

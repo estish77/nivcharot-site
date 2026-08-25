@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 
 import { EventGalleryCard } from '@/components/media/EventGalleryCard'
 import { eventGalleries } from '@/content/media'
@@ -8,8 +8,6 @@ import {
   activismFaqs,
   activismFaqSection,
   activismHalachaCards,
-  activismHalachaSection,
-  activismHero,
   activismImageSlots,
   activismPillars,
   activismPositionPapers,
@@ -17,7 +15,19 @@ import {
   activismPositionPapersPlaceholder,
   type ActivismPillar,
 } from '@/content/activism'
+import { getActivismContent } from '@/lib/cms'
 import { arrowForward, t, type Locale, type Localized } from '@/lib/i18n'
+
+/** Renders a `\n`-joined CMS string's line breaks as real `<br>`s — same convention as the About/Story pages' fixture `\n` markers. */
+function withLineBreaks(text: string): ReactNode {
+  const lines = text.split('\n')
+  return lines.map((line, i) => (
+    <Fragment key={i}>
+      {line}
+      {i < lines.length - 1 ? <br /> : null}
+    </Fragment>
+  ))
+}
 import { Accordion, Button, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SectionHead, Tag } from '@/components/ui'
 import { EqualizerDots } from './EqualizerDots'
 
@@ -145,19 +155,17 @@ function PillarImage({ label }: { label: string }) {
   )
 }
 
-export function ActivismPage({ locale }: { locale: Locale }) {
+export async function ActivismPage({ locale }: { locale: Locale }) {
+  const content = await getActivismContent(locale)
+
   return (
     <>
       {/* Hero */}
       <Reveal as="section">
         <Section as="div" maxWidth={1080} paddingBlockStart="64px" paddingBlockEnd="40px">
-          <Eyebrow className="mb-3.5">{t(locale, activismHero.eyebrow)}</Eyebrow>
-          <h1 className="mb-5 text-[clamp(36px,5vw,56px)] leading-[1.08]">
-            {t(locale, activismHero.titleLine1)}
-            <br />
-            {t(locale, activismHero.titleLine2)}
-          </h1>
-          <p className="mb-7 max-w-[660px] text-[17px] leading-[1.7] text-neutral-800">{t(locale, activismHero.lead)}</p>
+          <Eyebrow className="mb-3.5">{content.hero.eyebrow}</Eyebrow>
+          <h1 className="mb-5 text-[clamp(36px,5vw,56px)] leading-[1.08]">{withLineBreaks(content.hero.title)}</h1>
+          <p className="mb-7 max-w-[660px] text-[17px] leading-[1.7] text-neutral-800">{content.hero.body}</p>
           <div className="flex flex-wrap gap-3">
             {heroJumpLinks.map((link, i) => (
               <Button key={link.href} href={link.href} variant={i === 0 ? 'primary' : 'secondary'}>
@@ -223,10 +231,10 @@ export function ActivismPage({ locale }: { locale: Locale }) {
       {/* Halakha — two rulings (subsection of "משפט והלכה" above, hence h3) */}
       <Reveal as="section">
         <Section as="div" id="halacha" maxWidth={1080} paddingBlockStart="64px" paddingBlockEnd="8px">
-          <Eyebrow className="mb-2.5">{t(locale, activismHalachaSection.eyebrow)}</Eyebrow>
-          <h3 className="mb-3">{t(locale, activismHalachaSection.title)}</h3>
+          <Eyebrow className="mb-2.5">{content.halakha.eyebrow}</Eyebrow>
+          <h3 className="mb-3">{content.halakha.title}</h3>
           <p className="mb-[30px] max-w-[660px] text-[15.5px] leading-[1.7] text-neutral-800">
-            {t(locale, activismHalachaSection.lead)}
+            {content.halakha.body}
           </p>
           {/*
             Hand-rolled, not CellGrid: this 2-card row's border convention

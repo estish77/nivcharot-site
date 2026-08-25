@@ -12,6 +12,7 @@ import {
   hanivcheretQuotesEyebrow,
   resolveHeroMedia,
 } from '@/content/hanivcheret'
+import { getHanivcheretContent } from '@/lib/cms'
 import { t, type Locale, type Localized } from '@/lib/i18n'
 import { Button, Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SectionHead, Tag, cn } from '@/components/ui'
 import { AlumnaeVideosSection } from './AlumnaeVideosSection'
@@ -74,9 +75,10 @@ function HeroMedia({ locale }: { locale: Locale }) {
  * branching only where the source itself branches — everything else
  * (curriculum grid, quotes carousel, hero media resolution) is fully shared.
  */
-export function HanivcheretPage({ locale }: { locale: Locale }) {
+export async function HanivcheretPage({ locale }: { locale: Locale }) {
   const isHe = locale === 'he'
   const ctaHref = `/${locale}${hanivcheretHero.cta.href}`
+  const hero = await getHanivcheretContent(locale)
 
   return (
     <>
@@ -100,13 +102,13 @@ export function HanivcheretPage({ locale }: { locale: Locale }) {
                 page with none).
               */}
               <h1 className="mb-[26px] max-w-[470px] text-[clamp(38px,5vw,60px)] leading-[1.05]">
-                {t(locale, hanivcheretHero.title)}
+                {hero.title}
                 {locale === 'he' ? (
                   <span className="sr-only">, {t(locale, hanivcheretHero.titleSrOnlySuffix)}</span>
                 ) : null}
               </h1>
               <p className="mb-3 max-w-[600px] text-[17.5px] leading-[1.7] text-niv-slate">
-                {t(locale, hanivcheretHero.bodyPrimary)}
+                {hero.body}
               </p>
               <p className="mb-7 max-w-[600px] text-[15px] leading-[1.7] text-neutral-700">
                 {t(locale, hanivcheretHero.bodySecondary)}
@@ -154,10 +156,10 @@ export function HanivcheretPage({ locale }: { locale: Locale }) {
             <div>
               <div className="mb-3.5 flex items-center gap-3">
                 <Tag variant="accent">{t(locale, hanivcheretHero.tag)}</Tag>
-                <Eyebrow as="span">{t(locale, hanivcheretHero.eyebrow)}</Eyebrow>
+                <Eyebrow as="span">{hero.eyebrow}</Eyebrow>
               </div>
-              <h1 className="mb-5 text-[clamp(38px,5vw,60px)] leading-[1.05]">{t(locale, hanivcheretHero.title)}</h1>
-              <p className="mb-3 max-w-[600px] text-[17px] leading-[1.7]">{t(locale, hanivcheretHero.bodyPrimary)}</p>
+              <h1 className="mb-5 text-[clamp(38px,5vw,60px)] leading-[1.05]">{hero.title}</h1>
+              <p className="mb-3 max-w-[600px] text-[17px] leading-[1.7]">{hero.body}</p>
               <p className="mb-7 max-w-[600px] text-[15px] leading-[1.7] text-neutral-700">
                 {t(locale, hanivcheretHero.bodySecondary)}
               </p>

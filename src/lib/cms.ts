@@ -3,6 +3,12 @@ import { getPayload } from 'payload'
 
 import type { NavLink } from '@/components/ui'
 import { goalSection, heroContent, pillarCards, statTiles } from '@/content/home'
+import { aboutContent } from '@/content/about'
+import { storyContent } from '@/content/story'
+import { activismHero, activismHalachaSection } from '@/content/activism'
+import { podcastText } from '@/content/podcast'
+import { hanivcheretHero } from '@/content/hanivcheret'
+import { donateHero } from '@/content/donate'
 import { archivePosts as staticArchivePosts, type ArchivePost } from '@/content/media'
 import { otherPodcasts as staticOtherPodcasts, talksAndConferences as staticTalksAndConferences, videoArticles as staticVideoArticles, type ElsewhereMediaItem } from '@/content/elsewhere-media'
 import { pressArchiveItemsSorted as staticPressArchiveItemsSorted, sortPressItemsDesc, type PressArchiveItem } from '@/content/press-archive'
@@ -145,6 +151,200 @@ export async function getHomeContent(locale: Locale): Promise<PayloadHomeContent
       },
       statTiles: nextTiles,
       pillarCards: nextCards,
+    }
+  } catch {
+    return fallback
+  }
+}
+
+/** Plain, single-locale eyebrow/title/body text — the shape shared by every page-copy global's `hero` group. */
+export type SimpleHeroContent = { eyebrow: string; title: string; body: string }
+
+/**
+ * Partial dashboard wiring for the six remaining page-copy globals (About,
+ * Story, Activism, Podcast, HaNivcheret, Donate) — each shares `home`'s
+ * schema (heroField/statTilesField/pillarCardsField/sectionIntrosField, see
+ * src/payload/fields/globalSections.ts) but only the fields below actually
+ * fit each page's real content without forcing richer material (About's
+ * sourced stat tiles and "means" bullet lists, Story's 20-entry timeline,
+ * Activism's four pillar blocks and FAQ accordion, Hanivcheret's curriculum
+ * grid and alumnae quotes) into a shape that would silently drop it. Same
+ * try/fall-back-to-static-fixture pattern as `getHomeContent` above.
+ */
+export async function getAboutContent(
+  locale: Locale,
+): Promise<{ hero: SimpleHeroContent; purpose: SimpleHeroContent }> {
+  const fallback = {
+    hero: {
+      eyebrow: aboutContent.hero.eyebrow[locale],
+      title: aboutContent.hero.title[locale],
+      body: aboutContent.hero.lead[locale],
+    },
+    purpose: {
+      eyebrow: aboutContent.purpose.eyebrow[locale],
+      title: aboutContent.purpose.title[locale],
+      body: aboutContent.purpose.lead[locale],
+    },
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await payload.findGlobal({ slug: 'about', locale })
+    const hero = (doc?.hero ?? {}) as Record<string, unknown>
+    const intros = Array.isArray(doc?.sectionIntros) ? (doc.sectionIntros as Record<string, unknown>[]) : []
+    const purposeIntro = intros.find((intro) => intro?.key === 'purpose')
+
+    return {
+      hero: {
+        eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.hero.eyebrow),
+        title: resolveLocalizedValue(hero.title, locale, fallback.hero.title),
+        body: resolveLocalizedValue(hero.body, locale, fallback.hero.body),
+      },
+      purpose: purposeIntro
+        ? {
+            eyebrow: resolveLocalizedValue(purposeIntro.eyebrow, locale, fallback.purpose.eyebrow),
+            title: resolveLocalizedValue(purposeIntro.title, locale, fallback.purpose.title),
+            body: resolveLocalizedValue(purposeIntro.body, locale, fallback.purpose.body),
+          }
+        : fallback.purpose,
+    }
+  } catch {
+    return fallback
+  }
+}
+
+export async function getStoryContent(locale: Locale): Promise<SimpleHeroContent> {
+  const fallback: SimpleHeroContent = {
+    eyebrow: storyContent.hero.eyebrow[locale],
+    title: storyContent.hero.title[locale],
+    body: storyContent.hero.lead[locale],
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await payload.findGlobal({ slug: 'story', locale })
+    const hero = (doc?.hero ?? {}) as Record<string, unknown>
+    return {
+      eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.eyebrow),
+      title: resolveLocalizedValue(hero.title, locale, fallback.title),
+      body: resolveLocalizedValue(hero.body, locale, fallback.body),
+    }
+  } catch {
+    return fallback
+  }
+}
+
+export async function getActivismContent(
+  locale: Locale,
+): Promise<{ hero: SimpleHeroContent; halakha: SimpleHeroContent }> {
+  const fallback = {
+    hero: {
+      eyebrow: activismHero.eyebrow[locale],
+      title: `${activismHero.titleLine1[locale]}\n${activismHero.titleLine2[locale]}`,
+      body: activismHero.lead[locale],
+    },
+    halakha: {
+      eyebrow: activismHalachaSection.eyebrow[locale],
+      title: activismHalachaSection.title[locale],
+      body: activismHalachaSection.lead[locale],
+    },
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await payload.findGlobal({ slug: 'activism', locale })
+    const hero = (doc?.hero ?? {}) as Record<string, unknown>
+    const intros = Array.isArray(doc?.sectionIntros) ? (doc.sectionIntros as Record<string, unknown>[]) : []
+    const halakhaIntro = intros.find((intro) => intro?.key === 'halakha')
+
+    return {
+      hero: {
+        eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.hero.eyebrow),
+        title: resolveLocalizedValue(hero.title, locale, fallback.hero.title),
+        body: resolveLocalizedValue(hero.body, locale, fallback.hero.body),
+      },
+      halakha: halakhaIntro
+        ? {
+            eyebrow: resolveLocalizedValue(halakhaIntro.eyebrow, locale, fallback.halakha.eyebrow),
+            title: resolveLocalizedValue(halakhaIntro.title, locale, fallback.halakha.title),
+            body: resolveLocalizedValue(halakhaIntro.body, locale, fallback.halakha.body),
+          }
+        : fallback.halakha,
+    }
+  } catch {
+    return fallback
+  }
+}
+
+export async function getPodcastHeroContent(locale: Locale): Promise<SimpleHeroContent> {
+  const fallback: SimpleHeroContent = {
+    eyebrow: podcastText.heroEyebrow[locale],
+    title: podcastText.heroTitle[locale],
+    body: podcastText.heroLead[locale],
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await payload.findGlobal({ slug: 'podcast', locale })
+    const hero = (doc?.hero ?? {}) as Record<string, unknown>
+    return {
+      eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.eyebrow),
+      title: resolveLocalizedValue(hero.title, locale, fallback.title),
+      body: resolveLocalizedValue(hero.body, locale, fallback.body),
+    }
+  } catch {
+    return fallback
+  }
+}
+
+export async function getHanivcheretContent(locale: Locale): Promise<SimpleHeroContent> {
+  const fallback: SimpleHeroContent = {
+    eyebrow: hanivcheretHero.eyebrow[locale],
+    title: hanivcheretHero.title[locale],
+    body: hanivcheretHero.bodyPrimary[locale],
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await payload.findGlobal({ slug: 'hanivcheret', locale })
+    const hero = (doc?.hero ?? {}) as Record<string, unknown>
+    return {
+      eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.eyebrow),
+      title: resolveLocalizedValue(hero.title, locale, fallback.title),
+      body: resolveLocalizedValue(hero.body, locale, fallback.body),
+    }
+  } catch {
+    return fallback
+  }
+}
+
+export async function getDonateContent(locale: Locale): Promise<SimpleHeroContent> {
+  const fallback: SimpleHeroContent = {
+    eyebrow: donateHero.eyebrow[locale],
+    title: donateHero.title[locale],
+    body: donateHero.body[locale],
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await payload.findGlobal({ slug: 'donate', locale })
+    const hero = (doc?.hero ?? {}) as Record<string, unknown>
+    return {
+      eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.eyebrow),
+      title: resolveLocalizedValue(hero.title, locale, fallback.title),
+      body: resolveLocalizedValue(hero.body, locale, fallback.body),
     }
   } catch {
     return fallback

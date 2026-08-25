@@ -8,6 +8,7 @@ import type { TabBarItem } from '@/components/ui'
 import { EqualizerDots } from '@/components/about/EqualizerDots'
 import { StatTile } from '@/components/about/StatTile'
 import { aboutContent } from '@/content/about'
+import { getAboutContent } from '@/lib/cms'
 import { arrowForward, isLocale, locales, t, type Locale } from '@/lib/i18n'
 
 export function generateStaticParams() {
@@ -59,6 +60,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
+  const content = await getAboutContent(locale)
 
   const tabs: TabBarItem[] = [
     { label: t(locale, { he: 'אודות', en: 'About' }), href: `/${locale}/about` },
@@ -71,11 +73,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       {/* Hero */}
       <Reveal as="section" index={0}>
         <Section as="div" maxWidth={1080} paddingBlockStart="64px" paddingBlockEnd="48px">
-          <Eyebrow className="mb-3.5">{t(locale, aboutContent.hero.eyebrow)}</Eyebrow>
+          <Eyebrow className="mb-3.5">{content.hero.eyebrow}</Eyebrow>
           <h1 className="m-0 mb-5 text-[clamp(36px,5vw,56px)] leading-[1.08] max-[860px]:text-[clamp(30px,9vw,46px)]">
-            {withLineBreaks(t(locale, aboutContent.hero.title))}
+            {withLineBreaks(content.hero.title)}
           </h1>
-          <p className="m-0 max-w-[680px] text-[17px] leading-[1.7] text-neutral-800">{t(locale, aboutContent.hero.lead)}</p>
+          <p className="m-0 max-w-[680px] text-[17px] leading-[1.7] text-neutral-800">{content.hero.body}</p>
         </Section>
       </Reveal>
 
@@ -89,11 +91,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       {/* Purpose + three lines of work */}
       <Reveal as="section" index={2}>
         <Section as="div" maxWidth={1080} paddingBlockStart="52px" paddingBlockEnd="52px">
-          <Eyebrow className="mb-3">{t(locale, aboutContent.purpose.eyebrow)}</Eyebrow>
+          <Eyebrow className="mb-3">{content.purpose.eyebrow}</Eyebrow>
           <h2 className="mb-4 max-w-[780px] max-[860px]:text-[clamp(24px,7vw,34px)]">
-            {withLineBreaks(t(locale, aboutContent.purpose.title))}
+            {withLineBreaks(content.purpose.title)}
           </h2>
-          <p className="mb-[34px] max-w-[720px] text-base leading-[1.7] text-neutral-800">{t(locale, aboutContent.purpose.lead)}</p>
+          <p className="mb-[34px] max-w-[720px] text-base leading-[1.7] text-neutral-800">{content.purpose.body}</p>
 
           <div className="border-y-2 border-s-2 border-e-2 border-divider">
             <CellGrid cols={3}>
