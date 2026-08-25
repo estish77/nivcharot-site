@@ -10,6 +10,7 @@ import sharp from 'sharp'
 import { collections } from './src/payload/collections'
 import { globals } from './src/payload/globals'
 import { Users } from './src/payload/collections/Users'
+import { migrations } from './src/migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -25,9 +26,21 @@ const databaseURI = process.env.DATABASE_URI || 'file:./payload.db'
  * ephemeral filesystem (e.g. Vercel serverless). One config that works
  * unchanged in both places; see .env.example.
  */
+/**
+ * Postgres only auto-creates its schema in development (`pushDevSchema`,
+ * inside @payloadcms/db-postgres's connect.js) — in production it's a
+ * no-op unless `prodMigrations` is set, in which case that exact array is
+ * applied on every cold connect. Without this, a fresh production
+ * Postgres database never gets any tables at all: public pages still
+ * "work" because every content-fetching function in src/lib/cms.ts
+ * catches the resulting DB error and falls back to static content, but
+ * /admin has no such fallback and fails outright. `src/migrations/`
+ * is real, committed schema history (unlike gitignored payload-types.ts)
+ * — regenerate with `payload migrate:create <name>` after schema changes.
+ */
 const db = databaseURI.startsWith('file:')
   ? sqliteAdapter({ client: { url: databaseURI } })
-  : postgresAdapter({ pool: { connectionString: databaseURI } })
+  : postgresAdapter({ pool: { connectionString: databaseURI }, prodMigrations: migrations })
 
 // NOTE: buildConfig only assembles/validates the config object below — it
 // does not open a database connection. That only happens when Payload is
