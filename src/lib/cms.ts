@@ -118,20 +118,29 @@ export async function getHomeContent(locale: Locale): Promise<PayloadHomeContent
       }))
       : pillarCards
 
+    const rawIntros = Array.isArray(doc.sectionIntros) ? doc.sectionIntros : []
+    const goalIntro = rawIntros.find((intro) => intro?.key === 'goal')
+
     return {
       hero: nextHero,
+      // `goalSection` ("Our purpose") used to be built from `doc.hero`'s
+      // fields — a copy/paste bug: it silently duplicated the Hero section
+      // instead of reading its own content. Fixed to read the
+      // `sectionIntros` entry keyed `'goal'` (already in the Home global's
+      // schema, previously unused for this), matching how every other
+      // page's section-intro is modeled.
       goalSection: {
         eyebrow: {
-          he: resolveLocalizedValue(doc?.hero?.eyebrow, 'he', goalSection.eyebrow.he),
-          en: resolveLocalizedValue(doc?.hero?.eyebrow, 'en', goalSection.eyebrow.en),
+          he: resolveLocalizedValue(goalIntro?.eyebrow, 'he', goalSection.eyebrow.he),
+          en: resolveLocalizedValue(goalIntro?.eyebrow, 'en', goalSection.eyebrow.en),
         },
         titleLines: {
-          he: [resolveLocalizedValue(doc?.hero?.title, 'he', goalSection.titleLines.he[0] ?? '')],
-          en: [resolveLocalizedValue(doc?.hero?.title, 'en', goalSection.titleLines.en[0] ?? '')],
+          he: [resolveLocalizedValue(goalIntro?.title, 'he', goalSection.titleLines.he[0] ?? '')],
+          en: [resolveLocalizedValue(goalIntro?.title, 'en', goalSection.titleLines.en[0] ?? '')],
         },
         lead: {
-          he: resolveLocalizedValue(doc?.hero?.body, 'he', goalSection.lead.he),
-          en: resolveLocalizedValue(doc?.hero?.body, 'en', goalSection.lead.en),
+          he: resolveLocalizedValue(goalIntro?.body, 'he', goalSection.lead.he),
+          en: resolveLocalizedValue(goalIntro?.body, 'en', goalSection.lead.en),
         },
       },
       statTiles: nextTiles,

@@ -16,7 +16,8 @@
     "migrate": "payload migrate",
     "create-admin": "payload run scripts/create-admin-user.mjs",
     "export-content": "payload run scripts/export-content.mjs",
-    "import-content": "payload run scripts/import-content.mjs"
+    "import-content": "payload run scripts/import-content.mjs",
+    "seed-home": "payload run scripts/seed-home-global.mjs"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.87.0",
