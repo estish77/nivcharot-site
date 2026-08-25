@@ -9,18 +9,19 @@
 // .env.example's "dev-mode hazard" note for why running anything without
 // NODE_ENV=production against a production database is dangerous.
 //
-// KNOWN LIMITATION (verified empirically, not guessed): for this global's
-// array fields (statTiles/pillarCards/sectionIntros), Payload's Postgres/
-// SQLite adapters do not merge per-locale writes across two separate
-// updateGlobal calls the way they do for plain group fields (hero) — the
-// second call's locale silently replaces the whole array's text for BOTH
-// locales, and a single unscoped call with {he,en}-wrapped values is
-// unreliable for richText nested in an array (validated then hits a raw
-// SQL error depending on insert-vs-update state). Writing Hebrew LAST
-// wins that overwrite, so English visitors will see Hebrew stat-tile
-// labels, pillar-card text, and the "goal" section intro until a real
-// fix lands — hero (a group field, not an array) is unaffected and reads
-// correctly in both languages. Flagged, not silently accepted.
+// TWO-PASS, ID-PRESERVING PATTERN (verified empirically, use for every
+// other page's seed script too): a locale-scoped updateGlobal call must
+// use plain (unwrapped) per-locale values -- an unscoped call with
+// {he,en}-wrapped values works for group fields (hero) but is unreliable
+// for richText nested in an array (fails validation, or a raw SQL error
+// depending on insert-vs-update state). But two separate locale-scoped
+// calls on an ARRAY field normally don't merge -- the second call deletes
+// and re-inserts fresh rows, losing the first locale's data entirely --
+// UNLESS each array item carries the SAME `id` across both calls, in
+// which case Payload correctly updates the existing rows in place and
+// both locales' text survives. So: write locale 'he' first WITHOUT ids
+// (creating fresh rows), capture the ids Payload assigns, then write
+// locale 'en' including those same ids.
 import { getPayload } from 'payload'
 import config from '../payload.config.ts'
 import { goalSection, heroContent, pillarCards, statTiles } from '../src/content/home.ts'
@@ -49,15 +50,31 @@ function richText(text, direction) {
   }
 }
 
-function dataFor(locale) {
+function dataFor(locale, ids) {
   const dir = locale === 'he' ? 'rtl' : 'ltr'
+  const id = (key, index) => (ids ? { id: ids[key][index] } : {})
   return {
     hero: { eyebrow: heroContent.eyebrow[locale], title: heroContent.title[locale], body: heroContent.lead[locale] },
-    statTiles: statTiles[locale].map((tile) => ({ value: tile.value, label: tile.description })),
+    statTiles: statTiles.he.map((heTile, i) => {
+      // statTiles is intentionally ordered differently per locale in the
+      // static fixture (a real, deliberate mockup difference — see
+      // home.ts's own comment), but this global's array has one shared
+      // order across locales — Hebrew's order wins as canonical.
+      const enTile = statTiles.en.find((t) => t.value === heTile.value) ?? statTiles.en[i]
+      const tile = locale === 'he' ? heTile : enTile
+      return { ...id('statTiles', i), value: tile.value, label: tile.description }
+    }),
     sectionIntros: [
-      { key: 'goal', eyebrow: goalSection.eyebrow[locale], title: goalSection.titleLines[locale].join(' '), body: goalSection.lead[locale] },
+      {
+        ...id('sectionIntros', 0),
+        key: 'goal',
+        eyebrow: goalSection.eyebrow[locale],
+        title: goalSection.titleLines[locale].join(' '),
+        body: goalSection.lead[locale],
+      },
     ],
-    pillarCards: pillarCards.map((card) => ({
+    pillarCards: pillarCards.map((card, i) => ({
+      ...id('pillarCards', i),
       number: card.number,
       title: card.title[locale],
       body: richText(card.body[locale], dir),
@@ -67,17 +84,30 @@ function dataFor(locale) {
   }
 }
 
-// Hebrew (defaultLocale, fallback:true) written last on purpose — see the
-// KNOWN LIMITATION note above.
-await payload.updateGlobal({ slug: 'home', locale: 'en', context: { disableRevalidate: true }, data: dataFor('en') })
-console.log('home: en written')
-await payload.updateGlobal({ slug: 'home', locale: 'he', context: { disableRevalidate: true }, data: dataFor('he') })
+const heDoc = await payload.updateGlobal({ slug: 'home', locale: 'he', context: { disableRevalidate: true }, data: dataFor('he') })
 console.log('home: he written')
+
+const ids = {
+  statTiles: heDoc.statTiles.map((t) => t.id),
+  sectionIntros: heDoc.sectionIntros.map((s) => s.id),
+  pillarCards: heDoc.pillarCards.map((c) => c.id),
+}
+
+await payload.updateGlobal({ slug: 'home', locale: 'en', context: { disableRevalidate: true }, data: dataFor('en', ids) })
+console.log('home: en written')
 
 const check = await payload.findGlobal({ slug: 'home', locale: 'all' })
 console.log('verify hero.title:', JSON.stringify(check.hero?.title))
 console.log('verify goal intro title:', JSON.stringify(check.sectionIntros?.[0]?.title))
-console.log('verify statTiles:', JSON.stringify(check.statTiles))
-console.log('verify pillarCards count:', check.pillarCards?.length)
+console.log('verify statTiles[0].label:', JSON.stringify(check.statTiles?.[0]?.label))
+console.log('verify pillarCards[0].title:', JSON.stringify(check.pillarCards?.[0]?.title))
+console.log(
+  'verify pillarCards[0].body.he:',
+  JSON.stringify(check.pillarCards?.[0]?.body?.he?.root?.children?.[0]?.children?.[0]?.text),
+)
+console.log(
+  'verify pillarCards[0].body.en:',
+  JSON.stringify(check.pillarCards?.[0]?.body?.en?.root?.children?.[0]?.children?.[0]?.text),
+)
 
 process.exit(0)
