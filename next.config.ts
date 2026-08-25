@@ -14,6 +14,12 @@ const nextConfig: NextConfig = {
   // Wi-Fi IP; if it changes (different network, DHCP lease renewal), update
   // this list to match `ipconfig`'s new address.
   allowedDevOrigins: ['192.168.1.187'],
+  // Root layout keys off a top-level dynamic `[locale]` segment, so there's
+  // no single layout to compose a 404 from for a URL that matches no route
+  // at all — see src/app/global-not-found.tsx.
+  experimental: {
+    globalNotFound: true,
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

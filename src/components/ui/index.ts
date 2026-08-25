@@ -27,6 +27,8 @@ export type { HeaderProps } from './Header'
 export { SiteNotice } from './SiteNotice'
 export type { SiteNoticeProps } from './SiteNotice'
 
+export { NotFoundContent } from './NotFoundContent'
+
 export { Footer } from './Footer'
 export type { FooterProps } from './Footer'
 
