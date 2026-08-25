@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'motion/react'
 
@@ -11,9 +12,11 @@ import { hallAriaLabel, hallSentence, heroContent } from '@/content/home'
 import { SeatHall } from './SeatHall'
 
 const BREATHE_DURATION_S = 3.4
+const EASE = [0.22, 0.61, 0.36, 1] as const
 
 export function Hero({ locale, content = heroContent }: { locale: Locale; content?: typeof heroContent }) {
   const shouldReduceMotion = useReducedMotion()
+  const [hallSettled, setHallSettled] = useState(false)
   const titleLines = content.title[locale].split('\n')
 
   return (
@@ -22,7 +25,12 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
       className="relative grid grid-cols-[minmax(320px,44%)_1fr] items-center gap-6 border-b-2 border-divider bg-bg max-[860px]:grid-cols-1"
       style={{ minHeight: '78vh', paddingInline: '40px', paddingBlockStart: '56px', paddingBlockEnd: '48px' }}
     >
-      <div style={{ maxWidth: 620 }}>
+      <motion.div
+        style={{ maxWidth: 620 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, x: 26 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.85, ease: EASE, delay: 0.22 }}
+      >
         <div className="mb-4 flex items-center gap-3">
           <span aria-hidden="true" className="block h-[3px] w-[34px] bg-accent" />
           <span className="font-heading text-[13px] font-extrabold tracking-[0.08em] text-neutral-700">
@@ -58,10 +66,22 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
         >
           {t(locale, dict.scrollCue)} ↓
         </motion.div>
-      </div>
-      <div className="flex min-w-0 items-center justify-center">
+      </motion.div>
+      <motion.div
+        className="flex min-w-0 items-center justify-center"
+        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.55, rotate: -50 }}
+        animate={{ opacity: 1, scale: hallSettled ? [1, 1.02, 1] : 1, rotate: 0 }}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : hallSettled
+              ? { scale: { duration: 4.4, repeat: Infinity, ease: 'easeInOut' } }
+              : { duration: 1.05, ease: EASE }
+        }
+        onAnimationComplete={() => setHallSettled(true)}
+      >
         <SeatHall locale={locale} ariaLabel={hallAriaLabel} sentence={hallSentence} />
-      </div>
+      </motion.div>
     </Reveal>
   )
 }
