@@ -69,17 +69,18 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
       </motion.div>
       <motion.div
         className="flex min-w-0 items-center justify-center"
-        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.55, rotate: -50 }}
-        animate={{ opacity: 1, scale: hallSettled ? [1, 1.02, 1] : 1, rotate: 0 }}
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1, scale: hallSettled ? [1, 1.02, 1] : 1 }}
         transition={
           shouldReduceMotion
             ? { duration: 0 }
             : hallSettled
               ? { scale: { duration: 4.4, repeat: Infinity, ease: 'easeInOut' } }
-              : { duration: 1.05, ease: EASE }
+              : { duration: 1.3, ease: EASE }
         }
         onAnimationComplete={() => setHallSettled(true)}
       >
+        {/* The hall's own seats fly in from scattered points and converge into shape (`SeatHall`'s `entrance`) — this wrapper just fades in alongside them rather than adding its own competing scale/rotate. */}
         <SeatHall locale={locale} ariaLabel={hallAriaLabel} sentence={hallSentence} />
       </motion.div>
     </Reveal>

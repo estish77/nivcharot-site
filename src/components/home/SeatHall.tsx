@@ -84,6 +84,24 @@ const TOTAL_SEATS = SEATS.length
 const CAP = Math.floor(TOTAL_SEATS * 0.5)
 const OUTER_START = Math.max(0, TOTAL_SEATS - RING_SIZE)
 
+type ScatterDatum = { x: number; y: number; delay: number }
+
+/** Entrance-only: each seat's "flung outward" starting point (its resting position plus a random direction/distance), used to converge the hall in on mount. Computed once at module load — same shuffled arrangement all session, matching `STATIC_LIT`'s stability convention. */
+function generateScatter(seats: SeatPos[]): ScatterDatum[] {
+  return seats.map((s) => {
+    const angle = Math.random() * Math.PI * 2
+    const dist = 220 + Math.random() * 380
+    return {
+      x: +(s.cx + Math.cos(angle) * dist).toFixed(1),
+      y: +(s.cy + Math.sin(angle) * dist).toFixed(1),
+      delay: +(Math.random() * 0.4).toFixed(2),
+    }
+  })
+}
+
+const SCATTER = generateScatter(SEATS)
+const ENTRANCE_MS = 1300
+
 /** Deterministic (non-random) pattern shown under prefers-reduced-motion — same on every render, no timers. */
 const STATIC_LIT: ReadonlySet<number> = new Set(SEATS.map((_, i) => i).filter((i) => i % 5 === 0))
 
@@ -95,11 +113,17 @@ const SeatCircle = memo(function SeatCircle({
   cy,
   lit,
   hidden,
+  entrance,
+  scatter,
+  entranceDone,
 }: {
   cx: number
   cy: number
   lit: boolean
   hidden: boolean
+  entrance: boolean
+  scatter: ScatterDatum
+  entranceDone: boolean
 }) {
   // `r` must be a valid length in the server-rendered markup and on first paint.
   // Motion only writes animated SVG attributes once it takes over on the client, so
@@ -113,16 +137,23 @@ const SeatCircle = memo(function SeatCircle({
       cx={cx}
       cy={cy}
       r={restingRadius}
-      initial={false}
+      initial={entrance ? { cx: scatter.x, cy: scatter.y, opacity: 0 } : false}
       animate={{
+        cx,
+        cy,
         r: restingRadius,
         opacity: hidden ? 0 : 1,
         fill: lit ? ACCENT : SLATE,
         scale: lit ? [null, 1.35, 1] : 1,
       }}
       transition={{
+        cx: { duration: 0.9, ease: EASE, delay: scatter.delay },
+        cy: { duration: 0.9, ease: EASE, delay: scatter.delay },
         r: { duration: 0.32, ease: EASE },
-        opacity: { duration: 0.28, ease: 'easeOut' },
+        // Reuses the same slower, staggered timing for any opacity change that lands mid-entrance
+        // (e.g. a seat getting claimed by a ring letter before it's finished flying in); once
+        // `entranceDone` flips, later lit/hidden toggles get the original snappy fade back.
+        opacity: entranceDone ? { duration: 0.28, ease: 'easeOut' } : { duration: 0.7, ease: 'easeOut', delay: scatter.delay },
         fill: { duration: 0.55, ease: EASE },
         scale: { duration: 0.5, ease: EASE },
       }}
@@ -184,6 +215,15 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
   const svgRef = useRef<SVGSVGElement>(null)
   const hallRef = useRef<HallState>({ lit: {}, order: [] })
   const [, bumpHall] = useReducer((c: number) => c + 1, 0)
+
+  // Gates the seat circles' opacity-transition timing back to normal once the
+  // scattered-dots entrance (see `SeatCircle`) has finished converging.
+  const [entranceDone, setEntranceDone] = useState(reduced)
+  useEffect(() => {
+    if (reduced) return
+    const id = window.setTimeout(() => setEntranceDone(true), ENTRANCE_MS)
+    return () => window.clearTimeout(id)
+  }, [reduced])
 
   const [letterState, setLetterState] = useState<{ letterN: number; outSet: Record<number, true> }>({
     letterN: 0,
@@ -374,7 +414,16 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
         className="block h-auto max-h-full w-full overflow-visible"
       >
         {SEATS.map((s, i) => (
-          <SeatCircle key={i} cx={s.cx} cy={s.cy} lit={Boolean(litNow[i])} hidden={ringHidden.has(i)} />
+          <SeatCircle
+            key={i}
+            cx={s.cx}
+            cy={s.cy}
+            lit={Boolean(litNow[i])}
+            hidden={ringHidden.has(i)}
+            entrance={!reduced}
+            scatter={SCATTER[i]}
+            entranceDone={entranceDone}
+          />
         ))}
         <g>
           {letters.map((datum) => (
