@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
+import { autoTranslateGlobalHook } from '../hooks/autoTranslate'
 import { revalidateGlobal } from '../hooks/revalidate'
 
 /**
@@ -22,7 +23,7 @@ export const SiteSettings: GlobalConfig = {
     update: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateGlobal('site-settings')],
+    afterChange: [revalidateGlobal('site-settings'), autoTranslateGlobalHook()],
   },
   fields: [
     {

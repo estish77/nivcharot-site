@@ -5,6 +5,7 @@ import { publishedOrAdmin } from '../access/publishedOrAdmin'
 import { legacyFields } from '../fields/legacyFields'
 import { reviewStatusField } from '../fields/reviewStatusField'
 import { slugField } from '../fields/slugField'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -28,12 +29,18 @@ export const Events: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('events')],
+    afterChange: [revalidateCollection('events'), autoTranslateCollectionHook()],
   },
   fields: [
     slugField('title'),
     { name: 'title', type: 'text', required: true, localized: true },
     { name: 'year', type: 'number', required: true, min: 1990, max: 2100 },
+    {
+      name: 'summary',
+      type: 'textarea',
+      localized: true,
+      admin: { description: 'A few sentences about the event — shown on its gallery page.' },
+    },
     {
       name: 'credit',
       type: 'text',

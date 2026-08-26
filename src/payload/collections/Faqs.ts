@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -26,7 +27,7 @@ export const Faqs: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('faqs')],
+    afterChange: [revalidateCollection('faqs'), autoTranslateCollectionHook()],
   },
   fields: [
     { name: 'question', type: 'text', required: true, localized: true },

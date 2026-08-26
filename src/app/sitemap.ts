@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-import { eventGalleries } from '@/content/media'
-import { getArchivePosts } from '@/lib/cms'
+import { getArchivePosts, getEvents } from '@/lib/cms'
 import { defaultLocale, locales, type Locale } from '@/lib/i18n'
 import { siteUrl } from '@/lib/site'
 
@@ -49,6 +48,7 @@ function alternatesFor(path: string): Record<Locale | 'x-default', string> {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = []
   const archivePosts = await getArchivePosts()
+  const eventGalleries = await getEvents(defaultLocale)
 
   for (const { path, changeFrequency, priority } of STATIC_ENTRIES) {
     const languages = alternatesFor(path)

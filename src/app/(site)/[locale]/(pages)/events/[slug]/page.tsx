@@ -5,20 +5,22 @@ import { EmptyState } from '@/components/media/EmptyState'
 import { OtherGalleries } from '@/components/media/OtherGalleries'
 import { PhotoGrid } from '@/components/media/PhotoGrid'
 import { Eyebrow, Reveal, Section } from '@/components/ui'
-import { eventGalleries, findEventBySlug, otherGalleries } from '@/content/media'
+import { getEvents } from '@/lib/cms'
 import { arrowBack, isLocale, locales, t, type Locale } from '@/lib/i18n'
 
 type Params = { locale: string; slug: string }
 
 /** Ported from docs/Event.dc.html (was a `?e=<slug>` query-string route). */
-export function generateStaticParams() {
-  return locales.flatMap((locale) => eventGalleries.map((event) => ({ locale, slug: event.slug })))
+export async function generateStaticParams() {
+  const results = await Promise.all(locales.map((locale) => getEvents(locale)))
+  return results.flatMap((events, i) => events.map((event) => ({ locale: locales[i], slug: event.slug })))
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) return {}
-  const gallery = findEventBySlug(slug)
+  const events = await getEvents(rawLocale)
+  const gallery = events.find((e) => e.slug === slug)
   if (!gallery) return {}
 
   return {
@@ -33,7 +35,8 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
     notFound()
   }
   const locale: Locale = rawLocale
-  const gallery = findEventBySlug(slug)
+  const events = await getEvents(locale)
+  const gallery = events.find((e) => e.slug === slug)
 
   if (!gallery) {
     return (
@@ -49,7 +52,7 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
     )
   }
 
-  const others = otherGalleries(gallery.slug)
+  const others = events.filter((e) => e.slug !== gallery.slug).slice(0, 3)
 
   return (
     <>
@@ -77,6 +80,9 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
               </span>
             ) : null}
           </div>
+          {gallery.summary ? (
+            <p className="mt-6 max-w-[720px] text-[16px] leading-[1.7] text-neutral-800">{gallery.summary}</p>
+          ) : null}
         </Section>
       </Reveal>
       <Reveal as="section" index={1}>

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 
 /**
  * Shared upload library backing every `upload`/`relationTo: 'media'` field
@@ -21,6 +22,9 @@ export const Media: CollectionConfig = {
     create: isAdminOrEditor,
     update: isAdminOrEditor,
     delete: isAdminOrEditor,
+  },
+  hooks: {
+    afterChange: [autoTranslateCollectionHook()],
   },
   upload: {
     // Local-dev fallback path — payload.config.ts's vercelBlobStorage

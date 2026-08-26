@@ -2,6 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
 import { heroField, pillarCardsField, sectionIntrosField, statTilesField } from '../fields/globalSections'
+import { autoTranslateGlobalHook } from '../hooks/autoTranslate'
 import { revalidateGlobal } from '../hooks/revalidate'
 
 /**
@@ -18,7 +19,7 @@ export const Activism: GlobalConfig = {
     update: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateGlobal('activism')],
+    afterChange: [revalidateGlobal('activism'), autoTranslateGlobalHook()],
   },
   fields: [heroField(), statTilesField(), pillarCardsField(), sectionIntrosField()],
 }

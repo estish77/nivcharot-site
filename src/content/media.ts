@@ -388,55 +388,13 @@ export const archivePosts: ArchivePost[] = [
   },
 ]
 
-export type EventPhoto = { alt: string }
-
-export type EventGallery = {
-  slug: string
-  title: string
-  year: number
-  credit?: string
-  photos: EventPhoto[]
-}
-
-function makePhotos(title: string, count: number): EventPhoto[] {
-  return Array.from({ length: count }, (_, i) => ({ alt: `${title}, תמונה ${i + 1}` }))
-}
-
-export const eventGalleries: EventGallery[] = [
-  {
-    slug: 'annual-conference-2024',
-    title: 'הכנס השנתי של נבחרות 2024',
-    year: 2024,
-    credit: 'צילום: סטודיו קליק',
-    photos: makePhotos('הכנס השנתי של נבחרות 2024', 12),
-  },
-  {
-    slug: 'municipal-elections-launch-2023',
-    title: 'השקת הקמפיין לקראת הבחירות המקומיות',
-    year: 2023,
-    credit: 'צילום: נועה כהן',
-    photos: makePhotos('השקת הקמפיין לקראת הבחירות המקומיות', 14),
-  },
-  {
-    slug: 'leadership-graduation-2023',
-    title: 'טקס סיום מחזור ג׳ בתוכנית ההכשרה למנהיגות',
-    year: 2023,
-    credit: 'צילום: מיכל בר',
-    photos: makePhotos('טקס סיום מחזור ג׳ בתוכנית ההכשרה למנהיגות', 9),
-  },
-  {
-    slug: 'knesset-lobby-day-gallery-2022',
-    title: 'יום הלובי בכנסת',
-    year: 2022,
-    photos: makePhotos('יום הלובי בכנסת', 8),
-  },
-  {
-    slug: 'community-forum-2021',
-    title: 'פורום קהילתי: נשים משפיעות משנות',
-    year: 2021,
-    photos: makePhotos('פורום קהילתי: נשים משפיעות משנות', 6),
-  },
-]
+// The `EventGallery`/`EventPhoto` fixture that used to live here (5 events,
+// "the annual Nivcharot conference" etc.) was entirely fabricated — no such
+// events happened. Removed per the site owner's explicit instruction
+// (2026-08-26): the same "don't invent content" standard already applied to
+// posts/press-archive. Real events now live in the dashboard-editable
+// `events` Payload collection — see getEvents() in src/lib/cms.ts, which
+// every page that used to read `eventGalleries` now calls instead.
 
 /** `"14.03.2023"` from an ISO `yyyy-mm-dd` string. */
 export function formatArchiveDate(iso: string): string {
@@ -463,15 +421,6 @@ export function adjacentPosts(slug: string): { prev?: ArchivePost; next?: Archiv
   const i = sorted.findIndex((p) => p.slug === slug)
   if (i === -1) return {}
   return { prev: i > 0 ? sorted[i - 1] : undefined, next: i < sorted.length - 1 ? sorted[i + 1] : undefined }
-}
-
-export function findEventBySlug(slug: string): EventGallery | undefined {
-  return eventGalleries.find((e) => e.slug === slug)
-}
-
-/** Up to `limit` other galleries (docs/Event.dc.html's "גלריות נוספות"), excluding the current one. */
-export function otherGalleries(slug: string, limit = 3): EventGallery[] {
-  return eventGalleries.filter((e) => e.slug !== slug).slice(0, limit)
 }
 
 export type CategoryChip = { slug: string; name: string; count: number }

@@ -4,6 +4,7 @@ import { isAdminOrEditor } from '../access/isAdminOrEditor'
 import { publishedOrAdmin } from '../access/publishedOrAdmin'
 import { reviewStatusField } from '../fields/reviewStatusField'
 import { slugField } from '../fields/slugField'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -33,7 +34,7 @@ export const PressArchive: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('press-archive')],
+    afterChange: [revalidateCollection('press-archive'), autoTranslateCollectionHook()],
   },
   fields: [
     slugField('title'),

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -31,7 +32,7 @@ export const PodcastEpisodes: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('podcast-episodes')],
+    afterChange: [revalidateCollection('podcast-episodes'), autoTranslateCollectionHook()],
   },
   fields: [
     { name: 'number', type: 'number', required: true, unique: true, min: 1 },

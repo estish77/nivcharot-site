@@ -4,6 +4,7 @@ import { isAdminOrEditor } from '../access/isAdminOrEditor'
 import { publishedOrAdmin } from '../access/publishedOrAdmin'
 import { reviewStatusField } from '../fields/reviewStatusField'
 import { slugField } from '../fields/slugField'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -29,7 +30,7 @@ export const ElsewhereMedia: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('elsewhere-media')],
+    afterChange: [revalidateCollection('elsewhere-media'), autoTranslateCollectionHook()],
   },
   fields: [
     slugField('title'),

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -22,7 +23,7 @@ export const AlumnaeQuotes: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('alumnae-quotes')],
+    afterChange: [revalidateCollection('alumnae-quotes'), autoTranslateCollectionHook()],
   },
   fields: [
     { name: 'quote', type: 'textarea', required: true, localized: true },

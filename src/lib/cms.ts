@@ -873,3 +873,68 @@ export async function getHanivcheretQuotes(locale: Locale): Promise<AlumnaQuoteC
     return fallback
   }
 }
+
+export type EventPhotoContent = { alt: string; url?: string }
+export type EventGalleryContent = {
+  slug: string
+  title: string
+  year: number
+  summary?: string
+  credit?: string
+  coverImage: { url: string; alt: string } | null
+  photos: EventPhotoContent[]
+}
+
+/**
+ * "כנסים, הקרנות וגלריות" on the Activism page, and each event's own
+ * `/events/[slug]` gallery. src/content/media.ts used to hold 5 entirely
+ * fabricated events (an "annual conference" etc. that never happened) —
+ * removed outright per the site owner's explicit instruction, the same
+ * "don't invent content" standard already applied to posts/press-archive
+ * elsewhere in this codebase. Unlike those getters, this one falls back to
+ * an EMPTY array, never to invented placeholder events, when Payload has
+ * nothing real yet — an empty gallery section is honest; a fabricated one
+ * isn't.
+ */
+export async function getEvents(locale: Locale): Promise<EventGalleryContent[]> {
+  const payload = await getPayloadInstance()
+  if (!payload) return []
+
+  try {
+    const res = await cachedPayloadRead('events', [locale], () =>
+      payload.find({
+        collection: 'events',
+        locale,
+        where: { reviewStatus: { equals: 'keep' } },
+        sort: '-year',
+        limit: 200,
+        depth: 1,
+      }),
+    )
+
+    return res.docs.map((doc) => {
+      const d = doc as unknown as Record<string, unknown>
+      const title = typeof d.title === 'string' ? d.title : ''
+      const cover = d.coverImage && typeof d.coverImage === 'object' ? (d.coverImage as Record<string, unknown>) : null
+      const rawPhotos = Array.isArray(d.photos) ? (d.photos as Record<string, unknown>[]) : []
+
+      return {
+        slug: String(d.slug ?? ''),
+        title,
+        year: Number(d.year ?? 0),
+        summary: typeof d.summary === 'string' && d.summary ? d.summary : undefined,
+        credit: typeof d.credit === 'string' && d.credit ? d.credit : undefined,
+        coverImage: cover ? { url: String(cover.url ?? ''), alt: title } : null,
+        photos: rawPhotos.map((p) => {
+          const img = p.image && typeof p.image === 'object' ? (p.image as Record<string, unknown>) : null
+          return {
+            alt: typeof p.alt === 'string' ? p.alt : title,
+            url: img ? String(img.url ?? '') : undefined,
+          }
+        }),
+      }
+    })
+  } catch {
+    return []
+  }
+}

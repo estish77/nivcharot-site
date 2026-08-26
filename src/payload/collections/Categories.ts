@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
 import { slugField } from '../fields/slugField'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -23,7 +24,7 @@ export const Categories: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('categories')],
+    afterChange: [revalidateCollection('categories'), autoTranslateCollectionHook()],
   },
   fields: [
     { name: 'name', type: 'text', required: true, localized: true },

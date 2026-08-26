@@ -2,9 +2,9 @@ import Link from 'next/link'
 
 import { cn } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
-import type { EventGallery } from '@/content/media'
+import type { EventGalleryContent } from '@/lib/cms'
 
-export type OtherGalleriesProps = { galleries: EventGallery[]; locale: Locale }
+export type OtherGalleriesProps = { galleries: EventGalleryContent[]; locale: Locale }
 
 /** Mirrors docs/Event.dc.html's `x.title.length > 70 ? slice(0, 70) + '…' : x.title`. */
 function truncateTitle(title: string): string {

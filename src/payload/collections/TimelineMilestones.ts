@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
 import { publishedOrAdmin } from '../access/publishedOrAdmin'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -31,7 +32,7 @@ export const TimelineMilestones: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('timeline-milestones')],
+    afterChange: [revalidateCollection('timeline-milestones'), autoTranslateCollectionHook()],
   },
   fields: [
     {

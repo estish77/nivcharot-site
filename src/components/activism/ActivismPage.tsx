@@ -1,7 +1,6 @@
 import { Fragment, type ReactNode } from 'react'
 
 import { EventGalleryCard } from '@/components/media/EventGalleryCard'
-import { eventGalleries } from '@/content/media'
 import { pressItemHref } from '@/content/press-archive'
 import {
   activismArchiveSection,
@@ -14,7 +13,7 @@ import {
   activismPositionPapersPlaceholder,
   type ActivismPillar,
 } from '@/content/activism'
-import { getActivismContent, getActivismFaqs, getPressArchiveItems } from '@/lib/cms'
+import { getActivismContent, getActivismFaqs, getEvents, getPressArchiveItems } from '@/lib/cms'
 import { arrowForward, t, type Locale, type Localized } from '@/lib/i18n'
 
 /** Renders a `\n`-joined CMS string's line breaks as real `<br>`s — same convention as the About/Story pages' fixture `\n` markers. */
@@ -155,10 +154,11 @@ function PillarImage({ label }: { label: string }) {
 }
 
 export async function ActivismPage({ locale }: { locale: Locale }) {
-  const [content, faqs, pressArchiveItemsSorted] = await Promise.all([
+  const [content, faqs, pressArchiveItemsSorted, eventGalleries] = await Promise.all([
     getActivismContent(locale),
     getActivismFaqs(locale),
     getPressArchiveItems(),
+    getEvents(locale),
   ])
 
   return (
@@ -354,11 +354,17 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
             <p className="mb-6 max-w-[620px] text-[15px] leading-[1.7] text-neutral-800">
               {t(locale, galleriesSectionText.lead)}
             </p>
-            <div className="grid grid-cols-1 gap-7 min-[560px]:grid-cols-2 min-[861px]:grid-cols-3">
-              {eventGalleries.map((gallery) => (
-                <EventGalleryCard key={gallery.slug} gallery={gallery} locale={locale} />
-              ))}
-            </div>
+            {eventGalleries.length > 0 ? (
+              <div className="grid grid-cols-1 gap-7 min-[560px]:grid-cols-2 min-[861px]:grid-cols-3">
+                {eventGalleries.map((gallery) => (
+                  <EventGalleryCard key={gallery.slug} gallery={gallery} locale={locale} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-[14px] text-neutral-700">
+                {t(locale, { he: 'גלריות תתווספנה כאן בקרוב.', en: 'Galleries will be added here soon.' })}
+              </p>
+            )}
           </div>
         </Section>
       </Reveal>

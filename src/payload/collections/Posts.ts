@@ -5,6 +5,7 @@ import { publishedOrAdmin } from '../access/publishedOrAdmin'
 import { legacyFields } from '../fields/legacyFields'
 import { reviewStatusField } from '../fields/reviewStatusField'
 import { slugField } from '../fields/slugField'
+import { autoTranslateCollectionHook } from '../hooks/autoTranslate'
 import { revalidateCollection } from '../hooks/revalidate'
 
 /**
@@ -25,7 +26,7 @@ export const Posts: CollectionConfig = {
     delete: isAdminOrEditor,
   },
   hooks: {
-    afterChange: [revalidateCollection('posts')],
+    afterChange: [revalidateCollection('posts'), autoTranslateCollectionHook()],
   },
   fields: [
     slugField('title'),
