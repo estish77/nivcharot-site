@@ -1,13 +1,14 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
+import { unstable_cache } from 'next/cache'
 
 import type { NavLink } from '@/components/ui'
 import { goalSection, heroContent, pillarCards, statTiles } from '@/content/home'
 import { aboutContent } from '@/content/about'
-import { storyContent } from '@/content/story'
-import { activismHero, activismHalachaSection } from '@/content/activism'
+import { storyContent, timelineMilestones, type TimelineMilestone } from '@/content/story'
+import { activismFaqs, activismHero, activismHalachaSection } from '@/content/activism'
 import { podcastText } from '@/content/podcast'
-import { hanivcheretHero } from '@/content/hanivcheret'
+import { hanivcheretAlumnaPlaceholder, hanivcheretHero, hanivcheretQuotes } from '@/content/hanivcheret'
 import { donateHero } from '@/content/donate'
 import { archivePosts as staticArchivePosts, type ArchivePost } from '@/content/media'
 import { otherPodcasts as staticOtherPodcasts, talksAndConferences as staticTalksAndConferences, videoArticles as staticVideoArticles, type ElsewhereMediaItem } from '@/content/elsewhere-media'
@@ -65,6 +66,27 @@ async function getPayloadInstance() {
   }
 }
 
+/**
+ * Every global/collection registers a `revalidateGlobal(tag)` /
+ * `revalidateCollection(tag)` afterChange hook (src/payload/hooks/revalidate.ts)
+ * that calls `revalidateTag(tag, ...)` whenever an editor saves a change —
+ * but that only invalidates something if a Next.js cache entry was actually
+ * tagged with it. Every getter in this file used to call the Payload Local
+ * API directly with no cache tag attached, so those `revalidateTag` calls
+ * had nothing to invalidate: public pages only ever picked up a dashboard
+ * edit on the next full redeploy, when the static pages were rebuilt from
+ * scratch. Wrapping each read below in `unstable_cache(fn, keyParts, {
+ * tags: [tag] })` — this project doesn't set `cacheComponents` in
+ * next.config.ts, so it's on Next 16's "previous" caching model, where
+ * `unstable_cache` (not the newer `"use cache"` directive) is still how
+ * non-fetch reads participate in the tag-based Data Cache — makes the two
+ * halves finally meet: a save now busts exactly the right cache entry and
+ * the next visitor gets the fresh content, no redeploy required.
+ */
+function cachedPayloadRead<T>(tag: string, keyParts: string[], fn: () => Promise<T>): Promise<T> {
+  return unstable_cache(fn, [tag, ...keyParts], { tags: [tag] })()
+}
+
 export async function getHomeContent(locale: Locale): Promise<PayloadHomeContent> {
   const fallback: PayloadHomeContent = {
     hero: heroContent,
@@ -79,7 +101,7 @@ export async function getHomeContent(locale: Locale): Promise<PayloadHomeContent
   }
 
   try {
-    const doc = await payload.findGlobal({ slug: 'home', locale })
+    const doc = await cachedPayloadRead('home', [locale], () => payload.findGlobal({ slug: 'home', locale }))
 
     if (!doc) {
       return fallback
@@ -191,7 +213,7 @@ export async function getAboutContent(
   if (!payload) return fallback
 
   try {
-    const doc = await payload.findGlobal({ slug: 'about', locale })
+    const doc = await cachedPayloadRead('about', [locale], () => payload.findGlobal({ slug: 'about', locale }))
     const hero = (doc?.hero ?? {}) as Record<string, unknown>
     const intros = Array.isArray(doc?.sectionIntros) ? (doc.sectionIntros as Record<string, unknown>[]) : []
     const purposeIntro = intros.find((intro) => intro?.key === 'purpose')
@@ -226,7 +248,7 @@ export async function getStoryContent(locale: Locale): Promise<SimpleHeroContent
   if (!payload) return fallback
 
   try {
-    const doc = await payload.findGlobal({ slug: 'story', locale })
+    const doc = await cachedPayloadRead('story', [locale], () => payload.findGlobal({ slug: 'story', locale }))
     const hero = (doc?.hero ?? {}) as Record<string, unknown>
     return {
       eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.eyebrow),
@@ -258,7 +280,7 @@ export async function getActivismContent(
   if (!payload) return fallback
 
   try {
-    const doc = await payload.findGlobal({ slug: 'activism', locale })
+    const doc = await cachedPayloadRead('activism', [locale], () => payload.findGlobal({ slug: 'activism', locale }))
     const hero = (doc?.hero ?? {}) as Record<string, unknown>
     const intros = Array.isArray(doc?.sectionIntros) ? (doc.sectionIntros as Record<string, unknown>[]) : []
     const halakhaIntro = intros.find((intro) => intro?.key === 'halakha')
@@ -293,7 +315,7 @@ export async function getPodcastHeroContent(locale: Locale): Promise<SimpleHeroC
   if (!payload) return fallback
 
   try {
-    const doc = await payload.findGlobal({ slug: 'podcast', locale })
+    const doc = await cachedPayloadRead('podcast', [locale], () => payload.findGlobal({ slug: 'podcast', locale }))
     const hero = (doc?.hero ?? {}) as Record<string, unknown>
     return {
       eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.eyebrow),
@@ -316,7 +338,7 @@ export async function getHanivcheretContent(locale: Locale): Promise<SimpleHeroC
   if (!payload) return fallback
 
   try {
-    const doc = await payload.findGlobal({ slug: 'hanivcheret', locale })
+    const doc = await cachedPayloadRead('hanivcheret', [locale], () => payload.findGlobal({ slug: 'hanivcheret', locale }))
     const hero = (doc?.hero ?? {}) as Record<string, unknown>
     return {
       eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.eyebrow),
@@ -339,7 +361,7 @@ export async function getDonateContent(locale: Locale): Promise<SimpleHeroConten
   if (!payload) return fallback
 
   try {
-    const doc = await payload.findGlobal({ slug: 'donate', locale })
+    const doc = await cachedPayloadRead('donate', [locale], () => payload.findGlobal({ slug: 'donate', locale }))
     const hero = (doc?.hero ?? {}) as Record<string, unknown>
     return {
       eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.eyebrow),
@@ -359,7 +381,7 @@ export async function getNavigationLinks(locale: Locale): Promise<NavLink[]> {
   }
 
   try {
-    const doc = await payload.findGlobal({ slug: 'navigation' })
+    const doc = await cachedPayloadRead('navigation', [], () => payload.findGlobal({ slug: 'navigation', locale: 'all' }))
     if (!doc?.items?.length) {
       return fallback
     }
@@ -402,7 +424,7 @@ export async function getSiteSettings(): Promise<PayloadSiteSettings> {
   }
 
   try {
-    const doc = await payload.findGlobal({ slug: 'site-settings' })
+    const doc = await cachedPayloadRead('site-settings', [], () => payload.findGlobal({ slug: 'site-settings' }))
     return {
       contactEmail: String(doc?.contactEmail ?? 'estish@nivcharot.com'),
       social: {
@@ -457,6 +479,18 @@ function toLocalizedPair(value: unknown, fallback: Localized = { he: '', en: '' 
   return fallback
 }
 
+/** Same as {@link toLocalizedPair}, for a localized checkbox field. */
+function toLocalizedBoolPair(value: unknown, fallback: { he: boolean; en: boolean }): { he: boolean; en: boolean } {
+  if (typeof value === 'boolean') return { he: value, en: value }
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>
+    const he = typeof record.he === 'boolean' ? record.he : fallback.he
+    const en = typeof record.en === 'boolean' ? record.en : fallback.en
+    return { he, en }
+  }
+  return fallback
+}
+
 /** Flattens a Lexical richText editor-state document into plain paragraph strings. */
 function lexicalToParagraphs(value: unknown): string[] {
   if (!value || typeof value !== 'object') return []
@@ -487,14 +521,16 @@ export async function getPressArchiveItems(): Promise<PressArchiveItem[]> {
   if (!payload) return fallback
 
   try {
-    const res = await payload.find({
-      collection: 'press-archive',
-      locale: 'all',
-      where: { reviewStatus: { equals: 'keep' } },
-      sort: '-sortDate',
-      limit: 500,
-      depth: 0,
-    })
+    const res = await cachedPayloadRead('press-archive', [], () =>
+      payload.find({
+        collection: 'press-archive',
+        locale: 'all',
+        where: { reviewStatus: { equals: 'keep' } },
+        sort: '-sortDate',
+        limit: 500,
+        depth: 0,
+      }),
+    )
     if (!res.docs.length) return fallback
 
     const items: PressArchiveItem[] = res.docs.map((doc) => {
@@ -536,14 +572,16 @@ export async function getElsewhereMediaItems(): Promise<{
   if (!payload) return fallback
 
   try {
-    const res = await payload.find({
-      collection: 'elsewhere-media',
-      locale: 'all',
-      where: { reviewStatus: { equals: 'keep' } },
-      sort: '-sortDate',
-      limit: 500,
-      depth: 0,
-    })
+    const res = await cachedPayloadRead('elsewhere-media', [], () =>
+      payload.find({
+        collection: 'elsewhere-media',
+        locale: 'all',
+        where: { reviewStatus: { equals: 'keep' } },
+        sort: '-sortDate',
+        limit: 500,
+        depth: 0,
+      }),
+    )
     if (!res.docs.length) return fallback
 
     const items: ElsewhereMediaItem[] = res.docs.map((doc) => {
@@ -585,14 +623,16 @@ export async function getArchivePosts(): Promise<ArchivePost[]> {
   if (!payload) return fallback
 
   try {
-    const res = await payload.find({
-      collection: 'posts',
-      locale: 'all',
-      where: { reviewStatus: { equals: 'keep' } },
-      sort: '-date',
-      limit: 500,
-      depth: 1,
-    })
+    const res = await cachedPayloadRead('posts', [], () =>
+      payload.find({
+        collection: 'posts',
+        locale: 'all',
+        where: { reviewStatus: { equals: 'keep' } },
+        sort: '-date',
+        limit: 500,
+        depth: 1,
+      }),
+    )
     if (!res.docs.length) return fallback
 
     return res.docs.map((doc) => {
@@ -630,14 +670,16 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
   if (!payload) return fallback
 
   try {
-    const res = await payload.find({
-      collection: 'team-members',
-      locale: 'all',
-      where: { active: { equals: true } },
-      sort: 'order',
-      limit: 200,
-      depth: 1,
-    })
+    const res = await cachedPayloadRead('team-members', [], () =>
+      payload.find({
+        collection: 'team-members',
+        locale: 'all',
+        where: { active: { equals: true } },
+        sort: 'order',
+        limit: 200,
+        depth: 1,
+      }),
+    )
     if (!res.docs.length) return fallback
 
     return res.docs.map((doc) => {
@@ -657,6 +699,151 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
           : null,
         order: Number(d.order ?? 0),
         active: Boolean(d.active),
+      }
+    })
+  } catch {
+    return fallback
+  }
+}
+
+/**
+ * The Story page's 2012-2026 timeline. Unlike the other collection
+ * getters in this file, this one is NOT locale-scoped: `Timeline.tsx` is a
+ * client component that filters `visible[locale]` and picks `year`/`title`/
+ * `body` per-locale itself at render time, so the full bilingual shape
+ * (matching the static `TimelineMilestone` fixture type exactly) has to
+ * survive the round trip. `year` is a single, non-localized field on the
+ * collection (see src/payload/collections/TimelineMilestones.ts's own
+ * comment on why it's plain text) — both locales get the same value here,
+ * same as every entry in the static fixture except the two whose Hebrew and
+ * English year labels genuinely differ ("רקע"/"Origins", "2020/23"/
+ * "2020-23"), which is an accepted, pre-existing schema limitation, not a
+ * mapping bug introduced here.
+ */
+export async function getStoryTimeline(): Promise<TimelineMilestone[]> {
+  const fallback = timelineMilestones
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const res = await cachedPayloadRead('timeline-milestones', [], () =>
+      payload.find({ collection: 'timeline-milestones', locale: 'all', sort: 'order', limit: 200, depth: 0 }),
+    )
+    if (!res.docs.length) return fallback
+
+    return res.docs.map((doc, i) => {
+      const d = doc as unknown as Record<string, unknown>
+      const year = typeof d.year === 'string' ? d.year : ''
+      const rawArticles = Array.isArray(d.externalArticles) ? (d.externalArticles as Record<string, unknown>[]) : []
+      const externalArticles = rawArticles.map((a) => ({
+        label: toLocalizedPair(a.label),
+        outlet: String(a.outlet ?? ''),
+        url: String(a.url ?? ''),
+      }))
+
+      return {
+        id: String(d.id ?? `milestone-${i}`),
+        year: { he: year, en: year },
+        title: toLocalizedPair(d.title),
+        body: toLocalizedPair(d.body),
+        visible: toLocalizedBoolPair(d.visible, { he: true, en: true }),
+        externalArticles: externalArticles.length ? externalArticles : undefined,
+      }
+    })
+  } catch {
+    return fallback
+  }
+}
+
+export type ActivismFaqContent = { id: string; number: string; question: string; answerParagraphs: string[] }
+
+/**
+ * "מה שואלים אותנו" accordion on the Activism page. The `faqs` collection's
+ * `answer` field folds a citation line straight into the rich text as its
+ * own paragraph rather than a separate `source` field (see
+ * src/payload/collections/Faqs.ts's own comment) — `answerParagraphs`
+ * exposes every paragraph so the page can render each one, source line
+ * included, without this file leaking richText internals to the caller.
+ * `number` ("01", "02", ...) is derived from sort position, not stored —
+ * the collection only has a numeric `order` field.
+ */
+export async function getActivismFaqs(locale: Locale): Promise<ActivismFaqContent[]> {
+  const fallback: ActivismFaqContent[] = activismFaqs.map((faq) => ({
+    id: faq.id,
+    number: faq.number,
+    question: faq.question[locale],
+    answerParagraphs: faq.source ? [faq.answer[locale], faq.source[locale]] : [faq.answer[locale]],
+  }))
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const res = await cachedPayloadRead('faqs', ['activism', locale], () =>
+      payload.find({
+        collection: 'faqs',
+        locale,
+        where: { page: { equals: 'activism' } },
+        sort: 'order',
+        limit: 100,
+        depth: 0,
+      }),
+    )
+    if (!res.docs.length) return fallback
+
+    return res.docs.map((doc, i) => {
+      const d = doc as unknown as Record<string, unknown>
+      return {
+        id: String(d.id ?? `faq-${i}`),
+        number: String(i + 1).padStart(2, '0'),
+        question: typeof d.question === 'string' ? d.question : '',
+        answerParagraphs: lexicalToParagraphs(d.answer),
+      }
+    })
+  } catch {
+    return fallback
+  }
+}
+
+export type AlumnaQuoteContent = { id: string; cohort: number; name: string; quote: string }
+
+/**
+ * "בוגרות מספרות" quote carousel on the HaNivcheret page. The static
+ * fixture's six entries are explicit placeholders ("שם הבוגרת · בוגרת
+ * מחזור N", never a real name — see src/content/hanivcheret.ts's own
+ * comment), so the fallback below seeds `name` with that same placeholder
+ * text rather than inventing one. Once a real quote is added via the
+ * dashboard, `name` is a normal editable field — real names aren't
+ * localized (a person's name doesn't translate), matching the collection
+ * schema.
+ */
+export async function getHanivcheretQuotes(locale: Locale): Promise<AlumnaQuoteContent[]> {
+  const fallback: AlumnaQuoteContent[] = hanivcheretQuotes.map((entry) => ({
+    id: entry.id,
+    cohort: entry.cohort,
+    name:
+      locale === 'he'
+        ? hanivcheretAlumnaPlaceholder.he(entry.cohort)
+        : hanivcheretAlumnaPlaceholder.en(entry.cohort),
+    quote: entry.quote[locale],
+  }))
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const res = await cachedPayloadRead('alumnae-quotes', [locale], () =>
+      payload.find({ collection: 'alumnae-quotes', locale, sort: 'order', limit: 100, depth: 0 }),
+    )
+    if (!res.docs.length) return fallback
+
+    return res.docs.map((doc, i) => {
+      const d = doc as unknown as Record<string, unknown>
+      return {
+        id: String(d.id ?? `quote-${i}`),
+        cohort: Number(d.cohort ?? 0),
+        name: typeof d.name === 'string' && d.name ? d.name : '',
+        quote: typeof d.quote === 'string' ? d.quote : '',
       }
     })
   } catch {

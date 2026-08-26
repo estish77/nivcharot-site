@@ -18,7 +18,10 @@
     "export-content": "payload run scripts/export-content.mjs",
     "import-content": "payload run scripts/import-content.mjs",
     "seed-home": "payload run scripts/seed-home-global.mjs",
-    "seed-remaining": "payload run scripts/seed-remaining-globals.mjs"
+    "seed-remaining": "payload run scripts/seed-remaining-globals.mjs",
+    "seed-faqs": "payload run scripts/seed-faqs.mjs",
+    "seed-alumnae-quotes": "payload run scripts/seed-alumnae-quotes.mjs",
+    "seed-timeline": "payload run scripts/seed-timeline-milestones.mjs"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.87.0",

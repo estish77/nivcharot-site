@@ -58,5 +58,18 @@ export const TimelineMilestones: CollectionConfig = {
           'Localized on purpose — this is how 21 Hebrew milestones become 14 in the English timeline.',
       },
     },
+    {
+      name: 'externalArticles',
+      type: 'array',
+      labels: { singular: 'Press clipping', plural: 'Press clippings' },
+      admin: {
+        description: 'Optional "as covered by" links to real press coverage from the same period.',
+      },
+      fields: [
+        { name: 'label', type: 'text', required: true, localized: true },
+        { name: 'outlet', type: 'text', required: true },
+        { name: 'url', type: 'text', required: true },
+      ],
+    },
   ],
 }

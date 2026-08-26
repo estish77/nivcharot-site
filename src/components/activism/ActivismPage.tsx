@@ -5,7 +5,6 @@ import { eventGalleries } from '@/content/media'
 import { pressArchiveItemsSorted, pressItemHref } from '@/content/press-archive'
 import {
   activismArchiveSection,
-  activismFaqs,
   activismFaqSection,
   activismHalachaCards,
   activismImageSlots,
@@ -15,7 +14,7 @@ import {
   activismPositionPapersPlaceholder,
   type ActivismPillar,
 } from '@/content/activism'
-import { getActivismContent } from '@/lib/cms'
+import { getActivismContent, getActivismFaqs } from '@/lib/cms'
 import { arrowForward, t, type Locale, type Localized } from '@/lib/i18n'
 
 /** Renders a `\n`-joined CMS string's line breaks as real `<br>`s — same convention as the About/Story pages' fixture `\n` markers. */
@@ -156,7 +155,7 @@ function PillarImage({ label }: { label: string }) {
 }
 
 export async function ActivismPage({ locale }: { locale: Locale }) {
-  const content = await getActivismContent(locale)
+  const [content, faqs] = await Promise.all([getActivismContent(locale), getActivismFaqs(locale)])
 
   return (
     <>
@@ -301,24 +300,28 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
             */
             triggerClassName={`!items-start !gap-4 px-1 py-5 font-heading text-[17.5px] font-extrabold leading-[1.35] text-text hover:text-accent-700 focus-visible:text-accent-700`}
             panelClassName="ms-[34px] max-w-[640px] px-1 pb-6"
-            items={activismFaqs.map((faq) => ({
+            items={faqs.map((faq) => ({
               id: faq.id,
               trigger: (
                 <span className="flex items-start gap-4">
                   <span className="flex-none pt-[5px] font-heading text-xs font-extrabold text-accent-700">
                     {faq.number}
                   </span>
-                  <span className="flex-1">{t(locale, faq.question)}</span>
+                  <span className="flex-1">{faq.question}</span>
                 </span>
               ),
-              children: (
-                <>
-                  <p className="text-[15px] leading-[1.75] text-neutral-800">{t(locale, faq.answer)}</p>
-                  {faq.source ? (
-                    <p className="mt-2.5 text-[12.5px] leading-[1.5] text-neutral-700">{t(locale, faq.source)}</p>
-                  ) : null}
-                </>
-              ),
+              children: faq.answerParagraphs.map((paragraph, i) => (
+                <p
+                  key={i}
+                  className={
+                    i === 0
+                      ? 'text-[15px] leading-[1.75] text-neutral-800'
+                      : 'mt-2.5 text-[12.5px] leading-[1.5] text-neutral-700'
+                  }
+                >
+                  {paragraph}
+                </p>
+              )),
             }))}
           />
         </Section>

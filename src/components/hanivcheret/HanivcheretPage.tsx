@@ -7,12 +7,10 @@ import {
   hanivcheretHeroImageSlot,
   hanivcheretHeroMedia,
   hanivcheretHeroVideoTitle,
-  hanivcheretAlumnaPlaceholder,
-  hanivcheretQuotes,
   hanivcheretQuotesEyebrow,
   resolveHeroMedia,
 } from '@/content/hanivcheret'
-import { getHanivcheretContent } from '@/lib/cms'
+import { getHanivcheretContent, getHanivcheretQuotes } from '@/lib/cms'
 import { t, type Locale, type Localized } from '@/lib/i18n'
 import { Button, Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SectionHead, Tag, cn } from '@/components/ui'
 import { AlumnaeVideosSection } from './AlumnaeVideosSection'
@@ -78,7 +76,7 @@ function HeroMedia({ locale }: { locale: Locale }) {
 export async function HanivcheretPage({ locale }: { locale: Locale }) {
   const isHe = locale === 'he'
   const ctaHref = `/${locale}${hanivcheretHero.cta.href}`
-  const hero = await getHanivcheretContent(locale)
+  const [hero, quotes] = await Promise.all([getHanivcheretContent(locale), getHanivcheretQuotes(locale)])
 
   return (
     <>
@@ -229,18 +227,10 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
             autoScrollMs={4200}
             itemClassName="min-w-[260px]"
           >
-            {hanivcheretQuotes.map((entry) => (
+            {quotes.map((entry) => (
               <blockquote key={entry.id} className="m-0 h-full border-s-2 border-accent ps-[18px]">
-                <p className="mb-2 text-[16px] font-semibold leading-[1.65]">{t(locale, entry.quote)}</p>
-                {/*
-                  All six attributions are explicit placeholders in the
-                  mockup itself ("שם הבוגרת · בוגרת מחזור N" / "Name ·
-                  Cohort N alumna") — kept verbatim, not filled in with
-                  invented names.
-                */}
-                <div className="text-[13px] text-neutral-700">
-                  {isHe ? hanivcheretAlumnaPlaceholder.he(entry.cohort) : hanivcheretAlumnaPlaceholder.en(entry.cohort)}
-                </div>
+                <p className="mb-2 text-[16px] font-semibold leading-[1.65]">{entry.quote}</p>
+                <div className="text-[13px] text-neutral-700">{entry.name}</div>
               </blockquote>
             ))}
           </Carousel>
