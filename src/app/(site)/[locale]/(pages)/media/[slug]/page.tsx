@@ -4,20 +4,27 @@ import type { Metadata } from 'next'
 import { EmptyState } from '@/components/media/EmptyState'
 import { PostPrevNext } from '@/components/media/PostPrevNext'
 import { Figure, ImageSlot, Reveal, Section, Eyebrow } from '@/components/ui'
-import {
-  adjacentPosts,
-  archiveCategories,
-  archivePosts,
-  findPostBySlug,
-  formatArchiveDate,
-} from '@/content/media'
+import { archiveCategories, formatArchiveDate, sortPostsByDateDesc, type ArchivePost } from '@/content/media'
+import { getArchivePosts } from '@/lib/cms'
 import { arrowBack, isLocale, locales, t, type Locale } from '@/lib/i18n'
 
 type Params = { locale: string; slug: string }
 
-/** Ported from docs/Post.dc.html (was a `?p=<slug>` query-string route). */
-export function generateStaticParams() {
-  return locales.flatMap((locale) => archivePosts.map((post) => ({ locale, slug: post.slug })))
+/**
+ * Ported from docs/Post.dc.html (was a `?p=<slug>` query-string route).
+ *
+ * This used to list only the static fixture's slugs and look posts up via
+ * `findPostBySlug` — meaning a post added through the dashboard's `Posts`
+ * collection showed up fine on the /media archive listing (already wired
+ * to Payload) but 404'd the moment anyone clicked into it, since this page
+ * never read from Payload at all. Both now read the same live-or-fallback
+ * list from `getArchivePosts()`. `dynamicParams` stays at its default
+ * (`true`), so a post added after the last build still resolves correctly
+ * on the very next request instead of needing a redeploy first.
+ */
+export async function generateStaticParams() {
+  const posts = await getArchivePosts()
+  return locales.flatMap((locale) => posts.map((post) => ({ locale, slug: post.slug })))
 }
 
 function categoryLine(categories: string[]): string {
@@ -27,10 +34,18 @@ function categoryLine(categories: string[]): string {
     .join(' · ')
 }
 
+function findAdjacent(posts: ArchivePost[], slug: string): { prev?: ArchivePost; next?: ArchivePost } {
+  const sorted = sortPostsByDateDesc(posts)
+  const i = sorted.findIndex((p) => p.slug === slug)
+  if (i === -1) return {}
+  return { prev: i > 0 ? sorted[i - 1] : undefined, next: i < sorted.length - 1 ? sorted[i + 1] : undefined }
+}
+
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) return {}
-  const post = findPostBySlug(slug)
+  const posts = await getArchivePosts()
+  const post = posts.find((p) => p.slug === slug)
   if (!post) return {}
 
   return {
@@ -45,7 +60,8 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
     notFound()
   }
   const locale: Locale = rawLocale
-  const post = findPostBySlug(slug)
+  const posts = await getArchivePosts()
+  const post = posts.find((p) => p.slug === slug)
 
   if (!post) {
     return (
@@ -61,7 +77,7 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
     )
   }
 
-  const { prev, next } = adjacentPosts(post.slug)
+  const { prev, next } = findAdjacent(posts, post.slug)
 
   return (
     <>

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 
-import { archivePosts, eventGalleries } from '@/content/media'
+import { eventGalleries } from '@/content/media'
+import { getArchivePosts } from '@/lib/cms'
 import { defaultLocale, locales, type Locale } from '@/lib/i18n'
 import { siteUrl } from '@/lib/site'
 
@@ -45,8 +46,9 @@ function alternatesFor(path: string): Record<Locale | 'x-default', string> {
  * fixtures those routes prerender from (`src/content/media.ts`) so this
  * can't drift out of sync with the actual build output.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = []
+  const archivePosts = await getArchivePosts()
 
   for (const { path, changeFrequency, priority } of STATIC_ENTRIES) {
     const languages = alternatesFor(path)
