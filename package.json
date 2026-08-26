@@ -21,7 +21,9 @@
     "seed-remaining": "payload run scripts/seed-remaining-globals.mjs",
     "seed-faqs": "payload run scripts/seed-faqs.mjs",
     "seed-alumnae-quotes": "payload run scripts/seed-alumnae-quotes.mjs",
-    "seed-timeline": "payload run scripts/seed-timeline-milestones.mjs"
+    "seed-timeline": "payload run scripts/seed-timeline-milestones.mjs",
+    "seed-press-archive": "payload run scripts/seed-press-archive.mjs",
+    "seed-elsewhere-media": "payload run scripts/seed-elsewhere-media.mjs"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.87.0",
