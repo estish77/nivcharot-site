@@ -8,8 +8,8 @@ import type { TabBarItem } from '@/components/ui'
 import { EqualizerDots } from '@/components/story/EqualizerDots'
 import { Timeline } from '@/components/story/Timeline'
 import { storyContent } from '@/content/story'
-import { pressArchiveItemsSorted, pressItemHref } from '@/content/press-archive'
-import { getStoryContent, getStoryTimeline } from '@/lib/cms'
+import { pressItemHref } from '@/content/press-archive'
+import { getPressArchiveItems, getStoryContent, getStoryTimeline } from '@/lib/cms'
 import { arrowForward, isLocale, locales, t, type Locale } from '@/lib/i18n'
 
 export function generateStaticParams() {
@@ -53,7 +53,11 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
-  const [hero, timelineMilestones] = await Promise.all([getStoryContent(locale), getStoryTimeline()])
+  const [hero, timelineMilestones, pressArchiveItemsSorted] = await Promise.all([
+    getStoryContent(locale),
+    getStoryTimeline(),
+    getPressArchiveItems(),
+  ])
 
   const tabs: TabBarItem[] = [
     { label: t(locale, { he: 'אודות', en: 'About' }), href: `/${locale}/about` },

@@ -4,7 +4,8 @@ import type { Metadata } from 'next'
 import { EmptyState } from '@/components/media/EmptyState'
 import { PressTypeIcon } from '@/components/media/PressTypeIcon'
 import { Eyebrow, Reveal, Section } from '@/components/ui'
-import { findPressItemBySlug, pressArchiveItems, pressArchiveText } from '@/content/press-archive'
+import { pressArchiveText } from '@/content/press-archive'
+import { getPressArchiveItems } from '@/lib/cms'
 import { arrowBack, isLocale, locales, t, type Locale } from '@/lib/i18n'
 
 type Params = { locale: string; slug: string }
@@ -13,25 +14,32 @@ type Params = { locale: string; slug: string }
  * Standalone detail page for internal `PressArchiveItem`s (site owner's
  * brief item 16: full old-site articles, and described video/radio
  * appearances with no live embed, each "get their own page"). Deliberately
- * a SEPARATE route tree from the existing `/media/[slug]` (which already
- * serves a different, established fixture — `src/content/media.ts`'s
- * fictional/placeholder `archivePosts`) rather than reusing it: the two
- * fixtures have different shapes (`body: Localized<string[]>` here vs.
- * Hebrew-only `body: string[]` there) and different provenance (real,
- * research-sourced vs. placeholder), and `/media/[slug]` is already fully
- * wired up for its own data — extending it risked colliding with another
- * agent's already-shipped route. See the page-agent report for the full
- * reasoning.
+ * a SEPARATE route tree from `/media/[slug]` (a different fixture/collection
+ * entirely) — see this file's git history for the original reasoning.
+ *
+ * Reads from getPressArchiveItems() (same live-or-fallback source as the
+ * /media archive listing) instead of the static fixture directly — same
+ * bug class as /media/[slug]'s pre-fix state: a dashboard-added item with
+ * `Link kind: Internal` would archive-list fine but 404 here. Currently
+ * latent (every real Press Archive item today is `linkKind: 'external'`,
+ * confirmed 2026-08-26), but the moment an editor flips one to Internal
+ * this needs to already work. NOTE: the `press-archive` collection
+ * (src/payload/collections/PressArchive.ts) has no `body` field yet, so an
+ * internal item wired up this way still renders with no body paragraphs
+ * until that schema gap is filled in — this fix only closes the routing
+ * gap, not the content-authoring one.
  */
-export function generateStaticParams() {
-  const internalSlugs = pressArchiveItems.filter((item) => item.link.kind === 'internal').map((item) => item.slug)
+export async function generateStaticParams() {
+  const items = await getPressArchiveItems()
+  const internalSlugs = items.filter((item) => item.link.kind === 'internal').map((item) => item.slug)
   return locales.flatMap((locale) => internalSlugs.map((slug) => ({ locale, slug })))
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) return {}
-  const item = findPressItemBySlug(slug)
+  const items = await getPressArchiveItems()
+  const item = items.find((i) => i.slug === slug)
   if (!item) return {}
 
   return {
@@ -46,7 +54,8 @@ export default async function PressDetailPage({ params }: { params: Promise<Para
     notFound()
   }
   const locale: Locale = rawLocale
-  const item = findPressItemBySlug(slug)
+  const items = await getPressArchiveItems()
+  const item = items.find((i) => i.slug === slug)
 
   if (!item) {
     return (

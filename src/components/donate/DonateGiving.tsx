@@ -10,13 +10,16 @@ import {
   cardOption,
   closingCta,
   donateAmounts,
-  donationLinks,
   donationSummary,
   standingOrderOption,
   type DonateAmount,
 } from '@/content/donate'
 
-export type DonateGivingProps = { locale: Locale }
+export type DonateGivingProps = {
+  locale: Locale
+  /** From getSiteSettings() — dashboard-editable Morning checkout links, falling back to the static fixture's values. */
+  donationLinks: { standingOrderUrl: string; cardUrl: string }
+}
 
 function amountLabel(locale: Locale, amount: number): string {
   return locale === 'he' ? `${amount} ₪` : `${amount} NIS`
@@ -36,7 +39,7 @@ function amountLabel(locale: Locale, amount: number): string {
  * content of its own) is intentionally not ported — it's outside the
  * page's functional spec and disproportionate to build faithfully.
  */
-export function DonateGiving({ locale }: DonateGivingProps) {
+export function DonateGiving({ locale, donationLinks }: DonateGivingProps) {
   const [amount, setAmount] = useState<DonateAmount>(54)
 
   return (

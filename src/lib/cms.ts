@@ -134,10 +134,24 @@ export async function getHomeContent(locale: Locale): Promise<PayloadHomeContent
           he: resolveLocalizedValue(card?.title, 'he', pillarCards[index]?.title.he ?? ''),
           en: resolveLocalizedValue(card?.title, 'en', pillarCards[index]?.title.en ?? ''),
         } satisfies Localized,
-        body: {
-          he: resolveLocalizedValue(card?.body, 'he', pillarCards[index]?.body.he ?? ''),
-          en: resolveLocalizedValue(card?.body, 'en', pillarCards[index]?.body.en ?? ''),
-        } satisfies Localized,
+        // `card.body` is richText: at this getter's specific-locale query
+        // (not `locale: 'all'`), it comes back as one resolved Lexical doc
+        // for the current locale, not a `{he, en}` pair — resolveLocalizedValue
+        // (built for plain-string fields) can't read a locale key off that
+        // shape and was silently falling through to the static fallback on
+        // every render. Same bug class as the Story timeline's body field
+        // (already fixed) — flatten via lexicalToParagraphs instead. Both
+        // `he`/`en` slots get the same extracted text, matching how `title`/
+        // `linkLabel` above already behave at this same specific-locale query
+        // (each getHomeContent(locale) call only ever populates the slot
+        // matching its own `locale` correctly; the other slot is never read).
+        body: (() => {
+          const text = lexicalToParagraphs(card?.body).join(' ')
+          return {
+            he: text || pillarCards[index]?.body.he || '',
+            en: text || pillarCards[index]?.body.en || '',
+          } satisfies Localized
+        })(),
         linkLabel: {
           he: resolveLocalizedValue(card?.linkLabel, 'he', pillarCards[index]?.linkLabel.he ?? ''),
           en: resolveLocalizedValue(card?.linkLabel, 'en', pillarCards[index]?.linkLabel.en ?? ''),

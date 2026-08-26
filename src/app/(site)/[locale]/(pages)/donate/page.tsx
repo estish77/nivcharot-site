@@ -4,8 +4,8 @@ import type { Metadata } from 'next'
 import { Eyebrow, Reveal, Section } from '@/components/ui'
 import { DonateGiving } from '@/components/donate/DonateGiving'
 import { TransparencyGrid } from '@/components/donate/TransparencyGrid'
-import { donateHero } from '@/content/donate'
-import { getDonateContent } from '@/lib/cms'
+import { donateHero, donationLinks as staticDonationLinks } from '@/content/donate'
+import { getDonateContent, getSiteSettings } from '@/lib/cms'
 import { isLocale, locales, t } from '@/lib/i18n'
 
 /** Ported from docs/Shop.dc.html. */
@@ -34,7 +34,7 @@ export default async function DonatePage({ params }: { params: Promise<{ locale:
     notFound()
   }
   const locale = rawLocale
-  const hero = await getDonateContent(locale)
+  const [hero, siteSettings] = await Promise.all([getDonateContent(locale), getSiteSettings()])
 
   return (
     <>
@@ -50,7 +50,13 @@ export default async function DonatePage({ params }: { params: Promise<{ locale:
           <p className="max-w-[640px] text-[15px] leading-[1.7] text-neutral-700">{t(locale, donateHero.taxNote)}</p>
         </Section>
       </Reveal>
-      <DonateGiving locale={locale} />
+      <DonateGiving
+        locale={locale}
+        donationLinks={{
+          standingOrderUrl: siteSettings.donation.standingOrderUrl ?? staticDonationLinks.standingOrderUrl,
+          cardUrl: siteSettings.donation.cardUrl ?? staticDonationLinks.cardUrl,
+        }}
+      />
       <TransparencyGrid locale={locale} />
     </>
   )

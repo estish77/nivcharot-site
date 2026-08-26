@@ -2,7 +2,7 @@ import { Fragment, type ReactNode } from 'react'
 
 import { EventGalleryCard } from '@/components/media/EventGalleryCard'
 import { eventGalleries } from '@/content/media'
-import { pressArchiveItemsSorted, pressItemHref } from '@/content/press-archive'
+import { pressItemHref } from '@/content/press-archive'
 import {
   activismArchiveSection,
   activismFaqSection,
@@ -14,7 +14,7 @@ import {
   activismPositionPapersPlaceholder,
   type ActivismPillar,
 } from '@/content/activism'
-import { getActivismContent, getActivismFaqs } from '@/lib/cms'
+import { getActivismContent, getActivismFaqs, getPressArchiveItems } from '@/lib/cms'
 import { arrowForward, t, type Locale, type Localized } from '@/lib/i18n'
 
 /** Renders a `\n`-joined CMS string's line breaks as real `<br>`s — same convention as the About/Story pages' fixture `\n` markers. */
@@ -155,7 +155,11 @@ function PillarImage({ label }: { label: string }) {
 }
 
 export async function ActivismPage({ locale }: { locale: Locale }) {
-  const [content, faqs] = await Promise.all([getActivismContent(locale), getActivismFaqs(locale)])
+  const [content, faqs, pressArchiveItemsSorted] = await Promise.all([
+    getActivismContent(locale),
+    getActivismFaqs(locale),
+    getPressArchiveItems(),
+  ])
 
   return (
     <>
