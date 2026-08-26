@@ -26,8 +26,8 @@ export async function generateMetadata({
 
   return {
     title: t(locale, {
-      he: 'חרדית מדוברת — הפודקאסט של נבחרות',
-      en: 'Haredit Meduberet — The Nivcharot Podcast',
+      he: 'חרדית מדוברת - הפודקאסט של נבחרות',
+      en: 'Haredit Meduberet - The Nivcharot Podcast',
     }),
     description: t(locale, {
       he: 'אסתי שושן בשיחות בגובה העיניים, בלי צנזורה, על העולם החרדי, דת ומדינה, אקטיביזם, תקשורת ותרבות.',

@@ -45,7 +45,7 @@ export const PodcastEpisodes: CollectionConfig = {
       type: 'text',
       admin: {
         description:
-          'Apple Podcasts show ID shared by every episode (docs/Podcast.dc.html links to podcasts.apple.com/il/podcast/id1767223746) — used to build the per-episode Apple Podcasts URL.',
+          'Apple Podcasts show ID shared by every episode (docs/Podcast.dc.html links to podcasts.apple.com/il/podcast/id1767223746), used to build the per-episode Apple Podcasts URL.',
       },
     },
     { name: 'spotifyUrl', type: 'text' },

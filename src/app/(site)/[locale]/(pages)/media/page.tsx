@@ -125,8 +125,8 @@ export default async function MediaArchivePage({
           </h1>
           <p className="mb-7 max-w-[660px] text-base leading-[1.7] text-neutral-800">
             {t(locale, {
-              he: 'כל הכתבות, ההודעות לתקשורת והניוזלטרים שנאספו מהפעילות של נבחרות — לצפייה, לשיתוף ולמעקב אחרי מה שקורה.',
-              en: "Every article, media release and newsletter from Nivcharot's work — to read, share and follow along.",
+              he: 'כל הכתבות, ההודעות לתקשורת והניוזלטרים שנאספו מהפעילות של נבחרות, לצפייה, לשיתוף ולמעקב אחרי מה שקורה.',
+              en: "Every article, media release and newsletter from Nivcharot's work, to read, share and follow along.",
             })}
           </p>
           <div className="flex flex-wrap gap-3">

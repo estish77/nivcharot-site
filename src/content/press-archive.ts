@@ -88,6 +88,13 @@ export type PressArchiveItem = {
    * whichever four happen to be newest.
    */
   featured?: boolean
+  /**
+   * Short, hand-written blurb for the home page's 4-card strip, so cards
+   * stay a consistent size regardless of how long `summary` runs. Only set
+   * on featured items; `MediaArchive.tsx` falls back to a trimmed
+   * `summary` when absent.
+   */
+  homeExcerpt?: Localized<string>
 }
 
 const WAPO_2020_HEADLINE = "As Israel's election nears, some ultra-Orthodox women seek a greater political say"
@@ -106,8 +113,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: "Nivcharot's Founder Wins the Rappaport Prize for Trailblazing Women",
     },
     summary: {
-      he: 'פרס רות רפפורט לנשים פורצות דרך, המוענק מדי שנה החל מ-2013 על ידי קרן ברוס ורות רפפורט לנשים "יוצרות שינוי בחברה הישראלית", העניק בטקס מרץ 2019 במוזיאון תל אביב לאמנות שלושה פרסים בני 60,000 ₪ — לד"ר נסיה לאנג, לסיגל קנוטובסקי ולאסתי שושן, מייסדת נבחרות. עמוד הפרס עצמו, שאליו מפנה הקישור כאן, הוא דף הבית הכללי של הקרן ואינו מזכיר את שושן בשמה; פרטי זכייתה מאומתים דרך סיקור עצמאי מקביל בגלובס (ראו למטה בארכיון זה).',
-      en: 'The Ruth Rappaport Prize for Trailblazing Women, awarded annually since 2013 by the Bruce and Ruth Rappaport Foundation to women "generating change in Israeli society," gave three ₪60,000 awards at a March 2019 Tel Aviv Museum of Art ceremony — to Dr. Nasia Lang, Sigal Knutofsky, and Esty Shushan, founder of Nivcharot. The prize\'s own site, linked here, is the foundation\'s general homepage and doesn\'t name Shushan directly; her win is independently confirmed by parallel Globes coverage (see further down this archive).',
+      he: 'פרס רות רפפורט לנשים פורצות דרך, המוענק מדי שנה החל מ-2013 על ידי קרן ברוס ורות רפפורט לנשים "יוצרות שינוי בחברה הישראלית", העניק בטקס מרץ 2019 במוזיאון תל אביב לאמנות שלושה פרסים בני 60,000 ₪, לד"ר נסיה לאנג, לסיגל קנוטובסקי ולאסתי שושן, מייסדת נבחרות. עמוד הפרס עצמו, שאליו מפנה הקישור כאן, הוא דף הבית הכללי של הקרן ואינו מזכיר את שושן בשמה; פרטי זכייתה מאומתים דרך סיקור עצמאי מקביל בגלובס (ראו למטה בארכיון זה).',
+      en: 'The Ruth Rappaport Prize for Trailblazing Women, awarded annually since 2013 by the Bruce and Ruth Rappaport Foundation to women "generating change in Israeli society," gave three ₪60,000 awards at a March 2019 Tel Aviv Museum of Art ceremony, to Dr. Nasia Lang, Sigal Knutofsky, and Esty Shushan, founder of Nivcharot. The prize\'s own site, linked here, is the foundation\'s general homepage and doesn\'t name Shushan directly; her win is independently confirmed by parallel Globes coverage (see further down this archive).',
     },
     dateLabel: { he: 'מרץ 2019', en: 'March 2019' },
     sortDate: '2019-03-17',
@@ -126,8 +133,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: "Two ultra-Orthodox feminists challenge Israel's political landscape",
     },
     summary: {
-      he: 'פרופיל מקיף מאת רות אגלש על אסתי שושן ואסתי רידר-אינדורסקי, שבחמש השנים שקדמו לפרסום הובילו מאבק לשילוב נשים ברשימות ש"ס ויהדות התורה — מפלגות המחזיקות יחד 13 מושבים ושלושה תיקי ממשלה, כולם בידי גברים. שושן: "כנשים חרדיות אנחנו מתמודדות עם קרבות רבים. לקח לי זמן להבין שהמאבק הזה מתחיל דווקא שם למעלה". רידר-אינדורסקי: "לדעתי השינוי הזה יקרה, השאלה היא רק מתי... כי זה קרה בכל העולם". הכתבה מתעדת גם מחיר אישי: שושן נזקקה לצו בית משפט כדי לשמור על מקום בתה בבית הספר, ובנה של רידר-אינדורסקי התחנן בפניה שתפסיק.',
-      en: 'A wide Washington Post profile by Ruth Eglash on Esty Shushan and Estee Rieder-Indursky, who over the five years before publication led the push to get women onto Shas and United Torah Judaism candidate lists — parties holding 13 Knesset seats and three ministries between them, all held by men. Shushan: "As Haredi women, we face many battles. It took me awhile to realize that fighting those battles starts up there." Rieder-Indursky: "This change will happen, the question is just when... because it has happened all over the world." The piece also documents personal cost: a court order to keep Shushan\'s daughter enrolled in her school, and Rieder-Indursky\'s own son begging her to stop.',
+      he: 'פרופיל מקיף מאת רות אגלש על אסתי שושן ואסתי רידר-אינדורסקי, שבחמש השנים שקדמו לפרסום הובילו מאבק לשילוב נשים ברשימות ש"ס ויהדות התורה, מפלגות המחזיקות יחד 13 מושבים ושלושה תיקי ממשלה, כולם בידי גברים. שושן: "כנשים חרדיות אנחנו מתמודדות עם קרבות רבים. לקח לי זמן להבין שהמאבק הזה מתחיל דווקא שם למעלה". רידר-אינדורסקי: "לדעתי השינוי הזה יקרה, השאלה היא רק מתי... כי זה קרה בכל העולם". הכתבה מתעדת גם מחיר אישי: שושן נזקקה לצו בית משפט כדי לשמור על מקום בתה בבית הספר, ובנה של רידר-אינדורסקי התחנן בפניה שתפסיק.',
+      en: 'A wide Washington Post profile by Ruth Eglash on Esty Shushan and Estee Rieder-Indursky, who over the five years before publication led the push to get women onto Shas and United Torah Judaism candidate lists, parties holding 13 Knesset seats and three ministries between them, all held by men. Shushan: "As Haredi women, we face many battles. It took me awhile to realize that fighting those battles starts up there." Rieder-Indursky: "This change will happen, the question is just when... because it has happened all over the world." The piece also documents personal cost: a court order to keep Shushan\'s daughter enrolled in her school, and Rieder-Indursky\'s own son begging her to stop.',
     },
     dateLabel: { he: '23.7.2017', en: 'July 23, 2017' },
     sortDate: '2017-07-23',
@@ -150,7 +157,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
     },
     summary: {
       he: 'כיכר השבת מדווחת שבג"ץ, בראשות הנשיאה חיות, נתן לאגודת ישראל ארכה עד 2.9.2018 לתקן את סעיף 6 בתקנון, המגדיר חבר כ"כל יהודי גבר" ושולל בכך מנשים חברות והתמודדות. העתירה, שהגישה עו"ד תמר בן-פורת עוד ב-2015, זכתה לתמיכת "לא נבחרות – לא בוחרות"; אסתי רידר-אינדורסקי כינתה זאת "יום היסטורי": "לראות אולם בית משפט מלא בנשים חרדיות". אגודת ישראל דחתה את הפסיקה וכינתה את העותרות "הזויות".',
-      en: 'Kikar HaShabat reports the High Court, led by President Hayut, gave Agudat Yisrael until Sept. 2, 2018 to amend Section 6 of its bylaws — which defines a member as "any Jewish man," barring women from membership and candidacy. The petition, filed by attorney Tamar Ben-Porat back in 2015, was backed by "Lo Nivcharot – Lo Bocharot" activists; Estee Rieder-Indursky called it "a historic day": "[To] see a courtroom full of ultra-Orthodox women." Agudat Yisrael dismissed the ruling, calling the petitioners "delusional."',
+      en: 'Kikar HaShabat reports the High Court, led by President Hayut, gave Agudat Yisrael until Sept. 2, 2018 to amend Section 6 of its bylaws, which defines a member as "any Jewish man," barring women from membership and candidacy. The petition, filed by attorney Tamar Ben-Porat back in 2015, was backed by "Lo Nivcharot – Lo Bocharot" activists; Estee Rieder-Indursky called it "a historic day": "[To] see a courtroom full of ultra-Orthodox women." Agudat Yisrael dismissed the ruling, calling the petitioners "delusional."',
     },
     // The site owner's research filed this under its "2017" section, but
     // re-fetching the live page while building this fixture confirmed its
@@ -252,7 +259,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: '"Not Elected, Not Voting"',
     },
     summary: {
-      he: 'מאמר הדעה המייסד של אסתי שושן ב-Ynet (דצמבר 2012) תוקף את ש"ס ויהדות התורה על הפיכת הדרת נשים ממועמדות לסעיף תקנוני קבוע, ללא איסור הלכתי ממשי — ההצדקה "מקומה של האישה במקום אחר", לטענתה, נשענת על "קודים חברתיים" בלבד. שושן חושפת מה שהיא מכנה צביעות: המפלגות מעסיקות נשים לתעמולה בטלוויזיה אך שוללות מהן קבלת החלטות: "נשים ראויות לפקח ולנהל... אבל חברת כנסת זה תפקיד השמור רק לגברים חרדים". המאמר קורא להימנעות מהצבעה עד שהמפלגות יכירו בזכות ההתמודדות — המניפסט שממנו צמחה נבחרות.',
+      he: 'מאמר הדעה המייסד של אסתי שושן ב-Ynet (דצמבר 2012) תוקף את ש"ס ויהדות התורה על הפיכת הדרת נשים ממועמדות לסעיף תקנוני קבוע, ללא איסור הלכתי ממשי. ההצדקה "מקומה של האישה במקום אחר", לטענתה, נשענת על "קודים חברתיים" בלבד. שושן חושפת מה שהיא מכנה צביעות: המפלגות מעסיקות נשים לתעמולה בטלוויזיה אך שוללות מהן קבלת החלטות: "נשים ראויות לפקח ולנהל... אבל חברת כנסת זה תפקיד השמור רק לגברים חרדים". המאמר קורא להימנעות מהצבעה עד שהמפלגות יכירו בזכות ההתמודדות, המניפסט שממנו צמחה נבחרות.',
       en: 'Esty Shushan\'s founding manifesto op-ed in Ynet (December 2012) attacks Shas and United Torah Judaism for enshrining women\'s exclusion from candidacy in a standing bylaw clause despite no real halachic prohibition — the "a woman\'s place is elsewhere" justification, she argues, rests on "social codes" alone. She points to what she calls hypocrisy: parties use women for TV campaign appearances but deny them decision-making power: "Women are worthy of supervising and managing... but Knesset member is a position reserved only for Haredi men." She calls for withholding votes until the parties recognize the right to run — the manifesto Nivcharot grew out of.',
     },
     dateLabel: { he: '31.12.2012', en: 'Dec 31, 2012' },
@@ -271,7 +278,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: '"The Ultra-Orthodox Activist\'s Protest: At the Junctions, Yes — In the Knesset, No?"',
     },
     summary: {
-      he: 'כתבה מאת קובי נחשוני (ינואר 2013) על רות קוליאן, סטודנטית למשפטים, שהתנדבה לפעילות שטח בש"ס כדי לחשוף לדבריה סתירה: המפלגה מוכנה להיעזר בנשים ל"עבודה מלוכלכת" אך אוסרת את מועמדותן. קוליאן, שקיבלה ברכת ח"כ אריה דרעי על פעילותה: "לא צנוע שאישה תיכנס לבתים זרים, אבל לעשות עבודה מלוכלכת — להדביק מדבקות ולתלות שלטים — זה כן מקובל?". ש"ס הגיבה שנוכחות נשים בזירה הציבורית "מנוגדת למסורת היהודית".',
+      he: 'כתבה מאת קובי נחשוני (ינואר 2013) על רות קוליאן, סטודנטית למשפטים, שהתנדבה לפעילות שטח בש"ס כדי לחשוף לדבריה סתירה: המפלגה מוכנה להיעזר בנשים ל"עבודה מלוכלכת" אך אוסרת את מועמדותן. קוליאן, שקיבלה ברכת ח"כ אריה דרעי על פעילותה: "לא צנוע שאישה תיכנס לבתים זרים, אבל לעשות עבודה מלוכלכת, להדביק מדבקות ולתלות שלטים, זה כן מקובל?". ש"ס הגיבה שנוכחות נשים בזירה הציבורית "מנוגדת למסורת היהודית".',
       en: 'A Kobi Nahshoni article (January 2013) profiles Rut Kolian, a law student who volunteered for Shas field work in order to expose, in her telling, a contradiction: the party is willing to use women for "dirty work" but bars their candidacy. Kolian, who received MK Aryeh Deri\'s blessing for her efforts: "It\'s not modest for a woman to enter strangers\' houses, but doing dirty work — sticking stickers on cars and hanging signs — that\'s acceptable?" Shas responded that women\'s presence in the public sphere "contradicts Jewish tradition."',
     },
     dateLabel: { he: '17.1.2013', en: 'Jan 17, 2013' },
@@ -309,8 +316,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: '"Aha! The Haredi Feminists Confused the Haredim"',
     },
     summary: {
-      he: 'כתבה מאת קובי נחשוני (דצמבר 2014) על קמפיין פוסטרים סאטירי שהריצו תומכי "לא נבחרות לא בוחרות" בארבע ערים חרדיות, שחיקה בכוונה מודעות אמיתיות נגד שילוב נשים — האותיות הקטנות חשפו את הפרודיה. התרגיל הצליח יתר על המידה: כמה כלי תקשורת חרדיים, ובראשם כיכר השבת, לא זיהו את הסאטירה ופרסמו אותה כידיעה אמיתית, מה שהפך את המהלך עצמו לסיפור על תגובת התקשורת החרדית לקמפיין.',
-      en: 'A Kobi Nachshoni article (December 2014) covers a satirical poster campaign run by "Lo Nivcharot Lo Bocharot" supporters in four Haredi cities, deliberately mimicking genuine anti-women-in-politics flyers — with the fine print revealing the parody. The prank worked too well: several Haredi outlets, Kikar HaShabat chief among them, mistook it for real news and published it as such, turning the stunt itself into a story about how Haredi media reacted to the campaign.',
+      he: 'כתבה מאת קובי נחשוני (דצמבר 2014) על קמפיין פוסטרים סאטירי שהריצו תומכי "לא נבחרות לא בוחרות" בארבע ערים חרדיות, שחיקה בכוונה מודעות אמיתיות נגד שילוב נשים. האותיות הקטנות חשפו את הפרודיה. התרגיל הצליח יתר על המידה: כמה כלי תקשורת חרדיים, ובראשם כיכר השבת, לא זיהו את הסאטירה ופרסמו אותה כידיעה אמיתית, מה שהפך את המהלך עצמו לסיפור על תגובת התקשורת החרדית לקמפיין.',
+      en: 'A Kobi Nachshoni article (December 2014) covers a satirical poster campaign run by "Lo Nivcharot Lo Bocharot" supporters in four Haredi cities, deliberately mimicking genuine anti-women-in-politics flyers, with the fine print revealing the parody. The prank worked too well: several Haredi outlets, Kikar HaShabat chief among them, mistook it for real news and published it as such, turning the stunt itself into a story about how Haredi media reacted to the campaign.',
     },
     dateLabel: { he: '25.12.2014', en: 'Dec 25, 2014' },
     sortDate: '2014-12-25',
@@ -328,7 +335,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: "Israel's ultra-Orthodox mull bigger role for women",
     },
     summary: {
-      he: 'כתבה מאת טיה גולדנברג (דצמבר 2014) בוחנת תסיסה סביב ייצוג נשים חרדיות: מעל 20% מחברי הכנסת הן נשים, אך אף לא אחת מש"ס או יהדות התורה. שושן (בת 37 באותה עת): "יש מצב אבסורדי בישראל שבו נשים לא יכולות להתמודד עבור שתי מפלגות". הכתבה מזכירה גם את עדינה בר-שלום, בתו של הרב עובדיה יוסף, שדוחפת לשינוי מכיוון אחר — איומה לעבור מפלגה הוביל את ש"ס להקים מועצת נשים ולמנות אותה ליו"ר-שותפה.',
+      he: 'כתבה מאת טיה גולדנברג (דצמבר 2014) בוחנת תסיסה סביב ייצוג נשים חרדיות: מעל 20% מחברי הכנסת הן נשים, אך אף לא אחת מש"ס או יהדות התורה. שושן (בת 37 באותה עת): "יש מצב אבסורדי בישראל שבו נשים לא יכולות להתמודד עבור שתי מפלגות". הכתבה מזכירה גם את עדינה בר-שלום, בתו של הרב עובדיה יוסף, שדוחפת לשינוי מכיוון אחר. איומה לעבור מפלגה הוביל את ש"ס להקים מועצת נשים ולמנות אותה ליו"ר-שותפה.',
       en: "A Tia Goldenberg piece (December 2014) examines ferment over Haredi women's representation: over 20% of Knesset members are women, but none from Shas or United Torah Judaism. Shushan, then 37: \"There is an absurd situation in Israel where women cannot run for two political parties.\" The piece also notes Adina Bar-Shalom, Rabbi Ovadia Yosef's daughter, pushing for change from a different angle — her threat to defect pushed Shas to create a women's advisory council and name her its co-chair.",
     },
     dateLabel: { he: '26.12.2014', en: 'Dec 26, 2014' },
@@ -347,7 +354,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Yitzchak Ravitz: "Subject to Halacha, a Woman Could Serve in the Knesset"',
     },
     summary: {
-      he: 'ראיון מאת ישראל כהן (ינואר 2015), לציון שש שנים לפטירת ח"כ אברהם רביץ, עם בנו הרב יצחק רביץ, יו"ר דגל התורה. רביץ מציב את השאלה כשאלה הלכתית ולא עקרונית: נשים "עושות הכול — מנהלות בתי ספר ומנהלות חברות גדולות בהצלחה"; "הכנסת היא כמו ועד בית, אז אולי אישה כן יכולה לנהל אותה" — אך מדגיש שאינו פוסק הלכה בעצמו ושהקביעה שייכת לגדולי התורה. קורא לקהילה "לעבוד קשה יותר" לשילוב אזרחים חרדים עובדים בכלל.',
+      he: 'ראיון מאת ישראל כהן (ינואר 2015), לציון שש שנים לפטירת ח"כ אברהם רביץ, עם בנו הרב יצחק רביץ, יו"ר דגל התורה. רביץ מציב את השאלה כשאלה הלכתית ולא עקרונית: נשים "עושות הכול, מנהלות בתי ספר ומנהלות חברות גדולות בהצלחה"; "הכנסת היא כמו ועד בית, אז אולי אישה כן יכולה לנהל אותה". אך מדגיש שאינו פוסק הלכה בעצמו ושהקביעה שייכת לגדולי התורה. קורא לקהילה "לעבוד קשה יותר" לשילוב אזרחים חרדים עובדים בכלל.',
       en: 'An Israel Cohen interview (January 2015), marking six years since MK Avraham Ravitz\'s death, with his son Rabbi Yitzchak Ravitz, chairman of Degel HaTorah. He frames the question as a halachic one rather than a matter of principle: women "do everything — manage schools and run large companies successfully"; "the Knesset is like a building committee, so maybe a woman could manage it" — but stresses that he himself isn\'t a halachic decisor and that the ruling belongs to the Torah sages. He calls on the community more broadly to "work harder" at integrating working Haredi citizens.',
     },
     dateLabel: { he: '20.1.2015', en: 'Jan 20, 2015' },
@@ -366,7 +373,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: '"Lo Nivcharot, Lo Bocharot": Haredi Women Speak',
     },
     summary: {
-      he: 'כתבה (פברואר 2015) הנותנת במה לנשים חרדיות שונות. שושן: "לא הייתי עושה צעד כזה, שגובה מחיר כבד, אם לא הייתי יודעת עד כמה זה הכרחי לאישה החרדית". טלי פרקש מסבירה שהמטרה "לשקף את הצרכים של הנשים החרדיות, כ-5% מהחברה". לצד הקולות התומכים מובאת גם עמדה ביקורתית מפי עו"ד רבקה שוורץ: "ההלכה קובעת בעניין הזה. אם מטרת הקמפיין היא לפתוח דלתות נעולות, הוא כבר הצליח" — כתבה מרובת-נקודות-מבט, לא מגמתית לכיוון אחד.',
+      he: 'כתבה (פברואר 2015) הנותנת במה לנשים חרדיות שונות. שושן: "לא הייתי עושה צעד כזה, שגובה מחיר כבד, אם לא הייתי יודעת עד כמה זה הכרחי לאישה החרדית". טלי פרקש מסבירה שהמטרה "לשקף את הצרכים של הנשים החרדיות, כ-5% מהחברה". לצד הקולות התומכים מובאת גם עמדה ביקורתית מפי עו"ד רבקה שוורץ: "ההלכה קובעת בעניין הזה. אם מטרת הקמפיין היא לפתוח דלתות נעולות, הוא כבר הצליח". כתבה מרובת-נקודות-מבט, לא מגמתית לכיוון אחד.',
       en: 'A February 2015 feature gives voice to a range of Haredi women. Shushan: "I would not take such a step, one that carries a heavy price, had I not known how necessary it is for the Haredi woman." Tali Farkash explains the goal is "to reflect the needs of Haredi women, about 5% of society." Alongside supportive voices, the piece also carries a skeptical take from attorney Rebecca Schwartz: "Religious law determines this matter. If the campaign\'s goal is to open closed doors, it has already succeeded" — a genuinely multi-perspective piece, not tilted toward one side.',
     },
     dateLabel: { he: '12.2.2015', en: 'Feb 12, 2015' },
@@ -385,8 +392,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Why I Oppose the Haredi-Women-to-Knesset Campaign',
     },
     summary: {
-      he: 'טור דעה מאת שיפי חריטון (פברואר 2015) נגד הקמפיין, מפרט שלוש טענות: היעדר גיבוי רבני מפורש למהלך; טקטיקה שהיא מכנה תוקפנית מדי — "אני רואה את הדרישה הלוחמנית של נשות הקמפיין וחושבת שהן פועלות כמו הגברים שאיתם הן נלחמות"; וטענה שהמסר מרחיק דווקא את הנשים החרדיות שהוא אמור לייצג. חריטון עצמה בעד קידום נשים חרדיות, אך דרך ערוצים אחרים ותוך היוועצות עם רבנים — התנגדות מפורטת ולא סתמית.',
-      en: 'A Shiffi Chariton opinion column (February 2015) against the campaign lays out three arguments: no explicit rabbinic backing for the move; tactics she calls too combative — "I see the militant demand of the campaign\'s women and think they\'re acting like the men they\'re fighting"; and a claim that the messaging alienates the very Haredi women it claims to represent. Chariton herself favors advancing Haredi women, but through other, rabbi-consulted channels — a detailed objection, not a dismissive one.',
+      he: 'טור דעה מאת שיפי חריטון (פברואר 2015) נגד הקמפיין, מפרט שלוש טענות: היעדר גיבוי רבני מפורש למהלך; טקטיקה שהיא מכנה תוקפנית מדי: "אני רואה את הדרישה הלוחמנית של נשות הקמפיין וחושבת שהן פועלות כמו הגברים שאיתם הן נלחמות"; וטענה שהמסר מרחיק דווקא את הנשים החרדיות שהוא אמור לייצג. חריטון עצמה בעד קידום נשים חרדיות, אך דרך ערוצים אחרים ותוך היוועצות עם רבנים, התנגדות מפורטת ולא סתמית.',
+      en: 'A Shiffi Chariton opinion column (February 2015) against the campaign lays out three arguments: no explicit rabbinic backing for the move; tactics she calls too combative: "I see the militant demand of the campaign\'s women and think they\'re acting like the men they\'re fighting"; and a claim that the messaging alienates the very Haredi women it claims to represent. Chariton herself favors advancing Haredi women, but through other, rabbi-consulted channels, a detailed objection, not a dismissive one.',
     },
     dateLabel: { he: '12.2.2015', en: 'Feb 12, 2015' },
     sortDate: '2015-02-12',
@@ -404,7 +411,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Who Funds "Lo Nivcharot Lo Bocharot"?',
     },
     summary: {
-      he: 'כתבה חוקרת מאת אמילי עמרוסי (פברואר 2015) על מקורות המימון של הקמפיין: זיקת שתי מובילות למכון "שח"ר לפוליטיקה חדשה", הנתמך על ידי הקרן החדשה לישראל — רידר-אינדורסקי כעמיתת מחקר, איבנבוים לשעבר כחברת דירקטוריון. הקמפיין הכחיש כל תלות: "אף גוף לא מממן, מנהל או מפעיל אותנו"; הקרן החדשה לישראל השיבה בדומה: "אין שום קשר בינינו לקמפיין". כתבה שמטרתה המוצהרת לערער על עצמאות הקמפיין.',
+      he: 'כתבה חוקרת מאת אמילי עמרוסי (פברואר 2015) על מקורות המימון של הקמפיין: זיקת שתי מובילות למכון "שח"ר לפוליטיקה חדשה", הנתמך על ידי הקרן החדשה לישראל, רידר-אינדורסקי כעמיתת מחקר, איבנבוים לשעבר כחברת דירקטוריון. הקמפיין הכחיש כל תלות: "אף גוף לא מממן, מנהל או מפעיל אותנו"; הקרן החדשה לישראל השיבה בדומה: "אין שום קשר בינינו לקמפיין". כתבה שמטרתה המוצהרת לערער על עצמאות הקמפיין.',
       en: 'An Emily Amrosi investigation (February 2015) into the campaign\'s funding traces two leaders\' ties to the Shachar Institute for New Politics, backed by the New Israel Fund — Rieder-Indursky as a research fellow, Ivenboim a former board member. The campaign flatly denied any dependency: "No body funds, manages, or operates us"; the New Israel Fund answered similarly: "There is no connection between us and the campaign." An investigation whose evident aim is to cast doubt on the campaign\'s independence.',
     },
     dateLabel: { he: '22.2.2015', en: 'Feb 22, 2015' },
@@ -424,7 +431,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
     },
     summary: {
       he: 'כתבה מאת ירדן סקופ (אוקטובר 2016) על צו על-תנאי המחייב את אגודת ישראל להסביר תוך 75 יום מדוע לא יבוטל סעיף 6, המגדיר חבר מפלגה כ"כל איש יהודי... השומר תורה ומצוות". השופט עוזי פוגלמן, שחתם על הצו: "ברור שאישה חרדית תתקשה לעמוד בפני המפלגה ולהיחשף". גוף הכתבה חסום בתשלום מעבר לפרטים אלה.',
-      en: 'A Yarden Skop article (October 2016) covers a conditional order requiring Agudat Yisrael to justify, within 75 days, why Section 6 of its bylaws — defining a member as "every Jewish man... who observes Torah and mitzvot" — shouldn\'t be struck. Justice Uzi Fogelman, who signed the order: "It is clear that a Haredi woman would find it difficult to stand before the party and be exposed." The article\'s body is paywalled beyond these details.',
+      en: 'A Yarden Skop article (October 2016) covers a conditional order requiring Agudat Yisrael to justify, within 75 days, why Section 6 of its bylaws, defining a member as "every Jewish man... who observes Torah and mitzvot," shouldn\'t be struck. Justice Uzi Fogelman, who signed the order: "It is clear that a Haredi woman would find it difficult to stand before the party and be exposed." The article\'s body is paywalled beyond these details.',
     },
     dateLabel: { he: '28.10.2016', en: 'Oct 28, 2016' },
     sortDate: '2016-10-28',
@@ -446,7 +453,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'After 19 Elections of Exclusion, Haredi Women Are Done Staying Silent',
     },
     summary: {
-      he: 'כתבה מאת תמר דרסלר, לקראת מערכת הבחירות של 2015, על יוזמה שכבר צברה למעלה מ-3,000 תומכות: "אם לא תשלבו אישה בשורותיכם, לא תקבלו את הפתק שלנו". הכתבה מזהה את שושן — קולנוענית ואם לארבעה — לצד מיכל צ\'רנוביצקי, איבנבוים ואסתי רידר-אינדורסקי, ומציינת ש-75.7% מהנשים החרדיות עובדות, לעומת אפס מושבים חרדיים בידי נשים. הרב מרדכי בלוי מאיים בסנקציות קהילתיות; גורם ביהדות התורה מבטל את הקמפיין כ"שוליים בתוך שוליים".',
+      he: 'כתבה מאת תמר דרסלר, לקראת מערכת הבחירות של 2015, על יוזמה שכבר צברה למעלה מ-3,000 תומכות: "אם לא תשלבו אישה בשורותיכם, לא תקבלו את הפתק שלנו". הכתבה מזהה את שושן, קולנוענית ואם לארבעה, לצד מיכל צ\'רנוביצקי, איבנבוים ואסתי רידר-אינדורסקי, ומציינת ש-75.7% מהנשים החרדיות עובדות, לעומת אפס מושבים חרדיים בידי נשים. הרב מרדכי בלוי מאיים בסנקציות קהילתיות; גורם ביהדות התורה מבטל את הקמפיין כ"שוליים בתוך שוליים".',
       en: 'A Tamar Dressler article, ahead of the 2015 election, on an initiative that had already gathered over 3,000 supporters: "If you don\'t include a woman in your ranks, you won\'t get our vote." The piece names Shushan — a filmmaker and mother of four — alongside Michal Chernovitzky, Ivenboim, and Estee Rieder-Indursky, and notes that 75.7% of Haredi women work, against zero Haredi-party Knesset seats held by women. Rabbi Mordechai Bloi threatens communal sanctions; a UTJ official dismisses the campaign as "margins within the margins."',
     },
     // The article's own byline reads Dec. 9, 2014 — not July 2017 as this
@@ -512,7 +519,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: "Israel's Ultra-Orthodox Women Win Partial Victory in Fight to Run for Office",
     },
     summary: {
-      he: 'כתבה מאת מישל חבין (אוגוסט 2018), הבנויה ברובה על ציטוטי שושן. שושן: "אנחנו הנשים מהוות 50 אחוז מהאוכלוסייה החרדית, אבל אין לנו גישה לשולחן קבלת ההחלטות"; "לנשים חרדיות מותר להיות משווקות, עורכות דין, עיתונאיות — אבל המקום היחיד שאליו הן לא יכולות להיכנס הוא פוליטיקה". על המחיר האישי: "יש אנשים בקהילה שמתעלמים מאיתנו או מבזים אותנו". ובכל זאת: "המפלגות ימצאו דרך לעקוף את זה, אבל אני מרגישה את השינוי".',
+      he: 'כתבה מאת מישל חבין (אוגוסט 2018), הבנויה ברובה על ציטוטי שושן. שושן: "אנחנו הנשים מהוות 50 אחוז מהאוכלוסייה החרדית, אבל אין לנו גישה לשולחן קבלת ההחלטות"; "לנשים חרדיות מותר להיות משווקות, עורכות דין, עיתונאיות, אבל המקום היחיד שאליו הן לא יכולות להיכנס הוא פוליטיקה". על המחיר האישי: "יש אנשים בקהילה שמתעלמים מאיתנו או מבזים אותנו". ובכל זאת: "המפלגות ימצאו דרך לעקוף את זה, אבל אני מרגישה את השינוי".',
       en: 'A Michele Chabin article (August 2018), built largely around Shushan\'s own quotes. Shushan: "We women are 50 percent of the haredi population but we have no access at the decision-making table"; "Haredi women are allowed to become marketers, lawyers, journalists — but the one place they can\'t enter is politics." On the personal cost: "There are people in the community who either ignore us or shame us." Still: "The parties will find a way to get around it, but I feel the change in our community."',
     },
     dateLabel: { he: '24.8.2018', en: 'Aug 24, 2018' },
@@ -534,7 +541,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Ultra-Orthodox Coalition Party to End Ban on Women, but Says Nothing Will Change',
     },
     summary: {
-      he: 'כתבת סגל בטיימס אוף ישראל (4.9.2018): אגודת ישראל תבטל את הסעיף המונע חברות נשים, אך המפלגה עצמה מבהירה כי "השינוי בתקנון לא יוביל לשום שינוי מעשי בקבלה למפלגה" — בעקבות הוראת בג"ץ ועתירת בן-פורת ועשרת הארגונים, בהם נבחרות. אסתי רידר-אינדורסקי, בראיון לערוץ i24: "עבורנו זו לא 2018. זו 1918" — אזהרה שהניצחון המשפטי אינו ניצחון בפועל.',
+      he: 'כתבת סגל בטיימס אוף ישראל (4.9.2018): אגודת ישראל תבטל את הסעיף המונע חברות נשים, אך המפלגה עצמה מבהירה כי "השינוי בתקנון לא יוביל לשום שינוי מעשי בקבלה למפלגה", בעקבות הוראת בג"ץ ועתירת בן-פורת ועשרת הארגונים, בהם נבחרות. אסתי רידר-אינדורסקי, בראיון לערוץ i24: "עבורנו זו לא 2018. זו 1918", אזהרה שהניצחון המשפטי אינו ניצחון בפועל.',
       en: 'A Times of Israel staff report (September 4, 2018): Agudath Israel will remove the clause barring women\'s membership, but the party itself makes clear "the change in the regulations will not bring about any actual change in acceptance to the party" — following the Court order and Ben-Porat\'s petition with the ten organizations, including Nivcharot. Estee Rieder-Indursky, in an i24 interview: "For us it is not 2018. It is 1918" — a warning that the legal win isn\'t yet a real one.',
     },
     dateLabel: { he: '4.9.2018', en: 'Sept 4, 2018' },
@@ -552,7 +559,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
     category: 'interview',
     sourceLanguage: 'en',
     title: {
-      he: '"אין קול, אין הצבעה" — כך אומרות נשים פמיניסטיות חרדיות בישראל',
+      he: '"אין קול, אין הצבעה", כך אומרות נשים פמיניסטיות חרדיות בישראל',
       en: '"No Voice, No Vote," Say Feminist Haredi Women in Israel',
     },
     summary: {
@@ -578,7 +585,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Lady Globes Presents: 20 Influential Female Activists in Israel, 2018',
     },
     summary: {
-      he: 'ברשימת "ליידי גלובס: 20 האקטיביסטיות המשפיעות, 2018" מתוארת שושן כמובילת המאבק, וקוראת בעצמה להדרת הנשים החרדיות "טריטוריה גברית סגורה, מוצהרת ומגודרת": "אין שום סיבה הלכתית, אפילו לא תרבותית, שצריכה למנוע מאיתנו כל כך באופן מוחלט מהשתתפות בקבלת ההחלטות". היא מזהה כמה גורמים לכך — אפליה עדתית, כשלי הנהגה, אלימות במשפחה והשתקת פגיעה מינית — ומודה שנשים רבות תומכות בה בפרטיות בלבד, מחשש לחשיפה פומבית.',
+      he: 'ברשימת "ליידי גלובס: 20 האקטיביסטיות המשפיעות, 2018" מתוארת שושן כמובילת המאבק, וקוראת בעצמה להדרת הנשים החרדיות "טריטוריה גברית סגורה, מוצהרת ומגודרת": "אין שום סיבה הלכתית, אפילו לא תרבותית, שצריכה למנוע מאיתנו כל כך באופן מוחלט מהשתתפות בקבלת ההחלטות". היא מזהה כמה גורמים לכך: אפליה עדתית, כשלי הנהגה, אלימות במשפחה והשתקת פגיעה מינית, ומודה שנשים רבות תומכות בה בפרטיות בלבד, מחשש לחשיפה פומבית.',
       en: 'In Globes\' "Lady Globes: 20 Influential Activists, 2018," Shushan is profiled as leading the fight, and herself calls the exclusion of Haredi women "a closed, declared, and fenced-off male territory": "There is no halachic reason, not even a cultural one, that should prevent us so absolutely from participation in decision-making." She names several drivers — ethnic discrimination, leadership failures, domestic violence, and silenced abuse — and admits many women support her only privately, fearing public exposure.',
     },
     dateLabel: { he: '2018', en: '2018' },
@@ -602,7 +609,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
     },
     summary: {
       he: 'כתבה מאת מיכל רז-חיימוביץ\' (11.3.2019) על טקס פרס רפפורט: שלושה פרסים בני 60,000 ₪ — לד"ר נסיה לאנג, סיגל קנוטובסקי ואסתי שושן. אלונה בר-און, יו"ר גלובס, בנאום הטקס: "הוכחנו שנשים קיימות וראויות להכרה... אבל יש מחלה שנקראת צניעות — ביטול עצמי". הטקס במוזיאון תל אביב לאמנות שילב גם עיסוק במורשת פרידה קאלו וחשיפת דגם רכב לקסוס חדש — כתבה חברתית-אירועית ולא רק עיתונות מדיניות.',
-      en: 'A Michal Raz-Chaimovich article (March 11, 2019) on the Rappaport Prize ceremony: three ₪60,000 awards — to Dr. Nasia Lang, Sigal Knutofsky, and Esty Shushan. Globes chair Alona Bar-On, in her ceremony remarks: "We proved that women exist and deserve recognition... but there\'s a disease called modesty — self-erasure." The Tel Aviv Museum of Art ceremony also touched on Frida Kahlo\'s legacy and unveiled a new Lexus model — society-pages coverage, not straight policy journalism.',
+      en: 'A Michal Raz-Chaimovich article (March 11, 2019) on the Rappaport Prize ceremony: three ₪60,000 awards, to Dr. Nasia Lang, Sigal Knutofsky, and Esty Shushan. Globes chair Alona Bar-On, in her ceremony remarks: "We proved that women exist and deserve recognition... but there\'s a disease called modesty, self-erasure." The Tel Aviv Museum of Art ceremony also touched on Frida Kahlo\'s legacy and unveiled a new Lexus model, society-pages coverage, not straight policy journalism.',
     },
     dateLabel: { he: '11.3.2019', en: 'March 11, 2019' },
     sortDate: '2019-03-11',
@@ -643,7 +650,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Esty Shushan, Who Fought for Haredi Women\'s Representation in the Knesset: "I Wear the Title Divorcée With Ease"',
     },
     summary: {
-      he: 'פרופיל אישי מאת תהיה ברק (ככל הנראה נובמבר 2021, בסמוך לשידור "אשת חיל" בערוץ HOT8) על שושן, אז בת 44. "לא ידעתי אז שיום אחד אני אוביל תנועה פמיניסטית חרדית". הכתבה חושפת פרטים אישיים לא-פוליטיים: נישאה בגיל 18 וחצי, התגרשה תוך חמישה חודשים, נישאה שוב בגיל 19, ולאחר 25 שנה וארבעה ילדים נפרדה שוב בתקופת הסגר, בלי עורכי דין. שושן: "בזהות שלי אני חרדית בעומק הכי גדול. אני עדיין משלמת את מס החרדיות שלי" — כיום מתגוררת ברעננה, שכונה חילונית, עם חתול.',
+      he: 'פרופיל אישי מאת תהיה ברק (ככל הנראה נובמבר 2021, בסמוך לשידור "אשת חיל" בערוץ HOT8) על שושן, אז בת 44. "לא ידעתי אז שיום אחד אני אוביל תנועה פמיניסטית חרדית". הכתבה חושפת פרטים אישיים לא-פוליטיים: נישאה בגיל 18 וחצי, התגרשה תוך חמישה חודשים, נישאה שוב בגיל 19, ולאחר 25 שנה וארבעה ילדים נפרדה שוב בתקופת הסגר, בלי עורכי דין. שושן: "בזהות שלי אני חרדית בעומק הכי גדול. אני עדיין משלמת את מס החרדיות שלי". כיום מתגוררת ברעננה, שכונה חילונית, עם חתול.',
       en: 'A personal profile by Tahiya Barak (likely November 2021, around the "Women of Valor" broadcast on HOT8) of Shushan, then 44. "I didn\'t know back then that one day I\'d lead a Haredi feminist movement." The piece opens up non-political personal details: married at 18 and a half, divorced within five months, remarried at 19, and after 25 years and four children separated again during Covid lockdown, without lawyers. Shushan: "In my identity I am Haredi at the deepest level. I still pay my Haredi tax" — now living in secular Ra\'anana, with a cat.',
     },
     dateLabel: { he: 'בערך נובמבר 2021', en: 'c. November 2021' },
@@ -679,7 +686,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'The Haredi Parties Are No Longer an Option',
     },
     summary: {
-      he: 'אחד מטורי הדעה המוקדמים ביותר של אסתי שושן — מאוקטובר 2012, עוד לפני המניפסט מדצמבר אותה שנה שממנו נחשבת נבחרות לצמוח רשמית. הטור טוען שהמפלגות החרדיות הפכו לנציגות בלתי ראויות, המציעות רק הבטחות ל"עולם הבא" במקום טובות הנאה אמיתיות בהווה.',
+      he: 'אחד מטורי הדעה המוקדמים ביותר של אסתי שושן, מאוקטובר 2012, עוד לפני המניפסט מדצמבר אותה שנה שממנו נחשבת נבחרות לצמוח רשמית. הטור טוען שהמפלגות החרדיות הפכו לנציגות בלתי ראויות, המציעות רק הבטחות ל"עולם הבא" במקום טובות הנאה אמיתיות בהווה.',
       en: "One of Esty Shushan's earliest opinion columns — from October 2012, predating even the December manifesto of that year Nivcharot is usually dated from. The column argues the Haredi parties have become unfit representatives, offering only promises of \"the world to come\" instead of real present-day benefits.",
     },
     dateLabel: { he: '24.10.2012', en: 'Oct 24, 2012' },
@@ -741,8 +748,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'For the First Time: A Party of Haredi Mothers in Elad',
     },
     summary: {
-      he: 'כתבה (ספטמבר 2013) על רשימה עירונית של נשים חרדיות בלבד שהתמודדה באלעד, תוך ציון שמועמדות נשים בערים חרדיות אחרות פרשו "בעקבות לחצים ואיומים" — עדות לקושי הרחב יותר שממנו צמח מאבק הייצוג.',
-      en: 'An article (September 2013) on an all-women Haredi municipal list running in Elad, noting that women candidates in other Haredi towns had withdrawn under "pressure and threats" — evidence of the wider difficulty the representation struggle grew out of.',
+      he: 'כתבה (ספטמבר 2013) על רשימה עירונית של נשים חרדיות בלבד שהתמודדה באלעד, תוך ציון שמועמדות נשים בערים חרדיות אחרות פרשו "בעקבות לחצים ואיומים", עדות לקושי הרחב יותר שממנו צמח מאבק הייצוג.',
+      en: 'An article (September 2013) on an all-women Haredi municipal list running in Elad, noting that women candidates in other Haredi towns had withdrawn under "pressure and threats," evidence of the wider difficulty the representation struggle grew out of.',
     },
     dateLabel: { he: '29.9.2013', en: 'Sep 29, 2013' },
     sortDate: '2013-09-29',
@@ -833,7 +840,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
     sourceLanguage: 'he',
     title: {
       he: 'לא נבחרות לא בוחרות - יש פמיניזם חרדי',
-      en: '"Lo Nivcharot Lo Bocharot" — There Is Such a Thing as Haredi Feminism',
+      en: '"Lo Nivcharot Lo Bocharot" - There Is Such a Thing as Haredi Feminism',
     },
     summary: {
       he: 'ראיון מאת יעל ברזילי (מרץ 2015) עם אסתי שושן על הבחירה לפעול בתוך המפלגות הקיימות במקום להקים מפלגת נשים נפרדת; שושן משתפת גם בביקורת שספגה מפמיניסטיות מזרחיות ומקורבות לש"ס.',
@@ -855,7 +862,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Emily Amrusi Published False Insinuations',
     },
     summary: {
-      he: 'תגובתה הישירה של אסתי שושן (פברואר 2015) לטענות העיתונאית אמילי עמרוסי בדבר מימון נסתר לקמפיין — שושן מכחישה כל תלות ארגונית ומאיימת בתביעת דיבה. פרסום נפרד מכתבת החקירה המקורית של עמרוסי, המתועדת בנפרד בארכיון זה.',
+      he: 'תגובתה הישירה של אסתי שושן (פברואר 2015) לטענות העיתונאית אמילי עמרוסי בדבר מימון נסתר לקמפיין. שושן מכחישה כל תלות ארגונית ומאיימת בתביעת דיבה. פרסום נפרד מכתבת החקירה המקורית של עמרוסי, המתועדת בנפרד בארכיון זה.',
       en: "Esty Shushan's direct rebuttal (February 2015) to journalist Emily Amrusi's claims of hidden campaign funding — Shushan denies any organizational dependency and threatens defamation action. A separate publication from Amrusi's original investigative piece, documented separately in this archive.",
     },
     dateLabel: { he: '22.2.2015', en: 'Feb 22, 2015' },
@@ -874,7 +881,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'For the First Time: A Haredi Woman on the TED Stage',
     },
     summary: {
-      he: 'כתבה מאת יערית אלבז (מאי 2015) על הרצאת ה-TEDxJerusalem של אסתי שושן — הראשונה מסוגה מפי אישה חרדית — שבה סיפרה את סיפור הקמת התנועה.',
+      he: 'כתבה מאת יערית אלבז (מאי 2015) על הרצאת ה-TEDxJerusalem של אסתי שושן, הראשונה מסוגה מפי אישה חרדית, שבה סיפרה את סיפור הקמת התנועה.',
       en: "A Yearit Albaz article (May 2015) covers Shushan's TEDxJerusalem talk — the first ever by a Haredi woman — in which she recounted the movement's founding story.",
     },
     dateLabel: { he: '28.5.2015', en: 'May 28, 2015' },
@@ -912,7 +919,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Boycott, Boycott, Shalt Thou Pursue: The Haredi Weapon That Guarantees Obedience to Rabbinic Rules',
     },
     summary: {
-      he: 'כתבה מקיפה מאת יאקי אדמקר (אוקטובר 2016), מבט לאחור על ניסיון הנידוי הקהילתי נגד שושן: בכירים חרדים איימו על מעמדם הלימודי של ילדיה, ושושן העבירה אותם מראש לבתי ספר חלופיים. שושן: "הם הבינו שאין להם נשק" — לאחר שהאיום נכשל בהשתקתה.',
+      he: 'כתבה מקיפה מאת יאקי אדמקר (אוקטובר 2016), מבט לאחור על ניסיון הנידוי הקהילתי נגד שושן: בכירים חרדים איימו על מעמדם הלימודי של ילדיה, ושושן העבירה אותם מראש לבתי ספר חלופיים. שושן: "הם הבינו שאין להם נשק", לאחר שהאיום נכשל בהשתקתה.',
       en: 'A comprehensive Yaki Adamker article (October 2016), a retrospective look at the attempted communal boycott (cherem) against Shushan: Haredi officials threatened her children\'s educational placement, and she preemptively moved them to alternative schools. Shushan: "They realized they had no weapon" — once the threat failed to silence her.',
     },
     dateLabel: { he: '11.10.2016', en: 'Oct 11, 2016' },
@@ -931,7 +938,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'This Is What a Revolution Looks Like: The Women Leading the Struggles Shaking Up the Haredi Agenda',
     },
     summary: {
-      he: 'טור אורח מאת אסתי שושן (אפריל 2017) הממקם את נבחרות בתוך גל רחב יותר של מאבקי נשים חרדיות פנימיים — על אפליית שכר, ניצולות הטרדה, עובדות מעונות יום — ומזכיר את שרה שנירר כסמל היסטורי למהפכה חינוכית-נשית קודמת.',
+      he: 'טור אורח מאת אסתי שושן (אפריל 2017) הממקם את נבחרות בתוך גל רחב יותר של מאבקי נשים חרדיות פנימיים: על אפליית שכר, ניצולות הטרדה, עובדות מעונות יום, ומזכיר את שרה שנירר כסמל היסטורי למהפכה חינוכית-נשית קודמת.',
       en: 'A guest column by Esty Shushan (April 2017) situates Nivcharot within a wider wave of internal Haredi women\'s struggles — wage discrimination, harassment survivors, daycare workers — invoking Sarah Schenirer as a historical symbol of an earlier women\'s educational revolution.',
     },
     dateLabel: { he: '26.4.2017', en: 'Apr 26, 2017' },
@@ -969,7 +976,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Under Court Pressure: A Woman Can Now Join Agudat Yisrael as a Member',
     },
     summary: {
-      he: 'כתבה מאת מנחם שטאוב (ינואר 2019) המדווחת על התיקון הפורמלי בתקנון אגודת ישראל — הסרת המילה "איש" מסעיף החברות — בעקבות הלחץ מבג"ץ. שלב מאוחר ונפרד מהוראת בית המשפט מיולי 2018 שכבר מתועדת בארכיון זה: כאן מדובר בשינוי התקנון בפועל.',
+      he: 'כתבה מאת מנחם שטאוב (ינואר 2019) המדווחת על התיקון הפורמלי בתקנון אגודת ישראל, הסרת המילה "איש" מסעיף החברות, בעקבות הלחץ מבג"ץ. שלב מאוחר ונפרד מהוראת בית המשפט מיולי 2018 שכבר מתועדת בארכיון זה: כאן מדובר בשינוי התקנון בפועל.',
       en: "A Menahem Staub article (January 2019) reports on Agudat Yisrael's formal bylaw amendment — removing the word \"man\" from its membership clause — under Supreme Court pressure. A later, distinct procedural stage from the July 2018 court order already covered elsewhere in this archive: this is the actual bylaw change taking effect.",
     },
     dateLabel: { he: '10.1.2019', en: 'Jan 10, 2019' },
@@ -1102,8 +1109,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Black Panthers: Haredi Women Got Fed Up, So They Went to War',
     },
     summary: {
-      he: 'כתבה מאת חגי עמית (פברואר 2020) המציגה כמה פעילות חרדיות — שושן, אסתר טברסקי, תרצה בלוך-אסתרזון, הילה חסן-לפקוביץ, אפרת שוקרון ויעל אלימלך — כמפרנסות עיקריות במשפחותיהן הנלחמות בהדרה. הכתבה מסגרת את הנכונות שלהן להסתכן בנידוי דתי כמחיר המאבק.',
-      en: 'A Hagai Amit article (February 2020) profiles several Haredi women activists — Shushan, Ester Tavarski, Tirtza Bloch-Estherzon, Hila Hasan-Lefkowitz, Efrat Shokron, and Yael Elimelech — as primary breadwinners fighting exclusion. The piece frames their willingness to risk religious ostracism as the price of the struggle.',
+      he: 'כתבה מאת חגי עמית (פברואר 2020) המציגה כמה פעילות חרדיות: שושן, אסתר טברסקי, תרצה בלוך-אסתרזון, הילה חסן-לפקוביץ, אפרת שוקרון ויעל אלימלך, כמפרנסות עיקריות במשפחותיהן הנלחמות בהדרה. הכתבה מסגרת את הנכונות שלהן להסתכן בנידוי דתי כמחיר המאבק.',
+      en: 'A Hagai Amit article (February 2020) profiles several Haredi women activists: Shushan, Ester Tavarski, Tirtza Bloch-Estherzon, Hila Hasan-Lefkowitz, Efrat Shokron, and Yael Elimelech, as primary breadwinners fighting exclusion. The piece frames their willingness to risk religious ostracism as the price of the struggle.',
     },
     dateLabel: { he: '14.2.2020', en: 'Feb 14, 2020' },
     sortDate: '2020-02-14',
@@ -1121,7 +1128,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'The Haredi Women\'s "Chairs Protest": "We Are Invisible"',
     },
     summary: {
-      he: 'כתבה מאת יצחק טסלר (ספטמבר 2019) על "מחאת הכיסאות" של נבחרות לקראת מערכת הבחירות — ספסלים מסומנים "לגברים בלבד" — כאשר פעילות מתארות הטרדה כשניסו לשוחח עם חברי כנסת חרדים.',
+      he: 'כתבה מאת יצחק טסלר (ספטמבר 2019) על "מחאת הכיסאות" של נבחרות לקראת מערכת הבחירות: ספסלים מסומנים "לגברים בלבד", כאשר פעילות מתארות הטרדה כשניסו לשוחח עם חברי כנסת חרדים.',
       en: 'A Yitzhak Tessler article (September 2019) covers Nivcharot\'s "chairs protest" ahead of the election — benches labeled "for men only" — with activists describing harassment when trying to engage Haredi MKs directly.',
     },
     dateLabel: { he: '12.9.2019', en: 'Sep 12, 2019' },
@@ -1216,7 +1223,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: '"A Day Will Come and It Will Happen": When Will We See Women in Haredi Parties?',
     },
     summary: {
-      he: 'כתבה מאת אליעזר היון (מרץ 2025), מבט לאחור עשור: הישגי נבחרות המוקדמים בכפיית שינויי תקנון, לצד העובדה שעדיין לא נבחרה אף אישה ממפלגה חרדית לכנסת. הכתבה מציינת שינוי בזירה המוניציפלית — 14 נשים חרדיות התמודדו לאחרונה בבחירות מקומיות, שתיים נבחרו.',
+      he: 'כתבה מאת אליעזר היון (מרץ 2025), מבט לאחור עשור: הישגי נבחרות המוקדמים בכפיית שינויי תקנון, לצד העובדה שעדיין לא נבחרה אף אישה ממפלגה חרדית לכנסת. הכתבה מציינת שינוי בזירה המוניציפלית: 14 נשים חרדיות התמודדו לאחרונה בבחירות מקומיות, שתיים נבחרו.',
       en: "An Eliezer Hiyon article (March 2025), a decade-later retrospective: Nivcharot's early wins forcing bylaw changes, alongside the fact that no woman has yet been elected to the Knesset from a Haredi party. The piece notes movement at the municipal level — 14 Haredi women recently ran in local elections, two won.",
     },
     dateLabel: { he: '23.3.2025', en: 'Mar 23, 2025' },
@@ -1268,8 +1275,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: '"Lo Nivcharot" Presents: Our 10 Candidates for Knesset',
     },
     summary: {
-      he: 'כתבה מאת אלי כהן (ינואר 2015) על פרסום רשימת עשר נשים חרדיות שהקמפיין ממליץ עליהן כמועמדות לכנסת — בהן עדינה בר-שלום, רבקה רביץ ויהודית יוסף — בעקבות חלוקת עלונים ועימותים פומביים.',
-      en: 'An Eli Cohen article (January 2015) on the campaign publishing its slate of ten recommended Haredi women for Knesset candidacy — including Adina Bar-Shalom, Rivka Ravitz, and Yehudit Yosef — following flyer distribution and public confrontations.',
+      he: 'כתבה מאת אלי כהן (ינואר 2015) על פרסום רשימת עשר נשים חרדיות שהקמפיין ממליץ עליהן כמועמדות לכנסת, בהן עדינה בר-שלום, רבקה רביץ ויהודית יוסף, בעקבות חלוקת עלונים ועימותים פומביים.',
+      en: 'An Eli Cohen article (January 2015) on the campaign publishing its slate of ten recommended Haredi women for Knesset candidacy, including Adina Bar-Shalom, Rivka Ravitz, and Yehudit Yosef, following flyer distribution and public confrontations.',
     },
     dateLabel: { he: '8.1.2015', en: 'Jan 8, 2015' },
     sortDate: '2015-01-08',
@@ -1287,8 +1294,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'A Day in the Life of Esty Shushan: No Box for All My Identities, but Overall a "Kosher Woman"',
     },
     summary: {
-      he: 'פרופיל "יום בחיים" מאת סיוון קלינגביל (מרץ 2019) על שושן כאם לארבעה בת 41 בפתח תקווה — משפחתה, כתיבת שירה כפורקן, וההתנגדות שלה להיכנס לקטגוריית זהות אחת.',
-      en: 'A "day in the life" profile by Sivan Klingbeil (March 2019) of Shushan as a 41-year-old mother of four in Petach Tikva — her family, her poetry as an outlet, and her resistance to being boxed into one identity category.',
+      he: 'פרופיל "יום בחיים" מאת סיוון קלינגביל (מרץ 2019) על שושן כאם לארבעה בת 41 בפתח תקווה: משפחתה, כתיבת שירה כפורקן, וההתנגדות שלה להיכנס לקטגוריית זהות אחת.',
+      en: 'A "day in the life" profile by Sivan Klingbeil (March 2019) of Shushan as a 41-year-old mother of four in Petach Tikva: her family, her poetry as an outlet, and her resistance to being boxed into one identity category.',
     },
     dateLabel: { he: '25.3.2019', en: 'Mar 25, 2019' },
     sortDate: '2019-03-25',
@@ -1306,7 +1313,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Gender Segregation Under Cover of Law? "You Need to Understand, This Isn\'t a Religious Matter"',
     },
     summary: {
-      he: 'כתבה על משא ומתן קואליציוני סביב חקיקת הפרדה מגדרית (נובמבר 2022), המצטטת את שושן בשמה כמייסדת נבחרות: "להפרדה יש כוח לגדול... פתאום אפשר לחשוב על פתיחת רדיו שרק גברים מדברים בו" — טוענת שההדרות אינן מצוות הלכתית.',
+      he: 'כתבה על משא ומתן קואליציוני סביב חקיקת הפרדה מגדרית (נובמבר 2022), המצטטת את שושן בשמה כמייסדת נבחרות: "להפרדה יש כוח לגדול... פתאום אפשר לחשוב על פתיחת רדיו שרק גברים מדברים בו", טוענת שההדרות אינן מצוות הלכתית.',
       en: 'An article on coalition negotiations over proposed gender-segregation legislation (November 2022), quoting Shushan by name as Nivcharot\'s founder: "Separation has power to grow... one could suddenly think of opening a radio station where only men speak" — arguing the exclusions aren\'t religiously mandated.',
     },
     dateLabel: { he: '21.11.2022', en: 'Nov 21, 2022' },
@@ -1458,8 +1465,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: "Haredi Women Don't Need Men to Speak for Them",
     },
     summary: {
-      he: 'טור דעה מאת אסתי שושן (ינואר 2020) הטוען שהפוליטיקה החרדית "גברית במהותה", ומקשר בין רשימות המפלגות הגבריות בלבד לבין תרבות שמאפשרת לפוגעים — בהתייחסות לפרשות הרב ברלנד ומלכה לייפר — לחמוק מאחריות בהיעדר נשים בחדר.',
-      en: 'An Esty Shushan opinion column (January 2020) argues Haredi politics is "male in its essence," linking the all-male party lists to a culture that lets abusers — citing the Rabbi Berland and Malka Leifer cases — escape accountability because no women are in the room.',
+      he: 'טור דעה מאת אסתי שושן (ינואר 2020) הטוען שהפוליטיקה החרדית "גברית במהותה", ומקשר בין רשימות המפלגות הגבריות בלבד לבין תרבות שמאפשרת לפוגעים, בהתייחסות לפרשות הרב ברלנד ומלכה לייפר, לחמוק מאחריות בהיעדר נשים בחדר.',
+      en: 'An Esty Shushan opinion column (January 2020) argues Haredi politics is "male in its essence," linking the all-male party lists to a culture that lets abusers, citing the Rabbi Berland and Malka Leifer cases, escape accountability because no women are in the room.',
     },
     dateLabel: { he: '22.1.2020', en: 'Jan 22, 2020' },
     sortDate: '2020-01-22',
@@ -1474,7 +1481,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
     sourceLanguage: 'he',
     title: {
       he: 'כשהקיצוניים מכתיבים את סדר היום - בריאות הציבור מופקרת',
-      en: 'When Extremists Dictate the Agenda — Public Safety Is Abandoned',
+      en: 'When Extremists Dictate the Agenda - Public Safety Is Abandoned',
     },
     summary: {
       he: 'טור דעה מאת אסתי שושן (מאי 2021), שנכתב בעקבות אסון מירון; שושן מספרת על סירובו רב-השנים של אביה עצמו להשתתף בעלייה לרגל ביום ל"ג בעומר, וטוענת שגורמים קיצוניים המכתיבים החלטות בטיחות באירועים, ללא פיקוח ממשלתי, הם שגרמו לאסון.',
@@ -1538,7 +1545,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Since October 7, Haredi Society Has Been Under the Spotlight, Facing Harsh and Justified Criticism',
     },
     summary: {
-      he: 'ראיון נרחב מאת סמדר שילוני (פברואר 2026) סביב בכורת "חשבונות שמיים", סרטה העלילתי הראשון של שושן, על זוג הורים חרדים המתמודדים עם אבל אחרי שילדם נשכח ברכב ונפטר. שושן מתארת את הסרט כ"מראה" ולא כבידור — עדות לשאלות קשות של אמונה ואחריות בתוך החברה החרדית, לאור אסונות אחרונים. על הביקורת על החברה החרדית מאז 7 באוקטובר: "מוצדקת"; היא מדמה את אסון מירון ל"7 באוקטובר החרדי" — נקודת שבר שחשפה כשלים מערכתיים באחריותיות קהילתית.',
+      he: 'ראיון נרחב מאת סמדר שילוני (פברואר 2026) סביב בכורת "חשבונות שמיים", סרטה העלילתי הראשון של שושן, על זוג הורים חרדים המתמודדים עם אבל אחרי שילדם נשכח ברכב ונפטר. שושן מתארת את הסרט כ"מראה" ולא כבידור, עדות לשאלות קשות של אמונה ואחריות בתוך החברה החרדית, לאור אסונות אחרונים. על הביקורת על החברה החרדית מאז 7 באוקטובר: "מוצדקת"; היא מדמה את אסון מירון ל"7 באוקטובר החרדי", נקודת שבר שחשפה כשלים מערכתיים באחריותיות קהילתית.',
       en: 'A wide-ranging Samadar Shiloni interview (February 2026) around the premiere of "Cheshbonot Shamayim" ("Heavenly Accounts"), Shushan\'s first narrative feature, about a Haredi couple grieving after their young son is forgotten in a car and dies. Shushan describes the film as "a mirror," not entertainment — raising hard questions about faith and accountability within Haredi society in light of recent tragedies. On post-October-7 criticism of Haredi society: "justified"; she likens the Meron disaster to "the Haredi October 7" — a breaking point that exposed systemic failures of communal accountability.',
     },
     dateLabel: { he: 'פברואר 2026', en: 'Feb 2026' },
@@ -1558,8 +1565,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: "At First the Haredim Attacked Nivcharot's Founder. Now It's the Gender Studies Department",
     },
     summary: {
-      he: 'כתבה מאת תמר קפלנסקי (יולי 2022) על זווית פולמוס בלתי צפויה: אחרי ששושן פרסמה שיר ("תזה"), הביקורת הפעם הגיעה ממעגלים פמיניסטיים/אקדמיים העוסקים בלימודי מגדר, לא מרבנים חרדים — ציר התנגדות נוסף: מודרת בתוך החברה החרדית על פמיניזם שלה, ומודרת באקדמיה החילונית כאישה מזרחית.',
-      en: 'A Tamar Kaplansky article (July 2022) notable because the backlash here comes from an unexpected direction: after Shushan published a poem ("Thesis"), criticism came from feminist/gender-studies circles rather than Haredi rabbis — a second axis of controversy: marginalized within Haredi society for her feminism, and within secular academia\'s gender-studies circles as a Mizrahi woman.',
+      he: 'כתבה מאת תמר קפלנסקי (יולי 2022) על זווית פולמוס בלתי צפויה: אחרי ששושן פרסמה שיר ("תזה"), הביקורת הפעם הגיעה ממעגלים פמיניסטיים/אקדמיים העוסקים בלימודי מגדר, לא מרבנים חרדים, ציר התנגדות נוסף: מודרת בתוך החברה החרדית על פמיניזם שלה, ומודרת באקדמיה החילונית כאישה מזרחית.',
+      en: 'A Tamar Kaplansky article (July 2022) notable because the backlash here comes from an unexpected direction: after Shushan published a poem ("Thesis"), criticism came from feminist/gender-studies circles rather than Haredi rabbis, a second axis of controversy: marginalized within Haredi society for her feminism, and within secular academia\'s gender-studies circles as a Mizrahi woman.',
     },
     dateLabel: { he: '20.7.2022', en: 'Jul 20, 2022' },
     sortDate: '2022-07-20',
@@ -1627,6 +1634,29 @@ export function pressItemHref(link: PressItemLink, locale: string): { href: stri
   return { href: `/${locale}/press/${link.slug}`, external: false }
 }
 
+/**
+ * Home page card text for one featured item: the hand-written `homeExcerpt`
+ * when set, otherwise `summary` trimmed to its first couple of sentences so
+ * the card never displays a full, multi-quote archive paragraph. Always
+ * ends on a real sentence boundary (never mid-word/mid-clause) so a card
+ * without a dedicated excerpt still reads as a complete thought.
+ */
+export function homeCardExcerpt(item: PressArchiveItem, locale: 'he' | 'en', maxChars = 160): string {
+  const excerpt = item.homeExcerpt?.[locale]
+  if (excerpt) return excerpt
+
+  const full = item.summary[locale]
+  if (full.length <= maxChars) return full
+
+  const sentences = full.match(/[^.!?]+[.!?]+(\s|$)/g) ?? [full]
+  let out = ''
+  for (const sentence of sentences) {
+    if (out && out.length + sentence.length > maxChars) break
+    out += sentence
+  }
+  return (out || sentences[0]).trim()
+}
+
 export function sortPressItemsDesc(items: PressArchiveItem[]): PressArchiveItem[] {
   return [...items].sort((a, b) => (a.sortDate < b.sortDate ? 1 : a.sortDate > b.sortDate ? -1 : 0))
 }
@@ -1643,8 +1673,8 @@ export const pressArchiveText = {
   eyebrow: { he: 'נבחרות בתקשורת', en: 'IN THE MEDIA' } satisfies Localized,
   title: { he: 'בתקשורת', en: 'In the Media' } satisfies Localized,
   lead: {
-    he: 'כתבות, ריאיונות וניירות עמדה — מהארכיון של נבחרות ומהתקשורת החיצונית שסיקרה את הארגון, לפי מה שאותר ואומת במחקר. לא כל מה שנמצא היה שלם דיו כדי להופיע כאן; זה מה שכן.',
-    en: "Articles, interviews and position papers — from Nivcharot's own archive and from outside press coverage of the organization, drawn from what research located and verified. Not everything found was complete enough to include here; this is what was.",
+    he: 'כתבות, ריאיונות וניירות עמדה, מהארכיון של נבחרות ומהתקשורת החיצונית שסיקרה את הארגון, לפי מה שאותר ואומת במחקר. לא כל מה שנמצא היה שלם דיו כדי להופיע כאן; זה מה שכן.',
+    en: "Articles, interviews and position papers, from Nivcharot's own archive and from outside press coverage of the organization, drawn from what research located and verified. Not everything found was complete enough to include here; this is what was.",
   } satisfies Localized,
   allYears: { he: 'כל השנים', en: 'All years' } satisfies Localized,
   typeLabel: {

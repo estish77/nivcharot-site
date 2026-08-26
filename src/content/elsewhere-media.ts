@@ -90,7 +90,7 @@ export const otherPodcasts: ElsewhereMediaItem[] = [
     sourceLanguage: 'he',
     title: {
       he: 'פרק 10: אסתי שושן - פמיניזם חרדי',
-      en: 'Episode 10: Esty Shushan — Haredi Feminism',
+      en: 'Episode 10: Esty Shushan - Haredi Feminism',
     },
     summary: {
       he: 'שיחה עם ד"ר ג\'רמי פוגל, עונה 1 פרק 10 של "הרדיקל".',
@@ -166,7 +166,7 @@ export const otherPodcasts: ElsewhereMediaItem[] = [
     sourceLanguage: 'he',
     title: {
       he: 'חמישים גוונים של שחור-לבן! עם האקטיביסטית והיוצרת החרדית אסתי שושן',
-      en: 'Fifty Shades of Black-and-White — With Haredi Activist and Filmmaker Esty Shushan',
+      en: 'Fifty Shades of Black-and-White - With Haredi Activist and Filmmaker Esty Shushan',
     },
     summary: {
       he: 'שיחה ארוכה עם משה רדמן; קטע קצר מאותו פרק זמין גם בנפרד.',
@@ -186,7 +186,7 @@ export const otherPodcasts: ElsewhereMediaItem[] = [
       en: 'Esty Shushan, Haredi Activist | On Atypical Leadership',
     },
     summary: {
-      he: 'שיחה ברשת הפודקאסטים "All•in — הבית של הפודקאסטים".',
+      he: 'שיחה ברשת הפודקאסטים "All•in, הבית של הפודקאסטים".',
       en: 'A conversation on the "All•in" podcast network.',
     },
     dateLabel: { he: '13.8.2025', en: 'Aug 13, 2025' },
@@ -201,7 +201,7 @@ export const videoArticles: ElsewhereMediaItem[] = [
     kind: 'video',
     host: 'Women of Valor · אשת חיל (טריילר)',
     sourceLanguage: 'he',
-    title: { he: 'אשת חיל — טריילר', en: 'Women of Valor — Trailer' },
+    title: { he: 'אשת חיל - טריילר', en: 'Women of Valor - Trailer' },
     summary: {
       he: 'הטריילר לסרט התיעודי "אשת חיל", מהערוץ הרשמי של נבחרות ביוטיוב.',
       en: "The trailer for the documentary \"Women of Valor,\" from Nivcharot's own official YouTube channel.",
@@ -268,7 +268,7 @@ export const videoArticles: ElsewhereMediaItem[] = [
     sourceLanguage: 'he',
     title: {
       he: 'אסתי שושן ביטון - על סיפורה האישי שהוביל להקמת תנועת "נבחרות"',
-      en: 'Esty Shushan Bitton — On the Personal Story That Led to Founding the "Nivcharot" Movement',
+      en: 'Esty Shushan Bitton - On the Personal Story That Led to Founding the "Nivcharot" Movement',
     },
     summary: {
       he: 'שיחה על המסע האישי שהוביל להקמת התנועה.',
@@ -288,8 +288,8 @@ export const talksAndConferences: ElsewhereMediaItem[] = [
     sourceLanguage: 'he',
     title: { he: 'No Voice No Vote | אסתי שושן', en: 'No Voice No Vote | Esty Shushan' },
     summary: {
-      he: 'ההרצאה של אסתי שושן ב-TEDxJerusalem — הראשונה מסוגה מפי אישה חרדית — שבה סיפרה את סיפור הקמת נבחרות.',
-      en: "Esty Shushan's TEDxJerusalem talk — the first of its kind by a Haredi woman — recounting Nivcharot's founding story.",
+      he: 'ההרצאה של אסתי שושן ב-TEDxJerusalem, הראשונה מסוגה מפי אישה חרדית, שבה סיפרה את סיפור הקמת נבחרות.',
+      en: "Esty Shushan's TEDxJerusalem talk, the first of its kind by a Haredi woman, recounting Nivcharot's founding story.",
     },
     dateLabel: { he: '2015', en: '2015' },
     sortDate: '2015-05-28',
@@ -314,10 +314,10 @@ export const talksAndConferences: ElsewhereMediaItem[] = [
     kind: 'talk',
     host: 'קרן רפפורט (Rappaport Prizes)',
     sourceLanguage: 'he',
-    title: { he: 'אסתי שושן — פרס רפפורט 2019, נשים יוצרות שינוי', en: 'Esty Shushan — 2019 Rappaport Prize, Women Generating Change' },
+    title: { he: 'אסתי שושן - פרס רפפורט 2019, נשים יוצרות שינוי', en: 'Esty Shushan - 2019 Rappaport Prize, Women Generating Change' },
     summary: {
       he: 'הווידאו הרשמי של טקס פרס רפפורט (מוזיאון תל אביב לאמנות, מרץ 2019), שגם מתועד בכתבה בארכיון התקשורת של האתר.',
-      en: "The official video from the Rappaport Prize ceremony (Tel Aviv Museum of Art, March 2019) — the same event already covered in the site's press archive.",
+      en: "The official video from the Rappaport Prize ceremony (Tel Aviv Museum of Art, March 2019), the same event already covered in the site's press archive.",
     },
     dateLabel: { he: 'מרץ 2019', en: 'March 2019' },
     sortDate: '2019-03-17',
@@ -329,8 +329,8 @@ export const elsewhereMediaText = {
   eyebrow: { he: 'עוד ברשת', en: 'ELSEWHERE ONLINE' } satisfies Localized,
   title: { he: 'פודקאסטים וכתבות וידאו נוספים', en: 'More podcasts & video coverage' } satisfies Localized,
   lead: {
-    he: 'נבחרות ואנשיה בפודקאסטים ובערוצי וידאו אחרים — לא כולל את "חרדית מדוברת", לפודקאסט שלנו יש עמוד משלה.',
-    en: 'Nivcharot and its people on other podcasts and video channels — not including "Haredit Meduberet," our own podcast, which has its own page.',
+    he: 'נבחרות ואנשיה בפודקאסטים ובערוצי וידאו אחרים, לא כולל את "חרדית מדוברת", לפודקאסט שלנו יש עמוד משלה.',
+    en: 'Nivcharot and its people on other podcasts and video channels, not including "Haredit Meduberet," our own podcast, which has its own page.',
   } satisfies Localized,
   podcastsTitle: { he: 'פודקאסטים', en: 'Podcasts' } satisfies Localized,
   videoTitle: { he: 'וידאו וטלוויזיה', en: 'Video & TV' } satisfies Localized,

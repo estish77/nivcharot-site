@@ -40,7 +40,7 @@ export const Posts: CollectionConfig = {
       type: 'array',
       labels: { singular: 'Source link', plural: 'Source links' },
       admin: {
-        description: '"לקריאה ולצפייה במקור" — external links to the original coverage.',
+        description: '"לקריאה ולצפייה במקור": external links to the original coverage.',
       },
       fields: [
         { name: 'label', type: 'text', required: true },

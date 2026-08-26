@@ -34,7 +34,7 @@ export const Navigation: GlobalConfig = {
           name: 'href',
           type: 'text',
           required: true,
-          admin: { description: 'Route path, e.g. "/about" — the locale prefix is added automatically.' },
+          admin: { description: 'Route path, e.g. "/about". The locale prefix is added automatically.' },
         },
         { name: 'order', type: 'number', required: true, defaultValue: 0 },
       ],

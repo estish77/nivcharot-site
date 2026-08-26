@@ -550,6 +550,7 @@ export async function getPressArchiveItems(): Promise<PressArchiveItem[]> {
     const items: PressArchiveItem[] = res.docs.map((doc) => {
       const d = doc as unknown as Record<string, unknown>
       const note = toLocalizedPair(d.note)
+      const homeExcerpt = toLocalizedPair(d.homeExcerpt)
       return {
         slug: String(d.slug ?? ''),
         type: d.type as PressArchiveItem['type'],
@@ -564,6 +565,7 @@ export async function getPressArchiveItems(): Promise<PressArchiveItem[]> {
         note: note.he || note.en ? note : undefined,
         sourceLanguage: (d.sourceLanguage as PressArchiveItem['sourceLanguage']) ?? 'he',
         featured: Boolean(d.featured),
+        homeExcerpt: homeExcerpt.he || homeExcerpt.en ? homeExcerpt : undefined,
       }
     })
     return sortPressItemsDesc(items)

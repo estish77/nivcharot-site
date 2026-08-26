@@ -39,7 +39,7 @@ export const Events: CollectionConfig = {
       name: 'summary',
       type: 'textarea',
       localized: true,
-      admin: { description: 'A few sentences about the event — shown on its gallery page.' },
+      admin: { description: 'A few sentences about the event, shown on its gallery page.' },
     },
     {
       name: 'credit',

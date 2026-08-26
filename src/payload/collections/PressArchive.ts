@@ -25,7 +25,7 @@ export const PressArchive: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'outlet', 'sortDate', 'category', 'featured', 'reviewStatus'],
-    description: 'Real, externally-verified press coverage of Nivcharot — the "בתקשורת" section on /media.',
+    description: 'Real, externally-verified press coverage of Nivcharot, the "בתקשורת" section on /media.',
   },
   access: {
     read: publishedOrAdmin({ reviewStatus: { equals: 'keep' } }),
@@ -44,7 +44,17 @@ export const PressArchive: CollectionConfig = {
       type: 'textarea',
       required: true,
       localized: true,
-      admin: { description: 'A substantive paragraph — what the piece actually says, not a meta-description of its format.' },
+      admin: { description: 'A substantive paragraph, what the piece actually says, not a meta-description of its format.' },
+    },
+    {
+      name: 'homeExcerpt',
+      type: 'text',
+      localized: true,
+      admin: {
+        description:
+          'Short (roughly one sentence) blurb for the home page\'s 4-card featured strip, so cards stay a consistent size. Only matters when Featured is checked; falls back to a trimmed Summary if left blank.',
+        condition: (data) => Boolean(data?.featured),
+      },
     },
     {
       name: 'type',
@@ -78,10 +88,10 @@ export const PressArchive: CollectionConfig = {
       type: 'text',
       required: true,
       localized: true,
-      admin: { description: 'Human display date, e.g. "23.7.2017" or "March 2019" — can be an honest approximation.' },
+      admin: { description: 'Human display date, e.g. "23.7.2017" or "March 2019"; can be an honest approximation.' },
     },
     { name: 'sortDate', type: 'date', required: true, admin: { description: 'Used only for sorting/year-grouping, never rendered as-is.' } },
-    { name: 'year', type: 'number', required: true, admin: { description: 'Drives the year-grouped headers in the public archive — keep in sync with Sort date.' } },
+    { name: 'year', type: 'number', required: true, admin: { description: 'Drives the year-grouped headers in the public archive, keep in sync with Sort date.' } },
     {
       name: 'sourceLanguage',
       type: 'select',
@@ -91,7 +101,7 @@ export const PressArchive: CollectionConfig = {
         { label: 'Hebrew', value: 'he' },
         { label: 'English', value: 'en' },
       ],
-      admin: { description: 'The language the piece was actually published in — drives the "originally in X" badge on the other locale.' },
+      admin: { description: 'The language the piece was actually published in; drives the "originally in X" badge on the other locale.' },
     },
     {
       name: 'linkKind',
@@ -112,7 +122,7 @@ export const PressArchive: CollectionConfig = {
       name: 'note',
       type: 'textarea',
       localized: true,
-      admin: { description: 'An honest, visible caveat (paywall, unconfirmed exact date, etc.) — shown on the card when present.' },
+      admin: { description: 'An honest, visible caveat (paywall, unconfirmed exact date, etc.), shown on the card when present.' },
     },
     {
       name: 'featured',
@@ -120,7 +130,7 @@ export const PressArchive: CollectionConfig = {
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description: 'Show on the home page media strip. Keep the set varied — not just pieces centered on one person.',
+        description: 'Show on the home page media strip. Keep the set varied, not just pieces centered on one person.',
         // Clickable star right in the list view (not just the read-only
         // true/false Payload renders by default) — the site owner asked to
         // flip this without opening each article. See the component's own

@@ -41,7 +41,7 @@ export const TimelineMilestones: CollectionConfig = {
       required: true,
       admin: {
         description:
-          'Display label, not always a plain year — the mockup uses "רקע"/"Background" and "2020/23".',
+          'Display label, not always a plain year: the mockup uses "רקע"/"Background" and "2020/23".',
       },
     },
     { name: 'title', type: 'text', required: true, localized: true },
@@ -56,7 +56,7 @@ export const TimelineMilestones: CollectionConfig = {
       localized: true,
       admin: {
         description:
-          'Localized on purpose — this is how 21 Hebrew milestones become 14 in the English timeline.',
+          'Localized on purpose: this is how 21 Hebrew milestones become 14 in the English timeline.',
       },
     },
     {

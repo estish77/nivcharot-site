@@ -131,12 +131,11 @@ export function truncate(text: string, max = 190): string {
   return `${text.slice(0, max).trim()}…`
 }
 
-/** "topic - עם guest" (he) / "topic — with guest" (en) — the mockup's compound `label` (topic + hardcoded "עם" + guest), localized since the connector is UI chrome, not episode content. */
+/** "topic - עם guest" (he) / "topic - with guest" (en) — the mockup's compound `label` (topic + hardcoded "עם" + guest), localized since the connector is UI chrome, not episode content. */
 export function episodeLabel(episode: PodcastEpisode, locale: Locale): string {
   const topic = t(locale, episode.title)
   if (!episode.guestName) return topic
-  const dash = locale === 'he' ? '-' : '—'
-  return `${topic} ${dash} ${t(locale, podcastText.guestConnector)} ${episode.guestName}`
+  return `${topic} - ${t(locale, podcastText.guestConnector)} ${episode.guestName}`
 }
 
 /** "עם X" (he) / "with X" (en) — the mockup's `guestLine` (always hardcoded "עם", localized here). */

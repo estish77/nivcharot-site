@@ -21,7 +21,7 @@ export const ElsewhereMedia: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'host', 'kind', 'sortDate', 'reviewStatus'],
-    description: 'Podcasts, video/TV, and talks featuring Nivcharot on OTHER shows — the "עוד ברשת" section on /media.',
+    description: 'Podcasts, video/TV, and talks featuring Nivcharot on OTHER shows, the "עוד ברשת" section on /media.',
   },
   access: {
     read: publishedOrAdmin({ reviewStatus: { equals: 'keep' } }),
@@ -48,7 +48,7 @@ export const ElsewhereMedia: CollectionConfig = {
       ],
       admin: { description: 'Which sub-section this appears under on the public page.' },
     },
-    { name: 'host', type: 'text', required: true, admin: { description: 'Show/channel name — a proper name, not localized.' } },
+    { name: 'host', type: 'text', required: true, admin: { description: 'Show/channel name, a proper name, not localized.' } },
     {
       name: 'dateLabel',
       type: 'text',
@@ -66,12 +66,12 @@ export const ElsewhereMedia: CollectionConfig = {
         { label: 'English', value: 'en' },
       ],
     },
-    { name: 'url', type: 'text', required: true, admin: { description: 'The real URL — a YouTube watch link embeds inline automatically.' } },
+    { name: 'url', type: 'text', required: true, admin: { description: 'The real URL. A YouTube watch link embeds inline automatically.' } },
     {
       name: 'note',
       type: 'textarea',
       localized: true,
-      admin: { description: 'An honest, visible caveat (e.g. "exact publish date not located") — shown on the card when present.' },
+      admin: { description: 'An honest, visible caveat (e.g. "exact publish date not located"), shown on the card when present.' },
     },
     reviewStatusField(),
   ],

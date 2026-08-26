@@ -46,7 +46,7 @@ export function FeaturedCell({ cellData, rowData, collectionSlug }: DefaultCellC
       onClick={toggle}
       disabled={pending}
       aria-pressed={featured}
-      aria-label={featured ? 'Featured on home page — click to remove' : 'Not featured — click to show on home page'}
+      aria-label={featured ? 'Featured on home page, click to remove' : 'Not featured, click to show on home page'}
       title={featured ? 'Featured on home page' : 'Not featured'}
       style={{
         background: 'none',

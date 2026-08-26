@@ -11,8 +11,8 @@ export const contactHero = {
   eyebrow: { he: 'צרו קשר', en: 'Contact us' } satisfies Localized,
   title: { he: 'נשמח לשמוע מכן.', en: "We'd love to hear from you." } satisfies Localized,
   lead: {
-    he: 'שאלות, שיתופי פעולה, פניות תקשורת או כל דבר אחר — מלאו את הטופס ונחזור אליכן בהקדם.',
-    en: 'Questions, partnerships, press inquiries, or anything else — fill out the form and we’ll get back to you soon.',
+    he: 'שאלות, שיתופי פעולה, פניות תקשורת או כל דבר אחר. מלאו את הטופס ונחזור אליכן בהקדם.',
+    en: 'Questions, partnerships, press inquiries, or anything else. Fill out the form and we’ll get back to you soon.',
   } satisfies Localized,
 }
 
@@ -40,7 +40,7 @@ export const contactForm = {
    */
   successNote: {
     he: 'ההודעה שלכן התקבלה ונשמרה, ונחזור אליכן בהקדם. אפשר גם לכתוב ישירות ל-',
-    en: 'Your message was received and saved — we’ll get back to you soon. You can also write directly to ',
+    en: 'Your message was received and saved, and we’ll get back to you soon. You can also write directly to ',
   } satisfies Localized,
 }
 

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Cell, CellGrid, Reveal } from '@/components/ui'
 import { arrowForward, t, type Locale } from '@/lib/i18n'
 import { mediaArchiveSection } from '@/content/home'
-import { pressItemHref } from '@/content/press-archive'
+import { homeCardExcerpt, pressItemHref } from '@/content/press-archive'
 import { getPressArchiveItems } from '@/lib/cms'
 import { EqualizerDots } from './EqualizerDots'
 
@@ -67,8 +67,10 @@ export async function MediaArchive({ locale }: { locale: Locale }) {
               >
                 {/* `--color-accent` at 13px fails AA on this background (3.75:1 vs the 4.5:1 small-text minimum) — `--color-accent-700` per the project's small-text rule, deviating from the mockup's raw accent here. */}
                 <span className="font-heading text-[13px] font-extrabold text-accent-700">{t(locale, post.dateLabel)}</span>
-                <span className="font-heading text-[17px] font-extrabold leading-[1.35]">{t(locale, post.title)}</span>
-                <span className="text-[13.5px] leading-[1.6] text-neutral-700">{t(locale, post.summary)}</span>
+                {/* line-clamp-2, not unbounded: titles vary a lot in length across real coverage, and a 4-column row stretches every cell to match its tallest sibling (see Cell.tsx) — capping the title keeps one long headline from inflating all 4 cards. */}
+                <span className="line-clamp-2 font-heading text-[17px] font-extrabold leading-[1.35]">{t(locale, post.title)}</span>
+                {/* homeCardExcerpt (not the raw summary): the archive's `summary` is deliberately long-form (quotes, full context) for the /media list, way too much for a narrow card. line-clamp-4 is a pure backstop — the excerpt itself is written short enough that it shouldn't visibly truncate. */}
+                <span className="line-clamp-4 text-[13.5px] leading-[1.6] text-neutral-700">{homeCardExcerpt(post, locale)}</span>
               </Cell>
             )
           })}

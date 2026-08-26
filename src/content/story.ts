@@ -139,7 +139,7 @@ const timelineMilestonesChronological: TimelineMilestone[] = [
     title: { he: `פרשת קול ברמה`, en: `The Kol Barama case` },
     body: {
       he: `אסתי שושן מגישה עדות, יחד עם דידי שור, בתביעה הייצוגית של "קולך" נגד רדיו קול ברמה, על כך שהשתקת קולן של נשים ברדיו פוגעת בנשים חרדיות. ב-2019 בית המשפט פוסק שעל קול ברמה לשלם קנס של כמיליון שקל, לצד הוצאות משפט. אנשי הרדיו מביאים לעותרות את החזר הוצאות המשפט בדליים של מטבעות 20 אלף ש"ח.`,
-      en: `Esty Shushan submits testimony, together with Didi Shor, in Kolech's class action against Kol Barama radio, over the harm to Haredi women caused by silencing women's voices on air. In 2019 the court orders Kol Barama to pay roughly a million shekels in compensation, plus legal costs — which the station's staff deliver to the petitioners in buckets of 20,000 NIS in coins.`,
+      en: `Esty Shushan submits testimony, together with Didi Shor, in Kolech's class action against Kol Barama radio, over the harm to Haredi women caused by silencing women's voices on air. In 2019 the court orders Kol Barama to pay roughly a million shekels in compensation, plus legal costs. The station's staff deliver the compensation to the petitioners in buckets of 20,000 NIS in coins.`,
     },
     visible: { he: true, en: true },
   },
@@ -215,8 +215,8 @@ const timelineMilestonesChronological: TimelineMilestone[] = [
     year: { he: `2019`, en: `2019` },
     title: { he: `שתי בוגרות בזירה הארצית`, en: `Two alumnae on the national stage` },
     body: {
-      he: `מיכל צ'רנוביצקי מתמודדת בפריימריז מפלגת העבודה ומסיימת במקום ה-20. במקביל, עומר ינקלביץ מקבלת שיבוץ במקום ה-23, הריאלי, ברשימת כחול לבן — ותהפוך לימים לאישה החרדית הראשונה שמכהנת כשרה בישראל.`,
-      en: `Michal Chernovitzky runs in the Labor Party primaries and finishes in 20th place. At the same time, Omer Yanklevich is placed 23rd, a realistic slot, on the Kachol Lavan list — and later becomes the first Haredi woman to serve as a government minister in Israel.`,
+      he: `מיכל צ'רנוביצקי מתמודדת בפריימריז מפלגת העבודה ומסיימת במקום ה-20. במקביל, עומר ינקלביץ מקבלת שיבוץ במקום ה-23, הריאלי, ברשימת כחול לבן, ותהפוך לימים לאישה החרדית הראשונה שמכהנת כשרה בישראל.`,
+      en: `Michal Chernovitzky runs in the Labor Party primaries and finishes in 20th place. At the same time, Omer Yanklevich is placed 23rd, a realistic slot, on the Kachol Lavan list, and later becomes the first Haredi woman to serve as a government minister in Israel.`,
     },
     visible: { he: true, en: true },
     externalArticles: [
@@ -280,7 +280,7 @@ const timelineMilestonesChronological: TimelineMilestone[] = [
     body: {
       he: `אחרי אוקטובר 2023 קמה "חרדיות שותפות", התארגנות של נשים חרדיות להושטת יד לצה"ל ולעורף: ביקורים בבסיסים, סיוע למשפחות מגויסים ולמפונים, ומפגש ישיר בין נשים חרדיות למערכות שמהן הודרו. ההתארגנות מייצרת שיח חדש בקהילה על שותפות ועל אחריות.`,
       // Content merged into "13-2020-23-widening"'s English body — see note there.
-      en: `After October 2023, "Harediyot Shutafot" ("Haredi Women Partners") is founded — an organizing of Haredi women reaching out to the IDF and the home front: base visits, support for the families of soldiers and evacuees, and direct contact between Haredi women and systems they had been excluded from. The organizing opens a new communal conversation about partnership and responsibility.`,
+      en: `After October 2023, "Harediyot Shutafot" ("Haredi Women Partners") is founded, an organizing of Haredi women reaching out to the IDF and the home front: base visits, support for the families of soldiers and evacuees, and direct contact between Haredi women and systems they had been excluded from. The organizing opens a new communal conversation about partnership and responsibility.`,
     },
     visible: { he: true, en: false },
   },
@@ -331,7 +331,7 @@ const timelineMilestonesChronological: TimelineMilestone[] = [
     title: { he: `פריימריז לנשים חרדיות`, en: `Primaries for Haredi women` },
     body: {
       he: `יוזמת "פריימריז לנשים חרדיות" יוצאת לדרך, ביוזמת פעילות חברתיות, חלקן בוגרות התנועה, שמבקשות להנגיש את הזירה הפוליטית לנשים חרדיות מבפנים.`,
-      en: `The "Primaries for Haredi Women" initiative launches, driven by social activists — some of them movement alumnae — seeking to open up the political arena to Haredi women from within.`,
+      en: `The "Primaries for Haredi Women" initiative launches, driven by social activists, some of them movement alumnae, seeking to open up the political arena to Haredi women from within.`,
     },
     visible: { he: true, en: true },
   },

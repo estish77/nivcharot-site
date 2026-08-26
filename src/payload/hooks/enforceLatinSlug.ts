@@ -42,7 +42,7 @@ export function enforceLatinSlug(fallbackField: string): FieldHook {
 
     if (!slug) {
       throw new APIError(
-        `Could not derive a Latin slug from "${fallbackField}" ("${source}"). Hebrew text percent-encodes badly in URLs — enter a Latin/transliterated slug by hand (e.g. "kuntres-halachi").`,
+        `Could not derive a Latin slug from "${fallbackField}" ("${source}"). Hebrew text percent-encodes badly in URLs: enter a Latin/transliterated slug by hand (e.g. "kuntres-halachi").`,
         400,
         undefined,
         true,

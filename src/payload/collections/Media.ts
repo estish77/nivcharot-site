@@ -46,7 +46,7 @@ export const Media: CollectionConfig = {
       type: 'text',
       required: true,
       localized: true,
-      admin: { description: 'Descriptive alt text — required for every image, in both locales.' },
+      admin: { description: 'Descriptive alt text, required for every image, in both locales.' },
     },
   ],
 }

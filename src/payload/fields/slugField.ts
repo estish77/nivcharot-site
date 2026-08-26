@@ -22,7 +22,7 @@ export function slugField(fallbackField: string): Field {
     admin: {
       position: 'sidebar',
       description:
-        'Latin/transliterated URL slug. Hebrew is rejected on save — it percent-encodes badly in URLs.',
+        'Latin/transliterated URL slug. Hebrew is rejected on save: it percent-encodes badly in URLs.',
     },
     hooks: {
       beforeChange: [enforceLatinSlug(fallbackField)],
