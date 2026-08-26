@@ -741,11 +741,20 @@ export async function getStoryTimeline(): Promise<TimelineMilestone[]> {
         url: String(a.url ?? ''),
       }))
 
+      // `body` is richText, not plain text: locale:'all' returns
+      // { he: <Lexical doc>, en: <Lexical doc> }, which toLocalizedPair
+      // (built for plain-string localized fields) can't read — it was
+      // silently resolving to empty strings, dropping every milestone's
+      // body text. Flatten each locale's Lexical doc to plain text instead.
+      const bodyRecord = d.body as Record<string, unknown> | undefined
+      const bodyHe = lexicalToParagraphs(bodyRecord?.he).join(' ')
+      const bodyEn = lexicalToParagraphs(bodyRecord?.en).join(' ')
+
       return {
         id: String(d.id ?? `milestone-${i}`),
         year: { he: year, en: year },
         title: toLocalizedPair(d.title),
-        body: toLocalizedPair(d.body),
+        body: { he: bodyHe, en: bodyEn || bodyHe },
         visible: toLocalizedBoolPair(d.visible, { he: true, en: true }),
         externalArticles: externalArticles.length ? externalArticles : undefined,
       }
