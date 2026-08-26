@@ -24,7 +24,7 @@ export const PressArchive: CollectionConfig = {
   labels: { singular: 'Press Item', plural: 'Press Archive' },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'outlet', 'sortDate', 'category', 'reviewStatus'],
+    defaultColumns: ['title', 'outlet', 'sortDate', 'category', 'featured', 'reviewStatus'],
     description: 'Real, externally-verified press coverage of Nivcharot — the "בתקשורת" section on /media.',
   },
   access: {
@@ -121,6 +121,13 @@ export const PressArchive: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Show on the home page media strip. Keep the set varied — not just pieces centered on one person.',
+        // Clickable star right in the list view (not just the read-only
+        // true/false Payload renders by default) — the site owner asked to
+        // flip this without opening each article. See the component's own
+        // comment for how it PATCHes the field directly.
+        components: {
+          Cell: '@/components/admin/FeaturedCell#FeaturedCell',
+        },
       },
     },
     reviewStatusField(),
