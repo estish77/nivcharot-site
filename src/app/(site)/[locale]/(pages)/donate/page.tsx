@@ -73,6 +73,7 @@ export default async function DonatePage({ params }: { params: Promise<{ locale:
           standingOrderUrl: siteSettings.donation.standingOrderUrl ?? staticDonationLinks.standingOrderUrl,
           cardUrl: siteSettings.donation.cardUrl ?? staticDonationLinks.cardUrl,
         }}
+        receiptEmail={siteSettings.contactEmail}
       >
         <TransparencyGrid locale={locale} />
       </DonateGiving>

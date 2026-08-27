@@ -82,21 +82,6 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
   const [openId, setOpenId] = useState<string | null>(null)
   const [page, setPage] = useState(0)
 
-  useEffect(() => {
-    function applyHash() {
-      const next = HASH_TO_TAB[window.location.hash]
-      if (!next) return
-      setTab(next)
-      setFacet(null)
-      setYear(null)
-      setOpenId(null)
-      setPage(0)
-    }
-    applyHash()
-    window.addEventListener('hashchange', applyHash)
-    return () => window.removeEventListener('hashchange', applyHash)
-  }, [])
-
   const counts = useMemo(
     () => ({
       all: entries.length,
@@ -106,6 +91,36 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
     }),
     [entries],
   )
+
+  /**
+   * Only buckets that actually hold something are offered. The archive-post
+   * bucket is empty while `archivePostsVisible` is off (see
+   * src/content/media-visibility.ts), and an empty tab is a dead end, not a
+   * filter — so it simply isn't rendered, and turning those posts back on
+   * brings its tab back with no change here.
+   */
+  const availableTabs = useMemo(
+    () => TAB_ORDER.filter((key) => key === 'all' || counts[key] > 0),
+    [counts],
+  )
+
+  useEffect(() => {
+    function applyHash() {
+      const next = HASH_TO_TAB[window.location.hash]
+      // A hash pointing at a bucket that isn't offered any more (e.g.
+      // `#archive` while archive posts are hidden) falls back to "everything"
+      // rather than selecting a tab that isn't there.
+      if (!next || !availableTabs.includes(next)) return
+      setTab(next)
+      setFacet(null)
+      setYear(null)
+      setOpenId(null)
+      setPage(0)
+    }
+    applyHash()
+    window.addEventListener('hashchange', applyHash)
+    return () => window.removeEventListener('hashchange', applyHash)
+  }, [availableTabs])
 
   const tabEntries = useMemo(
     () => (tab === 'all' ? entries : entries.filter((e) => e.group === tab)),
@@ -242,7 +257,7 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
     <div>
       <DeskTabs
         label={t(locale, mediaDeskText.title)}
-        items={TAB_ORDER.map((key) => ({
+        items={availableTabs.map((key) => ({
           key,
           label: t(locale, mediaDeskText.tabs[key]),
           count: counts[key],

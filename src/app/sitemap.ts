@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 
+import { archivePostsVisible } from '@/content/media-visibility'
 import { getArchivePosts, getEvents, getPressArchiveItems } from '@/lib/cms'
 import { defaultLocale, locales } from '@/lib/i18n'
 import { alternatesFor, urlFor } from '@/lib/seo'
@@ -41,7 +42,9 @@ const STATIC_ENTRIES: StaticEntry[] = [
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = []
-  const archivePosts = await getArchivePosts()
+  // Hidden from the site (src/content/media-visibility.ts) means hidden
+  // from the sitemap too - listing URLs that 404 is worse than omitting them.
+  const archivePosts = archivePostsVisible ? await getArchivePosts() : []
   const eventGalleries = await getEvents(defaultLocale)
   const pressItems = await getPressArchiveItems()
 

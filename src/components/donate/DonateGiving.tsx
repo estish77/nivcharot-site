@@ -23,6 +23,8 @@ export type DonateGivingProps = {
   locale: Locale
   /** From getSiteSettings() — dashboard-editable Morning checkout links, falling back to the static fixture's values. */
   donationLinks: { standingOrderUrl: string; cardUrl: string }
+  /** Inbox a donor writes to for a receipt after a bank transfer. */
+  receiptEmail: string
   /**
    * Rendered between "other ways to give" and the closing banner — in
    * practice `TransparencyGrid`, passed down as `children` so it keeps
@@ -72,7 +74,7 @@ function amountLabel(locale: Locale, amount: number): string {
  * cell owns end/bottom" pattern, which needs no nth-child arithmetic and
  * therefore stays correct at every breakpoint.
  */
-export function DonateGiving({ locale, donationLinks, children }: DonateGivingProps) {
+export function DonateGiving({ locale, donationLinks, receiptEmail, children }: DonateGivingProps) {
   const [amount, setAmount] = useState<DonateAmount>(donatePreferredAmount)
 
   // Each preset amount has its own pre-filled Morning checkout
@@ -170,28 +172,41 @@ export function DonateGiving({ locale, donationLinks, children }: DonateGivingPr
             titleClassName="text-[clamp(22px,2.6vw,30px)]"
             className="mb-6"
           />
-          <CellGrid cols={2}>
-            <Cell paddingInline="0px" paddingBlockStart="30px" paddingBlockEnd="34px" className="gap-[14px] pe-7 max-[860px]:pe-0">
+          {/*
+            7fr/5fr, not the even two-up this used to be (2026-08-27 brief:
+            "move the divider between card and bank details, and give the
+            credit-card option more emphasis"). Both asks are the same fix:
+            the card option is the one most visitors actually want, but it
+            was sitting in the narrower-looking half beside a dense bank
+            table, and the divider fell dead centre between them. Widening
+            the card column moves the rule off centre and gives the option
+            the weight it should have had.
+          */}
+          <div className="grid grid-cols-[7fr_5fr] max-[860px]:grid-cols-1">
+            <div className="flex flex-col gap-[14px] border-e-2 border-divider pb-[34px] pe-10 pt-[30px] max-[860px]:border-e-0 max-[860px]:border-b-2 max-[860px]:pe-0">
               <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-accent-700">
                 {cardOption.number}
               </span>
-              <h3 className="text-[23px] max-[860px]:text-[clamp(19px,5.2vw,24px)]">{t(locale, cardOption.title)}</h3>
-              <p className="text-[14.5px] leading-[1.7] text-neutral-800">{t(locale, cardOption.body)}</p>
+              <h3 className="text-[clamp(24px,2.8vw,30px)] leading-[1.2]">{t(locale, cardOption.title)}</h3>
+              <p className="m-0 max-w-[520px] text-[16px] font-semibold leading-[1.65] text-text">
+                {t(locale, givingText.cardHighlight)}
+              </p>
+              <p className="m-0 max-w-[520px] text-[14.5px] leading-[1.7] text-neutral-800">
+                {t(locale, cardOption.body)}
+              </p>
+              {/* Primary (brand red), matching the standing-order CTA above:
+                  this is a real call to action, not a footnote. */}
               <Button
                 href={donationLinks.cardUrl}
                 target="_blank"
                 rel="noopener"
-                variant="secondary"
-                // Deliberately NOT `mt-auto`: this cell's copy is much
-                // shorter than the bank-details table beside it, and
-                // pushing the button to the taller cell's baseline left a
-                // ~200px hole between the paragraph and its own button.
+                size="lg"
                 className="mt-2 self-start"
               >
-                {t(locale, { he: 'לתרומה מאובטחת', en: 'Donate securely' })}
+                {t(locale, givingText.cardCta)}
               </Button>
-            </Cell>
-            <Cell paddingInline="0px" paddingBlockStart="30px" paddingBlockEnd="34px" className="gap-[14px] ps-7 max-[860px]:ps-0">
+            </div>
+            <div className="flex flex-col gap-[14px] pb-[34px] ps-10 pt-[30px] max-[860px]:ps-0">
               <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-accent-700">
                 {bankOption.number}
               </span>
@@ -235,9 +250,21 @@ export function DonateGiving({ locale, donationLinks, children }: DonateGivingPr
                   </div>
                 ))}
               </dl>
-              <p className="mt-auto pt-1 text-[13px] leading-[1.6] text-neutral-700">{t(locale, bankDetails.note)}</p>
-            </Cell>
-          </CellGrid>
+              <div className="mt-auto pt-2">
+                <p className="m-0 text-[13px] leading-[1.6] text-neutral-700">{t(locale, bankDetails.note)}</p>
+                <p className="m-0 mt-1.5 text-[13px] leading-[1.6] text-neutral-700">
+                  {t(locale, givingText.receiptLabel)}{' '}
+                  <a
+                    href={`mailto:${receiptEmail}`}
+                    dir="ltr"
+                    className="font-heading font-extrabold text-accent-700 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  >
+                    {receiptEmail}
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
         </Section>
       </Reveal>
 

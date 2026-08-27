@@ -2,9 +2,9 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 import { MediaDesk } from '@/components/media/MediaDesk'
-import { MediaMasthead, type MastheadStat } from '@/components/media/MediaMasthead'
 import { Eyebrow, Reveal, Section, SocialLinksRow, type SocialLinkItem } from '@/components/ui'
 import { mediaDeskText } from '@/content/media-desk'
+import { archivePostsVisible } from '@/content/media-visibility'
 import { getArchivePosts, getElsewhereMediaItems, getPressArchiveItems, getSiteSettings } from '@/lib/cms'
 import { isLocale, locales, t, type Locale } from '@/lib/i18n'
 import { buildMediaEntries } from '@/lib/mediaEntries'
@@ -67,7 +67,9 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
   const [press, elsewhere, posts, siteSettings] = await Promise.all([
     getPressArchiveItems(),
     getElsewhereMediaItems(),
-    getArchivePosts(),
+    // Still fetched behind the flag rather than dropped, so re-enabling
+    // the bucket is a one-line change in media-visibility.ts.
+    archivePostsVisible ? getArchivePosts() : Promise.resolve([]),
     getSiteSettings(),
   ])
 
@@ -81,23 +83,6 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
     },
     locale,
   )
-
-  const years = entries.map((entry) => entry.year).filter((year) => Number.isFinite(year))
-  const firstYear = years.length ? Math.min(...years) : null
-  const lastYear = years.length ? Math.max(...years) : null
-
-  const stats: MastheadStat[] = [
-    { value: String(press.length), label: t(locale, mediaDeskText.statPress) },
-    {
-      value: String(elsewhere.podcasts.length + elsewhere.videos.length + elsewhere.talks.length),
-      label: t(locale, mediaDeskText.statWatch),
-    },
-    { value: String(posts.length), label: t(locale, mediaDeskText.statArchive) },
-    {
-      value: firstYear && lastYear ? `${firstYear}–${lastYear}` : '—',
-      label: t(locale, mediaDeskText.statYears),
-    },
-  ]
 
   // Dashboard-editable (site-settings.social), same source the footer reads.
   // Labels name the account, not just the platform: this row links two
@@ -149,14 +134,7 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
           <h1 className="mb-[18px] text-[clamp(32px,4.4vw,48px)] leading-[1.08]">
             {t(locale, { he: 'נבחרות בתקשורת', en: 'Nivcharot in the Media' })}
           </h1>
-          <p className="mb-7 max-w-[680px] text-base leading-[1.7] text-neutral-800">
-            {t(locale, {
-              he: 'כל הכתבות, הראיונות, הפודקאסטים, ההודעות לתקשורת והניוזלטרים שנאספו מהפעילות של נבחרות, במקום אחד: לחפש, לסנן לפי סוג ולפי שנה, ולפתוח כל פריט בלי לצאת מהעמוד.',
-              en: "Every article, interview, podcast, media release and newsletter from Nivcharot's work, in one place: search it, filter it by kind and by year, and open any item without leaving the page.",
-            })}
-          </p>
-          <MediaMasthead stats={stats} />
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+          <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
             <SocialLinksRow heading={t(locale, { he: 'עקבו אחרינו', en: 'FOLLOW US' })} links={socialLinks} />
             <p className="m-0 text-[13.5px] leading-[1.7] text-neutral-700">
               {t(locale, { he: 'מחפשים תמונות מהשטח? ', en: 'Looking for photos from the field? ' })}

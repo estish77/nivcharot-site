@@ -199,6 +199,13 @@ export const givingText = {
   } satisfies Localized,
   otherWaysEyebrow: { he: 'לא מתאים הוראת קבע?', en: 'PREFER NOT TO COMMIT MONTHLY?' } satisfies Localized,
   otherWaysHeading: { he: 'דרכים נוספות לתרום', en: 'Other ways to give' } satisfies Localized,
+  cardHighlight: {
+    he: 'תרומה חד-פעמית בכרטיס אשראי, בלי התחייבות. הדרך המהירה ביותר.',
+    en: 'A one-time card donation, no commitment. The quickest way to give.',
+  } satisfies Localized,
+  cardCta: { he: 'לתרומה מאובטחת בכרטיס אשראי', en: 'Donate securely by card' } satisfies Localized,
+  /** Where to write for a receipt after a bank transfer (2026-08-27 brief). */
+  receiptLabel: { he: 'לקבלת קבלה, כתבו לנו:', en: 'For a receipt, write to us:' } satisfies Localized,
 } as const
 
 export const closingCta = {

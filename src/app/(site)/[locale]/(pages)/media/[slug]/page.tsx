@@ -5,6 +5,7 @@ import { EmptyState } from '@/components/media/EmptyState'
 import { PostPrevNext } from '@/components/media/PostPrevNext'
 import { Figure, ImageSlot, Reveal, Section, Eyebrow } from '@/components/ui'
 import { archiveCategories, formatArchiveDate, sortPostsByDateDesc, type ArchivePost } from '@/content/media'
+import { archivePostsVisible } from '@/content/media-visibility'
 import { getArchivePosts } from '@/lib/cms'
 import { arrowBack, isLocale, locales, t, type Locale } from '@/lib/i18n'
 import { pageMetadata, urlFor } from '@/lib/seo'
@@ -25,6 +26,11 @@ type Params = { locale: string; slug: string }
  * on the very next request instead of needing a redeploy first.
  */
 export async function generateStaticParams() {
+  // 2026-08-27 brief: archive posts are hidden from the public site while
+  // their content is reworked (src/content/media-visibility.ts). Nothing is
+  // pre-rendered, and the page below 404s, so no post is reachable - while
+  // every one of them stays intact and editable in the dashboard.
+  if (!archivePostsVisible) return []
   const posts = await getArchivePosts()
   return locales.flatMap((locale) => posts.map((post) => ({ locale, slug: post.slug })))
 }
@@ -65,6 +71,11 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
   if (!isLocale(rawLocale)) {
     notFound()
   }
+  // `dynamicParams` defaults to true, so an empty `generateStaticParams`
+  // alone would still resolve a post on demand. This is the actual gate.
+  if (!archivePostsVisible) {
+    notFound()
+  }
   const locale: Locale = rawLocale
   const posts = await getArchivePosts()
   const post = posts.find((p) => p.slug === slug)
@@ -78,7 +89,7 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
           en: 'The link may be broken. The full archive lives on the media page.',
         })}
         ctaLabel={t(locale, { he: 'לארכיון המלא', en: 'View the full archive' })}
-        ctaHref={`/${locale}/media#archive`}
+        ctaHref={`/${locale}/media#desk`}
       />
     )
   }
@@ -104,7 +115,7 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
       <Reveal as="section">
         <article className="mx-auto max-w-[760px] px-8 pb-6 pt-14">
           <a
-            href={`/${locale}/media#archive`}
+            href={`/${locale}/media#desk`}
             className="mb-[26px] inline-block text-[13px] font-semibold no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             {arrowBack(locale)} {t(locale, { he: 'חזרה לארכיון', en: 'Back to archive' })}
