@@ -24,6 +24,7 @@
     "seed-timeline": "payload run scripts/seed-timeline-milestones.mjs",
     "seed-press-archive": "payload run scripts/seed-press-archive.mjs",
     "seed-elsewhere-media": "payload run scripts/seed-elsewhere-media.mjs",
+    "upload-halacha-docs": "payload run scripts/upload-halacha-docs.mjs",
     "seed-legacy-posts": "payload run scripts/seed-legacy-posts.mjs"
   },
   "dependencies": {
