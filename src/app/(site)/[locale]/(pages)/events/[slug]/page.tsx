@@ -7,6 +7,7 @@ import { PhotoGrid } from '@/components/media/PhotoGrid'
 import { Eyebrow, Reveal, Section } from '@/components/ui'
 import { getEvents } from '@/lib/cms'
 import { arrowBack, isLocale, locales, t, type Locale } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 type Params = { locale: string; slug: string }
 
@@ -23,10 +24,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const gallery = events.find((e) => e.slug === slug)
   if (!gallery) return {}
 
-  return {
+  return pageMetadata({
+    locale: rawLocale,
+    path: `/events/${slug}`,
     title: gallery.title,
     description: t(rawLocale, { he: `${gallery.photos.length} תמונות מ${gallery.title}`, en: `${gallery.photos.length} photos from ${gallery.title}` }),
-  }
+    image: gallery.coverImage?.url,
+  })
 }
 
 export default async function EventDetailPage({ params }: { params: Promise<Params> }) {

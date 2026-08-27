@@ -5,6 +5,7 @@ import { ContactForm } from '@/components/contact/ContactForm'
 import { Eyebrow, Reveal, Section } from '@/components/ui'
 import { contactHero } from '@/content/contact'
 import { isLocale, locales, t } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -19,10 +20,12 @@ export async function generateMetadata({
   if (!isLocale(rawLocale)) return {}
   const locale = rawLocale
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/contact',
     title: t(locale, contactHero.eyebrow),
     description: t(locale, contactHero.lead),
-  }
+  })
 }
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {

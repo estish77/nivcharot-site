@@ -5,6 +5,7 @@ import { Eyebrow, Reveal } from '@/components/ui'
 import { halachaIntro, halachaSections, halachaSourceMeta, type HalachaQuote } from '@/content/halacha'
 import { getHalachaContent } from '@/lib/cms'
 import { isLocale, locales, type Locale } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 type Params = { locale: string }
 
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { locale: rawLocale } = await params
   const locale: Locale = isLocale(rawLocale) ? rawLocale : 'he'
   const content = await getHalachaContent(locale)
-  return { title: content.hero.title, description: content.hero.body }
+  return pageMetadata({ locale, path: '/halacha', title: content.hero.title, description: content.hero.body })
 }
 
 function QuoteBlock({ quote }: { quote: HalachaQuote }) {

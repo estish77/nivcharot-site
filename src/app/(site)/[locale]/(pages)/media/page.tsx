@@ -12,6 +12,7 @@ import { elsewhereMediaText } from '@/content/elsewhere-media'
 import { pressArchiveText } from '@/content/press-archive'
 import { getArchivePosts, getElsewhereMediaItems, getPressArchiveItems } from '@/lib/cms'
 import { isLocale, locales, t, type Locale } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 type Params = { locale: string }
 type SearchParams = { cat?: string | string[]; year?: string | string[] }
@@ -38,13 +39,15 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!isLocale(rawLocale)) return {}
   const locale = rawLocale
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/media',
     title: t(locale, { he: 'תקשורת וארכיון', en: 'Media & Archive' }),
     description: t(locale, {
       he: 'נבחרות בתקשורת: כתבות וריאיונות מהארכיון של נבחרות ומהעיתונות.',
       en: "Nivcharot in the media: articles and interviews from Nivcharot's own archive and outside press.",
     }),
-  }
+  })
 }
 
 function firstParam(value: string | string[] | undefined): string | undefined {

@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Eyebrow, Reveal } from '@/components/ui'
 import { getMishpatContent } from '@/lib/cms'
 import { isLocale, locales, type Locale } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 type Params = { locale: string }
 
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { locale: rawLocale } = await params
   const locale: Locale = isLocale(rawLocale) ? rawLocale : 'he'
   const content = await getMishpatContent(locale)
-  return { title: content.hero.title, description: content.hero.body }
+  return pageMetadata({ locale, path: '/mishpat', title: content.hero.title, description: content.hero.body })
 }
 
 export default async function MishpatPage({ params }: { params: Promise<Params> }) {

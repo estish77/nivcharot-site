@@ -1,8 +1,8 @@
 import type { MetadataRoute } from 'next'
 
-import { getArchivePosts, getEvents } from '@/lib/cms'
-import { defaultLocale, locales, type Locale } from '@/lib/i18n'
-import { siteUrl } from '@/lib/site'
+import { getArchivePosts, getEvents, getPressArchiveItems } from '@/lib/cms'
+import { defaultLocale, locales } from '@/lib/i18n'
+import { alternatesFor, urlFor } from '@/lib/seo'
 
 type StaticEntry = {
   path: string
@@ -10,7 +10,12 @@ type StaticEntry = {
   priority: number
 }
 
-/** Every top-level page route, mirrored 1:1 from `src/lib/nav.ts`. */
+/**
+ * Every top-level page route, mirrored 1:1 from `src/lib/nav.ts` — plus
+ * `/halacha` and `/mishpat`, which have their own routes
+ * (`(pages)/halacha`, `(pages)/mishpat`) but aren't in the nav's `children`
+ * as top-level `href`s, so they need listing here explicitly.
+ */
 const STATIC_ENTRIES: StaticEntry[] = [
   { path: '', changeFrequency: 'weekly', priority: 1 },
   { path: '/about', changeFrequency: 'monthly', priority: 0.8 },
@@ -18,25 +23,14 @@ const STATIC_ENTRIES: StaticEntry[] = [
   { path: '/team', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/podcast', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/activism', changeFrequency: 'monthly', priority: 0.7 },
+  { path: '/halacha', changeFrequency: 'monthly', priority: 0.6 },
+  { path: '/mishpat', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/hanivcheret', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/join', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/media', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/donate', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/contact', changeFrequency: 'yearly', priority: 0.5 },
 ]
-
-function urlFor(locale: Locale, path: string): string {
-  return `${siteUrl}/${locale}${path}`
-}
-
-/** he/en (+ x-default pointing at the default locale) alternates for one logical path — see `src/lib/i18n.ts`'s `defaultLocale`. */
-function alternatesFor(path: string): Record<Locale | 'x-default', string> {
-  return {
-    he: urlFor('he', path),
-    en: urlFor('en', path),
-    'x-default': urlFor(defaultLocale, path),
-  }
-}
 
 /**
  * Every public route, in both locales, with hreflang alternates —
@@ -49,13 +43,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = []
   const archivePosts = await getArchivePosts()
   const eventGalleries = await getEvents(defaultLocale)
+  const pressItems = await getPressArchiveItems()
 
   for (const { path, changeFrequency, priority } of STATIC_ENTRIES) {
     const languages = alternatesFor(path)
     for (const locale of locales) {
       entries.push({
         url: urlFor(locale, path),
-        lastModified: new Date(),
+        // No real "last modified" date exists for these static marketing
+        // pages — `new Date()` here would just mean "now, every single
+        // request", which is worse than omitting it (Next's sitemap type
+        // makes this field optional).
         changeFrequency,
         priority,
         alternates: { languages },
@@ -84,6 +82,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       entries.push({
         url: urlFor(locale, path),
         lastModified: new Date(gallery.year, 0, 1),
+        changeFrequency: 'yearly',
+        priority: 0.4,
+        alternates: { languages },
+      })
+    }
+  }
+
+  // Only `link.kind === 'internal'` items get a real `/press/[slug]` page
+  // (see that route's `generateStaticParams`) — external items link straight
+  // to the outlet, so listing them here would sitemap a URL that 404s.
+  for (const item of pressItems.filter((i) => i.link.kind === 'internal')) {
+    const path = `/press/${item.slug}`
+    const languages = alternatesFor(path)
+    for (const locale of locales) {
+      entries.push({
+        url: urlFor(locale, path),
+        lastModified: new Date(item.sortDate),
         changeFrequency: 'yearly',
         priority: 0.4,
         alternates: { languages },

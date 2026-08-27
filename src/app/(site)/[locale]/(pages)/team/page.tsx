@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { TeamPageContent } from '@/components/team/TeamPageContent'
 import { teamHero } from '@/content/team'
 import { isLocale, locales, t } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -27,10 +28,12 @@ export async function generateMetadata({
   if (!isLocale(rawLocale)) return {}
   const locale = rawLocale
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/team',
     title: t(locale, { he: 'הצוות', en: 'Team' }),
     description: t(locale, teamHero.lead),
-  }
+  })
 }
 
 export default async function TeamPage({ params }: { params: Promise<{ locale: string }> }) {

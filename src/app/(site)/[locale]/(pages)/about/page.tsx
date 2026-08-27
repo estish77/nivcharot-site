@@ -10,6 +10,7 @@ import { StatTile } from '@/components/about/StatTile'
 import { aboutContent } from '@/content/about'
 import { getAboutContent } from '@/lib/cms'
 import { arrowForward, isLocale, locales, t, type Locale } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -23,10 +24,12 @@ export async function generateMetadata({
   const { locale: rawLocale } = await params
   const locale: Locale = isLocale(rawLocale) ? rawLocale : 'he'
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/about',
     title: t(locale, { he: 'אודות', en: 'About' }),
     description: t(locale, aboutContent.hero.lead),
-  }
+  })
 }
 
 /** Renders a fixture string's literal `\n` markers as real `<br>` line breaks. */

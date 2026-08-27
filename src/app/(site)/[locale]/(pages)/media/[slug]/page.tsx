@@ -7,6 +7,8 @@ import { Figure, ImageSlot, Reveal, Section, Eyebrow } from '@/components/ui'
 import { archiveCategories, formatArchiveDate, sortPostsByDateDesc, type ArchivePost } from '@/content/media'
 import { getArchivePosts } from '@/lib/cms'
 import { arrowBack, isLocale, locales, t, type Locale } from '@/lib/i18n'
+import { pageMetadata, urlFor } from '@/lib/seo'
+import { siteUrl } from '@/lib/site'
 
 type Params = { locale: string; slug: string }
 
@@ -48,10 +50,14 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const post = posts.find((p) => p.slug === slug)
   if (!post) return {}
 
-  return {
+  return pageMetadata({
+    locale: rawLocale,
+    path: `/media/${slug}`,
     title: post.title,
     description: post.body[0],
-  }
+    image: post.cover?.src,
+    type: 'article',
+  })
 }
 
 export default async function PostDetailPage({ params }: { params: Promise<Params> }) {
@@ -79,8 +85,22 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
 
   const { prev, next } = findAdjacent(posts, post.slug)
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.body[0],
+    image: post.cover?.src ? [post.cover.src] : undefined,
+    datePublished: post.date,
+    url: urlFor(locale, `/media/${post.slug}`),
+    isPartOf: { '@type': 'WebSite', name: 'נבחרות | Nivcharot', url: siteUrl },
+    publisher: { '@type': 'Organization', name: 'נבחרות | Nivcharot', url: siteUrl },
+  }
+
   return (
     <>
+      {/* Standard JSON-LD pattern — content is server-built from this same archive fixture/CMS data, never raw user input. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <Reveal as="section">
         <article className="mx-auto max-w-[760px] px-8 pb-6 pt-14">
           <a

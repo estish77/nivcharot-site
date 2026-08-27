@@ -11,6 +11,7 @@ import { storyContent } from '@/content/story'
 import { pressItemHref } from '@/content/press-archive'
 import { getPressArchiveItems, getStoryContent, getStoryTimeline } from '@/lib/cms'
 import { arrowForward, isLocale, locales, t, type Locale } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -24,10 +25,12 @@ export async function generateMetadata({
   const { locale: rawLocale } = await params
   const locale: Locale = isLocale(rawLocale) ? rawLocale : 'he'
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/story',
     title: t(locale, { he: 'הסיפור שלנו', en: 'Our story' }),
     description: t(locale, storyContent.hero.kicker),
-  }
+  })
 }
 
 /** Renders a fixture string's literal `\n` markers as real `<br>` line breaks. */

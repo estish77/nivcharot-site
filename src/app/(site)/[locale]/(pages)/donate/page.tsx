@@ -7,6 +7,7 @@ import { TransparencyGrid } from '@/components/donate/TransparencyGrid'
 import { donateHero, donationLinks as staticDonationLinks } from '@/content/donate'
 import { getDonateContent, getSiteSettings } from '@/lib/cms'
 import { isLocale, locales, t } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 /** Ported from docs/Shop.dc.html. */
 export function generateStaticParams() {
@@ -22,10 +23,12 @@ export async function generateMetadata({
   if (!isLocale(rawLocale)) return {}
   const locale = rawLocale
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/donate',
     title: t(locale, { he: 'תרומה לנבחרות', en: 'Donate to Nivcharot' }),
     description: t(locale, donateHero.body),
-  }
+  })
 }
 
 export default async function DonatePage({ params }: { params: Promise<{ locale: string }> }) {

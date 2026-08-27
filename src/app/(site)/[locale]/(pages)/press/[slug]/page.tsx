@@ -7,6 +7,8 @@ import { Eyebrow, Reveal, Section } from '@/components/ui'
 import { pressArchiveText } from '@/content/press-archive'
 import { getPressArchiveItems } from '@/lib/cms'
 import { arrowBack, isLocale, locales, t, type Locale } from '@/lib/i18n'
+import { pageMetadata, urlFor } from '@/lib/seo'
+import { siteUrl } from '@/lib/site'
 
 type Params = { locale: string; slug: string }
 
@@ -42,10 +44,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const item = items.find((i) => i.slug === slug)
   if (!item) return {}
 
-  return {
+  return pageMetadata({
+    locale: rawLocale,
+    path: `/press/${slug}`,
     title: t(rawLocale, item.title),
     description: t(rawLocale, item.summary),
-  }
+    type: 'article',
+  })
 }
 
 export default async function PressDetailPage({ params }: { params: Promise<Params> }) {
@@ -73,8 +78,22 @@ export default async function PressDetailPage({ params }: { params: Promise<Para
 
   const body = item.body ? t(locale, item.body) : []
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: t(locale, item.title),
+    description: t(locale, item.summary),
+    datePublished: item.sortDate,
+    url: urlFor(locale, `/press/${item.slug}`),
+    isPartOf: { '@type': 'WebSite', name: 'נבחרות | Nivcharot', url: siteUrl },
+    publisher: { '@type': 'Organization', name: 'נבחרות | Nivcharot', url: siteUrl },
+  }
+
   return (
-    <Reveal as="section">
+    <>
+      {/* Standard JSON-LD pattern — content is server-built from this same press-archive fixture/CMS data, never raw user input. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <Reveal as="section">
       <article className="mx-auto max-w-[760px] px-8 pb-20 pt-14 max-[860px]:px-[18px] max-[860px]:pb-12 max-[860px]:pt-8">
         <a
           href={`/${locale}/media#in-the-media`}
@@ -103,6 +122,7 @@ export default async function PressDetailPage({ params }: { params: Promise<Para
           </p>
         ) : null}
       </article>
-    </Reveal>
+      </Reveal>
+    </>
   )
 }

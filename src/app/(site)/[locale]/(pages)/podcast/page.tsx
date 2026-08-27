@@ -10,6 +10,7 @@ import { ShortsSection } from '@/components/podcast/ShortsSection'
 import { StoriesSection } from '@/components/podcast/StoriesSection'
 import { podcastEpisodes } from '@/content/podcast'
 import { isLocale, locales, t } from '@/lib/i18n'
+import { pageMetadata } from '@/lib/seo'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -24,7 +25,9 @@ export async function generateMetadata({
   if (!isLocale(rawLocale)) return {}
   const locale = rawLocale
 
-  return {
+  return pageMetadata({
+    locale,
+    path: '/podcast',
     title: t(locale, {
       he: 'חרדית מדוברת - הפודקאסט של נבחרות',
       en: 'Haredit Meduberet - The Nivcharot Podcast',
@@ -33,7 +36,7 @@ export async function generateMetadata({
       he: 'אסתי שושן בשיחות בגובה העיניים, בלי צנזורה, על העולם החרדי, דת ומדינה, אקטיביזם, תקשורת ותרבות.',
       en: 'Esty Shushan in candid, uncensored conversations about the Haredi world, religion and state, activism, journalism, and culture.',
     }),
-  }
+  })
 }
 
 /**
