@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 
-import { Button, Cell, CellGrid, Reveal, Section, cn } from '@/components/ui'
+import { Button, Cell, CellGrid, Eyebrow, Reveal, Section, SectionHead, cn } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import {
   bankDetails,
@@ -13,6 +13,7 @@ import {
   donatePreferredAmount,
   donateStandingOrderLinks,
   donationSummary,
+  givingText,
   preferredAmountBadge,
   standingOrderOption,
   type DonateAmount,
@@ -22,6 +23,15 @@ export type DonateGivingProps = {
   locale: Locale
   /** From getSiteSettings() — dashboard-editable Morning checkout links, falling back to the static fixture's values. */
   donationLinks: { standingOrderUrl: string; cardUrl: string }
+  /**
+   * Rendered between "other ways to give" and the closing banner — in
+   * practice `TransparencyGrid`, passed down as `children` so it keeps
+   * rendering on the server while still sitting inside this client
+   * component's run of sections. The closing banner has to stay in here
+   * (it echoes the selected amount), and trust content reads better
+   * BEFORE a final ask than after it.
+   */
+  children?: ReactNode
 }
 
 function amountLabel(locale: Locale, amount: number): string {
@@ -29,20 +39,40 @@ function amountLabel(locale: Locale, amount: number): string {
 }
 
 /**
- * The interactive core of the Donate page (docs/Shop.dc.html): the three
- * giving-method columns (standing order with an amount picker, card,
- * bank transfer) and the closing CTA banner, which reads the same
- * selected amount in its headline ("הוראת קבע של 54 ₪ בחודש"). Both
- * pieces share `amount` state, so they're one client component even
- * though they render as two separate page sections — matching the
- * mockup's single top-level component state.
+ * The interactive core of the Donate page.
  *
- * The mockup's decorative hover-driven "equalizer dot" flourish
- * (`{{ eq0 }}`..`{{ eq7 }}`, an aria-hidden random-blink widget with no
- * content of its own) is intentionally not ported — it's outside the
- * page's functional spec and disproportionate to build faithfully.
+ * 2026-08-27 redesign brief ("reorder this page, make it much cleaner").
+ * It used to be three equal-weight columns — standing order, card, bank —
+ * side by side, which gave the page no focal point: the monthly standing
+ * order (the thing the hero copy calls "the most meaningful way to
+ * support us") carried exactly as much visual weight as the bank-transfer
+ * details table, the amount picker was five small buttons crammed into a
+ * one-third-width column, and the red banner repeated the same call to
+ * action immediately under the button it duplicated.
+ *
+ * The page now runs ask → alternatives → trust → final ask:
+ *
+ *   1. the amount scale below — five full-height cells of oversized
+ *      numerals, the page's one clear focal point, selected cell filled in
+ *      brand red, the recommended amount badged;
+ *   2. card and bank transfer as a deliberately lighter, two-up
+ *      `tint-cream` band, framed as alternatives rather than equals;
+ *   3. `children` (the transparency block);
+ *   4. the red closing banner, now genuinely closing rather than echoing
+ *      a button two sections above it.
+ *
+ * No copy was invented for this: the fine print under the button collects
+ * lines the old layout already carried (see `givingText`'s comment), and
+ * every option keeps its original title and body text.
+ *
+ * The scale is a wrapping flex row rather than a 5-column grid so that a
+ * wrapped row still fills the full width — a `grid-cols-5` collapsing to 3
+ * leaves the last row two-thirds full, with a visible notch in the border
+ * box. Borders follow the codebase's usual "container owns top/start, each
+ * cell owns end/bottom" pattern, which needs no nth-child arithmetic and
+ * therefore stays correct at every breakpoint.
  */
-export function DonateGiving({ locale, donationLinks }: DonateGivingProps) {
+export function DonateGiving({ locale, donationLinks, children }: DonateGivingProps) {
   const [amount, setAmount] = useState<DonateAmount>(donatePreferredAmount)
 
   // Each preset amount has its own pre-filled Morning checkout
@@ -53,107 +83,166 @@ export function DonateGiving({ locale, donationLinks }: DonateGivingProps) {
   return (
     <>
       <Reveal as="section">
-        <Section as="div" borderBlock paddingBlockStart="28px" paddingBlockEnd="0px">
-          <CellGrid cols={3}>
-            <Cell paddingInline="28px" paddingBlockStart="38px" paddingBlockEnd="34px" className="gap-[14px]">
-              <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-accent-700">
-                {standingOrderOption.number}
-              </span>
-              <h3 className="text-[23px] max-[860px]:text-[clamp(19px,5.2vw,24px)]">
-                {t(locale, standingOrderOption.title)}
-              </h3>
-              <p className="text-[14.5px] leading-[1.7] text-neutral-800">{t(locale, standingOrderOption.body)}</p>
-              <div
-                className="mt-1 flex flex-wrap items-start gap-[10px]"
-                role="group"
-                aria-label={t(locale, { he: 'בחירת סכום תרומה', en: 'Choose a donation amount' })}
-              >
-                {donateAmounts.map((value) => {
-                  const active = value === amount
-                  const preferred = value === donatePreferredAmount
-                  const badgeId = `niv-donate-preferred-${value}`
-                  return (
-                    <span key={value} className="flex flex-col items-center gap-1.5">
-                      <button
-                        type="button"
-                        aria-pressed={active}
-                        aria-describedby={preferred ? badgeId : undefined}
-                        onClick={() => setAmount(value)}
-                        className={cn(
-                          'w-full cursor-pointer border-2 px-[18px] py-[10px] font-heading text-[15px] font-extrabold transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-                          active
-                            ? 'border-accent bg-accent text-white'
-                            : cn(
-                                'bg-transparent text-text',
-                                // The recommended amount keeps an accent
-                                // outline even while unselected, so it still
-                                // reads as the suggested one after the donor
-                                // clicks a different button.
-                                preferred
-                                  ? 'border-accent hover:bg-neutral-200 focus-visible:bg-neutral-200'
-                                  : 'border-divider hover:border-text focus-visible:border-text',
-                              ),
-                        )}
-                      >
-                        {amountLabel(locale, value)}
-                      </button>
-                      {preferred ? (
-                        <span
-                          id={badgeId}
-                          className="tag tag-accent pointer-events-none px-2 py-[2px] text-[10px] leading-[1.4] tracking-[0.06em]"
-                        >
-                          {t(locale, preferredAmountBadge)}
-                        </span>
-                      ) : null}
-                    </span>
-                  )
-                })}
-              </div>
-              <Button href={standingOrderHref} target="_blank" rel="noopener" className="mt-auto self-start">
-                {locale === 'he'
-                  ? `לפתיחת הוראת קבע · ${amountLabel(locale, amount)}`
-                  : `Set up a standing order · ${amountLabel(locale, amount)}`}
-              </Button>
-            </Cell>
-            <Cell paddingInline="28px" paddingBlockStart="38px" paddingBlockEnd="34px" className="gap-[14px]">
+        <Section as="div" borderBlockStart paddingBlockStart="52px" paddingBlockEnd="56px">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+            <div className="max-w-[620px]">
+              <Eyebrow className="mb-3">
+                {standingOrderOption.number} · {t(locale, standingOrderOption.title)}
+              </Eyebrow>
+              <h2 className="text-[clamp(26px,3.2vw,38px)] leading-[1.12]">
+                {t(locale, givingText.chooseAmountLabel)}
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.7] text-neutral-800">
+                {t(locale, standingOrderOption.body)}
+              </p>
+            </div>
+          </div>
+
+          <div
+            role="group"
+            aria-label={t(locale, givingText.chooseAmountLabel)}
+            className="flex flex-wrap border-t-2 border-s-2 border-divider"
+          >
+            {donateAmounts.map((value) => {
+              const active = value === amount
+              const preferred = value === donatePreferredAmount
+              const badgeId = `niv-donate-preferred-${value}`
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={active}
+                  aria-describedby={preferred ? badgeId : undefined}
+                  onClick={() => setAmount(value)}
+                  className={cn(
+                    'flex flex-1 basis-[150px] cursor-pointer flex-col items-center justify-center gap-1.5',
+                    'border-e-2 border-b-2 border-divider px-4 py-[26px]',
+                    'transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent',
+                    active ? 'bg-accent text-white' : 'bg-transparent text-text hover:bg-neutral-200',
+                  )}
+                >
+                  <span className="font-heading text-[clamp(30px,3.4vw,44px)] font-extrabold leading-none tabular-nums">
+                    {value}
+                  </span>
+                  <span
+                    className={cn(
+                      'font-heading text-[10.5px] font-extrabold tracking-[0.12em]',
+                      active ? 'text-white/85' : 'text-neutral-700',
+                    )}
+                  >
+                    {t(locale, givingText.perMonth)}
+                  </span>
+                  {/*
+                    Rendered in every cell, hidden where it doesn't apply, so
+                    the badge never pushes the recommended cell's numeral off
+                    the baseline its four neighbours sit on.
+                  */}
+                  <span
+                    id={preferred ? badgeId : undefined}
+                    aria-hidden={preferred ? undefined : 'true'}
+                    className={cn(
+                      'mt-0.5 px-2 py-[2px] font-heading text-[10px] font-extrabold leading-[1.5] tracking-[0.08em]',
+                      !preferred && 'invisible',
+                      active ? 'bg-white text-accent-700' : 'bg-accent text-white',
+                    )}
+                  >
+                    {t(locale, preferredAmountBadge)}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4">
+            <Button href={standingOrderHref} target="_blank" rel="noopener" size="lg">
+              {t(locale, givingText.standingOrderCta)} · {amountLabel(locale, amount)}
+            </Button>
+            <p className="m-0 text-[13.5px] leading-[1.7] text-neutral-700">{t(locale, givingText.finePrint)}</p>
+          </div>
+        </Section>
+      </Reveal>
+
+      <Reveal as="section">
+        <Section as="div" tint="tint-cream" borderBlock paddingBlockStart="48px" paddingBlockEnd="0px">
+          <SectionHead
+            eyebrow={t(locale, givingText.otherWaysEyebrow)}
+            title={t(locale, givingText.otherWaysHeading)}
+            titleClassName="text-[clamp(22px,2.6vw,30px)]"
+            className="mb-6"
+          />
+          <CellGrid cols={2}>
+            <Cell paddingInline="0px" paddingBlockStart="30px" paddingBlockEnd="34px" className="gap-[14px] pe-7 max-[860px]:pe-0">
               <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-accent-700">
                 {cardOption.number}
               </span>
-              <h3 className="text-[23px] max-[860px]:text-[clamp(19px,5.2vw,24px)]">
-                {t(locale, cardOption.title)}
-              </h3>
+              <h3 className="text-[23px] max-[860px]:text-[clamp(19px,5.2vw,24px)]">{t(locale, cardOption.title)}</h3>
               <p className="text-[14.5px] leading-[1.7] text-neutral-800">{t(locale, cardOption.body)}</p>
-              <Button href={donationLinks.cardUrl} target="_blank" rel="noopener" className="mt-auto self-start">
+              <Button
+                href={donationLinks.cardUrl}
+                target="_blank"
+                rel="noopener"
+                variant="secondary"
+                // Deliberately NOT `mt-auto`: this cell's copy is much
+                // shorter than the bank-details table beside it, and
+                // pushing the button to the taller cell's baseline left a
+                // ~200px hole between the paragraph and its own button.
+                className="mt-2 self-start"
+              >
                 {t(locale, { he: 'לתרומה מאובטחת', en: 'Donate securely' })}
               </Button>
             </Cell>
-            <Cell paddingInline="28px" paddingBlockStart="38px" paddingBlockEnd="34px" className="gap-[14px]">
+            <Cell paddingInline="0px" paddingBlockStart="30px" paddingBlockEnd="34px" className="gap-[14px] ps-7 max-[860px]:ps-0">
               <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-accent-700">
                 {bankOption.number}
               </span>
-              <h3 className="text-[23px] max-[860px]:text-[clamp(19px,5.2vw,24px)]">
-                {t(locale, bankOption.title)}
-              </h3>
+              <h3 className="text-[23px] max-[860px]:text-[clamp(19px,5.2vw,24px)]">{t(locale, bankOption.title)}</h3>
               <p className="text-[14.5px] leading-[1.7] text-neutral-800">{t(locale, bankOption.body)}</p>
-              <dl className="grid grid-cols-[auto_1fr] gap-x-[14px] gap-y-[6px] text-[14.5px] leading-[1.6]">
-                <dt className="font-semibold text-neutral-700">{t(locale, { he: 'בנק', en: 'Bank' })}</dt>
-                <dd className="m-0">{t(locale, bankDetails.bankName)}</dd>
-                <dt className="font-semibold text-neutral-700">{t(locale, { he: 'סניף', en: 'Branch' })}</dt>
-                <dd className="m-0">{bankDetails.branch}</dd>
-                <dt className="font-semibold text-neutral-700">{t(locale, { he: 'חשבון', en: 'Account' })}</dt>
-                <dd className="m-0">{bankDetails.accountNumber}</dd>
-                <dt className="font-semibold text-neutral-700">{t(locale, { he: 'על שם', en: 'Name' })}</dt>
-                <dd className="m-0">{t(locale, bankDetails.accountHolder)}</dd>
-                <dt className="font-semibold text-neutral-700">IBAN</dt>
-                <dd className="m-0 text-start [direction:ltr]">{bankDetails.iban}</dd>
-                <dt className="font-semibold text-neutral-700">SWIFT</dt>
-                <dd className="m-0 text-start [direction:ltr]">{bankDetails.swift}</dd>
+              <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-[18px] gap-y-0 text-[14.5px] leading-[1.6]">
+                {[
+                  [t(locale, { he: 'בנק', en: 'Bank' }), t(locale, bankDetails.bankName)],
+                  [t(locale, { he: 'סניף', en: 'Branch' }), bankDetails.branch],
+                  [t(locale, { he: 'חשבון', en: 'Account' }), bankDetails.accountNumber],
+                  [t(locale, { he: 'על שם', en: 'Name' }), t(locale, bankDetails.accountHolder)],
+                  ['IBAN', bankDetails.iban],
+                  ['SWIFT', bankDetails.swift],
+                ].map(([label, value], i, all) => (
+                  <div key={label} className="contents">
+                    <dt
+                      className={cn(
+                        'py-[7px] font-heading text-[12.5px] font-extrabold tracking-[0.04em] text-neutral-700',
+                        i !== all.length - 1 && 'border-b-2 border-divider',
+                      )}
+                    >
+                      {label}
+                    </dt>
+                    <dd
+                      className={cn(
+                        'm-0 py-[7px] tabular-nums',
+                        i !== all.length - 1 && 'border-b-2 border-divider',
+                      )}
+                    >
+                      {/*
+                        `<bdi>` rather than the `[direction:ltr] text-start`
+                        this row used to carry: forcing the direction also
+                        flipped what "start" means, so the IBAN and SWIFT
+                        values alone jumped to the far side of the column
+                        while every other value hugged its label. Isolating
+                        the run keeps them rendering left-to-right (which is
+                        the actual requirement) without moving them.
+                      */}
+                      <bdi>{value}</bdi>
+                    </dd>
+                  </div>
+                ))}
               </dl>
-              <p className="mt-auto text-[13px] leading-[1.6] text-neutral-700">{t(locale, bankDetails.note)}</p>
+              <p className="mt-auto pt-1 text-[13px] leading-[1.6] text-neutral-700">{t(locale, bankDetails.note)}</p>
             </Cell>
           </CellGrid>
         </Section>
       </Reveal>
+
+      {children}
+
       <Reveal as="section">
         <Section
           as="div"

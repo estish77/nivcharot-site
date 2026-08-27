@@ -1,4 +1,4 @@
-import { Eyebrow, Reveal, Section, cn } from '@/components/ui'
+import { Reveal, Section, cn } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import { transparencyEyebrow, transparencyHeading, transparencyItems } from '@/content/donate'
 
@@ -17,14 +17,20 @@ export function TransparencyGrid({ locale }: TransparencyGridProps) {
     <Reveal as="section">
       <Section as="div" tint="niv-slate" paddingBlockStart="56px" paddingBlockEnd="60px">
         {/*
-          Eyebrow always renders in --color-accent-700 (the project's a11y
-          fix for small red text on --color-bg). That rule doesn't strictly
-          apply on this section's dark --niv-slate background — the mockup
-          uses the brighter --color-accent here — but overriding a Tailwind
-          utility Eyebrow already sets isn't reliably winnable via class
-          order, so this reuses Eyebrow as designed rather than fighting it.
+          A plain styled <p> rather than the shared `Eyebrow`, which hard-
+          codes --color-accent-700: that token is the a11y fix for small red
+          text on the LIGHT --color-bg, and on this section's dark
+          --niv-slate ground it measures about 2:1 and is genuinely hard to
+          read (2026-08-27 redesign pass). Going darker makes a dark ground
+          worse, so this uses --color-accent-300, the light tint the design
+          tokens define for exactly this case (5.23:1 on --niv-slate).
+          `cn` is a plain joiner, not tailwind-merge, so passing a competing
+          text-* class to `Eyebrow` would leave both in the class list and
+          let stylesheet order decide - hence a <p> instead of an override.
         */}
-        <Eyebrow className="mb-2.5">{t(locale, transparencyEyebrow)}</Eyebrow>
+        <p className="m-0 mb-2.5 font-heading text-[13px] font-extrabold tracking-[0.08em] text-accent-300">
+          {t(locale, transparencyEyebrow)}
+        </p>
         <h2 className="mb-[30px] text-niv-cream max-[860px]:text-[clamp(24px,7vw,34px)]">
           {t(locale, transparencyHeading)}
         </h2>

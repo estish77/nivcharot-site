@@ -179,6 +179,28 @@ export const transparencyItems: TransparencyItem[] = [
   },
 ]
 
+/**
+ * Chrome for the 2026-08-27 redesign of this page (see `DonateGiving`).
+ *
+ * Every line below restates something the page already said rather than
+ * introducing a new claim: "cancel anytime" comes from
+ * `standingOrderOption.body`, the automatic receipt from `cardOption.body`
+ * / `closingCta.note`, and the Section 46 deduction from
+ * `donateHero.taxNote`. Collecting them under the one button they actually
+ * qualify is what makes the primary action readable at a glance.
+ */
+export const givingText = {
+  chooseAmountLabel: { he: 'בחירת סכום חודשי', en: 'Choose a monthly amount' } satisfies Localized,
+  perMonth: { he: '₪ לחודש', en: 'NIS / month' } satisfies Localized,
+  standingOrderCta: { he: 'לפתיחת הוראת קבע', en: 'Set up a standing order' } satisfies Localized,
+  finePrint: {
+    he: 'אפשר לבטל בכל רגע · הקבלה נשלחת אוטומטית למייל · החזר מס לפי סעיף 46',
+    en: 'Cancel anytime · The receipt is emailed automatically · Tax-deductible under Section 46',
+  } satisfies Localized,
+  otherWaysEyebrow: { he: 'לא מתאים הוראת קבע?', en: 'PREFER NOT TO COMMIT MONTHLY?' } satisfies Localized,
+  otherWaysHeading: { he: 'דרכים נוספות לתרום', en: 'Other ways to give' } satisfies Localized,
+} as const
+
 export const closingCta = {
   note: {
     he: 'הכפתור מוביל למערכת התרומות המאובטחת של מורנינג. הקבלה נשלחת אוטומטית למייל.',
