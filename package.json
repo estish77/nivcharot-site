@@ -27,6 +27,7 @@
     "seed-legacy-posts": "payload run scripts/seed-legacy-posts.mjs"
   },
   "dependencies": {
+    "@next/third-parties": "^16.3.0",
     "@payloadcms/db-postgres": "^3.87.0",
     "@payloadcms/db-sqlite": "^3.87.1",
     "@payloadcms/next": "^3.87.0",

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
@@ -7,6 +8,13 @@ import { fontVariables } from '@/lib/fonts'
 import { defaultLocale, dict, dirOf, isLocale, locales } from '@/lib/i18n'
 import { siteUrl } from '@/lib/site'
 import { SiteNotice } from '@/components/ui'
+
+/**
+ * Unset locally on purpose (same pattern as `BLOB_READ_WRITE_TOKEN` in
+ * `.env.example`) — only set in Vercel's Production environment, so local
+ * dev and preview deployments never send hits into the real GA4 property.
+ */
+const gaId = process.env.NEXT_PUBLIC_GA_ID
 
 /**
  * This layout is the ROOT layout for every `/{locale}/...` route — there is
@@ -90,6 +98,7 @@ export default async function LocaleLayout({
         <SiteNotice locale={locale} />
         {children}
       </body>
+      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   )
 }
