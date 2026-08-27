@@ -3,9 +3,9 @@ import type { Metadata } from 'next'
 
 import { MediaDesk } from '@/components/media/MediaDesk'
 import { MediaMasthead, type MastheadStat } from '@/components/media/MediaMasthead'
-import { Eyebrow, Reveal, Section } from '@/components/ui'
+import { Eyebrow, Reveal, Section, SocialLinksRow, type SocialLinkItem } from '@/components/ui'
 import { mediaDeskText } from '@/content/media-desk'
-import { getArchivePosts, getElsewhereMediaItems, getPressArchiveItems } from '@/lib/cms'
+import { getArchivePosts, getElsewhereMediaItems, getPressArchiveItems, getSiteSettings } from '@/lib/cms'
 import { isLocale, locales, t, type Locale } from '@/lib/i18n'
 import { buildMediaEntries } from '@/lib/mediaEntries'
 import { pageMetadata } from '@/lib/seo'
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return pageMetadata({
     locale,
     path: '/media',
-    title: t(locale, { he: 'תקשורת וארכיון', en: 'Media & Archive' }),
+    title: t(locale, { he: 'נבחרות בתקשורת', en: 'Nivcharot in the Media' }),
     description: t(locale, {
       he: 'נבחרות בתקשורת: כתבות וריאיונות מהארכיון של נבחרות ומהעיתונות.',
       en: "Nivcharot in the media: articles and interviews from Nivcharot's own archive and outside press.",
@@ -64,10 +64,11 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
   }
   const locale: Locale = rawLocale
 
-  const [press, elsewhere, posts] = await Promise.all([
+  const [press, elsewhere, posts, siteSettings] = await Promise.all([
     getPressArchiveItems(),
     getElsewhereMediaItems(),
     getArchivePosts(),
+    getSiteSettings(),
   ])
 
   const entries = buildMediaEntries(
@@ -98,13 +99,55 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
     },
   ]
 
+  // Dashboard-editable (site-settings.social), same source the footer reads.
+  // Labels name the account, not just the platform: this row links two
+  // different Instagram accounts, so "Instagram" alone would give two
+  // controls the same accessible name.
+  const socialLinks: SocialLinkItem[] = [
+    {
+      network: 'facebook',
+      href: siteSettings.social.facebook!,
+      label: t(locale, { he: 'פייסבוק · נבחרות', en: 'Facebook · Nivcharot' }),
+    },
+    {
+      network: 'instagram',
+      href: siteSettings.social.instagram!,
+      label: t(locale, { he: 'אינסטגרם · נבחרות', en: 'Instagram · Nivcharot' }),
+    },
+    {
+      network: 'youtube',
+      href: siteSettings.social.youtube!,
+      label: t(locale, { he: 'יוטיוב · חרדית מדוברת', en: 'YouTube · Haredit Meduberet' }),
+    },
+    {
+      network: 'spotify',
+      href: siteSettings.social.spotify!,
+      label: t(locale, { he: 'ספוטיפיי · חרדית מדוברת', en: 'Spotify · Haredit Meduberet' }),
+    },
+    {
+      network: 'applePodcasts',
+      href: siteSettings.social.applePodcasts!,
+      label: t(locale, { he: 'אפל פודקאסטס · חרדית מדוברת', en: 'Apple Podcasts · Haredit Meduberet' }),
+    },
+    {
+      network: 'instagram',
+      href: siteSettings.social.podcastInstagram!,
+      label: t(locale, { he: 'אינסטגרם · חרדית מדוברת', en: 'Instagram · Haredit Meduberet' }),
+    },
+    {
+      network: 'email',
+      href: `mailto:${siteSettings.contactEmail}`,
+      label: t(locale, { he: 'מייל', en: 'Email' }),
+    },
+  ]
+
   return (
     <>
       <Reveal as="section">
         <Section as="div" paddingBlockStart="52px" paddingBlockEnd="34px">
           <Eyebrow className="mb-3.5">{t(locale, { he: 'תקשורת וארכיון', en: 'MEDIA & ARCHIVE' })}</Eyebrow>
           <h1 className="mb-[18px] text-[clamp(32px,4.4vw,48px)] leading-[1.08]">
-            {t(locale, { he: 'נבחרות בתקשורת ובשטח', en: 'Nivcharot in the media and in the field' })}
+            {t(locale, { he: 'נבחרות בתקשורת', en: 'Nivcharot in the Media' })}
           </h1>
           <p className="mb-7 max-w-[680px] text-base leading-[1.7] text-neutral-800">
             {t(locale, {
@@ -113,15 +156,18 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
             })}
           </p>
           <MediaMasthead stats={stats} />
-          <p className="mt-5 text-[13.5px] leading-[1.7] text-neutral-700">
-            {t(locale, { he: 'מחפשים תמונות מהשטח? ', en: 'Looking for photos from the field? ' })}
-            <a
-              href={`/${locale}/activism#gatherings`}
-              className="font-heading text-[13.5px] font-extrabold text-accent-700 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              {t(locale, { he: 'לגלריות מהפעילות ←', en: '→ Activity galleries' })}
-            </a>
-          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+            <SocialLinksRow heading={t(locale, { he: 'עקבו אחרינו', en: 'FOLLOW US' })} links={socialLinks} />
+            <p className="m-0 text-[13.5px] leading-[1.7] text-neutral-700">
+              {t(locale, { he: 'מחפשים תמונות מהשטח? ', en: 'Looking for photos from the field? ' })}
+              <a
+                href={`/${locale}/activism#gatherings`}
+                className="font-heading text-[13.5px] font-extrabold text-accent-700 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                {t(locale, { he: 'לגלריות מהפעילות ←', en: '→ Activity galleries' })}
+              </a>
+            </p>
+          </div>
         </Section>
       </Reveal>
 

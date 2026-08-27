@@ -97,7 +97,11 @@ export type PressArchiveItem = {
   homeExcerpt?: Localized<string>
 }
 
-const WAPO_2020_HEADLINE = "As Israel's election nears, some ultra-Orthodox women seek a greater political say"
+// The headline the piece carries today; the Post re-headlined it after it
+// was first archived here (it ran as "As Israel's election nears, some
+// ultra-Orthodox women seek a greater political say").
+const WAPO_2020_HEADLINE =
+  'Some ultra-Orthodox Jewish women in Israel are breaking with tradition to press for a political say'
 
 export const pressArchiveItems: PressArchiveItem[] = [
   // ---- External: real press coverage / old-site items that were themselves just a summary + outbound link ----
@@ -174,7 +178,7 @@ export const pressArchiveItems: PressArchiveItem[] = [
     category: 'coverage',
     sourceLanguage: 'en',
     title: {
-      he: 'לקראת הבחירות בישראל, נשים חרדיות מבקשות השפעה פוליטית גדולה יותר',
+      he: 'נשים חרדיות בישראל שוברות את המסורת כדי לדרוש קול פוליטי',
       en: WAPO_2020_HEADLINE,
     },
     summary: {
@@ -1328,8 +1332,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
     category: 'coverage',
     sourceLanguage: 'he',
     title: {
-      he: 'שלטון גברי: איך ייצוג הנשים בישראל צנח לרמות של סוריה ופקיסטן?',
-      en: "Male Rule: How Did Women's Representation in Israel Fall to the Level of Syria and Pakistan?",
+      he: 'ממשלת הגברים: מדוע בממשלת נתניהו החדשה לא יהיו כמעט שרות',
+      en: "A government of men: why Netanyahu's new cabinet will have almost no women ministers",
     },
     summary: {
       he: 'כתבת תחקיר מאת מאי פכט ועמית קמינסקי (דצמבר 2022) על התדרדרות ישראל בדירוגי ייצוג נשים עולמיים; שושן מפרטת את ניצחונות נבחרות המשפטיים ואת הדחיות שממשיכות: "22 נשים הגישו בקשות רשמיות למפלגות חרדיות וקיבלו סירוב".',
@@ -1561,8 +1565,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
     sourceLanguage: 'he',
     // 2026-08-16 brief: name only in interview/opinion-category titles.
     title: {
-      he: 'בהתחלה החרדים תקפו את מייסדת נבחרות. עכשיו זה החוג למגדר',
-      en: "At First the Haredim Attacked Nivcharot's Founder. Now It's the Gender Studies Department",
+      he: 'האשימו אותי שאני יורקת לבאר, אבל אני לא שתיתי מהבאר הזו',
+      en: '"They accused me of spitting into the well, but I never drank from that well"',
     },
     summary: {
       he: 'כתבה מאת תמר קפלנסקי (יולי 2022) על זווית פולמוס בלתי צפויה: אחרי ששושן פרסמה שיר ("תזה"), הביקורת הפעם הגיעה ממעגלים פמיניסטיים/אקדמיים העוסקים בלימודי מגדר, לא מרבנים חרדים, ציר התנגדות נוסף: מודרת בתוך החברה החרדית על פמיניזם שלה, ומודרת באקדמיה החילונית כאישה מזרחית.',
@@ -1609,8 +1613,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
     category: 'coverage',
     sourceLanguage: 'he',
     title: {
-      he: '"אשת חיל" בפסטיבל ירושלים 2021: מסמך אקטואלי משמעותי',
-      en: '"Woman of Valor" at the 2021 Jerusalem Film Festival: A Significant Contemporary Document',
+      he: 'סקירת פסטיבל ירושלים 2021: "אשת חיל" כמסמך אקטואלי חשוב',
+      en: '2021 Jerusalem Film Festival round-up: "Woman of Valor" as a significant contemporary document',
     },
     summary: {
       he: 'מתוך סקירת פסטיבל ירושלים מאת מרלין וניג (אוגוסט 2021): הסרט התיעודי "אשת חיל" מתואר כ"מסמך אקטואלי משמעותי" על שאיפתן של נשים חרדיות להשתלב במפלגות החרדיות בכנסת. שושן מתוארת כ"אישה חרדית אינטלקטואלית שתודעתה הפמיניסטית מתפתחת דרך ניסיונות ליצור שינוי"; בחירתה של הבמאית אנה סומרשף לעקוב אחריה כעדה שקטה יוצרת תחושה ש"המצלמה היא אחת מסוכנות המאבק".',

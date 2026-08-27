@@ -73,3 +73,6 @@ export type { TabBarProps, TabBarItem } from './TabBar'
 
 export { DeskTabs, DeskSearch, SegmentedControl, YearRail, DeskPagination } from './DeskControls'
 export type { DeskTabItem, SegmentedOption, YearBucket } from './DeskControls'
+
+export { SocialLinksRow, socialIconPaths } from './SocialLinks'
+export type { SocialLinksRowProps, SocialLinkItem, SocialNetwork } from './SocialLinks'
