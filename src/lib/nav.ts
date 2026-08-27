@@ -35,7 +35,14 @@ export function navLinksFor(locale: Locale): NavLink[] {
     },
     { label: { he: 'הנבחרת', en: 'HaNivcheret' }, href: `/${locale}/hanivcheret` },
     { label: { he: 'חרדית מדוברת', en: 'Haredit Meduberet' }, href: `/${locale}/podcast` },
-    { label: { he: 'פעילות ומשפט', en: 'Advocacy & Law' }, href: `/${locale}/activism` },
+    {
+      label: { he: 'פעילות ומשפט', en: 'Advocacy & Law' },
+      href: `/${locale}/activism`,
+      children: [
+        { label: { he: 'הלכה', en: 'Halakha' }, href: `/${locale}/halacha` },
+        { label: { he: 'משפט', en: 'Law' }, href: `/${locale}/mishpat` },
+      ],
+    },
     { label: { he: 'תקשורת ומדיה', en: 'Media & Archive' }, href: `/${locale}/media` },
     { label: { he: 'תרומה', en: 'Donate' }, href: `/${locale}/donate` },
     { label: { he: 'צרו קשר', en: 'Contact us' }, href: `/${locale}/contact` },

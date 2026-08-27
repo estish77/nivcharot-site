@@ -21,18 +21,5 @@ export const Activism: GlobalConfig = {
   hooks: {
     afterChange: [revalidateGlobal('activism'), autoTranslateGlobalHook()],
   },
-  fields: [
-    heroField(),
-    statTilesField(),
-    pillarCardsField(),
-    sectionIntrosField(),
-    {
-      name: 'halakhaDocument',
-      type: 'upload',
-      relationTo: 'media',
-      admin: {
-        description: 'Rabbi Kreuzer\'s ruling (PDF or image) — links the second halakha card on this page once uploaded.',
-      },
-    },
-  ],
+  fields: [heroField(), statTilesField(), pillarCardsField(), sectionIntrosField()],
 }

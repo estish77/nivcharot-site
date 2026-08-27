@@ -256,7 +256,7 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
                 {t(locale, activismHalachaCards.first.body)}
               </p>
               <a
-                href={`/${locale}${activismHalachaCards.first.href}`}
+                href={`/${locale}/halacha`}
                 className={`mt-auto self-start pt-2.5 text-[14px] font-semibold ${FOCUS_RING}`}
               >
                 <ArrowLabel locale={locale}>{t(locale, activismHalachaCards.first.linkLabel)}</ArrowLabel>
@@ -270,25 +270,12 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
               <p className="text-[14.5px] leading-[1.7] text-neutral-800">
                 {t(locale, activismHalachaCards.second.body)}
               </p>
-              {content.halakhaDocumentUrl ? (
-                <a
-                  href={content.halakhaDocumentUrl}
-                  target="_blank"
-                  rel="noopener"
-                  className={`mt-auto self-start pt-2.5 text-[14px] font-semibold ${FOCUS_RING}`}
-                >
-                  <ArrowLabel locale={locale}>
-                    {t(locale, { he: 'לפסק המלא', en: 'The full ruling' })}
-                  </ArrowLabel>
-                </a>
-              ) : (
-                // Explicit, intentional placeholder in the mockup — no link,
-                // no invented URL — until an editor uploads the document via
-                // the Activism global's `halakhaDocument` field in /admin.
-                <span className="mt-auto self-start border-b border-dotted border-accent pt-2.5 text-[12.5px] text-accent-700">
-                  {t(locale, activismHalachaCards.second.placeholderLabel)}
-                </span>
-              )}
+              <a
+                href={`/${locale}/halacha`}
+                className={`mt-auto self-start pt-2.5 text-[14px] font-semibold ${FOCUS_RING}`}
+              >
+                <ArrowLabel locale={locale}>{t(locale, activismHalachaCards.second.linkLabel)}</ArrowLabel>
+              </a>
             </div>
           </div>
         </Section>

@@ -7,6 +7,8 @@ import { goalSection, heroContent, pillarCards, statTiles } from '@/content/home
 import { aboutContent } from '@/content/about'
 import { storyContent, timelineMilestones, type TimelineMilestone } from '@/content/story'
 import { activismFaqs, activismHero, activismHalachaSection } from '@/content/activism'
+import { halachaHero } from '@/content/halacha'
+import { mishpatFallbackBody, mishpatHero } from '@/content/mishpat'
 import { podcastText } from '@/content/podcast'
 import { hanivcheretAlumnaPlaceholder, hanivcheretHero, hanivcheretQuotes } from '@/content/hanivcheret'
 import { donateHero } from '@/content/donate'
@@ -276,7 +278,7 @@ export async function getStoryContent(locale: Locale): Promise<SimpleHeroContent
 
 export async function getActivismContent(
   locale: Locale,
-): Promise<{ hero: SimpleHeroContent; halakha: SimpleHeroContent; halakhaDocumentUrl?: string }> {
+): Promise<{ hero: SimpleHeroContent; halakha: SimpleHeroContent }> {
   const fallback = {
     hero: {
       eyebrow: activismHero.eyebrow[locale],
@@ -298,10 +300,6 @@ export async function getActivismContent(
     const hero = (doc?.hero ?? {}) as Record<string, unknown>
     const intros = Array.isArray(doc?.sectionIntros) ? (doc.sectionIntros as Record<string, unknown>[]) : []
     const halakhaIntro = intros.find((intro) => intro?.key === 'halakha')
-    const halakhaDocument =
-      doc?.halakhaDocument && typeof doc.halakhaDocument === 'object'
-        ? (doc.halakhaDocument as unknown as Record<string, unknown>)
-        : null
 
     return {
       hero: {
@@ -316,7 +314,79 @@ export async function getActivismContent(
             body: resolveLocalizedValue(halakhaIntro.body, locale, fallback.halakha.body),
           }
         : fallback.halakha,
-      halakhaDocumentUrl: halakhaDocument?.url ? String(halakhaDocument.url) : undefined,
+    }
+  } catch {
+    return fallback
+  }
+}
+
+/** Hero copy + the two source-document URLs for `/halacha` — the write-up itself is always the hardcoded `halachaSections` in `src/content/halacha.ts`, never CMS-driven. */
+export async function getHalachaContent(
+  locale: Locale,
+): Promise<{ hero: SimpleHeroContent; kroizerDocumentUrl?: string; pamphletDocumentUrl?: string }> {
+  const fallback = {
+    hero: {
+      eyebrow: halachaHero.eyebrow[locale],
+      title: halachaHero.title[locale],
+      body: halachaHero.lead[locale],
+    },
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await cachedPayloadRead('halacha', [locale], () => payload.findGlobal({ slug: 'halacha', locale }))
+    const hero = (doc?.hero ?? {}) as Record<string, unknown>
+    const kroizerDoc =
+      doc?.kroizerRulingDocument && typeof doc.kroizerRulingDocument === 'object'
+        ? (doc.kroizerRulingDocument as unknown as Record<string, unknown>)
+        : null
+    const pamphletDoc =
+      doc?.pamphletDocument2015 && typeof doc.pamphletDocument2015 === 'object'
+        ? (doc.pamphletDocument2015 as unknown as Record<string, unknown>)
+        : null
+
+    return {
+      hero: {
+        eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.hero.eyebrow),
+        title: resolveLocalizedValue(hero.title, locale, fallback.hero.title),
+        body: resolveLocalizedValue(hero.body, locale, fallback.hero.body),
+      },
+      kroizerDocumentUrl: kroizerDoc?.url ? String(kroizerDoc.url) : undefined,
+      pamphletDocumentUrl: pamphletDoc?.url ? String(pamphletDoc.url) : undefined,
+    }
+  } catch {
+    return fallback
+  }
+}
+
+/** Hero + body paragraphs for `/mishpat` — a placeholder page meant to be rewritten from `/admin` (a free-text richText field), unlike `/halacha`'s hardcoded write-up. */
+export async function getMishpatContent(locale: Locale): Promise<{ hero: SimpleHeroContent; body: string[] }> {
+  const fallback = {
+    hero: {
+      eyebrow: mishpatHero.eyebrow[locale],
+      title: mishpatHero.title[locale],
+      body: mishpatHero.lead[locale],
+    },
+    body: mishpatFallbackBody,
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await cachedPayloadRead('mishpat', [locale], () => payload.findGlobal({ slug: 'mishpat', locale }))
+    const hero = (doc?.hero ?? {}) as Record<string, unknown>
+    const paragraphs = lexicalToParagraphs(doc?.body)
+
+    return {
+      hero: {
+        eyebrow: resolveLocalizedValue(hero.eyebrow, locale, fallback.hero.eyebrow),
+        title: resolveLocalizedValue(hero.title, locale, fallback.hero.title),
+        body: resolveLocalizedValue(hero.body, locale, fallback.hero.body),
+      },
+      body: paragraphs.length > 0 ? paragraphs : fallback.body,
     }
   } catch {
     return fallback

@@ -3,9 +3,11 @@ import type { GlobalConfig } from 'payload'
 import { About } from './About'
 import { Activism } from './Activism'
 import { Donate } from './Donate'
+import { Halacha } from './Halacha'
 import { Hanivcheret } from './Hanivcheret'
 import { Home } from './Home'
 import { Join } from './Join'
+import { Mishpat } from './Mishpat'
 import { Navigation } from './Navigation'
 import { Podcast } from './Podcast'
 import { SiteSettings } from './SiteSettings'
@@ -22,6 +24,8 @@ export const globals: GlobalConfig[] = [
   About,
   Story,
   Activism,
+  Halacha,
+  Mishpat,
   Podcast,
   Hanivcheret,
   Join,

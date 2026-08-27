@@ -141,9 +141,9 @@ export const activismHalachaSection = {
 }
 
 /**
- * The two halakhic-ruling cards. The second is an explicit, intentional
- * placeholder in the mockup — "המסמך יעלה לאתר" / "document to be uploaded",
- * with no link — preserved as designed rather than inventing a URL.
+ * The two halakhic-ruling cards on the Activism page. Both now link to the
+ * full comparative write-up at `/halacha` (src/content/halacha.ts) instead
+ * of the dead guessed route / upload-pending placeholder they used to.
  */
 export const activismHalachaCards = {
   first: {
@@ -154,13 +154,6 @@ export const activismHalachaCards = {
       en: "We clarified the halakhic position directly: the pamphlet presents Rabbi Y. Y. Weinberg's 1950 responsum, according to which there are three positions - those who forbid, those who permit, and those who distinguish between voting and standing. It was distributed to rabbis, community figures and the Haredi press.",
     } satisfies Localized,
     linkLabel: { he: 'לקונטרס המלא', en: 'The full pamphlet' } satisfies Localized,
-    /**
-     * "Post.dc.html?p=kuntres-halachi" in the mockup — mapped to a guessed
-     * post route (locale-relative, no leading `/${locale}` — the page
-     * component prepends that, matching `Footer`'s `donateHref` convention).
-     * Align once the Media/Post routes exist.
-     */
-    href: '/media/kuntres-halachi',
   },
   second: {
     tag: { he: 'פסק שני', en: 'Second ruling' } satisfies Localized,
@@ -169,11 +162,10 @@ export const activismHalachaCards = {
       en: "Rabbi Kreuzer's responsum on women in political parties",
     } satisfies Localized,
     body: {
-      he: 'פסק הלכה נוסף, העוסק ישירות בשאלת שילובן של נשים במפלגות. המסמך יעלה לאתר.',
-      en: 'A further halakhic ruling, addressing the question of women joining political parties directly. The document will be published here.',
+      he: 'פסק הלכה נוסף, העוסק ישירות בשאלת שילובן של נשים במפלגות.',
+      en: 'A further halakhic ruling, addressing the question of women joining political parties directly.',
     } satisfies Localized,
-    /** No href by design — the mockup shows a dotted-underline label, not a link. */
-    placeholderLabel: { he: 'המסמך להעלאה', en: 'document to be uploaded' } satisfies Localized,
+    linkLabel: { he: 'לפסק המלא', en: 'The full ruling' } satisfies Localized,
   },
 }
 
