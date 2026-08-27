@@ -10,7 +10,10 @@ import {
   cardOption,
   closingCta,
   donateAmounts,
+  donatePreferredAmount,
+  donateStandingOrderLinks,
   donationSummary,
+  preferredAmountBadge,
   standingOrderOption,
   type DonateAmount,
 } from '@/content/donate'
@@ -40,7 +43,12 @@ function amountLabel(locale: Locale, amount: number): string {
  * page's functional spec and disproportionate to build faithfully.
  */
 export function DonateGiving({ locale, donationLinks }: DonateGivingProps) {
-  const [amount, setAmount] = useState<DonateAmount>(54)
+  const [amount, setAmount] = useState<DonateAmount>(donatePreferredAmount)
+
+  // Each preset amount has its own pre-filled Morning checkout
+  // (src/content/donate.ts). The dashboard-editable single link stays as
+  // the fallback for any amount that doesn't have one.
+  const standingOrderHref = donateStandingOrderLinks[amount] ?? donationLinks.standingOrderUrl
 
   return (
     <>
@@ -56,32 +64,55 @@ export function DonateGiving({ locale, donationLinks }: DonateGivingProps) {
               </h3>
               <p className="text-[14.5px] leading-[1.7] text-neutral-800">{t(locale, standingOrderOption.body)}</p>
               <div
-                className="mt-1 flex flex-wrap gap-[10px]"
+                className="mt-1 flex flex-wrap items-start gap-[10px]"
                 role="group"
                 aria-label={t(locale, { he: 'בחירת סכום תרומה', en: 'Choose a donation amount' })}
               >
                 {donateAmounts.map((value) => {
                   const active = value === amount
+                  const preferred = value === donatePreferredAmount
+                  const badgeId = `niv-donate-preferred-${value}`
                   return (
-                    <button
-                      key={value}
-                      type="button"
-                      aria-pressed={active}
-                      onClick={() => setAmount(value)}
-                      className={cn(
-                        'cursor-pointer border-2 px-[18px] py-[10px] font-heading text-[15px] font-extrabold transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-                        active
-                          ? 'border-accent bg-accent text-white'
-                          : 'border-divider bg-transparent text-text hover:border-text focus-visible:border-text',
-                      )}
-                    >
-                      {amountLabel(locale, value)}
-                    </button>
+                    <span key={value} className="flex flex-col items-center gap-1.5">
+                      <button
+                        type="button"
+                        aria-pressed={active}
+                        aria-describedby={preferred ? badgeId : undefined}
+                        onClick={() => setAmount(value)}
+                        className={cn(
+                          'w-full cursor-pointer border-2 px-[18px] py-[10px] font-heading text-[15px] font-extrabold transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+                          active
+                            ? 'border-accent bg-accent text-white'
+                            : cn(
+                                'bg-transparent text-text',
+                                // The recommended amount keeps an accent
+                                // outline even while unselected, so it still
+                                // reads as the suggested one after the donor
+                                // clicks a different button.
+                                preferred
+                                  ? 'border-accent hover:bg-neutral-200 focus-visible:bg-neutral-200'
+                                  : 'border-divider hover:border-text focus-visible:border-text',
+                              ),
+                        )}
+                      >
+                        {amountLabel(locale, value)}
+                      </button>
+                      {preferred ? (
+                        <span
+                          id={badgeId}
+                          className="tag tag-accent pointer-events-none px-2 py-[2px] text-[10px] leading-[1.4] tracking-[0.06em]"
+                        >
+                          {t(locale, preferredAmountBadge)}
+                        </span>
+                      ) : null}
+                    </span>
                   )
                 })}
               </div>
-              <Button href={donationLinks.standingOrderUrl} target="_blank" rel="noopener" className="mt-auto self-start">
-                {t(locale, { he: 'לפתיחת הוראת קבע', en: 'Set up a standing order' })}
+              <Button href={standingOrderHref} target="_blank" rel="noopener" className="mt-auto self-start">
+                {locale === 'he'
+                  ? `לפתיחת הוראת קבע · ${amountLabel(locale, amount)}`
+                  : `Set up a standing order · ${amountLabel(locale, amount)}`}
               </Button>
             </Cell>
             <Cell paddingInline="28px" paddingBlockStart="38px" paddingBlockEnd="34px" className="gap-[14px]">
@@ -147,7 +178,7 @@ export function DonateGiving({ locale, donationLinks }: DonateGivingProps) {
             <p className="m-0 text-[19px] font-bold leading-[1.45] text-white">{t(locale, closingCta.note)}</p>
           </div>
           <a
-            href={donationLinks.standingOrderUrl}
+            href={standingOrderHref}
             target="_blank"
             rel="noopener"
             className="whitespace-nowrap bg-white px-7 py-[14px] font-heading text-base font-extrabold text-accent no-underline transition-colors duration-200 ease-out hover:bg-niv-slate hover:text-white focus-visible:bg-niv-slate focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

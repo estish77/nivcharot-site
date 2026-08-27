@@ -24,6 +24,33 @@ import type { Locale, Localized } from '@/lib/i18n'
 export const donateAmounts = [18, 36, 54, 90, 180] as const
 export type DonateAmount = (typeof donateAmounts)[number]
 
+/**
+ * One Morning ("מורנינג") standing-order checkout per preset amount
+ * (2026-08-27, links supplied by the site owner).
+ *
+ * Until now every amount button led to the SAME checkout link — the 180 ₪
+ * one — so the picker changed only the closing banner's headline while the
+ * donor was always sent to a 180 ₪ form. Each amount now opens its own
+ * pre-filled recurring form; all five were opened and confirmed to show
+ * the matching sum and monthly wording before being added here.
+ */
+export const donateStandingOrderLinks: Record<DonateAmount, string> = {
+  18: 'https://mrng.to/t96gJ11kNv',
+  36: 'https://mrng.to/lmlRcB0Ewa',
+  54: 'https://mrng.to/Mb3esFCGko',
+  90: 'https://mrng.to/51fTXKzMi9',
+  180: 'https://mrng.to/WJUIrZs6F9',
+}
+
+/**
+ * The amount the page leads with — preselected on load and flagged with a
+ * "מומלץ" badge (site owner's call, 2026-08-27). It is a suggestion, not a
+ * restriction: every other amount stays one click away and equally usable.
+ */
+export const donatePreferredAmount: DonateAmount = 90
+
+export const preferredAmountBadge: Localized = { he: 'מומלץ', en: 'Recommended' }
+
 export const donateHero: {
   eyebrow: Localized
   title: Localized
@@ -78,7 +105,14 @@ export const bankOption: GivingOption = {
   },
 }
 
-/** Mirrors `site-settings.donation` (SiteSettings.ts). */
+/**
+ * Mirrors `site-settings.donation` (SiteSettings.ts).
+ *
+ * `standingOrderUrl` is now the FALLBACK for the standing-order CTA: the
+ * per-amount map above is what the amount picker actually links to, and
+ * this dashboard-editable value is only used for an amount that has no
+ * entry there (none today).
+ */
 export const donationLinks = {
   standingOrderUrl: 'https://mrng.to/WJUIrZs6F9',
   cardUrl: 'https://mrng.to/KPpOoC6rJ2',

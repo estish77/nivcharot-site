@@ -94,7 +94,10 @@ export const SiteSettings: GlobalConfig = {
           type: 'text',
           required: true,
           defaultValue: 'https://mrng.to/WJUIrZs6F9',
-          admin: { description: 'Recurring monthly standing-order checkout.' },
+          admin: {
+            description:
+              'Fallback recurring standing-order checkout. The Donate page now links each preset amount to its own Morning form (src/content/donate.ts, donateStandingOrderLinks); this value is only used for an amount that has no entry there.',
+          },
         },
         {
           name: 'cardUrl',
