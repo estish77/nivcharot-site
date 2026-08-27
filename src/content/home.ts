@@ -106,8 +106,6 @@ export const statTiles: Record<Locale, StatTile[]> = {
   ],
 }
 
-export const statsBandEyebrow: Localized = { he: 'מדוע בעצם הכל התחיל?', en: 'IN BRIEF' }
-
 /** Only the English branch of the mockup carries this disclaimer paragraph — a genuine asymmetry, not an omission. */
 export const statsFootnoteEn: string =
   'The Haredi population numbers about 1.45 million, some 14% of Israel (Haredi Society Yearbook 2025); about half of it is under 16. The Supreme Court ordered Agudat Yisrael to amend its bylaws, but membership is still not possible, and two petitions remain pending.'

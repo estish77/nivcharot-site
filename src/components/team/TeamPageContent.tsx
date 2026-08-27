@@ -4,6 +4,7 @@ import { TabBar } from '@/components/ui/TabBar'
 import { t, type Locale } from '@/lib/i18n'
 import { teamHero, teamMemberCategoryLabels, teamSectionIntro, type TeamMember, type TeamMemberCategory } from '@/content/team'
 import { getTeamMembers } from '@/lib/cms'
+import { EqualizerDots } from './EqualizerDots'
 import { TeamMemberCard } from './TeamMemberCard'
 
 const CATEGORY_ORDER: TeamMemberCategory[] = ['central-team', 'central-activity', 'staff']
@@ -51,6 +52,9 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
       </Reveal>
 
       <Reveal as="section" className="relative mx-auto max-w-[1080px] px-8 pb-16 pt-[72px] max-[860px]:px-[18px] max-[860px]:pb-9 max-[860px]:pt-9">
+        <div className="absolute top-8 end-8 leading-none">
+          <EqualizerDots tone="light" />
+        </div>
         <Eyebrow className="mb-[10px]">{t(locale, teamSectionIntro.eyebrow)}</Eyebrow>
         <div className="flex items-center justify-between gap-[22px]">
           <h2 className="mb-[30px] max-[860px]:text-[clamp(24px,7vw,34px)]">{t(locale, teamSectionIntro.title)}</h2>

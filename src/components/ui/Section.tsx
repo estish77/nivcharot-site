@@ -28,13 +28,14 @@ function fluidBlockPadding(px: string): string {
 }
 
 /** Background tint tokens used across the mockups' `<section>` wrappers. */
-export type SectionTint = 'none' | 'bg' | 'tint-cream' | 'tint-slate' | 'niv-slate' | 'accent'
+export type SectionTint = 'none' | 'bg' | 'tint-cream' | 'tint-slate' | 'tint-blue' | 'niv-slate' | 'accent'
 
 const TINT_CLASS: Record<SectionTint, string> = {
   none: '',
   bg: 'bg-bg',
   'tint-cream': 'bg-tint-cream',
   'tint-slate': 'bg-tint-slate',
+  'tint-blue': 'bg-tint-blue',
   'niv-slate': 'bg-niv-slate',
   accent: 'bg-accent',
 }

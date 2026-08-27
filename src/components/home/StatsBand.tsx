@@ -1,6 +1,6 @@
 import { Reveal, Section } from '@/components/ui'
-import { t, type Locale } from '@/lib/i18n'
-import { statsBandEyebrow, statsFootnoteEn, statTiles } from '@/content/home'
+import type { Locale } from '@/lib/i18n'
+import { statsFootnoteEn, statTiles } from '@/content/home'
 
 /** The "350,000" tile alone renders at a smaller clamp so the longer number doesn't overflow its cell, and never wraps. */
 const WIDE_VALUE = '350,000'
@@ -35,29 +35,15 @@ const GRID_CSS = `
 export function StatsBand({
   locale,
   tiles = statTiles[locale],
-  eyebrow = statsBandEyebrow,
   footnote = statsFootnoteEn,
 }: {
   locale: Locale
   tiles?: Array<{ value: string; description: string }>
-  eyebrow?: typeof statsBandEyebrow
   footnote?: string
 }) {
-
   return (
     <Reveal as="section">
       <Section as="div" tint="niv-slate" paddingBlockStart="60px" paddingBlockEnd="64px">
-        {/*
-          The mockup colors this eyebrow with the raw, brighter
-          `--color-accent` (not the site-wide `--color-accent-700` a11y
-          fix) — deliberately kept here: `--color-accent-700` is a *darker*
-          red, which would have *worse* contrast than the brighter accent
-          against this dark slate background, so the usual small-text fix
-          would be a contrast regression on this particular background.
-        */}
-        <p className="m-0 mb-7 font-heading text-[13px] font-extrabold tracking-[0.08em] text-accent-300">
-          {t(locale, eyebrow)}
-        </p>
         <style dangerouslySetInnerHTML={{ __html: GRID_CSS }} />
         <div className="niv-stats-grid">
           {tiles.map((tile) => (

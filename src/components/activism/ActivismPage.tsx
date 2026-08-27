@@ -27,6 +27,7 @@ function withLineBreaks(text: string): ReactNode {
   ))
 }
 import { Accordion, Button, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SectionHead, Tag } from '@/components/ui'
+import { EqualizerDots } from './EqualizerDots'
 
 /**
  * Hero jump-nav (2026-08-13 brief: "תבנה כמו דף נחיתה שיהיה קל לדלג בין
@@ -383,6 +384,7 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
       {/* Archive: position papers & legislation */}
       <Reveal as="section">
         <Section as="div" id="archive" paddingBlockStart="72px" paddingBlockEnd="72px" innerClassName="relative">
+          <EqualizerDots className="absolute top-8 end-8" />
           <div className="mb-[22px] flex flex-col items-start gap-3">
             <div className="flex flex-1 items-center justify-between gap-[22px]">
               <h2>{t(locale, activismArchiveSection.title)}</h2>

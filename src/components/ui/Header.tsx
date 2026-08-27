@@ -25,42 +25,48 @@ function HeartIcon({ className }: { className?: string }) {
 }
 
 const PODCAST_BAR_COUNT = 4
-// Distinct, non-round per-bar durations (not a shared delay off one period)
-// so the bars drift in and out of phase with each other — reads as a real
-// audio visualizer reacting to sound, not a single mechanically-synced pulse.
-const PODCAST_BAR_DURATIONS_S = [0.62, 0.8, 0.54, 0.88]
+const PODCAST_PULSE_DURATION_S = 1.6
+const PODCAST_BAR_DELAY_STEP_S = 0.16
 
 /**
- * A small always-on "sound is playing" equalizer glyph — the header's link
- * to `/podcast`. Kept accent-colored at rest (not just on hover, like a
- * plain nav icon) and scales up slightly on hover, so it reads as a live,
- * clickable indicator rather than decoration. Bars scale on their own
- * vertical center (not height+position) so they never shift the icon's
- * baseline while animating.
+ * A "sound is playing" equalizer glyph — the header's link to `/podcast`.
+ * A calm, slow, gently staggered breathing pulse (not a fast/erratic
+ * visualizer) — each bar shares the same rhythm, just slightly out of
+ * phase with its neighbors. Kept accent-colored at rest (not just on
+ * hover, like a plain nav icon) and scales up slightly on hover, so it
+ * reads as a live, clickable indicator rather than decoration. Bars scale
+ * on their own vertical center (not height+position) so they never shift
+ * the icon's baseline while animating. Sized larger than a typical nav
+ * glyph (24x20, vs. the header's other ~18px icons) specifically so the
+ * pulse is easy to notice at a glance.
  */
 function PodcastIcon() {
   const shouldReduceMotion = useReducedMotion()
   return (
     <svg
-      viewBox="0 0 20 16"
-      width="18"
-      height="16"
+      viewBox="0 0 24 20"
+      width="24"
+      height="20"
       aria-hidden="true"
       className="transition-transform duration-300 ease-out group-hover:scale-110"
     >
       {Array.from({ length: PODCAST_BAR_COUNT }, (_, i) => (
         <motion.rect
           key={i}
-          x={i * 5 + 1}
-          y={2}
-          width={3}
-          height={12}
-          rx={1.5}
+          x={i * 6 + 2}
+          y={3}
+          width={3.5}
+          height={14}
+          rx={1.75}
           fill="currentColor"
           style={{ transformOrigin: 'center' }}
           initial={false}
-          animate={shouldReduceMotion ? { scaleY: 0.55 } : { scaleY: [0.25, 1, 0.35, 0.9, 0.25] }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: PODCAST_BAR_DURATIONS_S[i], repeat: Infinity, ease: 'easeInOut' }}
+          animate={shouldReduceMotion ? { scaleY: 0.6 } : { scaleY: [0.45, 1, 0.45] }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { duration: PODCAST_PULSE_DURATION_S, repeat: Infinity, ease: 'easeInOut', delay: i * PODCAST_BAR_DELAY_STEP_S }
+          }
         />
       ))}
     </svg>

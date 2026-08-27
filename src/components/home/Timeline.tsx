@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Cell, CellGrid, Reveal } from '@/components/ui'
 import { arrowForward, t, type Locale } from '@/lib/i18n'
 import { timelineItems, timelineSection } from '@/content/home'
+import { EqualizerDots } from './EqualizerDots'
 
 export function Timeline({ locale }: { locale: Locale }) {
   const arrow = arrowForward(locale)
@@ -10,6 +11,9 @@ export function Timeline({ locale }: { locale: Locale }) {
   return (
     <Reveal as="section" className="border-y-2 border-divider bg-tint-cream">
       <div className="relative mx-auto" style={{ maxWidth: 1240, paddingInline: '32px', paddingBlockStart: '72px', paddingBlockEnd: '64px' }}>
+        <div className="absolute leading-none" style={{ insetBlockStart: '32px', insetInlineEnd: '32px' }}>
+          <EqualizerDots tone="light" />
+        </div>
         <div className="mb-6 flex flex-col items-start gap-3">
           <h2 className="m-0">{t(locale, timelineSection.title)}</h2>
           <Link

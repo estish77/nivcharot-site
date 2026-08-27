@@ -5,6 +5,7 @@ import { Fragment, type ReactNode } from 'react'
 
 import { Cell, CellGrid, Eyebrow, Figure, Reveal, Section, TabBar } from '@/components/ui'
 import type { TabBarItem } from '@/components/ui'
+import { EqualizerDots } from '@/components/about/EqualizerDots'
 import { StatTile } from '@/components/about/StatTile'
 import { aboutContent } from '@/content/about'
 import { getAboutContent } from '@/lib/cms'
@@ -130,6 +131,9 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           paddingBlockEnd="72px"
           innerClassName="relative grid grid-cols-1 items-center gap-11 min-[861px]:grid-cols-[4fr_8fr]"
         >
+          <div className="absolute top-8 end-8 leading-none">
+            <EqualizerDots tone="light" />
+          </div>
           <Figure
             grayscale={false}
             src="/assets/schenirer-logo-portrait.png"

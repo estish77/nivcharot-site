@@ -21,9 +21,10 @@ const newsletterCard = joinCards.find((card) => card.id === 'newsletter')!
  * a third-party signup tool. No outbound email-sending is wired up yet;
  * this only durably stores who signed up.
  *
- * Deliberately lighter than `DonateBand` right above it (less padding, no
- * block border) — two full-weight accent bands stacked back-to-back read as
- * "two donation asks," so this one is the quieter, secondary one.
+ * Deliberately lighter than `DonateBand` right above it — a thin, single-row
+ * bar (own `tint-blue` background, distinct from the accent-red donate band
+ * and the cream/slate tints used elsewhere) rather than another full-weight
+ * banner, so two big asks back-to-back don't read as "two donation asks."
  */
 export function NewsletterSection({ locale }: { locale: Locale }) {
   const [email, setEmail] = useState('')
@@ -76,8 +77,8 @@ export function NewsletterSection({ locale }: { locale: Locale }) {
 
   return (
     <Breathe as="section" durationS={5}>
-      <Section as="div" tint="tint-cream" paddingBlockStart="28px" paddingBlockEnd="28px" className="relative">
-        <form onSubmit={handleSubmit} noValidate className="flex flex-wrap items-start justify-between gap-6">
+      <Section as="div" tint="tint-blue" paddingBlockStart="14px" paddingBlockEnd="14px" className="relative">
+        <form onSubmit={handleSubmit} noValidate className="relative flex flex-nowrap items-center gap-4 overflow-x-auto max-[640px]:flex-wrap">
           <div className="absolute h-px w-px overflow-hidden" aria-hidden="true">
             <label htmlFor="niv-home-newsletter-website">Leave this field empty</label>
             <input
@@ -90,44 +91,48 @@ export function NewsletterSection({ locale }: { locale: Locale }) {
             />
           </div>
 
-          <div style={{ maxWidth: 420 }}>
-            <p className="m-0 mb-1.5 font-heading text-[13px] font-extrabold tracking-[0.06em] text-accent-700">
-              {t(locale, newsletterCard.title)}
-            </p>
-            <p className="m-0 text-[15px] leading-[1.7] text-neutral-800">{t(locale, newsletterCard.body)}</p>
-            {sent ? <p className="m-0 mt-2 text-[13.5px] font-semibold text-accent-700">{successMessage}</p> : null}
-          </div>
-          <div className="flex flex-1 flex-wrap items-start gap-3" style={{ minWidth: 280, maxWidth: 520 }}>
-            <div className="flex flex-1 flex-col gap-1.5" style={{ minWidth: 200 }}>
-              <label htmlFor="niv-home-newsletter-email" className="sr-only">
-                {t(locale, { he: 'כתובת אימייל', en: 'Email address' })}
-              </label>
-              <input
-                id="niv-home-newsletter-email"
-                type="email"
-                inputMode="email"
-                dir="ltr"
-                autoComplete="email"
-                placeholder={t(locale, { he: 'כתובת אימייל', en: 'Email address' })}
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value)
-                  if (status !== 'idle') setStatus('idle')
-                }}
-                aria-invalid={status === 'email'}
-                aria-describedby={status !== 'idle' ? 'niv-home-newsletter-error' : undefined}
-                className="w-full border-2 border-divider bg-white px-4 py-[13px] text-[15px] text-text placeholder:text-neutral-600 focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              />
-              {status !== 'idle' ? (
-                <p id="niv-home-newsletter-error" role="alert" className="m-0 text-[13px] font-semibold text-accent-700">
-                  {status === 'email' ? errorMessage : submitErrorMessage}
-                </p>
-              ) : null}
-            </div>
-            <button type="submit" disabled={submitting} className="btn btn-primary whitespace-nowrap px-6 py-[13px] text-[15px] disabled:opacity-60">
+          <p className="m-0 shrink-0 whitespace-nowrap font-heading text-[13px] font-extrabold tracking-[0.04em] text-neutral-800">
+            {t(locale, newsletterCard.title)}
+          </p>
+
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <label htmlFor="niv-home-newsletter-email" className="sr-only">
+              {t(locale, { he: 'כתובת אימייל', en: 'Email address' })}
+            </label>
+            <input
+              id="niv-home-newsletter-email"
+              type="email"
+              inputMode="email"
+              dir="ltr"
+              autoComplete="email"
+              placeholder={t(locale, { he: 'כתובת אימייל', en: 'Email address' })}
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value)
+                if (status !== 'idle') setStatus('idle')
+              }}
+              aria-invalid={status === 'email'}
+              aria-describedby={status !== 'idle' ? 'niv-home-newsletter-error' : undefined}
+              className="w-full min-w-0 max-w-[260px] border-2 border-divider bg-white px-3.5 py-2 text-[14px] text-text placeholder:text-neutral-600 focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            />
+            <button
+              type="submit"
+              disabled={submitting}
+              className="btn btn-primary shrink-0 whitespace-nowrap px-5 py-2 text-[14px] disabled:opacity-60"
+            >
               {submitting ? submittingLabel : submitLabel}
             </button>
           </div>
+
+          {status !== 'idle' || sent ? (
+            <p
+              id="niv-home-newsletter-error"
+              role="alert"
+              className="absolute start-0 top-full mt-1 text-[13px] font-semibold text-accent-700"
+            >
+              {status === 'email' ? errorMessage : status === 'submit' ? submitErrorMessage : successMessage}
+            </p>
+          ) : null}
         </form>
       </Section>
     </Breathe>
