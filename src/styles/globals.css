@@ -31,8 +31,6 @@
   --niv-slate: #314451;
   --tint-cream: #fbf0e3;
   --tint-slate: #eef1f2;
-  /** Soft, muted blue — the newsletter banner's background, distinguishing it from the cream/slate tints used elsewhere. */
-  --tint-blue: #e6edf5;
 }
 
 @theme {
@@ -97,7 +95,6 @@
   --color-niv-slate: var(--niv-slate);
   --color-tint-cream: var(--tint-cream);
   --color-tint-slate: var(--tint-slate);
-  --color-tint-blue: var(--tint-blue);
 }
 
 @layer base {

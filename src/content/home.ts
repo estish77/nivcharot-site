@@ -227,22 +227,14 @@ export const timelineItems: TimelineItem[] = [
 
 export const donateBand: {
   title: Localized
-  lead: Localized
   primaryCta: { label: Localized; slug: string }
-  secondaryCta: { label: Localized; slug: string }
 } = {
-  title: { he: 'לתת קול, להיבחר ולהשפיע', en: 'Speak up. Get elected. Make change.' },
-  lead: {
-    he: 'בואו להיות חלק מהשינוי שנבחרות עושה בעולם.',
-    en: 'Come be part of the change Nivcharot is making in the world.',
+  title: {
+    he: 'בואו להיות חלק מהשינוי שנבחרות עושה בעולם',
+    en: 'Come be part of the change Nivcharot is making in the world',
   },
-  /**
-   * Donate is the primary (filled, prominent) CTA — this whole section IS
-   * the home page's donate banner (2026-08-13 brief, item 18) — with Join
-   * as the secondary option, not the other way around.
-   */
+  /** This whole section IS the home page's donate banner (2026-08-13 brief, item 18) — one statement, one CTA. */
   primaryCta: { label: { he: 'למסלולי התמיכה', en: 'Support tracks' }, slug: 'donate' },
-  secondaryCta: { label: { he: 'בואו לקחת חלק', en: 'Take part' }, slug: 'join' },
 }
 
 // ---------------------------------------------------------------------------

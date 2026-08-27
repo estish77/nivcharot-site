@@ -24,51 +24,47 @@ function HeartIcon({ className }: { className?: string }) {
   )
 }
 
-const PODCAST_BAR_COUNT = 4
-const PODCAST_PULSE_DURATION_S = 1.6
-const PODCAST_BAR_DELAY_STEP_S = 0.16
+const PODCAST_PULSE_DURATION_S = 1.4
 
 /**
- * A "sound is playing" equalizer glyph — the header's link to `/podcast`.
- * A calm, slow, gently staggered breathing pulse (not a fast/erratic
- * visualizer) — each bar shares the same rhythm, just slightly out of
- * phase with its neighbors. Kept accent-colored at rest (not just on
- * hover, like a plain nav icon) and scales up slightly on hover, so it
- * reads as a live, clickable indicator rather than decoration. Bars scale
- * on their own vertical center (not height+position) so they never shift
- * the icon's baseline while animating. Sized larger than a typical nav
- * glyph (24x20, vs. the header's other ~18px icons) specifically so the
- * pulse is easy to notice at a glance.
+ * A "sound is playing" indicator — the header's link to `/podcast` — built
+ * from the universally recognized speaker + sound-wave glyph (the same
+ * silhouette as a volume/broadcast icon everywhere else on the web),
+ * rather than a custom abstract bar visualizer. The two wave arcs pulse
+ * outward from the speaker on a calm, gentle rhythm, staggered so the
+ * outer arc lags just behind the inner one — reads immediately as "sound
+ * playing," not as decoration. Scales up slightly on hover so it reads as
+ * a live, clickable indicator.
  */
 function PodcastIcon() {
   const shouldReduceMotion = useReducedMotion()
   return (
     <svg
-      viewBox="0 0 24 20"
-      width="24"
-      height="20"
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
       aria-hidden="true"
       className="transition-transform duration-300 ease-out group-hover:scale-110"
     >
-      {Array.from({ length: PODCAST_BAR_COUNT }, (_, i) => (
-        <motion.rect
-          key={i}
-          x={i * 6 + 2}
-          y={3}
-          width={3.5}
-          height={14}
-          rx={1.75}
-          fill="currentColor"
-          style={{ transformOrigin: 'center' }}
-          initial={false}
-          animate={shouldReduceMotion ? { scaleY: 0.6 } : { scaleY: [0.45, 1, 0.45] }}
-          transition={
-            shouldReduceMotion
-              ? { duration: 0 }
-              : { duration: PODCAST_PULSE_DURATION_S, repeat: Infinity, ease: 'easeInOut', delay: i * PODCAST_BAR_DELAY_STEP_S }
-          }
-        />
-      ))}
+      <path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor" />
+      <motion.path
+        d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"
+        fill="currentColor"
+        initial={false}
+        animate={shouldReduceMotion ? { opacity: 0.9 } : { opacity: [0.35, 1, 0.35] }}
+        transition={shouldReduceMotion ? { duration: 0 } : { duration: PODCAST_PULSE_DURATION_S, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.path
+        d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
+        fill="currentColor"
+        initial={false}
+        animate={shouldReduceMotion ? { opacity: 0.75 } : { opacity: [0.2, 0.85, 0.2] }}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { duration: PODCAST_PULSE_DURATION_S, repeat: Infinity, ease: 'easeInOut', delay: PODCAST_PULSE_DURATION_S * 0.2 }
+        }
+      />
     </svg>
   )
 }

@@ -20,28 +20,15 @@ export function DonateBand({ locale }: { locale: Locale }) {
     <Breathe as="section" className="relative bg-accent text-white">
       <div className="mx-auto" style={{ maxWidth: 1240, paddingInline: '32px', paddingBlock: '68px' }}>
         <div className="flex flex-wrap items-center justify-between gap-9">
-          <div style={{ maxWidth: 620 }}>
-            <h2 className="m-0 mb-3 text-white" style={{ fontSize: 'clamp(30px, 4vw, 50px)', lineHeight: 1.08 }}>
-              {t(locale, donateBand.title)}
-            </h2>
-            <p className="m-0 text-[15.5px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.92)' }}>
-              {t(locale, donateBand.lead)}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href={`/${locale}/${donateBand.primaryCta.slug}`}
-              className="btn whitespace-nowrap bg-white px-6 py-[13px] text-[15px] text-accent hover:bg-niv-slate hover:text-white focus-visible:bg-niv-slate focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              {t(locale, donateBand.primaryCta.label)}
-            </Link>
-            <Link
-              href={`/${locale}/${donateBand.secondaryCta.slug}`}
-              className="btn whitespace-nowrap border-white bg-transparent px-6 py-[13px] text-[15px] text-white hover:bg-niv-slate hover:border-niv-slate hover:text-white focus-visible:bg-niv-slate focus-visible:border-niv-slate focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              {t(locale, donateBand.secondaryCta.label)}
-            </Link>
-          </div>
+          <h2 className="m-0 text-white" style={{ maxWidth: 720, fontSize: 'clamp(30px, 4vw, 50px)', lineHeight: 1.08 }}>
+            {t(locale, donateBand.title)}
+          </h2>
+          <Link
+            href={`/${locale}/${donateBand.primaryCta.slug}`}
+            className="btn whitespace-nowrap bg-white px-6 py-[13px] text-[15px] text-accent hover:bg-niv-slate hover:text-white focus-visible:bg-niv-slate focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            {t(locale, donateBand.primaryCta.label)}
+          </Link>
         </div>
       </div>
     </Breathe>
