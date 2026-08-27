@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-import { DonateBand, GoalSection, Hero, MediaArchive, NewsletterSection, StatsBand, Timeline } from '@/components/home'
+import { DonateBand, GoalSection, Hero, MediaArchive, StatsBand, Timeline } from '@/components/home'
 import { Footer } from '@/components/ui/Footer'
 import { Header } from '@/components/ui/Header'
 import { getHomeContent, getNavigationLinks, getSiteSettings } from '@/lib/cms'
@@ -57,7 +57,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <GoalSection locale={locale} section={homeContent.goalSection ?? undefined} cards={homeContent.pillarCards} />
         <Timeline locale={locale} />
         <DonateBand locale={locale} />
-        <NewsletterSection locale={locale} />
         <MediaArchive locale={locale} />
       </main>
       <Footer locale={locale} donateHref={`/${locale}/donate`} contactEmail={siteSettings.contactEmail} social={siteSettings.social} />

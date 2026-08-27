@@ -28,7 +28,37 @@ const RING_DURATION_S = 7.2
 const RING_EASE = [0.45, 0, 0.55, 1] as const
 const RING_DELAY_STEP_S = 1.2
 
+/**
+ * Best-effort guest-name extraction from the Short's freeform YouTube
+ * title. Real titles from the channel follow several different shapes —
+ * sampled 25 real Shorts titles while building this: about 10 match
+ * "…מתוך הפרק (החדש) עם NAME[, more text]", 2 match the pipe-delimited
+ * "חרדית מדוברת | NAME | … | SHORT" format, and the rest embed the name as
+ * a plain sentence subject with no consistent marker at all (e.g. "יהודית
+ * יפרח מספרת איך…") — those can't be told apart from ordinary prose by
+ * regex without real risk of mis-cutting a person's name, so this only
+ * extracts the two patterns confirmed reliable and returns `null`
+ * otherwise, leaving the caller to fall back to the title itself.
+ */
+function guestNameFrom(title: string): string | null {
+  const pipeParts = title
+    .split('|')
+    .map((p) => p.trim())
+    .filter(Boolean)
+  if (pipeParts.length >= 2 && /^short$/i.test(pipeParts[pipeParts.length - 1])) {
+    return pipeParts[1] || null
+  }
+
+  // Stops at a comma, a period, " על " ("about" — several titles run
+  // straight from the name into "X על TOPIC" with no punctuation between
+  // them), or the end of the string.
+  const match = title.match(/מתוך הפרק(?: החדש)? עם ([^.,]+?)(?:,|\.|\s+על\s|$)/)
+  return match ? match[1].trim() : null
+}
+
 function captionFor(short: PodcastShort): string {
+  const guestName = guestNameFrom(short.title)
+  if (guestName) return guestName
   return short.title.length > 26 ? `${short.title.slice(0, 26).trim()}…` : short.title
 }
 
@@ -41,12 +71,17 @@ function captionFor(short: PodcastShort): string {
  * hover/focus outline. Tapping a story opens `StoryViewer`, an in-page
  * lightbox — not a navigation away to YouTube.
  *
- * The caption is the Short's own (truncated) title, not a parsed-out guest
- * name: titles follow a "מתוך הפרק עם X" pattern but aren't structured data
- * — regex-guessing a real person's name back out of free text risks
- * mis-cutting it, the same reason full-episode titles aren't parsed either
- * (see content/podcast.ts's `toLiveEpisode` comment). Flagged as a real,
- * open gap against the brief's "text below is the interviewee's name" ask.
+ * The caption is the guest's name where `captionFor()`/`guestNameFrom()`
+ * above can confidently pull one out of the Short's freeform YouTube
+ * title, falling back to the (truncated) title itself otherwise.
+ *
+ * `hqdefault.jpg` thumbnails for these (vertical, Shorts-format) videos
+ * come back as a landscape 480x360 frame with the real content letterboxed
+ * into a narrow strip in the middle, blurred/darkened copies of itself
+ * padding the sides (confirmed by fetching real thumbnails from the
+ * channel while building this) — plain `object-cover` alone still leaves
+ * those blurred bars visible inside the circle, so the `<img>` below also
+ * gets a fixed extra zoom to crop in past them onto just the real content.
  */
 export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; locale: Locale }) {
   const shouldReduceMotion = useReducedMotion()
@@ -108,7 +143,16 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
                     width={86}
                     height={86}
                     loading="lazy"
-                    className="block h-full w-full object-cover"
+                    // scale-[1.7] on top of object-cover: cropping a 480x360
+                    // hqdefault.jpg straight into this 1:1 circle already
+                    // crops in on the (centered) real content, but not far
+                    // enough — the blurred side padding (see this
+                    // component's own doc comment) is still wide enough to
+                    // show inside the circle at plain object-cover. 1.7x
+                    // was picked by inspecting real thumbnails: comfortably
+                    // clears the padding without zooming in past the guest's
+                    // face.
+                    className="block h-full w-full scale-[1.7] object-cover"
                   />
                 ) : (
                   <ImageSlot

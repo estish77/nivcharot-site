@@ -4,7 +4,8 @@ import { APIError } from 'payload'
 import { isAdminOrEditor } from '../access/isAdminOrEditor'
 
 /**
- * Newsletter signups from the home page (src/components/home/NewsletterSection.tsx).
+ * Newsletter signups from the home page (src/components/home/DonateBand.tsx,
+ * merged from the former NewsletterSection.tsx).
  * Public `create` (anonymous site visitors post here), admin/editor-only
  * read — transactional data, not editorial content, same shape as
  * `Inquiries.ts` (public create, honeypot, no localization, no revalidate

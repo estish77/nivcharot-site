@@ -96,13 +96,22 @@ function generateScatter(seats: SeatPos[]): ScatterDatum[] {
     return {
       x: +(s.cx + Math.cos(angle) * dist).toFixed(1),
       y: +(s.cy + Math.sin(angle) * dist).toFixed(1),
-      delay: +(Math.random() * 0.4).toFixed(2),
+      // Wider stagger spread (was 0-0.4s) so seats visibly converge one
+      // after another into the semicircle rather than nearly all at once.
+      delay: +(Math.random() * 0.9).toFixed(2),
     }
   })
 }
 
 const SCATTER = generateScatter(SEATS)
-const ENTRANCE_MS = 1300
+// Was 0.9s cx/cy + up to 0.4s stagger (ENTRANCE_MS 1300) — the whole hall
+// assembled almost as fast as it faded in, reading as a snap rather than a
+// deliberate gathering into the semicircle. Slower flight (0.9s -> 2.1s)
+// plus the wider stagger above (up to 0.9s) is meant to read as seats
+// genuinely arriving one after another; ENTRANCE_MS tracks the new
+// worst-case total (2.1 + 0.9 = 3.0s) so `entranceDone` still flips only
+// once every seat has actually finished landing.
+const ENTRANCE_MS = 3000
 
 /** Deterministic (non-random) pattern shown under prefers-reduced-motion — same on every render, no timers. */
 const STATIC_LIT: ReadonlySet<number> = new Set(SEATS.map((_, i) => i).filter((i) => i % 5 === 0))
@@ -149,8 +158,8 @@ const SeatCircle = memo(function SeatCircle({
         scale: lit ? [null, 1.35, 1] : 1,
       }}
       transition={{
-        cx: { duration: 0.9, ease: EASE, delay: scatter.delay },
-        cy: { duration: 0.9, ease: EASE, delay: scatter.delay },
+        cx: { duration: 2.1, ease: EASE, delay: scatter.delay },
+        cy: { duration: 2.1, ease: EASE, delay: scatter.delay },
         r: { duration: 0.32, ease: EASE },
         // Reuses the same slower, staggered timing for any opacity change that lands mid-entrance
         // (e.g. a seat getting claimed by a ring letter before it's finished flying in); once
