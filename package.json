@@ -30,6 +30,7 @@
     "@next/third-parties": "^16.3.0",
     "@payloadcms/db-postgres": "^3.87.0",
     "@payloadcms/db-sqlite": "^3.87.1",
+    "@payloadcms/email-nodemailer": "^3.87.1",
     "@payloadcms/next": "^3.87.0",
     "@payloadcms/richtext-lexical": "^3.87.0",
     "@payloadcms/storage-vercel-blob": "^3.87.1",

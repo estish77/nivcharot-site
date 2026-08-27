@@ -2,8 +2,9 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 import { ContactForm } from '@/components/contact/ContactForm'
-import { Eyebrow, Reveal, Section } from '@/components/ui'
-import { contactHero } from '@/content/contact'
+import { Eyebrow, Reveal, Section, SocialLinksRow, type SocialLinkItem } from '@/components/ui'
+import { contactDirect, contactEmail, contactHero } from '@/content/contact'
+import { getSiteSettings } from '@/lib/cms'
 import { isLocale, locales, t } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
 
@@ -32,6 +33,20 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale = rawLocale
+  const siteSettings = await getSiteSettings()
+  const inbox = siteSettings.contactEmail || contactEmail
+
+  // Same dashboard-editable source the footer and the media page read.
+  // Labels name the account rather than just the platform, so the two
+  // Instagram links don't end up with identical accessible names.
+  const socialLinks: SocialLinkItem[] = [
+    { network: 'facebook', href: siteSettings.social.facebook!, label: t(locale, { he: 'פייסבוק · נבחרות', en: 'Facebook · Nivcharot' }) },
+    { network: 'instagram', href: siteSettings.social.instagram!, label: t(locale, { he: 'אינסטגרם · נבחרות', en: 'Instagram · Nivcharot' }) },
+    { network: 'youtube', href: siteSettings.social.youtube!, label: t(locale, { he: 'יוטיוב · חרדית מדוברת', en: 'YouTube · Haredit Meduberet' }) },
+    { network: 'spotify', href: siteSettings.social.spotify!, label: t(locale, { he: 'ספוטיפיי · חרדית מדוברת', en: 'Spotify · Haredit Meduberet' }) },
+    { network: 'applePodcasts', href: siteSettings.social.applePodcasts!, label: t(locale, { he: 'אפל פודקאסטס · חרדית מדוברת', en: 'Apple Podcasts · Haredit Meduberet' }) },
+    { network: 'instagram', href: siteSettings.social.podcastInstagram!, label: t(locale, { he: 'אינסטגרם · חרדית מדוברת', en: 'Instagram · Haredit Meduberet' }) },
+  ]
 
   return (
     <Reveal as="section">
@@ -56,6 +71,26 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
           {t(locale, contactHero.lead)}
         </p>
         <ContactForm locale={locale} />
+
+        <div className="mt-12 border-t-2 border-divider pt-8">
+          <p className="m-0 mb-1.5 font-heading text-[11px] font-extrabold tracking-[0.14em] text-neutral-700">
+            {t(locale, contactDirect.emailHeading)}
+          </p>
+          <a
+            href={`mailto:${inbox}`}
+            dir="ltr"
+            className="inline-block font-heading text-[clamp(20px,2.6vw,26px)] font-extrabold text-accent-700 no-underline hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            {inbox}
+          </a>
+          <p className="m-0 mt-2 text-[14px] leading-[1.7] text-neutral-700">{t(locale, contactDirect.emailNote)}</p>
+
+          <SocialLinksRow
+            heading={t(locale, contactDirect.followHeading)}
+            links={socialLinks}
+            className="mt-8"
+          />
+        </div>
       </Section>
     </Reveal>
   )

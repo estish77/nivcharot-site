@@ -1,3 +1,4 @@
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -44,6 +45,25 @@ const databaseURI = process.env.DATABASE_URI || 'file:./payload.db'
  * blocks forever on an interactive confirmation prompt no real server can
  * answer. See .env.example for the recovery step if this ever happens.
  */
+const smtpHost = process.env.SMTP_HOST
+const smtpUser = process.env.SMTP_USER
+const smtpPass = process.env.SMTP_PASS
+
+const emailConfig = smtpHost && smtpUser && smtpPass
+  ? nodemailerAdapter({
+    defaultFromName: process.env.SMTP_FROM_NAME || 'נבחרות',
+    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || smtpUser,
+    transportOptions: {
+      host: smtpHost,
+      port: Number(process.env.SMTP_PORT || 587),
+      // Port 465 is implicit TLS; 587 and 25 start plaintext and upgrade
+      // with STARTTLS, which nodemailer does on its own when secure=false.
+      secure: Number(process.env.SMTP_PORT || 587) === 465,
+      auth: { user: smtpUser, pass: smtpPass },
+    },
+  })
+  : undefined
+
 const db = databaseURI.startsWith('file:')
   ? sqliteAdapter({ client: { url: databaseURI } })
   : postgresAdapter({ pool: { connectionString: databaseURI }, prodMigrations: migrations })
@@ -71,6 +91,23 @@ export default buildConfig({
     fallback: true,
   },
   db,
+  /**
+   * Outbound email, used by the contact form to forward each inquiry to the
+   * organization's inbox (see src/payload/collections/Inquiries.ts).
+   *
+   * Configured only when real SMTP credentials are present. Payload without
+   * an adapter logs messages to the console instead of sending them, which
+   * is the right behaviour for local development and for any deploy where
+   * the credentials have not been set yet: the inquiry is still saved to
+   * the collection either way, so a missing/incorrect mail configuration
+   * can never lose a visitor's message, it only delays the notification.
+   *
+   * SMTP rather than a provider SDK on purpose: it works unchanged with
+   * Gmail app passwords, Resend, Postmark, SendGrid or the organization's
+   * own mail host, so the choice of provider stays an ops decision and
+   * doesn't need a code change. See .env.example for the variables.
+   */
+  email: emailConfig,
   sharp,
   plugins: [
     // Same local-dev-vs-production split as `db` above: with no

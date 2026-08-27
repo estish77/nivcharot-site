@@ -12,6 +12,14 @@ import { isAdminOrEditor } from '../access/isAdminOrEditor'
  * `website` is a honeypot: rendered off-screen in the form so real visitors
  * never fill it, but naive spam bots that autofill every input do. Hidden
  * from the admin UI (`admin.hidden`) since editors never need to see it.
+ *
+ * 2026-08-27 brief ("whoever fills the form, the message they wrote has to
+ * reach me by email"): every new submission is now also forwarded to the
+ * organization's inbox by the `afterChange` hook below, on top of being
+ * stored here. The store is still the source of truth - the hook never
+ * throws, so a mail outage or missing SMTP credentials can delay the
+ * notification but can never lose the message or fail the visitor's
+ * submission.
  */
 export const Inquiries: CollectionConfig = {
   slug: 'inquiries',
@@ -63,6 +71,46 @@ export const Inquiries: CollectionConfig = {
           throw new APIError('Invalid submission.', 400, undefined, true)
         }
         return data
+      },
+    ],
+    afterChange: [
+      async ({ doc, operation, req }) => {
+        if (operation !== 'create') return doc
+
+        const to = process.env.CONTACT_INBOX || 'estish@nivcharot.com'
+        const from = doc?.name ? String(doc.name) : 'לא צוין'
+        const replyTo = doc?.email ? String(doc.email) : undefined
+        const body = [
+          `שם: ${from}`,
+          `אימייל: ${replyTo ?? 'לא צוין'}`,
+          `שפת הפנייה: ${doc?.locale ?? '—'}`,
+          '',
+          'ההודעה:',
+          String(doc?.message ?? ''),
+          '',
+          `— נשלח מטופס צור קשר באתר. הפנייה נשמרה גם בדשבורד (מזהה ${doc?.id}).`,
+        ].join('\n')
+
+        try {
+          await req.payload.sendEmail({
+            to,
+            // Reply hits the visitor directly; the From stays the site's own
+            // authenticated sender, since sending as the visitor's address
+            // would fail SPF/DMARC at most providers.
+            ...(replyTo ? { replyTo } : {}),
+            subject: `פנייה חדשה מהאתר: ${from}`,
+            text: body,
+          })
+        } catch (error) {
+          // Never fail the visitor's submission over a mail problem - the
+          // message is already saved, and that is what must not be lost.
+          req.payload.logger.error(
+            { err: error, inquiry: doc?.id },
+            'Contact form: saved the inquiry but could not send the notification email.',
+          )
+        }
+
+        return doc
       },
     ],
   },

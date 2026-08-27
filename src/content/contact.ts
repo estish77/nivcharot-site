@@ -45,3 +45,13 @@ export const contactForm = {
 }
 
 export const contactEmail = 'estish@nivcharot.com'
+
+/** Chrome for the direct-contact block and social row (2026-08-27 brief). */
+export const contactDirect = {
+  emailHeading: { he: 'במייל, ישירות', en: 'By email, directly' } satisfies Localized,
+  emailNote: {
+    he: 'מעדיפות לכתוב מהמייל שלכן? זו הכתובת.',
+    en: 'Prefer to write from your own inbox? This is the address.',
+  } satisfies Localized,
+  followHeading: { he: 'עקבו אחרינו', en: 'FOLLOW US' } satisfies Localized,
+} as const
