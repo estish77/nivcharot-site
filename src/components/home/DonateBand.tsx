@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { Breathe } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import { donateBand } from '@/content/home'
-import { EqualizerDots } from './EqualizerDots'
 
 /**
  * The home page's donate banner (2026-08-13 brief, item 18): a focused
@@ -19,9 +18,6 @@ import { EqualizerDots } from './EqualizerDots'
 export function DonateBand({ locale }: { locale: Locale }) {
   return (
     <Breathe as="section" className="relative bg-accent text-white">
-      <div className="absolute leading-none" style={{ insetBlockStart: '32px', insetInlineEnd: '32px' }}>
-        <EqualizerDots tone="accent" />
-      </div>
       <div className="mx-auto" style={{ maxWidth: 1240, paddingInline: '32px', paddingBlock: '68px' }}>
         <div className="flex flex-wrap items-center justify-between gap-9">
           <div style={{ maxWidth: 620 }}>

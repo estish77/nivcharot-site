@@ -25,13 +25,29 @@ function HeartIcon({ className }: { className?: string }) {
 }
 
 const PODCAST_BAR_COUNT = 4
-const PODCAST_PULSE_DURATION_S = 1.1
+// Distinct, non-round per-bar durations (not a shared delay off one period)
+// so the bars drift in and out of phase with each other — reads as a real
+// audio visualizer reacting to sound, not a single mechanically-synced pulse.
+const PODCAST_BAR_DURATIONS_S = [0.62, 0.8, 0.54, 0.88]
 
-/** A small idle-pulsing equalizer glyph — the header's link to `/podcast`. Bars scale on their own vertical center (not height+position) so they never shift the icon's baseline while pulsing. */
+/**
+ * A small always-on "sound is playing" equalizer glyph — the header's link
+ * to `/podcast`. Kept accent-colored at rest (not just on hover, like a
+ * plain nav icon) and scales up slightly on hover, so it reads as a live,
+ * clickable indicator rather than decoration. Bars scale on their own
+ * vertical center (not height+position) so they never shift the icon's
+ * baseline while animating.
+ */
 function PodcastIcon() {
   const shouldReduceMotion = useReducedMotion()
   return (
-    <svg viewBox="0 0 20 16" width="18" height="16" aria-hidden="true">
+    <svg
+      viewBox="0 0 20 16"
+      width="18"
+      height="16"
+      aria-hidden="true"
+      className="transition-transform duration-300 ease-out group-hover:scale-110"
+    >
       {Array.from({ length: PODCAST_BAR_COUNT }, (_, i) => (
         <motion.rect
           key={i}
@@ -43,12 +59,8 @@ function PodcastIcon() {
           fill="currentColor"
           style={{ transformOrigin: 'center' }}
           initial={false}
-          animate={shouldReduceMotion ? { scaleY: 0.6 } : { scaleY: [0.4, 1, 0.4] }}
-          transition={
-            shouldReduceMotion
-              ? { duration: 0 }
-              : { duration: PODCAST_PULSE_DURATION_S, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }
-          }
+          animate={shouldReduceMotion ? { scaleY: 0.55 } : { scaleY: [0.25, 1, 0.35, 0.9, 0.25] }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: PODCAST_BAR_DURATIONS_S[i], repeat: Infinity, ease: 'easeInOut' }}
         />
       ))}
     </svg>
@@ -160,7 +172,7 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
       >
         <Link
           href={`/${locale}/podcast`}
-          className="flex items-center text-neutral-700 hover:text-accent focus-visible:rounded-sm focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="group flex items-center text-accent-700 hover:text-accent focus-visible:rounded-sm focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           aria-label={t(locale, { he: 'הפודקאסט של נבחרות', en: "Nivcharot's podcast" })}
         >
           <PodcastIcon />

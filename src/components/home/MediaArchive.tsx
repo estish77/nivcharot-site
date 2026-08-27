@@ -5,7 +5,6 @@ import { arrowForward, t, type Locale } from '@/lib/i18n'
 import { mediaArchiveSection } from '@/content/home'
 import { homeCardExcerpt, pressItemHref } from '@/content/press-archive'
 import { getPressArchiveItems } from '@/lib/cms'
-import { EqualizerDots } from './EqualizerDots'
 
 /**
  * 2026-08-13 site owner brief, items 39/40: this teaser used to read four
@@ -30,9 +29,6 @@ export async function MediaArchive({ locale }: { locale: Locale }) {
   return (
     <Reveal as="section">
       <div className="relative mx-auto" style={{ maxWidth: 1240, paddingInline: '32px', paddingBlock: '72px' }}>
-        <div className="absolute leading-none" style={{ insetBlockStart: '32px', insetInlineEnd: '32px' }}>
-          <EqualizerDots tone="light" />
-        </div>
         <div className="mb-[22px] flex flex-col items-start gap-3">
           <h2 className="m-0">{t(locale, mediaArchiveSection.title)}</h2>
           <Link

@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { Cell, CellGrid, Eyebrow, Reveal, Tag } from '@/components/ui'
 import { arrowForward, t, type Locale } from '@/lib/i18n'
 import { goalSection, pillarCards, pillarTagLabel } from '@/content/home'
-import { EqualizerDots } from './EqualizerDots'
 
 export function GoalSection({
   locale,
@@ -23,9 +22,6 @@ export function GoalSection({
   return (
     <Reveal as="section">
       <div className="relative mx-auto" style={{ maxWidth: 1240, paddingInline: '32px', paddingBlockStart: '64px', paddingBlockEnd: '60px' }}>
-        <div className="absolute leading-none" style={{ insetBlockStart: '32px', insetInlineEnd: '32px' }}>
-          <EqualizerDots tone="light" />
-        </div>
         <div className="mb-[30px]">
           <Eyebrow className="mb-3">{t(locale, section.eyebrow)}</Eyebrow>
           <h2 className="m-0">

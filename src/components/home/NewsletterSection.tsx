@@ -5,7 +5,6 @@ import { useState, type FormEvent } from 'react'
 import { Breathe, Section } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import { joinCards } from '@/content/join'
-import { EqualizerDots } from './EqualizerDots'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -78,9 +77,6 @@ export function NewsletterSection({ locale }: { locale: Locale }) {
   return (
     <Breathe as="section" durationS={5}>
       <Section as="div" tint="tint-cream" paddingBlockStart="28px" paddingBlockEnd="28px" className="relative">
-        <div className="absolute leading-none" style={{ insetBlockStart: '18px', insetInlineEnd: '32px' }}>
-          <EqualizerDots tone="light" />
-        </div>
         <form onSubmit={handleSubmit} noValidate className="flex flex-wrap items-start justify-between gap-6">
           <div className="absolute h-px w-px overflow-hidden" aria-hidden="true">
             <label htmlFor="niv-home-newsletter-website">Leave this field empty</label>

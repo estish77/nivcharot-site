@@ -1,4 +1,3 @@
-import { EqualizerDots } from '@/components/team/EqualizerDots'
 import { CellGrid } from '@/components/ui/Cell'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Reveal } from '@/components/ui/Reveal'
@@ -40,9 +39,6 @@ export function JoinPageContent({ locale }: JoinPageContentProps) {
 
       <Reveal as="section" className="bg-accent">
         <div className="relative mx-auto max-w-[1080px] px-8 py-[72px] max-[860px]:px-[18px] max-[860px]:py-9">
-          <div className="absolute top-8 end-8 leading-none max-[860px]:end-[18px]">
-            <EqualizerDots tone="accent" />
-          </div>
           <div className="flex flex-wrap items-center justify-between gap-[22px]">
             <h2 className="max-w-[720px] text-[clamp(26px,3.5vw,40px)] leading-[1.2] text-white max-[860px]:text-[clamp(24px,7vw,34px)] max-[860px]:leading-[1.08]">
               {t(locale, joinQuote)}

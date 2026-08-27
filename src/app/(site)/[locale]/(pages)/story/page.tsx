@@ -5,7 +5,6 @@ import { Fragment, type ReactNode } from 'react'
 
 import { Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, TabBar } from '@/components/ui'
 import type { TabBarItem } from '@/components/ui'
-import { EqualizerDots } from '@/components/story/EqualizerDots'
 import { Timeline } from '@/components/story/Timeline'
 import { storyContent } from '@/content/story'
 import { pressItemHref } from '@/content/press-archive'
@@ -105,9 +104,6 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
 
       {/* CTA band */}
       <Reveal as="section" className="relative bg-accent">
-        <div className="absolute top-8 end-8 leading-none">
-          <EqualizerDots tone="accent" />
-        </div>
         <div className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-8 px-8 py-14">
           <h2 className="m-0 text-[clamp(26px,3.5vw,40px)] text-white">{t(locale, storyContent.cta.title)}</h2>
           <Link
@@ -122,9 +118,6 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
       {/* From the archive */}
       <Reveal as="section">
         <Section as="div" maxWidth={1240} paddingBlockStart="72px" paddingBlockEnd="72px" innerClassName="relative">
-          <div className="absolute top-8 end-8 leading-none">
-            <EqualizerDots tone="light" />
-          </div>
           <div className="mb-[22px] flex flex-col items-start gap-3">
             <h2 className="m-0">{t(locale, storyContent.archiveHead.title)}</h2>
             <Link href={`/${locale}${storyContent.archiveHead.hrefSlug}`} className={arrowLinkClass}>
