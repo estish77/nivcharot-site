@@ -2,13 +2,9 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { ArchiveHighlightsSection } from '@/components/podcast/ArchiveHighlightsSection'
-import { EpisodeArchiveSection } from '@/components/podcast/EpisodeArchiveSection'
-import { HeroSection } from '@/components/podcast/HeroSection'
-import { LatestEpisodeSection } from '@/components/podcast/LatestEpisodeSection'
-import { RecentEpisodesSection } from '@/components/podcast/RecentEpisodesSection'
-import { ShortsSection } from '@/components/podcast/ShortsSection'
+import { EpisodeDeskSection } from '@/components/podcast/EpisodeDeskSection'
+import { PodcastHeroSection } from '@/components/podcast/PodcastHeroSection'
 import { StoriesSection } from '@/components/podcast/StoriesSection'
-import { podcastEpisodes } from '@/content/podcast'
 import { isLocale, locales, t } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
 
@@ -40,11 +36,24 @@ export async function generateMetadata({
 }
 
 /**
- * "חרדית מדוברת" — the podcast page (docs/Podcast.dc.html). Header/Footer
- * render once in the locale root layout (src/app/(site)/[locale]/layout.tsx),
- * so this only assembles the page's own sections in source order: the
- * stories strip, hero, "recently" 3-up highlight grid, the latest-episode
- * player, the paginated full archive, and the archive/magazine strip.
+ * "חרדית מדוברת" — the podcast page. Header/Footer render once in the
+ * locale root layout, so this only assembles the page's own sections.
+ *
+ * 2026-08-27 brief ("do the same to the podcast"): this used to be seven
+ * stacked sections — stories, hero, a dark "recently" trio, the latest
+ * episode + player, the paginated archive, a Shorts grid, and the magazine
+ * strip — which meant a visitor met the same episode catalogue three
+ * separate times on the way down. It is now four:
+ *
+ *   1. the stories strip (unchanged — already compact and distinctive);
+ *   2. `PodcastHeroSection`, which merges the old hero with the latest
+ *      episode and its player side by side;
+ *   3. `EpisodeDeskSection`, one searchable, sortable, paginated desk over
+ *      every full episode AND every Short (replacing sections 3, 5 and 6);
+ *   4. the from-the-archive strip through to `/media`.
+ *
+ * No episode, Short, link or field was dropped in the merge — see
+ * `EpisodeDesk`'s comment for where each one now lives.
  */
 export default async function PodcastPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params
@@ -57,12 +66,9 @@ export default async function PodcastPage({ params }: { params: Promise<{ locale
 
   return (
     <>
-      <StoriesSection episodes={podcastEpisodes} locale={locale} />
-      <HeroSection locale={locale} />
-      <RecentEpisodesSection episodes={podcastEpisodes} locale={locale} />
-      <LatestEpisodeSection episodes={podcastEpisodes} locale={locale} />
-      <EpisodeArchiveSection episodes={podcastEpisodes} locale={locale} />
-      <ShortsSection locale={locale} />
+      <StoriesSection locale={locale} />
+      <PodcastHeroSection locale={locale} />
+      <EpisodeDeskSection locale={locale} />
       <ArchiveHighlightsSection locale={locale} />
     </>
   )

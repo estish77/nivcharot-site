@@ -194,9 +194,6 @@ export const podcastEpisodes: PodcastEpisode[] = RAW_EPISODES.map((raw, i) =>
   toEpisode(raw, RAW_EPISODES.length - i),
 )
 
-/** Archive accordion + pagination controls page size (mockup: `const PER = 10`). */
-export const PODCAST_PAGE_SIZE = 10
-
 /**
  * Maps one real, live-fetched YouTube RSS entry into the same
  * `PodcastEpisode` shape `toEpisode()` produces for the hardcoded fixture,
@@ -228,7 +225,7 @@ export const PODCAST_PAGE_SIZE = 10
  * `<media:description>` verbatim: real YouTube descriptions on this
  * channel are multi-paragraph and end in a repeated block of social-link
  * boilerplate ("ערוץ יוטיוב / https://bit.ly/…", etc. — see the sample in
- * src/lib/youtube.ts's doc comment). `LatestEpisodeSection`/`EpisodeArchive`
+ * src/lib/youtube.ts's doc comment). `PodcastHeroSection`/`EpisodeDesk`
  * render this field in full, with no length cap, so passing the raw text
  * through would dump that entire link list into the page. Taking just the
  * first paragraph is the same "real lead, not a summary we invented" move
@@ -262,14 +259,14 @@ function toLiveEpisode(entry: YoutubeFeedEntry, number: number): PodcastEpisode 
 
 /**
  * The podcast page's real data source (item 9/10 of the live-data
- * follow-up brief) — every section (stories strip, "recently" 3-up,
- * latest-episode hero, full archive) should call this instead of importing
- * `podcastEpisodes` directly, so all four read the exact same, current,
+ * follow-up brief) — every section (stories strip, latest-episode hero,
+ * the episode desk) should call this instead of importing
+ * `podcastEpisodes` directly, so they all read the exact same, current,
  * newest-first list. Falls back to the hardcoded `podcastEpisodes` fixture
  * whenever the live fetch fails or returns nothing; never throws.
  *
  * This is also what keeps the "latest episode" hero
- * (`LatestEpisodeSection`, `episodes[0]`) honest against the Spotify
+ * (`PodcastHeroSection`, `episodes[0]`) honest against the Spotify
  * embed next to it: that iframe embeds the whole SHOW
  * (`open.spotify.com/embed/show/<id>`), not a single pinned episode — there
  * is no real per-episode Spotify id in this data to point it at instead —

@@ -66,7 +66,16 @@ export function ArchiveHighlightsSection({ locale }: { locale: Locale }) {
                   {t(locale, post.dateLabel)}
                 </span>
                 <span className="font-heading text-[17px] font-extrabold leading-[1.35]">{t(locale, post.title)}</span>
-                <span className="text-[13.5px] leading-[1.6] text-neutral-700">{t(locale, post.summary)}</span>
+                {/*
+                  Clamped, 2026-08-27 redesign: these are full press-archive
+                  summaries (a substantive paragraph each, by design — see
+                  press-archive.ts), so printed in full four of them made
+                  this closing strip taller than the episode desk above it.
+                  The whole text stays one click away on `/media`.
+                */}
+                <span className="line-clamp-4 text-[13.5px] leading-[1.6] text-neutral-700">
+                  {t(locale, post.summary)}
+                </span>
               </Link>
             )
           })}

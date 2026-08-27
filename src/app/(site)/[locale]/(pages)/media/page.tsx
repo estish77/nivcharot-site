@@ -1,34 +1,41 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-import type { FilterChip } from '@/components/media/ArchiveFilters'
-import { ArchiveFilters } from '@/components/media/ArchiveFilters'
-import { ElsewhereMediaSection } from '@/components/media/ElsewhereMediaSection'
-import { PostCard } from '@/components/media/PostCard'
-import { PressArchiveSection } from '@/components/media/PressArchiveSection'
-import { Button, CellGrid, Eyebrow, Reveal, Section, SectionHead } from '@/components/ui'
-import { categoryChips, filterArchivePosts, yearChips } from '@/content/media'
-import { elsewhereMediaText } from '@/content/elsewhere-media'
-import { pressArchiveText } from '@/content/press-archive'
+import { MediaDesk } from '@/components/media/MediaDesk'
+import { MediaMasthead, type MastheadStat } from '@/components/media/MediaMasthead'
+import { Eyebrow, Reveal, Section } from '@/components/ui'
+import { mediaDeskText } from '@/content/media-desk'
 import { getArchivePosts, getElsewhereMediaItems, getPressArchiveItems } from '@/lib/cms'
 import { isLocale, locales, t, type Locale } from '@/lib/i18n'
+import { buildMediaEntries } from '@/lib/mediaEntries'
 import { pageMetadata } from '@/lib/seo'
 
 type Params = { locale: string }
-type SearchParams = { cat?: string | string[]; year?: string | string[] }
 
 /**
- * The media/press archive index (linked as `Media.dc.html#archive`
- * throughout the mockups, but never itself drawn — see the task brief).
- * Built in the established visual language (`SectionHead` + category/year
- * `Tag` filter chips + a `CellGrid` of post cards), using
- * docs/ArchiveTemp.dc.html only for its filter/sort *behaviour*, not its
- * styling, per the brief. The event-galleries section that used to live
- * here moved to the Activism page's Gatherings section (2026-08-13 brief).
+ * The media/press archive index.
  *
- * Filters are plain `?cat=&year=` search params read on the server, so
- * every filtered view is a real, linkable, server-rendered URL — no
- * client-side state.
+ * 2026-08-27 brief: this page used to be four long, independently filtered
+ * sections stacked one under another — outside press coverage (70+
+ * full-height rows), three grids of podcast/video/talk embeds, and the
+ * archive-post grid with its own `?cat=&year=` server-side filter chips.
+ * All the material was there, but reaching any of it meant scrolling past
+ * everything above it, and nothing gave a view of the collection as a
+ * whole.
+ *
+ * It is now a short masthead plus ONE explorer (`MediaDesk`) over exactly
+ * the same, complete data: every source is normalized into a common row
+ * shape (`buildMediaEntries`) with no field dropped, then searched,
+ * faceted, sorted and paginated together. See `MediaDesk`'s own comment
+ * for the interaction model, and `mediaEntries.ts` for the mapping.
+ *
+ * Filters live in client state rather than `?cat=&year=` search params
+ * now: with one control surface spanning three formerly separate datasets,
+ * round-tripping every chip click through the server (and re-rendering
+ * every embed with it) cost far more than linkable filter URLs were worth.
+ * The section anchors that other pages link to (`#in-the-media`,
+ * `#elsewhere`, `#archive`) are preserved below and open the desk on the
+ * matching bucket.
  */
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -50,162 +57,94 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   })
 }
 
-function firstParam(value: string | string[] | undefined): string | undefined {
-  return Array.isArray(value) ? value[0] : value
-}
-
-function archiveHref(locale: Locale, cat: string | undefined, year: string | undefined): string {
-  const qs = new URLSearchParams()
-  if (cat) qs.set('cat', cat)
-  if (year) qs.set('year', year)
-  const query = qs.toString()
-  return `/${locale}/media${query ? `?${query}` : ''}#archive`
-}
-
-export default async function MediaArchivePage({
-  params,
-  searchParams,
-}: {
-  params: Promise<Params>
-  searchParams: Promise<SearchParams>
-}) {
+export default async function MediaArchivePage({ params }: { params: Promise<Params> }) {
   const { locale: rawLocale } = await params
   if (!isLocale(rawLocale)) {
     notFound()
   }
   const locale: Locale = rawLocale
 
-  const sp = await searchParams
-  const currentCat = firstParam(sp.cat)
-  const currentYear = firstParam(sp.year)
-
-  const [archivePosts, pressArchiveItemsSorted, elsewhereMedia] = await Promise.all([
-    getArchivePosts(),
+  const [press, elsewhere, posts] = await Promise.all([
     getPressArchiveItems(),
     getElsewhereMediaItems(),
+    getArchivePosts(),
   ])
 
-  const filtered = filterArchivePosts({ category: currentCat, year: currentYear }, archivePosts)
-  const postsInCategory = filterArchivePosts({ category: currentCat }, archivePosts)
-
-  const categoryFilterChips: FilterChip[] = [
+  const entries = buildMediaEntries(
     {
-      key: 'all',
-      label: `${t(locale, { he: 'הכול', en: 'All' })} (${archivePosts.length})`,
-      href: archiveHref(locale, undefined, currentYear),
-      active: !currentCat,
+      press,
+      podcasts: elsewhere.podcasts,
+      videos: elsewhere.videos,
+      talks: elsewhere.talks,
+      posts,
     },
-    ...categoryChips(archivePosts).map((c) => ({
-      key: c.slug,
-      label: `${c.name} (${c.count})`,
-      href: archiveHref(locale, c.slug, currentYear),
-      active: currentCat === c.slug,
-    })),
-  ]
+    locale,
+  )
 
-  const yearFilterChips: FilterChip[] = [
+  const years = entries.map((entry) => entry.year).filter((year) => Number.isFinite(year))
+  const firstYear = years.length ? Math.min(...years) : null
+  const lastYear = years.length ? Math.max(...years) : null
+
+  const stats: MastheadStat[] = [
+    { value: String(press.length), label: t(locale, mediaDeskText.statPress) },
     {
-      key: 'all',
-      label: t(locale, { he: 'כל השנים', en: 'All years' }),
-      href: archiveHref(locale, currentCat, undefined),
-      active: !currentYear,
+      value: String(elsewhere.podcasts.length + elsewhere.videos.length + elsewhere.talks.length),
+      label: t(locale, mediaDeskText.statWatch),
     },
-    ...yearChips(postsInCategory).map((y) => ({
-      key: String(y),
-      label: String(y),
-      href: archiveHref(locale, currentCat, String(y)),
-      active: currentYear === String(y),
-    })),
+    { value: String(posts.length), label: t(locale, mediaDeskText.statArchive) },
+    {
+      value: firstYear && lastYear ? `${firstYear}–${lastYear}` : '—',
+      label: t(locale, mediaDeskText.statYears),
+    },
   ]
 
   return (
     <>
       <Reveal as="section">
-        <Section as="div" paddingBlockStart="56px" paddingBlockEnd="24px">
+        <Section as="div" paddingBlockStart="52px" paddingBlockEnd="34px">
           <Eyebrow className="mb-3.5">{t(locale, { he: 'תקשורת וארכיון', en: 'MEDIA & ARCHIVE' })}</Eyebrow>
           <h1 className="mb-[18px] text-[clamp(32px,4.4vw,48px)] leading-[1.08]">
             {t(locale, { he: 'נבחרות בתקשורת ובשטח', en: 'Nivcharot in the media and in the field' })}
           </h1>
-          <p className="mb-7 max-w-[660px] text-base leading-[1.7] text-neutral-800">
+          <p className="mb-7 max-w-[680px] text-base leading-[1.7] text-neutral-800">
             {t(locale, {
-              he: 'כל הכתבות, ההודעות לתקשורת והניוזלטרים שנאספו מהפעילות של נבחרות, לצפייה, לשיתוף ולמעקב אחרי מה שקורה.',
-              en: "Every article, media release and newsletter from Nivcharot's work, to read, share and follow along.",
+              he: 'כל הכתבות, הראיונות, הפודקאסטים, ההודעות לתקשורת והניוזלטרים שנאספו מהפעילות של נבחרות, במקום אחד: לחפש, לסנן לפי סוג ולפי שנה, ולפתוח כל פריט בלי לצאת מהעמוד.',
+              en: "Every article, interview, podcast, media release and newsletter from Nivcharot's work, in one place: search it, filter it by kind and by year, and open any item without leaving the page.",
             })}
           </p>
-          <div className="flex flex-wrap gap-3">
-            <Button href="#in-the-media" variant="primary">
-              {t(locale, { he: 'לתקשורת ↓', en: 'In the media ↓' })}
-            </Button>
-            <Button href="#elsewhere" variant="secondary">
-              {t(locale, { he: 'לפודקאסטים ולוידאו ↓', en: 'Podcasts & video ↓' })}
-            </Button>
-            <Button href={`/${locale}/activism#gatherings`} variant="secondary">
-              {t(locale, { he: 'לגלריות מפעילות ←', en: '→ Activity galleries' })}
-            </Button>
-          </div>
+          <MediaMasthead stats={stats} />
+          <p className="mt-5 text-[13.5px] leading-[1.7] text-neutral-700">
+            {t(locale, { he: 'מחפשים תמונות מהשטח? ', en: 'Looking for photos from the field? ' })}
+            <a
+              href={`/${locale}/activism#gatherings`}
+              className="font-heading text-[13.5px] font-extrabold text-accent-700 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              {t(locale, { he: 'לגלריות מהפעילות ←', en: '→ Activity galleries' })}
+            </a>
+          </p>
         </Section>
       </Reveal>
 
       <Reveal as="section" index={1}>
-        <Section as="div" id="in-the-media" borderBlockStart paddingBlockStart="56px" paddingBlockEnd="64px">
-          <SectionHead
-            eyebrow={t(locale, pressArchiveText.eyebrow)}
-            title={t(locale, pressArchiveText.title)}
-            lead={t(locale, pressArchiveText.lead)}
-            titleClassName="text-[clamp(24px,3vw,32px)]"
-            className="mb-[26px]"
-          />
-          <PressArchiveSection items={pressArchiveItemsSorted} locale={locale} />
-        </Section>
-      </Reveal>
+        <Section as="div" id="desk" borderBlockStart paddingBlockStart="46px" paddingBlockEnd="72px">
+          {/*
+            Anchor targets kept for the inbound links the four old sections
+            owned (`/media#in-the-media` from the home strip, the story
+            timeline and `/press/[slug]`; `/media#archive` from
+            `/media/[slug]` and the activism sub-nav). `MediaDesk` reads the
+            same hashes and opens on the bucket each one used to point at.
+          */}
+          <span id="in-the-media" aria-hidden="true" className="block" />
+          <span id="elsewhere" aria-hidden="true" className="block" />
+          <span id="archive" aria-hidden="true" className="block" />
 
-      <Reveal as="section" index={2}>
-        <Section as="div" id="elsewhere" borderBlockStart paddingBlockStart="56px" paddingBlockEnd="64px">
-          <SectionHead
-            eyebrow={t(locale, elsewhereMediaText.eyebrow)}
-            title={t(locale, elsewhereMediaText.title)}
-            lead={t(locale, elsewhereMediaText.lead)}
-            titleClassName="text-[clamp(24px,3vw,32px)]"
-            className="mb-[26px]"
-          />
-          <ElsewhereMediaSection
-            podcasts={elsewhereMedia.podcasts}
-            videos={elsewhereMedia.videos}
-            talks={elsewhereMedia.talks}
-            locale={locale}
-          />
-        </Section>
-      </Reveal>
-
-      <Reveal as="section" index={3}>
-        <Section as="div" id="archive" borderBlockStart paddingBlockStart="56px" paddingBlockEnd="64px">
-          <div className="mb-[22px] flex flex-wrap items-end justify-between gap-7">
-            <SectionHead
-              title={t(locale, { he: 'רשומות מהארכיון', en: 'Archive posts' })}
-              titleClassName="text-[clamp(24px,3vw,32px)]"
-            />
-            <div className="whitespace-nowrap font-heading text-[13px] font-extrabold text-neutral-700">
-              {t(locale, {
-                he: `${filtered.length} רשומות מתוך ${archivePosts.length}`,
-                en: `${filtered.length} of ${archivePosts.length} posts`,
-              })}
-            </div>
+          <div className="mb-7 max-w-[720px]">
+            <Eyebrow className="mb-3">{t(locale, mediaDeskText.eyebrow)}</Eyebrow>
+            <h2 className="text-[clamp(24px,3vw,32px)]">{t(locale, mediaDeskText.title)}</h2>
+            <p className="mt-4 text-[16px] leading-[1.7] text-neutral-800">{t(locale, mediaDeskText.lead)}</p>
           </div>
-          <ArchiveFilters categoryChips={categoryFilterChips} yearChips={yearFilterChips} />
-          {filtered.length > 0 ? (
-            <CellGrid cols={3} className="mt-6">
-              {filtered.map((post) => (
-                <PostCard key={post.slug} post={post} locale={locale} />
-              ))}
-            </CellGrid>
-          ) : (
-            <p className="py-7 text-[15px] text-neutral-700">
-              {t(locale, {
-                he: 'אין רשומות בחיתוך הזה. נסו קטגוריה או שנה אחרת.',
-                en: 'No posts match this filter. Try a different category or year.',
-              })}
-            </p>
-          )}
+
+          <MediaDesk entries={entries} locale={locale} />
         </Section>
       </Reveal>
     </>

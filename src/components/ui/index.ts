@@ -70,3 +70,6 @@ export type { StatCounterProps } from './StatCounter'
 
 export { TabBar } from './TabBar'
 export type { TabBarProps, TabBarItem } from './TabBar'
+
+export { DeskTabs, DeskSearch, SegmentedControl, YearRail, DeskPagination } from './DeskControls'
+export type { DeskTabItem, SegmentedOption, YearBucket } from './DeskControls'
