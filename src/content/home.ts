@@ -233,10 +233,10 @@ export const donateBand: {
   primaryCta: { label: Localized; slug: string }
   secondaryCta: { label: Localized; slug: string }
 } = {
-  title: { he: 'לתת קול. להיבחר. להשפיע.', en: 'A voice. A vote. A seat.' },
+  title: { he: 'לתת קול, להיבחר ולהשפיע', en: 'Speak up. Get elected. Make change.' },
   lead: {
-    he: 'הוראת קבע חודשית לפודקאסט, להכשרת המנהיגות או לפעילות כולה, ותשורה שמגיעה אליכם הביתה.',
-    en: 'A monthly standing order for the podcast, the leadership program or the whole operation, with a reward that ships to your door.',
+    he: 'בואו להיות חלק מהשינוי שנבחרות עושה בעולם.',
+    en: 'Come be part of the change Nivcharot is making in the world.',
   },
   /**
    * Donate is the primary (filled, prominent) CTA — this whole section IS

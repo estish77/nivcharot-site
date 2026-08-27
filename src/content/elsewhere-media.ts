@@ -32,6 +32,8 @@ export type ElsewhereMediaItem = {
   url: string
   /** Honest caveat shown alongside the item — used only where one applies. */
   note?: Localized<string>
+  /** Optional cover image. Podcasts without one fall back to the waveform icon tile. */
+  image?: { src: string; alt: string }
 }
 
 export const otherPodcasts: ElsewhereMediaItem[] = [

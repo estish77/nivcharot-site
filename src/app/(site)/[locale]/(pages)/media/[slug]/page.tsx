@@ -106,7 +106,16 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
               </span>
             ) : null}
           </div>
-          {post.cover ? (
+          {post.cover?.src ? (
+            <Figure
+              src={post.cover.src}
+              alt={post.cover.alt}
+              grayscale
+              aspectRatio="16/9"
+              className="mt-7 overflow-hidden border-2 border-divider"
+              mediaClassName="object-cover"
+            />
+          ) : post.cover ? (
             <Figure grayscale className="relative mt-7 aspect-video overflow-hidden border-2 border-divider bg-neutral-200">
               <ImageSlot label={post.cover.alt} className="absolute inset-0 h-full w-full" />
             </Figure>

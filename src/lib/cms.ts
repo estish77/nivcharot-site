@@ -276,7 +276,7 @@ export async function getStoryContent(locale: Locale): Promise<SimpleHeroContent
 
 export async function getActivismContent(
   locale: Locale,
-): Promise<{ hero: SimpleHeroContent; halakha: SimpleHeroContent }> {
+): Promise<{ hero: SimpleHeroContent; halakha: SimpleHeroContent; halakhaDocumentUrl?: string }> {
   const fallback = {
     hero: {
       eyebrow: activismHero.eyebrow[locale],
@@ -298,6 +298,10 @@ export async function getActivismContent(
     const hero = (doc?.hero ?? {}) as Record<string, unknown>
     const intros = Array.isArray(doc?.sectionIntros) ? (doc.sectionIntros as Record<string, unknown>[]) : []
     const halakhaIntro = intros.find((intro) => intro?.key === 'halakha')
+    const halakhaDocument =
+      doc?.halakhaDocument && typeof doc.halakhaDocument === 'object'
+        ? (doc.halakhaDocument as unknown as Record<string, unknown>)
+        : null
 
     return {
       hero: {
@@ -312,6 +316,7 @@ export async function getActivismContent(
             body: resolveLocalizedValue(halakhaIntro.body, locale, fallback.halakha.body),
           }
         : fallback.halakha,
+      halakhaDocumentUrl: halakhaDocument?.url ? String(halakhaDocument.url) : undefined,
     }
   } catch {
     return fallback
@@ -595,7 +600,7 @@ export async function getElsewhereMediaItems(): Promise<{
         where: { reviewStatus: { equals: 'keep' } },
         sort: '-sortDate',
         limit: 500,
-        depth: 0,
+        depth: 1,
       }),
     )
     if (!res.docs.length) return fallback
@@ -603,6 +608,8 @@ export async function getElsewhereMediaItems(): Promise<{
     const items: ElsewhereMediaItem[] = res.docs.map((doc) => {
       const d = doc as unknown as Record<string, unknown>
       const note = toLocalizedPair(d.note)
+      const image = d.image && typeof d.image === 'object' ? (d.image as Record<string, unknown>) : null
+      const imageAlt = image ? toLocalizedPair(image.alt) : null
       return {
         slug: String(d.slug ?? ''),
         kind: d.kind as ElsewhereMediaItem['kind'],
@@ -614,6 +621,7 @@ export async function getElsewhereMediaItems(): Promise<{
         sourceLanguage: (d.sourceLanguage as ElsewhereMediaItem['sourceLanguage']) ?? 'he',
         url: String(d.url ?? ''),
         note: note.he || note.en ? note : undefined,
+        image: image?.url ? { src: String(image.url), alt: imageAlt?.he || imageAlt?.en || String(d.host ?? '') } : undefined,
       }
     })
     return {
@@ -661,13 +669,15 @@ export async function getArchivePosts(): Promise<ArchivePost[]> {
           .map((c) => (c && typeof c === 'object' ? String((c as Record<string, unknown>).slug ?? '') : String(c ?? '')))
           .filter(Boolean)
         : []
+      const coverImage = d.coverImage && typeof d.coverImage === 'object' ? (d.coverImage as Record<string, unknown>) : null
+      const coverAlt = coverImage ? toLocalizedPair(coverImage.alt) : null
       return {
         slug: String(d.slug ?? ''),
         title: titlePair.he || titlePair.en,
         date: String(d.date ?? '').slice(0, 10),
         categories,
         body: lexicalToParagraphs(bodyLexical),
-        cover: undefined,
+        cover: coverImage?.url ? { src: String(coverImage.url), alt: (coverAlt?.he || coverAlt?.en || titlePair.he || titlePair.en) } : undefined,
         sourceLinks: Array.isArray(d.sourceLinks)
           ? (d.sourceLinks as Record<string, unknown>[]).map((l) => ({ label: String(l.label ?? ''), url: String(l.url ?? '') }))
           : undefined,
@@ -715,6 +725,7 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
           : null,
         order: Number(d.order ?? 0),
         active: Boolean(d.active),
+        category: (d.category as TeamMember['category']) ?? 'staff',
       }
     })
   } catch {

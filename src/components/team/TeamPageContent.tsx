@@ -2,10 +2,12 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Reveal } from '@/components/ui/Reveal'
 import { TabBar } from '@/components/ui/TabBar'
 import { t, type Locale } from '@/lib/i18n'
-import { teamHero, teamSectionIntro } from '@/content/team'
+import { teamHero, teamMemberCategoryLabels, teamSectionIntro, type TeamMember, type TeamMemberCategory } from '@/content/team'
 import { getTeamMembers } from '@/lib/cms'
 import { EqualizerDots } from './EqualizerDots'
 import { TeamMemberCard } from './TeamMemberCard'
+
+const CATEGORY_ORDER: TeamMemberCategory[] = ['central-team', 'central-activity', 'staff']
 
 export type TeamPageContentProps = { locale: Locale }
 
@@ -28,6 +30,12 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
 
   const teamMembers = await getTeamMembers()
   const visibleMembers = teamMembers.filter((member) => member.active).sort((a, b) => a.order - b.order)
+  const groupedMembers: [TeamMemberCategory, TeamMember[]][] = CATEGORY_ORDER.map(
+    (category): [TeamMemberCategory, TeamMember[]] => [
+      category,
+      visibleMembers.filter((member) => (member.category ?? 'staff') === category),
+    ],
+  ).filter(([, members]) => members.length > 0)
 
   return (
     <>
@@ -51,11 +59,24 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
         <div className="flex items-center justify-between gap-[22px]">
           <h2 className="mb-[30px] max-[860px]:text-[clamp(24px,7vw,34px)]">{t(locale, teamSectionIntro.title)}</h2>
         </div>
-        <div className="grid grid-cols-3 gap-x-[26px] gap-y-8 max-[860px]:grid-cols-2 max-[560px]:grid-cols-1">
-          {visibleMembers.map((member) => (
-            <TeamMemberCard key={member.id} member={member} locale={locale} />
-          ))}
-        </div>
+        {groupedMembers.length > 1
+          ? groupedMembers.map(([category, members], i) => (
+              <div key={category} className={i > 0 ? 'mt-[42px]' : undefined}>
+                <h3 className="mb-5 text-[18px]">{t(locale, teamMemberCategoryLabels[category])}</h3>
+                <div className="grid grid-cols-3 gap-x-[26px] gap-y-8 max-[860px]:grid-cols-2 max-[560px]:grid-cols-1">
+                  {members.map((member) => (
+                    <TeamMemberCard key={member.id} member={member} locale={locale} />
+                  ))}
+                </div>
+              </div>
+            ))
+          : (
+              <div className="grid grid-cols-3 gap-x-[26px] gap-y-8 max-[860px]:grid-cols-2 max-[560px]:grid-cols-1">
+                {visibleMembers.map((member) => (
+                  <TeamMemberCard key={member.id} member={member} locale={locale} />
+                ))}
+              </div>
+            )}
       </Reveal>
     </>
   )

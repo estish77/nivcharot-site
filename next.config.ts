@@ -20,6 +20,19 @@ const nextConfig: NextConfig = {
   experimental: {
     globalNotFound: true,
   },
+  // `next/image` hard-errors on any external host not listed here. Without
+  // this, real YouTube thumbnails (src/lib/youtube.ts) and — once
+  // BLOB_READ_WRITE_TOKEN is set in production — every Payload media upload
+  // served from Vercel Blob would be unrenderable through next/image
+  // sitewide. i.ytimg.com is already used today via a plain `<img>` as a
+  // workaround (see src/components/podcast/StoriesStrip.tsx); this makes
+  // next/image usable for that host too.
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'i.ytimg.com' },
+      { protocol: 'https', hostname: '*.public.blob.vercel-storage.com' },
+    ],
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

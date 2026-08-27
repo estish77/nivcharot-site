@@ -32,7 +32,7 @@ export const Media: CollectionConfig = {
     // BLOB_READ_WRITE_TOKEN is set, so production uploads don't land on a
     // disk that doesn't survive a deploy.
     staticDir: 'media',
-    mimeTypes: ['image/*'],
+    mimeTypes: ['image/*', 'application/pdf'],
     focalPoint: true,
     imageSizes: [
       { name: 'thumbnail', width: 400, height: 300, position: 'centre' },

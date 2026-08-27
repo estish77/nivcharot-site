@@ -1,4 +1,6 @@
-import { Reveal, Section } from '@/components/ui'
+import Image from 'next/image'
+
+import { ImageSlot, Reveal, Section } from '@/components/ui'
 import type { PodcastEpisode } from '@/content/podcast'
 import { getPodcastEpisodes, podcastText } from '@/content/podcast'
 import type { Locale } from '@/lib/i18n'
@@ -57,6 +59,16 @@ export async function RecentEpisodesSection({
                 borderInlineEnd: i !== featured.length - 1 ? '2px solid rgba(249, 218, 187, 0.28)' : undefined,
               }}
             >
+              <div className="relative aspect-video w-full overflow-hidden border-2 border-[rgba(249,218,187,0.28)] bg-[#141210]">
+                {episode.thumbnailUrl ? (
+                  <Image src={episode.thumbnailUrl} alt={episodeLabel(episode, locale)} fill sizes="(max-width: 860px) 100vw, 33vw" className="object-cover" />
+                ) : (
+                  <ImageSlot
+                    label={t(locale, { he: 'תמונת הפרק', en: 'Episode image' })}
+                    className="absolute inset-0 h-full w-full border-0 bg-transparent text-[#e3ded7]"
+                  />
+                )}
+              </div>
               <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-accent-300">
                 {shortDateLabel(episode.publishedAt, locale)}
               </span>

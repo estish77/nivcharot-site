@@ -52,7 +52,8 @@ export type ArchivePost = {
   categories: string[]
   /** Paragraphs of Hebrew body copy. */
   body: string[]
-  cover?: { alt: string }
+  /** `src` is only ever set for a real Payload-uploaded cover; the static fallback fixture below only ever has `alt` (renders as an `ImageSlot` placeholder). */
+  cover?: { src?: string; alt: string }
   sourceLinks?: ArchiveSourceLink[]
   featured?: boolean
 }

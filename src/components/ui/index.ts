@@ -9,6 +9,9 @@ export type { ClassValue } from './cn'
 export { Reveal } from './Reveal'
 export type { RevealProps, RevealTag } from './Reveal'
 
+export { Breathe } from './Breathe'
+export type { BreatheProps, BreatheTag } from './Breathe'
+
 export { Logo } from './Logo'
 export type { LogoProps } from './Logo'
 

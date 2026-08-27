@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import { Cell, Tag } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import { elsewhereMediaText, type ElsewhereMediaItem } from '@/content/elsewhere-media'
@@ -75,9 +77,15 @@ export function ElsewhereMediaCard({ item, locale }: ElsewhereMediaCardProps) {
   if (item.kind === 'podcast') {
     return (
       <Cell href={item.url} target="_blank" rel="noopener" hoverTint className="gap-2.5">
-        <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 border-2 border-accent-700 bg-tint-cream">
-          <AudioWaveIcon className="text-accent-700" />
-          <span className="font-heading text-[13px] font-extrabold tracking-[0.08em] text-accent-700">{cta}</span>
+        <div className="relative flex aspect-video w-full flex-col items-center justify-center gap-2 overflow-hidden border-2 border-accent-700 bg-tint-cream">
+          {item.image ? (
+            <Image src={item.image.src} alt={item.image.alt} fill sizes="(max-width: 860px) 100vw, 33vw" className="object-cover" />
+          ) : (
+            <>
+              <AudioWaveIcon className="text-accent-700" />
+              <span className="font-heading text-[13px] font-extrabold tracking-[0.08em] text-accent-700">{cta}</span>
+            </>
+          )}
         </div>
         <CardMeta item={item} locale={locale} />
         <h3 className="text-[18px] leading-[1.3]">{t(locale, item.title)}</h3>

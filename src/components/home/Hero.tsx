@@ -12,6 +12,7 @@ import { hallAriaLabel, hallSentence, heroContent } from '@/content/home'
 import { SeatHall } from './SeatHall'
 
 const BREATHE_DURATION_S = 3.4
+const CTA_BREATHE_DURATION_S = 4
 const EASE = [0.22, 0.61, 0.36, 1] as const
 
 export function Hero({ locale, content = heroContent }: { locale: Locale; content?: typeof heroContent }) {
@@ -49,15 +50,27 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
           {t(locale, content.lead)}
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
-          <Button href={`/${locale}/${content.primaryCta.slug}`} variant="primary" size="lg" className="whitespace-nowrap">
-            {t(locale, content.primaryCta.label)}
-          </Button>
-          <Link
-            href={`/${locale}/${content.secondaryCta.slug}`}
-            className="btn whitespace-nowrap border-text bg-transparent px-[26px] py-[12px] text-[15.5px] text-text hover:bg-niv-slate hover:text-white focus-visible:bg-niv-slate focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          <motion.div
+            className="inline-block"
+            animate={shouldReduceMotion ? undefined : { scale: [1, 1.03, 1] }}
+            transition={{ duration: CTA_BREATHE_DURATION_S, ease: 'easeInOut', repeat: Infinity }}
           >
-            {t(locale, content.secondaryCta.label)}
-          </Link>
+            <Button href={`/${locale}/${content.primaryCta.slug}`} variant="primary" size="lg" className="whitespace-nowrap">
+              {t(locale, content.primaryCta.label)}
+            </Button>
+          </motion.div>
+          <motion.div
+            className="inline-block"
+            animate={shouldReduceMotion ? undefined : { scale: [1, 1.03, 1] }}
+            transition={{ duration: CTA_BREATHE_DURATION_S, ease: 'easeInOut', repeat: Infinity, delay: 0.35 }}
+          >
+            <Link
+              href={`/${locale}/${content.secondaryCta.slug}`}
+              className="btn whitespace-nowrap border-text bg-transparent px-[26px] py-[12px] text-[15.5px] text-text hover:bg-niv-slate hover:text-white focus-visible:bg-niv-slate focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              {t(locale, content.secondaryCta.label)}
+            </Link>
+          </motion.div>
         </div>
         <motion.div
           className="mt-10 font-heading text-[11.5px] font-extrabold tracking-[0.14em] text-neutral-700"

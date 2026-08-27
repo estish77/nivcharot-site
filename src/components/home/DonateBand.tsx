@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { Reveal } from '@/components/ui'
+import { Breathe } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import { donateBand } from '@/content/home'
 import { EqualizerDots } from './EqualizerDots'
@@ -11,10 +11,14 @@ import { EqualizerDots } from './EqualizerDots'
  * embedded newsletter form — that's now `NewsletterSection`, its own
  * separate spot on the page, so this section reads unambiguously as "the
  * donate banner" rather than a mixed donate/newsletter block.
+ *
+ * Uses `Breathe` (a continuous idle pulse) rather than `Reveal`'s one-shot
+ * scroll-entrance — this banner should read as always "alive" on screen,
+ * not just animate in once and go still.
  */
 export function DonateBand({ locale }: { locale: Locale }) {
   return (
-    <Reveal as="section" className="relative bg-accent text-white">
+    <Breathe as="section" className="relative bg-accent text-white">
       <div className="absolute leading-none" style={{ insetBlockStart: '32px', insetInlineEnd: '32px' }}>
         <EqualizerDots tone="accent" />
       </div>
@@ -44,6 +48,6 @@ export function DonateBand({ locale }: { locale: Locale }) {
           </div>
         </div>
       </div>
-    </Reveal>
+    </Breathe>
   )
 }

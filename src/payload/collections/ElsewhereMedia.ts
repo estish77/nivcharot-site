@@ -68,6 +68,12 @@ export const ElsewhereMedia: CollectionConfig = {
     },
     { name: 'url', type: 'text', required: true, admin: { description: 'The real URL. A YouTube watch link embeds inline automatically.' } },
     {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Optional cover image for the card. Podcasts without one fall back to a waveform icon.' },
+    },
+    {
       name: 'note',
       type: 'textarea',
       localized: true,

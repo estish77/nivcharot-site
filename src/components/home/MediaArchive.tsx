@@ -25,7 +25,7 @@ export async function MediaArchive({ locale }: { locale: Locale }) {
   const arrow = arrowForward(locale)
   const allItems = await getPressArchiveItems()
   const featured = allItems.filter((item) => item.featured)
-  const posts = (featured.length > 0 ? featured : allItems).slice(0, 4)
+  const posts = (featured.length > 0 ? featured : allItems).slice(0, 8)
 
   return (
     <Reveal as="section">

@@ -36,6 +36,15 @@ export type TeamMemberPhoto = {
   alt: Localized
 }
 
+/** Matches `TeamMembers.ts`'s `category` select field. */
+export type TeamMemberCategory = 'staff' | 'central-team' | 'central-activity'
+
+export const teamMemberCategoryLabels: Record<TeamMemberCategory, Localized> = {
+  staff: { he: 'צוות', en: 'Staff' },
+  'central-team': { he: 'צוות מרכזי', en: 'Central team' },
+  'central-activity': { he: 'פעילות מרכזית', en: 'Central activity' },
+}
+
 export type TeamMember = {
   id: string
   name: Localized
@@ -46,6 +55,8 @@ export type TeamMember = {
   photo: TeamMemberPhoto | null
   order: number
   active: boolean
+  /** Groups the public Team page into three sections. Defaults to `'staff'` when unset (this fixture's existing entries predate the field). */
+  category?: TeamMemberCategory
 }
 
 export const teamHero: { eyebrow: Localized; title: Localized; lead: Localized } = {

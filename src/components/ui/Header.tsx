@@ -6,10 +6,54 @@ import { motion } from 'motion/react'
 
 import { useReducedMotion } from '@/lib/useReducedMotion'
 import { t, type Locale } from '@/lib/i18n'
+import { Button } from './Button'
 import { cn } from './cn'
 import { Logo } from './Logo'
 import { LanguageToggle } from './LanguageToggle'
 import { NavMenu, type NavLink } from './NavMenu'
+
+/** Filled, minimal heart — matches the hand-drawn-inline-SVG convention used everywhere else in this codebase (see NavMenu.tsx's icons); no icon library is installed or needed. */
+function HeartIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" className={className}>
+      <path
+        d="M12 20.5c-.25 0-.5-.09-.7-.27C7.6 16.9 3 13 3 8.7 3 5.8 5.2 3.5 8 3.5c1.7 0 3.2.85 4 2.15.8-1.3 2.3-2.15 4-2.15 2.8 0 5 2.3 5 5.2 0 4.3-4.6 8.2-8.3 11.53-.2.18-.45.27-.7.27Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+const PODCAST_BAR_COUNT = 4
+const PODCAST_PULSE_DURATION_S = 1.1
+
+/** A small idle-pulsing equalizer glyph — the header's link to `/podcast`. Bars scale on their own vertical center (not height+position) so they never shift the icon's baseline while pulsing. */
+function PodcastIcon() {
+  const shouldReduceMotion = useReducedMotion()
+  return (
+    <svg viewBox="0 0 20 16" width="18" height="16" aria-hidden="true">
+      {Array.from({ length: PODCAST_BAR_COUNT }, (_, i) => (
+        <motion.rect
+          key={i}
+          x={i * 5 + 1}
+          y={2}
+          width={3}
+          height={12}
+          rx={1.5}
+          fill="currentColor"
+          style={{ transformOrigin: 'center' }}
+          initial={false}
+          animate={shouldReduceMotion ? { scaleY: 0.6 } : { scaleY: [0.4, 1, 0.4] }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { duration: PODCAST_PULSE_DURATION_S, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }
+          }
+        />
+      ))}
+    </svg>
+  )
+}
 
 export type { NavLink }
 
@@ -114,7 +158,18 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
         className="flex items-center gap-5"
         aria-label={t(locale, { he: 'ניווט ראשי', en: 'Primary navigation' })}
       >
+        <Link
+          href={`/${locale}/podcast`}
+          className="flex items-center text-neutral-700 hover:text-accent focus-visible:rounded-sm focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          aria-label={t(locale, { he: 'הפודקאסט של נבחרות', en: "Nivcharot's podcast" })}
+        >
+          <PodcastIcon />
+        </Link>
         <LanguageToggle locale={locale} />
+        <Button href={`/${locale}/donate`} variant="primary" size="sm" className="flex items-center gap-1.5 whitespace-nowrap">
+          <HeartIcon />
+          {t(locale, { he: 'תרמו', en: 'Donate' })}
+        </Button>
         <NavMenu locale={locale} links={navLinks} />
       </nav>
     </motion.header>

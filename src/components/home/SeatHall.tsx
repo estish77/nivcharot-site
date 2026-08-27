@@ -52,6 +52,8 @@ const RING_RADII = [140, 185, 230, 275, 320, 365, 410, 455] as const
 const RING_SIZE = 30
 const RING_SHIFT = 2
 const LIGHT_RADIUS = 110
+/** Matches the `max-[860px]:` breakpoint the hall's own wrapper (and the rest of the site) uses for its mobile layout — see the rotated `<div>` wrapper in the render below. */
+const MOBILE_BREAKPOINT_QUERY = '(max-width: 860px)'
 const AMBIENT_INTERVAL_MS = 1100
 const LETTER_INTERVAL_MS = 130
 const LETTER_HOLD_TICKS = 22
@@ -362,8 +364,24 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
       if (!svg) return
       const rect = svg.getBoundingClientRect()
       if (!rect.width || !rect.height) return
-      const px = ((e.clientX - rect.left) / rect.width) * 1000
-      const py = ((e.clientY - rect.top) / rect.height) * 500
+
+      // Below the mobile breakpoint the whole hall is rotated -90deg (CSS,
+      // see the wrapper `<div>` below) so it reads portrait instead of
+      // landscape. `getBoundingClientRect()` already reflects that rotated
+      // (swapped width/height) box, but mapping a pointer point back into
+      // the *unrotated* 1000x500 viewBox needs the inverse of that rotation,
+      // not the plain unrotated fraction-of-width/height math below.
+      let px: number
+      let py: number
+      if (window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches) {
+        const cx = e.clientX - rect.left - rect.width / 2
+        const cy = e.clientY - rect.top - rect.height / 2
+        px = 500 - cy * (1000 / rect.height)
+        py = 250 + cx * (500 / rect.width)
+      } else {
+        px = ((e.clientX - rect.left) / rect.width) * 1000
+        py = ((e.clientY - rect.top) / rect.height) * 500
+      }
 
       const { lit: current, order: currentOrder } = hallRef.current
       const next = { ...current }
@@ -404,38 +422,49 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
       aria-label={ariaLabel[locale]}
       onPointerMove={handlePointerMove}
       onPointerEnter={handlePointerMove}
-      className={cn('relative w-full cursor-crosshair', className)}
+      className={cn('relative w-full cursor-crosshair max-[860px]:aspect-[1/2] max-[860px]:overflow-hidden', className)}
     >
-      <svg
-        ref={svgRef}
-        viewBox="0 0 1000 500"
-        aria-hidden="true"
-        focusable="false"
-        className="block h-auto max-h-full w-full overflow-visible"
-      >
-        {SEATS.map((s, i) => (
-          <SeatCircle
-            key={i}
-            cx={s.cx}
-            cy={s.cy}
-            lit={Boolean(litNow[i])}
-            hidden={ringHidden.has(i)}
-            entrance={!reduced}
-            scatter={SCATTER[i]}
-            entranceDone={entranceDone}
-          />
-        ))}
-        <g>
-          {letters.map((datum) => (
-            <RingLetter
-              key={datum.key}
-              datum={datum}
-              onHoverStart={() => setHotLetter(datum.key)}
-              onHoverEnd={() => setHotLetter((h) => (h === datum.key ? null : h))}
+      {/*
+        Below 860px this inner wrapper is rotated -90deg so the (otherwise
+        landscape, 1000x500-viewBox) hall reads portrait on narrow screens.
+        The "reserve the rotated footprint" trick: the outer `<div>` above
+        reserves the FINAL portrait box (`aspect-[1/2]`), while this wrapper
+        renders the SVG at its natural 2:1 landscape size at 200% width —
+        exactly so that once rotated 90deg, its footprint (width becomes the
+        old height, height becomes the old width) fills that portrait box.
+      */}
+      <div className="max-[860px]:absolute max-[860px]:left-1/2 max-[860px]:top-1/2 max-[860px]:w-[200%] max-[860px]:-translate-x-1/2 max-[860px]:-translate-y-1/2 max-[860px]:rotate-[-90deg]">
+        <svg
+          ref={svgRef}
+          viewBox="0 0 1000 500"
+          aria-hidden="true"
+          focusable="false"
+          className="block h-auto max-h-full w-full overflow-visible"
+        >
+          {SEATS.map((s, i) => (
+            <SeatCircle
+              key={i}
+              cx={s.cx}
+              cy={s.cy}
+              lit={Boolean(litNow[i])}
+              hidden={ringHidden.has(i)}
+              entrance={!reduced}
+              scatter={SCATTER[i]}
+              entranceDone={entranceDone}
             />
           ))}
-        </g>
-      </svg>
+          <g>
+            {letters.map((datum) => (
+              <RingLetter
+                key={datum.key}
+                datum={datum}
+                onHoverStart={() => setHotLetter(datum.key)}
+                onHoverEnd={() => setHotLetter((h) => (h === datum.key ? null : h))}
+              />
+            ))}
+          </g>
+        </svg>
+      </div>
     </div>
   )
 }

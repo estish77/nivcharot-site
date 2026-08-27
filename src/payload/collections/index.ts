@@ -7,6 +7,7 @@ import { Events } from './Events'
 import { Faqs } from './Faqs'
 import { Inquiries } from './Inquiries'
 import { Media } from './Media'
+import { NewsletterSubscribers } from './NewsletterSubscribers'
 import { PodcastEpisodes } from './PodcastEpisodes'
 import { Posts } from './Posts'
 import { PressArchive } from './PressArchive'
@@ -39,4 +40,5 @@ export const collections: CollectionConfig[] = [
   Faqs,
   AlumnaeQuotes,
   Inquiries,
+  NewsletterSubscribers,
 ]

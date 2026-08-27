@@ -14,8 +14,9 @@ import { revalidateCollection } from '../hooks/revalidate'
 export const TeamMembers: CollectionConfig = {
   slug: 'team-members',
   admin: {
+    group: 'People',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'role', 'active', 'order'],
+    defaultColumns: ['name', 'role', 'category', 'active', 'order'],
   },
   access: {
     read: publishedOrAdmin({ active: { equals: true } }),
@@ -31,6 +32,18 @@ export const TeamMembers: CollectionConfig = {
     { name: 'role', type: 'text', required: true, localized: true },
     { name: 'bio', type: 'richText', localized: true },
     { name: 'photo', type: 'upload', relationTo: 'media' },
+    {
+      name: 'category',
+      type: 'select',
+      required: true,
+      defaultValue: 'staff',
+      options: [
+        { label: 'צוות', value: 'staff' },
+        { label: 'צוות מרכזי', value: 'central-team' },
+        { label: 'פעילות מרכזית', value: 'central-activity' },
+      ],
+      admin: { position: 'sidebar', description: 'Which group this person is listed under on the public Team page.' },
+    },
     {
       name: 'order',
       type: 'number',

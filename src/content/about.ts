@@ -163,14 +163,6 @@ export const aboutContent = {
     email: `estish@nivcharot.com`,
   },
 
-  team: {
-    eyebrow: { he: `צוות`, en: `Team` } satisfies Localized,
-    body: {
-      he: `לצד אסתי פועלות מנהלות, מנחות ופעילות שטח, וקהילת בוגרות רחבה. הצוות המלא מופיע למעלה.`,
-      en: `Managers, facilitators and field activists work alongside Esty, together with a broad alumnae community. The full team is below.`,
-    } satisfies Localized,
-  },
-
   stats: {
     eyebrow: { he: `במספרים`, en: `By the numbers` } satisfies Localized,
     leadPrefix: {
