@@ -32,11 +32,18 @@ export function Logo({ locale, className }: LogoProps) {
       <img
         src="/assets/nivcharot-logo-he.svg"
         alt={label}
-        className={className}
         // 70px, not the mockup's original 46px: at 46px the Hebrew wordmark
         // (denser letterforms + the illustration) read as illegible in
         // practice, even though the same rule works for the English mark.
-        style={{ height: 70, width: 'auto', display: 'block' }}
+        //
+        // Fixed at 70px height on every viewport used to force the header
+        // onto two lines on every phone width (this mark alone is ~152px
+        // wide at 70px tall — same class of bug the English mark's
+        // min-[356px]/min-[440px] steps below were already written to
+        // avoid). Same two breakpoints, scaled by height instead of width
+        // so the SVG's own aspect ratio still governs the actual width.
+        className={cn('h-10 min-[356px]:h-[52px] min-[440px]:h-[70px]', className)}
+        style={{ width: 'auto', display: 'block' }}
       />
     )
   }

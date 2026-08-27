@@ -41,10 +41,13 @@ function PodcastIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
-      width="22"
-      height="22"
       aria-hidden="true"
-      className="transition-transform duration-300 ease-out group-hover:scale-110"
+      // Fixed 22×22 (as `width`/`height` attributes, so no className could
+      // ever resize it) regardless of viewport was one of the fixed-size
+      // nav items squeezing the header's mobile row into a wrap — sized via
+      // classes now so it can shrink below `max-[640px]:` like everything
+      // else in this row.
+      className="h-[22px] w-[22px] max-[640px]:h-[18px] max-[640px]:w-[18px] transition-transform duration-300 ease-out group-hover:scale-110"
     >
       <path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor" />
       <motion.path
@@ -105,8 +108,14 @@ const SHADOW_STATIC = '0 8px 20px -8px rgba(49,68,81,0.18)'
 
 /**
  * Site header: logo (links home) + language toggle + nav menu trigger.
- * `flex`, `gap-6` (24px), `py-[18px] px-8` (18px/32px), wraps on narrow
- * viewports — matches every mockup page's header exactly.
+ * `flex`, `gap-6` (24px), `py-[18px] px-8` (18px/32px) on desktop, matching
+ * every mockup page's header exactly. Below `640px` the row's padding/gaps
+ * (and the logo's and `PodcastIcon`'s own sizing) step down via
+ * `max-[640px]:` — without that, the nav row (podcast icon + language
+ * toggle + Donate button + hamburger, each a fixed minimum width) plus the
+ * full-size logo don't fit on one line on any real phone width, so the nav
+ * wraps onto its own second row under the logo instead of `flex-wrap`
+ * merely reflowing individual items.
  *
  * `sticky`, 2026-08-13 brief: on the long multi-section pages (Activism,
  * Media) the logo and hamburger used to scroll away entirely, with no way
@@ -150,7 +159,7 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
   return (
     <motion.header
       className={cn(
-        'sticky z-30 flex flex-wrap items-center justify-between gap-6 bg-bg px-8 py-[18px]',
+        'sticky z-30 flex flex-wrap items-center justify-between gap-6 max-[640px]:gap-3 bg-bg px-8 max-[640px]:px-4 py-[18px] max-[640px]:py-3',
         bordered && 'border-b-2 border-divider',
         className,
       )}
@@ -169,7 +178,7 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
         <Logo locale={locale} />
       </Link>
       <nav
-        className="flex items-center gap-5"
+        className="flex items-center gap-5 max-[640px]:gap-2"
         aria-label={t(locale, { he: 'ניווט ראשי', en: 'Primary navigation' })}
       >
         <Link
@@ -180,7 +189,12 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
           <PodcastIcon />
         </Link>
         <LanguageToggle locale={locale} />
-        <Button href={`/${locale}/donate`} variant="primary" size="sm" className="flex items-center gap-1.5 whitespace-nowrap">
+        <Button
+          href={`/${locale}/donate`}
+          variant="primary"
+          size="sm"
+          className="flex items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px]"
+        >
           <HeartIcon />
           {t(locale, { he: 'תרמו', en: 'Donate' })}
         </Button>
