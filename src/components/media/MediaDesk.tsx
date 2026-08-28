@@ -283,7 +283,7 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
         onSelect={selectTab}
       />
 
-      <p className="mb-5 mt-3 max-w-[720px] text-[13.5px] leading-[1.65] text-neutral-700">
+      <p className="mb-5 mt-3 max-w-[720px] text-[13.5px] leading-[1.65] text-neutral-700 max-[560px]:mb-3.5 max-[560px]:mt-2.5 max-[560px]:text-[12.5px]">
         {t(locale, mediaDeskText.tabHints[tab])}
       </p>
 
@@ -298,9 +298,15 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
           label={t(locale, mediaDeskText.searchLabel)}
           placeholder={t(locale, mediaDeskText.searchPlaceholder)}
           clearLabel={t(locale, mediaDeskText.clearSearch)}
-          className="min-w-[220px] max-w-[420px] flex-1"
+          className="min-w-[220px] max-w-[420px] flex-1 max-[560px]:w-full max-[560px]:min-w-0 max-[560px]:max-w-none"
         />
-        <div className="flex flex-wrap items-center gap-2.5">
+        {/*
+          Sort and view used to wrap onto two more rows on a phone. They stay
+          side by side now, with the view control dropping to icons only
+          below 560px — the icons already carry the meaning and the control
+          keeps its accessible name.
+        */}
+        <div className="flex flex-nowrap items-center gap-2.5 max-[560px]:w-full max-[560px]:gap-2">
           <SegmentedControl<SortKey>
             label={t(locale, mediaDeskText.sortLabel)}
             value={sort}
@@ -325,8 +331,22 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
               value={view}
               onChange={setView}
               options={[
-                { value: 'list', label: <><ListIcon /> {t(locale, mediaDeskText.viewList)}</> },
-                { value: 'grid', label: <><GridIcon /> {t(locale, mediaDeskText.viewGrid)}</> },
+                {
+                  value: 'list',
+                  label: (
+                    <>
+                      <ListIcon /> <span className="max-[560px]:hidden">{t(locale, mediaDeskText.viewList)}</span>
+                    </>
+                  ),
+                },
+                {
+                  value: 'grid',
+                  label: (
+                    <>
+                      <GridIcon /> <span className="max-[560px]:hidden">{t(locale, mediaDeskText.viewGrid)}</span>
+                    </>
+                  ),
+                },
               ]}
             />
           ) : null}

@@ -172,27 +172,33 @@ export function NavMenu({ locale, links, className }: NavMenuProps) {
                 clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 34px), 50% 100%, 0 calc(100% - 34px))',
               }}
               /*
-               * The panel drops in from above and then settles with a short
-               * up-and-down bounce (2026-08-28 brief). It used to sway side
-               * to side instead — a `rotate` keyframe run on hover — which
-               * read as the panel tilting rather than landing. Motion along
-               * the axis it actually arrives on is what makes it feel like
-               * it came to rest.
+               * The panel drops in from above and lands, full stop.
                *
-               * The settle is keyframed into the entrance rather than left
-               * on hover, so it happens once, on arrival, for everyone —
-               * including anyone who never hovers (touch, keyboard).
+               * It used to keyframe a bounce into the entrance — an
+               * overshoot past its resting position and back. Read as too
+               * much movement every single time the menu opens (2026-08-28
+               * brief: "it moves too much after it comes down"), so the
+               * arrival is now a clean settle with no overshoot.
+               *
+               * The only idle motion left is a slow, 3px sway while the
+               * pointer is actually over the open panel — which is exactly
+               * where the brief asked to keep it. It never runs on touch or
+               * keyboard, so opening the menu is still perfectly still for
+               * anyone who doesn't hover.
                */
               initial={shouldReduceMotion ? false : { y: '-105%', opacity: 0 }}
-              animate={shouldReduceMotion ? { y: 0, opacity: 1 } : { y: ['-105%', '0%', '1.6%', '0%'], opacity: 1 }}
+              animate={{ y: 0, opacity: 1 }}
               exit={shouldReduceMotion ? { opacity: 0 } : { y: '-105%', opacity: 0 }}
               whileHover={
-                shouldReduceMotion ? undefined : { y: [0, 5, -2, 0], transition: { duration: 1.2, ease: 'easeInOut' } }
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                    y: [0, 3, 0, -3, 0],
+                    transition: { duration: 2.4, ease: 'easeInOut', repeat: Infinity },
+                  }
               }
               transition={
-                shouldReduceMotion
-                  ? { duration: 0 }
-                  : { duration: 1.05, ease: EASE, times: [0, 0.72, 0.87, 1], opacity: { duration: 0.5 } }
+                shouldReduceMotion ? { duration: 0 } : { duration: 0.62, ease: EASE, opacity: { duration: 0.4 } }
               }
             >
               <button

@@ -4,6 +4,7 @@ import { Cell, CellGrid, Reveal } from '@/components/ui'
 import { arrowForward, t, type Locale } from '@/lib/i18n'
 import { timelineItems, timelineSection } from '@/content/home'
 import { EqualizerDots } from './EqualizerDots'
+import { TimelineTrack } from './TimelineTrack'
 
 export function Timeline({ locale }: { locale: Locale }) {
   const arrow = arrowForward(locale)
@@ -31,14 +32,33 @@ export function Timeline({ locale }: { locale: Locale }) {
             )}
           </Link>
         </div>
-        <CellGrid cols={4}>
-          {timelineItems.map((item) => (
-            <Cell key={item.year} paddingInline="20px" paddingBlockStart="26px" paddingBlockEnd="26px">
-              <div className="font-heading text-[32px] font-extrabold text-accent-700">{item.year}</div>
-              <p className="mt-2 text-[14px] leading-[1.55]">{t(locale, item.body)}</p>
-            </Cell>
-          ))}
-        </CellGrid>
+        {/*
+          The years used to appear all at once with the section. They now sit
+          under a rail that fills with scroll position, and each entry rises
+          in on its own beat (2026-08-28 brief).
+
+          The stagger goes through `Reveal` rather than a hand-rolled
+          `whileInView`, so it inherits that component's fallback timer —
+          the one added after entries on a very long page could stick at
+          opacity 0 forever. `Reveal` wraps each cell's CONTENT rather than
+          the cell itself, because `CellGrid` styles its children with a
+          direct-child selector that an extra wrapper element would break.
+        */}
+        <TimelineTrack>
+          <CellGrid cols={4}>
+            {timelineItems.map((item, index) => (
+              <Cell key={item.year} paddingInline="20px" paddingBlockStart="26px" paddingBlockEnd="26px">
+                <Reveal index={index}>
+                  <div className="font-heading text-[32px] font-extrabold leading-none text-accent-700">
+                    {item.year}
+                  </div>
+                  <span aria-hidden="true" className="mt-2.5 block h-[2px] w-8 bg-accent/35" />
+                  <p className="mt-2.5 text-[14px] leading-[1.55]">{t(locale, item.body)}</p>
+                </Reveal>
+              </Cell>
+            ))}
+          </CellGrid>
+        </TimelineTrack>
       </div>
     </Reveal>
   )

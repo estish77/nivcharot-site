@@ -97,9 +97,9 @@ function SocialIconLink({ href, label, path }: SocialLink) {
 
 /**
  * Site footer: 2px top divider, `padding: 34px 24px 28px`, max-width 1240px
- * centered — two brand groups with their verbatim social icon SVG paths
- * (נבחרות: Facebook/Instagram/email; חרדית מדוברת: YouTube/Spotify/Apple
- * Podcasts/Instagram), then a donate link + the copyright line.
+ * centered — a single row of social icons (Nivcharot's Facebook/Instagram/
+ * email followed by the podcast's YouTube/Spotify/Apple Podcasts/Instagram),
+ * then a donate link + the copyright line.
  */
 export function Footer({ locale, donateHref, contactEmail, social, className }: FooterProps) {
   const nivchaLinks = buildNivcharotLinks(social, contactEmail)
@@ -115,24 +115,20 @@ export function Footer({ locale, donateHref, contactEmail, social, className }: 
         holds together as one block.
       */}
       <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-6 max-[720px]:flex-col max-[720px]:items-center max-[720px]:gap-3 max-[720px]:text-center">
-        <div className="flex flex-wrap items-center justify-start gap-4 max-[720px]:justify-center">
-          <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-neutral-700">
-            {t(locale, { he: 'נבחרות', en: 'NIVCHAROT' })}
-          </span>
-          <span className="flex items-center gap-1">
-            {nivchaLinks.map((link) => (
-              <SocialIconLink key={link.href} {...link} />
-            ))}
-          </span>
-          <span aria-hidden="true" className="mx-0.5 h-4 w-px bg-divider" />
-          <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-neutral-700">
-            {t(locale, { he: 'חרדית מדוברת', en: 'HAREDIT MEDUBERET' })}
-          </span>
-          <span className="flex items-center gap-1">
-            {podcastLinks.map((link) => (
-              <SocialIconLink key={link.href} {...link} />
-            ))}
-          </span>
+        {/*
+          One unbroken row of icons (2026-08-28 brief: drop the "נבחרות" and
+          "חרדית מדוברת" captions and put them all on one line). The captions
+          were what forced a second row on a phone — seven glyphs fit across
+          390px comfortably, two words plus seven glyphs do not.
+
+          `flex-nowrap` keeps it a single row at every width; each link still
+          names its own destination for screen readers, which is what the
+          captions were doing visually.
+        */}
+        <div className="flex flex-nowrap items-center justify-start gap-1 max-[720px]:justify-center">
+          {[...nivchaLinks, ...podcastLinks].map((link) => (
+            <SocialIconLink key={link.href} {...link} />
+          ))}
         </div>
         <div className="flex flex-wrap items-center justify-end gap-4 text-end text-xs tracking-[0.01em] text-neutral-700 max-[720px]:justify-center max-[720px]:text-center">
           <Link

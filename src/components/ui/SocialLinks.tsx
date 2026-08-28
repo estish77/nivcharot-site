@@ -86,7 +86,13 @@ export function SocialLinksRow({ links, heading, className }: SocialLinksRowProp
       {heading ? (
         <span className="font-heading text-[11px] font-extrabold tracking-[0.14em] text-neutral-700">{heading}</span>
       ) : null}
-      <ul className="m-0 flex list-none flex-wrap items-center gap-2 p-0">
+      {/*
+        Seven 40px boxes plus gaps overflow a 390px screen and wrapped onto a
+        second row, adding another band of chrome above the media page's
+        controls (2026-08-28 brief). Below 560px they shrink to 34px with a
+        tighter gap — 7x34 + 6x5 = 268px — so the row always holds.
+      */}
+      <ul className="m-0 flex list-none flex-nowrap items-center gap-2 p-0 max-[560px]:gap-[5px]">
         {links.map((link) => (
           <li key={`${link.network}:${link.href}`}>
             <a
@@ -97,6 +103,7 @@ export function SocialLinksRow({ links, heading, className }: SocialLinksRowProp
               rel={link.href.startsWith('http') ? 'noopener' : undefined}
               className={cn(
                 'flex h-10 w-10 items-center justify-center border-2 border-divider text-neutral-800',
+                'max-[560px]:h-[34px] max-[560px]:w-[34px]',
                 'transition-colors duration-200 ease-out hover:border-accent hover:text-accent-700',
                 'focus-visible:border-accent focus-visible:text-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
               )}

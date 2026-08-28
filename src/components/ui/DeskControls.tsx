@@ -59,7 +59,18 @@ export function DeskTabs({
             className={cn(
               'flex flex-1 basis-[170px] items-center justify-between gap-2.5 px-[18px] py-[14px] text-start font-heading text-[14.5px] font-extrabold transition-colors duration-[250ms] ease-out',
               'border-e-2 border-divider last:border-e-0',
-              'max-[720px]:basis-full max-[720px]:border-e-0 max-[720px]:border-b-2 max-[720px]:last:border-b-0',
+              /*
+               * On a phone these used to go `basis-full`, i.e. one full-width
+               * row per tab. With three tabs that is ~150px of stacked chrome
+               * before anything else, and the search, sort, view and filter
+               * controls sit underneath it — the whole first screen was
+               * controls and no content (2026-08-28 brief).
+               *
+               * They stay one row instead, with the label over its count so
+               * even "כתבות בעיתונות" fits a third of a 390px screen.
+               */
+              'max-[720px]:flex-col max-[720px]:items-center max-[720px]:justify-center max-[720px]:gap-0.5',
+              'max-[720px]:basis-0 max-[720px]:px-2 max-[720px]:py-2.5 max-[720px]:text-center max-[720px]:text-[12.5px] max-[720px]:leading-[1.25]',
               FOCUS,
               selected ? 'bg-accent text-white' : 'bg-transparent text-text hover:bg-neutral-200',
             )}
