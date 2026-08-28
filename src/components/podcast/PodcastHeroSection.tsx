@@ -34,6 +34,10 @@ import { episodeLabel, guestLine, shortDateLabel } from './podcastUtils'
  * newest episode there, and reading the hero text off the same live feed
  * is what keeps the two from drifting apart.
  */
+/** Keeps YouTube / Spotify / Apple Podcasts on a single row down to 320px. */
+const platformButtonClass =
+  'whitespace-nowrap max-[560px]:px-3 max-[560px]:py-2 max-[560px]:text-[13px] max-[380px]:px-2.5 max-[380px]:text-[12px]'
+
 export async function PodcastHeroSection({ locale }: { locale: Locale }) {
   const [hero, episodes] = await Promise.all([getPodcastHeroContent(locale), getPodcastEpisodes()])
   const latest = episodes[0]
@@ -48,14 +52,32 @@ export async function PodcastHeroSection({ locale }: { locale: Locale }) {
               {hero.title}
             </h1>
             <p className="mb-7 max-w-[620px] text-[17px] leading-[1.7]">{hero.body}</p>
-            <div className="flex flex-wrap gap-3">
-              <Button href={podcastText.youtubeShowUrl} variant="primary">
+            {/*
+              The three platform buttons wrapped onto two rows on a phone —
+              "אפל פודקאסטס" alone is wide enough to push itself down. They
+              stay on one line now, shrinking their padding and type below
+              560px instead of wrapping (2026-08-28 brief).
+            */}
+            <div className="flex flex-nowrap items-center gap-3 max-[560px]:gap-2">
+              <Button
+                href={podcastText.youtubeShowUrl}
+                variant="primary"
+                className={platformButtonClass}
+              >
                 {t(locale, podcastText.ctaYoutube)}
               </Button>
-              <Button href={podcastText.spotifyShowUrl} variant="secondary">
+              <Button
+                href={podcastText.spotifyShowUrl}
+                variant="secondary"
+                className={platformButtonClass}
+              >
                 {t(locale, podcastText.ctaSpotify)}
               </Button>
-              <Button href={podcastText.appleShowUrl} variant="secondary">
+              <Button
+                href={podcastText.appleShowUrl}
+                variant="secondary"
+                className={platformButtonClass}
+              >
                 {t(locale, podcastText.ctaApple)}
               </Button>
             </div>

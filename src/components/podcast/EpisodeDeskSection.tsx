@@ -23,7 +23,10 @@ export async function EpisodeDeskSection({ locale }: { locale: Locale }) {
       <Section as="div" id="episodes" borderBlockStart paddingBlockStart="50px" paddingBlockEnd="66px">
         <div className="mb-7 max-w-[720px]">
           <Eyebrow className="mb-3">{t(locale, episodeDeskText.eyebrow)}</Eyebrow>
-          <h2 className="max-[860px]:text-[clamp(24px,7vw,34px)]">{t(locale, episodeDeskText.title)}</h2>
+          {/* Deliberately larger than a normal section h2 — the brief asked for a big title here. */}
+          <h2 className="text-[clamp(32px,4.4vw,52px)] leading-[1.08] max-[860px]:text-[clamp(26px,8.5vw,40px)]">
+            {t(locale, episodeDeskText.title)}
+          </h2>
           <p className="mt-4 text-[16px] leading-[1.7] text-neutral-800">{t(locale, episodeDeskText.lead)}</p>
         </div>
         <EpisodeDesk episodes={episodes} shorts={shorts} locale={locale} />

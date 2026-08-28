@@ -283,11 +283,11 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
         onSelect={selectTab}
       />
 
-      <p className="mb-5 mt-3 max-w-[720px] text-[13.5px] leading-[1.65] text-neutral-700 max-[560px]:mb-3.5 max-[560px]:mt-2.5 max-[560px]:text-[12.5px]">
+      <p className="mb-5 mt-3 max-w-[720px] text-[13.5px] leading-[1.65] text-neutral-700 max-[560px]:hidden">
         {t(locale, mediaDeskText.tabHints[tab])}
       </p>
 
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 max-[560px]:mb-3 max-[560px]:mt-3 max-[560px]:gap-2">
         <DeskSearch
           id="niv-media-desk-search"
           value={query}
@@ -361,8 +361,8 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
           {filtersPanel}
         </aside>
 
-        <details className="mb-5 hidden border-2 border-divider max-[960px]:block">
-          <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 font-heading text-[13.5px] font-extrabold focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
+        <details className="mb-5 hidden border-2 border-divider max-[960px]:block max-[560px]:mb-3">
+          <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 font-heading text-[13.5px] font-extrabold focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent max-[560px]:px-3 max-[560px]:py-2.5 max-[560px]:text-[12.5px] [&::-webkit-details-marker]:hidden">
             <span>{t(locale, mediaDeskText.filtersHeading)}</span>
             <span className="font-heading text-[11.5px] font-extrabold text-accent-700">
               {filtersActive ? t(locale, mediaDeskText.activeFilters) : `${filtered.length}`}
@@ -372,8 +372,8 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
         </details>
 
         <div ref={resultsRef}>
-          <div className="mb-1 flex flex-wrap items-baseline justify-between gap-3 border-b-2 border-divider pb-2.5">
-            <p className="m-0 font-heading text-[12.5px] font-extrabold tracking-[0.04em] text-neutral-700">
+          <div className="mb-1 flex flex-wrap items-baseline justify-between gap-3 border-b-2 border-divider pb-2.5 max-[560px]:pb-1.5">
+            <p className="m-0 font-heading text-[12.5px] font-extrabold tracking-[0.04em] text-neutral-700 max-[560px]:text-[11.5px]">
               {tab === 'watch' ? (
                 <>
                   {filtered.length} {t(locale, mediaDeskText.resultsCount)}

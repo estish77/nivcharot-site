@@ -199,9 +199,18 @@ export const givingText = {
   } satisfies Localized,
   otherWaysEyebrow: { he: 'לא מתאים הוראת קבע?', en: 'PREFER NOT TO COMMIT MONTHLY?' } satisfies Localized,
   otherWaysHeading: { he: 'דרכים נוספות לתרום', en: 'Other ways to give' } satisfies Localized,
-  cardHighlight: {
-    he: 'תרומה חד-פעמית בכרטיס אשראי, בלי התחייבות. הדרך המהירה ביותר.',
-    en: 'A one-time card donation, no commitment. The quickest way to give.',
+  /*
+   * Split into three parts so "חד-פעמית" can be picked out in accent red
+   * (2026-08-28 brief). Same prefix/emphasis/suffix shape the About page's
+   * stats lead already uses for its dotted-underline phrase — the emphasis
+   * has to be its own element, and the surrounding words have to stay
+   * translatable as running text.
+   */
+  cardHighlightPrefix: { he: 'תרומה ', en: 'A ' } satisfies Localized,
+  cardHighlightEmphasis: { he: 'חד-פעמית', en: 'one-time' } satisfies Localized,
+  cardHighlightSuffix: {
+    he: ' בכרטיס אשראי, בלי התחייבות. הדרך המהירה ביותר.',
+    en: ' card donation, no commitment. The quickest way to give.',
   } satisfies Localized,
   cardCta: { he: 'לתרומה מאובטחת בכרטיס אשראי', en: 'Donate securely by card' } satisfies Localized,
   /** Where to write for a receipt after a bank transfer (2026-08-27 brief). */

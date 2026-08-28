@@ -6,10 +6,9 @@ import { motion } from 'motion/react'
 
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
-import { Button, Reveal } from '@/components/ui'
+import { Button, Reveal, SeatHall } from '@/components/ui'
 import { dict, t, type Locale } from '@/lib/i18n'
 import { hallAriaLabel, hallSentence, heroContent } from '@/content/home'
-import { SeatHall } from './SeatHall'
 
 const BREATHE_DURATION_S = 3.4
 const CTA_BREATHE_DURATION_S = 4

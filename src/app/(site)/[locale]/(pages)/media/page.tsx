@@ -133,20 +133,17 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
       <Reveal as="section">
         <Section as="div" paddingBlockStart="52px" paddingBlockEnd="34px">
           <Eyebrow className="mb-3.5">{t(locale, { he: 'תקשורת וארכיון', en: 'MEDIA & ARCHIVE' })}</Eyebrow>
-          <h1 className="mb-[18px] text-[clamp(32px,4.4vw,48px)] leading-[1.08]">
+          <h1 className="mb-[18px] text-[clamp(32px,4.4vw,48px)] leading-[1.08] max-[560px]:mb-3 max-[560px]:text-[clamp(26px,8vw,34px)]">
             {t(locale, { he: 'נבחרות בתקשורת', en: 'Nivcharot in the Media' })}
           </h1>
-          <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+          {/*
+            The "looking for photos from the field?" line and its galleries
+            link were removed on 2026-08-28, on both desktop and mobile —
+            they were another band of chrome between the title and the
+            actual coverage.
+          */}
+          <div className="mt-6 max-[560px]:mt-4">
             <SocialLinksRow heading={t(locale, { he: 'עקבו אחרינו', en: 'FOLLOW US' })} links={socialLinks} />
-            <p className="m-0 text-[13.5px] leading-[1.7] text-neutral-700">
-              {t(locale, { he: 'מחפשים תמונות מהשטח? ', en: 'Looking for photos from the field? ' })}
-              <a
-                href={`/${locale}/activism#gatherings`}
-                className="font-heading text-[13.5px] font-extrabold text-accent-700 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                {t(locale, { he: 'לגלריות מהפעילות ←', en: '→ Activity galleries' })}
-              </a>
-            </p>
           </div>
         </Section>
       </Reveal>

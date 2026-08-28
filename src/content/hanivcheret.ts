@@ -59,6 +59,14 @@ export const hanivcheretHero = {
     he: 'מושבי הכנסת, הכיסאות שממתינים לנשים חרדיות',
     en: 'Knesset seats, the chairs waiting for Haredi women',
   } satisfies Localized,
+  /**
+   * Spelled out letter by letter around the hall's outer ring, which holds
+   * 30 seats — so this has to stay well under 30 characters.
+   */
+  seatHallSentence: {
+    he: 'הכיסא שלך מחכה',
+    en: 'YOUR SEAT IS WAITING',
+  } satisfies Localized,
 }
 
 /**

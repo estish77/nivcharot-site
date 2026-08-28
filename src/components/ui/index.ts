@@ -38,6 +38,11 @@ export type { FooterProps } from './Footer'
 export { Section } from './Section'
 export type { SectionProps, SectionTint } from './Section'
 
+export { SeatHall } from './SeatHall'
+export type { SeatHallProps } from './SeatHall'
+
+export { HeartIcon } from './HeartIcon'
+
 export { RichText, hasRichText } from './RichText'
 export type { RichTextProps } from './RichText'
 

@@ -12,11 +12,10 @@ import {
 } from '@/content/hanivcheret'
 import { getHanivcheretContent, getHanivcheretQuotes } from '@/lib/cms'
 import { t, type Locale, type Localized } from '@/lib/i18n'
-import { Button, Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SectionHead, Tag, cn } from '@/components/ui'
+import { Button, Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SeatHall, SectionHead, Tag, cn } from '@/components/ui'
 import { AlumnaeVideosSection } from './AlumnaeVideosSection'
 import { ApplySection } from './ApplySection'
 import { NivcharotVoicesSection } from './NivcharotVoicesSection'
-import { SeatHall } from './SeatHall'
 
 const FOCUS_RING = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
 
@@ -140,7 +139,11 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
               </Link>
             </div>
             <div className="flex min-w-0 items-center justify-center py-2">
-              <SeatHall ariaLabel={t(locale, hanivcheretHero.seatHallAriaLabel)} />
+              <SeatHall
+                locale={locale}
+                ariaLabel={hanivcheretHero.seatHallAriaLabel}
+                sentence={hanivcheretHero.seatHallSentence}
+              />
             </div>
           </Section>
         </Reveal>

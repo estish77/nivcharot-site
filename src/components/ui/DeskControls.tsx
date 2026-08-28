@@ -134,6 +134,9 @@ export function DeskSearch({
         placeholder={placeholder}
         className={cn(
           'w-full border-2 border-divider bg-white py-[11px] text-[14.5px] text-text ps-10 pe-10',
+          // Shorter and tighter on a phone, where every row of chrome above
+          // the results costs a visible chunk of the first screen.
+          'max-[560px]:py-2 max-[560px]:text-[13.5px] max-[560px]:ps-9 max-[560px]:pe-9',
           'placeholder:text-neutral-600 focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
           // Safari renders its own clear glyph on type=search, which would
           // sit under the button below; the button is the accessible one.

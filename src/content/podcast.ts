@@ -418,6 +418,8 @@ export const podcastText = {
 
   latestEyebrow: { he: 'הפרק האחרון שעלה השבוע', en: 'THIS WEEK’S EPISODE' } satisfies Localized,
   playerTitle: { he: 'חרדית מדוברת, נגן ספוטיפיי', en: 'Haredit Meduberet, Spotify player' } satisfies Localized,
+  /** The show's own account — distinct from the host's, below. */
+  instagramShowUrl: 'https://www.instagram.com/haredit_meduberet/',
   instagramHostUrl: 'https://www.instagram.com/esty_shushan/',
   facebookHostUrl: 'https://www.facebook.com/profile.php?id=61565500745331',
   xHostUrl: 'https://x.com/estyshushan',

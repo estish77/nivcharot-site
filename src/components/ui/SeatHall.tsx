@@ -6,10 +6,17 @@ import { motion } from 'motion/react'
 
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
-import { cn } from '@/components/ui'
+import { cn } from './cn'
 import type { Locale, Localized } from '@/lib/i18n'
 
 /**
+ * The Knesset seat hall. Shared by the home hero and `/hanivcheret`, which
+ * is why it lives here rather than under `home/` — /hanivcheret used to
+ * carry its own cut-down copy (ambient light-up only, no entrance, no
+ * pointer interaction, no ring sentence) and the 2026-08-28 brief asked
+ * for the animated element there too, so the two have been folded into
+ * this one.
+ *
  * Ported from "Home copy.dc.html"'s `__hallInit`/`moveHall` (source lines
  * ~457-669): a 1000x500 semicircular "Knesset hall" of 156 seats that light
  * up as the pointer roams nearby, drift on their own between interactions,

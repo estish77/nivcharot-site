@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from 'react'
 
-import { Button, Cell, CellGrid, Eyebrow, Reveal, Section, SectionHead, cn } from '@/components/ui'
+import { Button, Cell, CellGrid, Eyebrow, HeartIcon, Reveal, Section, SectionHead, cn } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import {
   bankDetails,
@@ -121,6 +121,9 @@ export function DonateGiving({ locale, donationLinks, receiptEmail, children }: 
                     'border-e-2 border-b-2 border-divider px-4 py-[26px]',
                     'transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent',
                     active ? 'bg-accent text-white' : 'bg-transparent text-text hover:bg-neutral-200',
+                    // The recommendation stays visible as one even when the
+                    // visitor has picked a different amount.
+                    preferred && !active && 'bg-tint-cream',
                   )}
                 >
                   <span className="font-heading text-[clamp(30px,3.4vw,44px)] font-extrabold leading-none tabular-nums">
@@ -143,12 +146,24 @@ export function DonateGiving({ locale, donationLinks, receiptEmail, children }: 
                     id={preferred ? badgeId : undefined}
                     aria-hidden={preferred ? undefined : 'true'}
                     className={cn(
-                      'mt-0.5 px-2 py-[2px] font-heading text-[10px] font-extrabold leading-[1.5] tracking-[0.08em]',
+                      'mt-1 px-2.5 py-[3px] font-heading text-[10px] font-extrabold leading-[1.5] tracking-[0.08em]',
                       !preferred && 'invisible',
-                      active ? 'bg-white text-accent-700' : 'bg-accent text-white',
+                      /*
+                       * White heart and white label in BOTH states (the brief
+                       * asked for a white heart, and 90 is the default
+                       * selection, so the selected state is what's normally
+                       * on screen). The badge inverted to a white fill when
+                       * selected, which turned the heart red — it takes the
+                       * darker red instead, which reads clearly on the
+                       * accent-filled cell and puts white text at 8.4:1.
+                       */
+                      active ? 'bg-accent-700 text-white' : 'bg-accent text-white',
                     )}
                   >
-                    {t(locale, preferredAmountBadge)}
+                    <span className="flex items-center gap-1.5">
+                      <HeartIcon size={11} />
+                      {t(locale, preferredAmountBadge)}
+                    </span>
                   </span>
                 </button>
               )
@@ -189,7 +204,9 @@ export function DonateGiving({ locale, donationLinks, receiptEmail, children }: 
               </span>
               <h3 className="text-[clamp(24px,2.8vw,30px)] leading-[1.2]">{t(locale, cardOption.title)}</h3>
               <p className="m-0 max-w-[520px] text-[16px] font-semibold leading-[1.65] text-text">
-                {t(locale, givingText.cardHighlight)}
+                {t(locale, givingText.cardHighlightPrefix)}
+                <strong className="font-extrabold text-accent-700">{t(locale, givingText.cardHighlightEmphasis)}</strong>
+                {t(locale, givingText.cardHighlightSuffix)}
               </p>
               <p className="m-0 max-w-[520px] text-[14.5px] leading-[1.7] text-neutral-800">
                 {t(locale, cardOption.body)}

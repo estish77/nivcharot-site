@@ -94,10 +94,17 @@ export const mediaDeskText = {
 /** UI chrome for `/podcast`'s episode desk. */
 export const episodeDeskText = {
   eyebrow: { he: 'כל הפרקים במקום אחד', en: 'EVERY EPISODE IN ONE PLACE' } satisfies Localized,
-  title: { he: 'מרכז הפרקים', en: 'The episode desk' } satisfies Localized,
+  /**
+   * The show's own name rather than a label for the UI (2026-08-28 brief:
+   * "מרכז הפרקים" out, a big "בינג' חרדית מדוברת" in). `en` transliterates
+   * instead of translating "בינג'", the same convention `podcastText`
+   * already uses for the show's name.
+   */
+  title: { he: "בינג' חרדית מדוברת", en: 'Binge Haredit Meduberet' } satisfies Localized,
+  /** Was a description of the controls ("search, sort, listen"); now an invitation in. */
   lead: {
-    he: 'חיפוש, מיון והאזנה לכל פרקי "חרדית מדוברת" ולשורטס של הערוץ, בלי גלילה אינסופית.',
-    en: 'Search, sort and listen to every "Haredit Meduberet" episode and to the channel\'s shorts, with no endless scrolling.',
+    he: 'בואו להכיר את החברה החרדית, את גיבוריה וגיבורותיה במבט אמיץ ומפוכח למציאות, לקונפליקטים ולהזדמנויות.',
+    en: 'Come and meet Haredi society and its heroes and heroines, in a brave, clear-eyed look at the reality, the conflicts and the opportunities.',
   } satisfies Localized,
 
   tabEpisodes: { he: 'פרקים מלאים', en: 'Full episodes' } satisfies Localized,

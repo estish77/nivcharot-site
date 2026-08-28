@@ -67,9 +67,21 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
         <h1 className="m-0 mb-5 max-w-[640px] text-[clamp(36px,5vw,56px)] leading-[1.08] max-[860px]:text-[clamp(30px,9vw,46px)]">
           {t(locale, contactHero.title)}
         </h1>
-        <p className="m-0 mb-10 max-w-[640px] text-[17px] leading-[1.7] text-neutral-800">
+        <p className="m-0 mb-7 max-w-[640px] text-[17px] leading-[1.7] text-neutral-800">
           {t(locale, contactHero.lead)}
         </p>
+        {/*
+          The follow-us icons sit above the form (2026-08-28 brief). They
+          used to be the last thing on the page, below the form and the
+          direct-email block — far enough down that anyone who came to
+          follow rather than to write had to scroll past the whole form to
+          find them.
+        */}
+        <SocialLinksRow
+          heading={t(locale, contactDirect.followHeading)}
+          links={socialLinks}
+          className="mb-10 border-b-2 border-divider pb-7"
+        />
         <ContactForm locale={locale} />
 
         <div className="mt-12 border-t-2 border-divider pt-8">
@@ -84,12 +96,6 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             {inbox}
           </a>
           <p className="m-0 mt-2 text-[14px] leading-[1.7] text-neutral-700">{t(locale, contactDirect.emailNote)}</p>
-
-          <SocialLinksRow
-            heading={t(locale, contactDirect.followHeading)}
-            links={socialLinks}
-            className="mt-8"
-          />
         </div>
       </Section>
     </Reveal>
