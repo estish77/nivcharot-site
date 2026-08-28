@@ -107,8 +107,15 @@ export function Footer({ locale, donateHref, contactEmail, social, className }: 
 
   return (
     <footer className={cn('border-t-2 border-divider px-6 pb-7 pt-[34px]', className)}>
-      <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-6">
-        <div className="flex flex-wrap items-center justify-start gap-4">
+      {/*
+        On a phone the two halves used to wrap onto separate rows with a
+        full 24px gap between them, which read as two stacked footers rather
+        than one (2026-08-28 brief). Below 720px they now stack as a single
+        centred column with a tighter gap and no opposing alignment, so it
+        holds together as one block.
+      */}
+      <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-6 max-[720px]:flex-col max-[720px]:items-center max-[720px]:gap-3 max-[720px]:text-center">
+        <div className="flex flex-wrap items-center justify-start gap-4 max-[720px]:justify-center">
           <span className="font-heading text-[11px] font-extrabold tracking-[0.12em] text-neutral-700">
             {t(locale, { he: 'נבחרות', en: 'NIVCHAROT' })}
           </span>
@@ -127,7 +134,7 @@ export function Footer({ locale, donateHref, contactEmail, social, className }: 
             ))}
           </span>
         </div>
-        <div className="flex flex-wrap items-center justify-end gap-4 text-end text-xs tracking-[0.01em] text-neutral-700">
+        <div className="flex flex-wrap items-center justify-end gap-4 text-end text-xs tracking-[0.01em] text-neutral-700 max-[720px]:justify-center max-[720px]:text-center">
           <Link
             href={donateHref ?? `/${locale}/donate`}
             // pt/pb + matching negative -mt/-mb grows the tap target to a

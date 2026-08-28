@@ -29,14 +29,11 @@ export async function TopShortsSection({ locale }: { locale: Locale }) {
 
   return (
     <Reveal as="section">
-      <Section as="div" borderBlockStart paddingBlockStart="50px" paddingBlockEnd="66px">
+      <Section as="div" id="top-shorts" borderBlockStart paddingBlockStart="50px" paddingBlockEnd="66px">
         <div className="mb-7 flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
           <div className="max-w-[680px]">
             <Eyebrow className="mb-3">{t(locale, episodeDeskText.topShortsEyebrow)}</Eyebrow>
             <h2 className="max-[860px]:text-[clamp(24px,7vw,34px)]">{t(locale, episodeDeskText.topShortsTitle)}</h2>
-            <p className="mt-4 text-[16px] leading-[1.7] text-neutral-800">
-              {t(locale, episodeDeskText.topShortsLead)}
-            </p>
           </div>
           <a
             href={podcastText.allShortsHref}

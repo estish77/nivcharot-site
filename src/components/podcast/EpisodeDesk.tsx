@@ -137,6 +137,20 @@ export function EpisodeDesk({
         ]}
         active={tab}
         onSelect={(next) => {
+          /*
+           * "שורטס" is a jump, not a bucket (2026-08-28 brief): the Shorts
+           * worth surfacing are the most-watched ones, and those have their
+           * own section further down the page. Selecting it scrolls there
+           * and leaves the desk on the episodes, so there is exactly one
+           * place Shorts live rather than two competing lists.
+           */
+          if (next === 'shorts') {
+            document.getElementById('top-shorts')?.scrollIntoView({
+              behavior: shouldReduceMotion ? 'auto' : 'smooth',
+              block: 'start',
+            })
+            return
+          }
           setTab(next as TabKey)
           setOpenId(null)
           setPage(0)

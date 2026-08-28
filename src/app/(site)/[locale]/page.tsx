@@ -55,8 +55,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <Hero locale={locale} content={homeContent.hero} />
         <StatsBand locale={locale} tiles={homeContent.statTiles} />
         <GoalSection locale={locale} section={homeContent.goalSection ?? undefined} cards={homeContent.pillarCards} />
-        <Timeline locale={locale} />
+        {/*
+          The donate band sits directly under "המטרה והאמצעים" (2026-08-28
+          brief) rather than after the timeline: the ask lands while the
+          reader has just been told what the work is and why, instead of
+          after a long scroll through the movement's history.
+        */}
         <DonateBand locale={locale} />
+        <Timeline locale={locale} />
         <MediaArchive locale={locale} />
       </main>
       <Footer locale={locale} donateHref={`/${locale}/donate`} contactEmail={siteSettings.contactEmail} social={siteSettings.social} />

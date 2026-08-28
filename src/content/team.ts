@@ -42,7 +42,9 @@ export type TeamMemberCategory = 'staff' | 'central-team' | 'central-activity'
 export const teamMemberCategoryLabels: Record<TeamMemberCategory, Localized> = {
   staff: { he: 'צוות', en: 'Staff' },
   'central-team': { he: 'צוות מרכזי', en: 'Central team' },
-  'central-activity': { he: 'פעילות מרכזית', en: 'Central activity' },
+  // Renamed on the 2026-08-28 brief — this group is the movement's
+  // activists across its whole history, not a current job title.
+  'central-activity': { he: 'פעילות מרכזיות בארגון לאורך השנים', en: 'Key activists over the years' },
 }
 
 export type TeamMember = {
@@ -62,8 +64,8 @@ export type TeamMember = {
 export const teamHero: { eyebrow: Localized; title: Localized; lead: Localized } = {
   eyebrow: { he: 'אודות · הצוות', en: 'ABOUT · TEAM' },
   title: {
-    he: 'מי שמחזיקה את זה בידיים.',
-    en: 'The people holding this together.',
+    he: 'מי אנחנו',
+    en: 'Who we are',
   },
   lead: {
     he: 'מנהלות, מנחות ופעילות שטח, לצד ועד מנהל וקהילת בוגרות רחבה. כמעט כולן עושות את זה בנוסף לעבודה, לבית ולקהילה שהן חיות בה.',
@@ -94,13 +96,17 @@ export const teamMembers: TeamMember[] = [
     },
     order: 1,
     active: true,
+    category: 'staff',
   },
   {
     id: 'hila-yalon',
     name: { he: 'הילה ילון', en: 'Hila Yalon' },
-    role: { he: 'חברת ועד מנהל', en: 'Board member' },
+    role: {
+      he: 'אשת חינוך; חברת ועד מנהל',
+      en: 'Educator; board member',
+    },
     bio: {
-      he: 'עובדת עם הצוות הישראלי של הפדרציה היהודית של סן פרנסיסקו. למעלה מעשרים שנות עבודת שטח וניהול בתחומי עלייה וקליטה, חינוך ותעסוקה. מנחת תיאטרון קהילתי ובוגרת מדיניות ציבורית.',
+      he: 'עבדה עם הצוות הישראלי של הפדרציה היהודית של סן פרנסיסקו. למעלה מעשרים שנות עבודת שטח וניהול בתחומי עלייה וקליטה, חינוך ותעסוקה. מנחת תיאטרון קהילתי ובוגרת מדיניות ציבורית.',
       en: 'Works with the Israeli team of the Jewish Federation of San Francisco. Over twenty years of fieldwork and management in immigration and absorption, education and employment. A community-theatre director and public-policy graduate.',
     },
     photo: {
@@ -109,6 +115,7 @@ export const teamMembers: TeamMember[] = [
     },
     order: 2,
     active: true,
+    category: 'staff',
   },
   {
     id: 'hila-hasan-lefkowitz',
@@ -127,6 +134,7 @@ export const teamMembers: TeamMember[] = [
     },
     order: 3,
     active: true,
+    category: 'staff',
   },
   {
     id: 'tirtza-bloch-esterzon',
@@ -145,6 +153,7 @@ export const teamMembers: TeamMember[] = [
     },
     order: 4,
     active: true,
+    category: 'staff',
   },
   {
     id: 'efrat-shukrun',
@@ -163,6 +172,7 @@ export const teamMembers: TeamMember[] = [
     },
     order: 5,
     active: true,
+    category: 'staff',
   },
   {
     id: 'sara-yanetz',
@@ -176,26 +186,24 @@ export const teamMembers: TeamMember[] = [
       en: "Responsible for Nivcharot's presence on social media, and for the podcast's production and research.",
     },
     photo: null,
-    order: 6,
+    order: 9,
     active: true,
+    category: 'staff',
   },
   {
     id: 'esty-reader-indursky',
     name: { he: 'אסתי רידר אינדורסקי', en: 'Esty Reader Indursky' },
     role: {
-      he: 'מנכ"לית משותפת, 2016–2018',
-      en: 'Co-CEO, 2016–2018',
-    },
-    bio: {
-      he: 'שותפה למהלכים המשפטיים והתקשורתיים שנעשו בשנות כהונתה. חוקרת וסופרת, כתבה את "ושאינן נראות", הספר הראשון שניסח את מושג הפמיניזם החרדי.',
-      en: "Partner in the legal and media efforts of her years leading the organization. A researcher and author, she wrote \"And They Are Not Seen,\" the first book to articulate the concept of Haredi feminism.",
+      he: 'מנכ"לית שותפה בנבחרות, 2016–2018',
+      en: 'Co-CEO of Nivcharot, 2016–2018',
     },
     photo: {
       src: '/assets/team/esty-reader-indursky.jpg',
       alt: { he: 'אסתי רידר אינדורסקי', en: 'Esty Reader Indursky' },
     },
-    order: 13,
+    order: 1,
     active: true,
+    category: 'central-activity',
   },
   {
     id: 'racheli-ibenboim',
@@ -205,8 +213,9 @@ export const teamMembers: TeamMember[] = [
       en: 'Co-founded "Meoravot" with Esty Shushan; activist in the "No Voice, No Vote" campaign, 2015',
     },
     photo: null,
-    order: 9,
+    order: 2,
     active: true,
+    category: 'central-activity',
   },
   {
     id: 'tali-farkash',
@@ -223,16 +232,18 @@ export const teamMembers: TeamMember[] = [
       src: '/assets/team/tali-farkash.jpg',
       alt: { he: 'טלי פרקש', en: 'Tali Farkash' },
     },
-    order: 10,
+    order: 3,
     active: true,
+    category: 'central-activity',
   },
   {
     id: 'racheli-rushgold-gottlieb',
     name: { he: 'רחלי רושגולד גוטליב', en: 'Racheli Rushgold Gottlieb' },
     role: { he: 'מנהלת קשרי ממשל, 2018', en: 'Government-relations manager, 2018' },
     photo: null,
-    order: 14,
+    order: 4,
     active: true,
+    category: 'central-activity',
   },
   {
     id: 'michal-chernovitzky',
@@ -242,54 +253,51 @@ export const teamMembers: TeamMember[] = [
       en: 'Activist in the "No Voice, No Vote" campaign, 2015',
     },
     photo: null,
-    order: 11,
+    order: 5,
     active: true,
+    category: 'central-activity',
   },
   {
     id: 'malki-rotner',
     name: { he: 'מלכי רוטנר', en: 'Malki Rotner' },
-    role: { he: 'מנחת "הנבחרת", 2022 ו-2026', en: '"HaNivcheret" facilitator, 2022 and 2026' },
+    role: {
+      he: 'מנחת תוכניות מנהיגות',
+      en: 'Leadership-programme facilitator',
+    },
     photo: null,
-    order: 20,
+    order: 8,
     active: true,
+    category: 'staff',
   },
   {
     id: 'sheli-rappaport',
     name: { he: 'שלי רפופורט', en: 'Sheli Rappaport' },
     role: {
-      he: 'מנחת "הנבחרת", 2019, בשיתוף ויצו',
-      en: '"HaNivcheret" facilitator, 2019, in partnership with WIZO',
+      he: 'מנחת סדנאות חזון',
+      en: 'Vision-workshop facilitator',
     },
     photo: null,
-    order: 17,
+    order: 7,
     active: true,
-  },
-  {
-    id: 'mira-zohar',
-    name: { he: 'מירה זוהר', en: 'Mira Zohar' },
-    role: {
-      he: 'מנחת "הנבחרת", 2018, בשיתוף ויצו והשגרירות האמריקאית',
-      en: '"HaNivcheret" facilitator, 2018, in partnership with WIZO and the U.S. Embassy',
-    },
-    photo: null,
-    order: 15,
-    active: true,
+    category: 'staff',
   },
   {
     id: 'tzipi-lavi',
     name: { he: 'ציפי לביא', en: 'Tzipi Lavi' },
     role: { he: 'מנהלת פרויקטים וקשרי ממשל, 2024', en: 'Projects and government-relations manager, 2024' },
     photo: null,
-    order: 21,
+    order: 6,
     active: true,
+    category: 'central-activity',
   },
   {
     id: 'leah-shainbrom',
     name: { he: 'לאה שיינברום', en: 'Leah Shainbrom' },
     role: { he: 'מנהלת קבוצות "שיח.ה"', en: 'Manager of the "Sicha" discussion groups' },
     photo: null,
-    order: 18,
+    order: 7,
     active: true,
+    category: 'central-activity',
   },
   {
     id: 'raaya-mari',
@@ -299,8 +307,9 @@ export const teamMembers: TeamMember[] = [
       en: 'Projects manager, 2022–2025, and lead petitioner in the case against Shas',
     },
     photo: null,
-    order: 19,
+    order: 8,
     active: true,
+    category: 'central-activity',
   },
   {
     id: 'esther-kramer',
@@ -310,24 +319,18 @@ export const teamMembers: TeamMember[] = [
       en: 'HaNivcheret cohort 1 alumna; lecturer on government relations and Knesset committee work',
     },
     photo: null,
-    order: 16,
+    order: 6,
     active: true,
-  },
-  {
-    id: 'miri-rosen',
-    name: { he: 'מירי רוזן', en: 'Miri Rosen' },
-    role: { he: 'פעילה ומנכ"לית "מעורבות", 2015', en: 'Activist and CEO of "Meoravot", 2015' },
-    photo: null,
-    order: 12,
-    active: true,
+    category: 'staff',
   },
   {
     id: 'reuven-bitton',
     name: { he: 'עו"ד ראובן ביטון', en: 'Adv. Reuven Bitton' },
     role: { he: 'יועץ משפטי', en: 'Legal advisor' },
     photo: null,
-    order: 8,
+    order: 10,
     active: true,
+    category: 'staff',
   },
   {
     id: 'yoav-lalum',
@@ -341,7 +344,8 @@ export const teamMembers: TeamMember[] = [
       src: '/assets/team/yoav-lalum.jpg',
       alt: { he: 'עו"ד יואב ללום', en: 'Adv. Yoav Lalum' },
     },
-    order: 7,
+    order: 11,
     active: true,
+    category: 'staff',
   },
 ]

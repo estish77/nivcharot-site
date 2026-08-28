@@ -7,7 +7,7 @@ import { useReducedMotion } from '@/lib/useReducedMotion'
 
 import type { PodcastShort } from '@/content/podcast'
 import { podcastText } from '@/content/podcast'
-import { ImageSlot } from '@/components/ui'
+import { cn, ImageSlot } from '@/components/ui'
 import type { Locale } from '@/lib/i18n'
 import { t } from '@/lib/i18n'
 import { StoryViewer, type StoryViewerItem } from './StoryViewer'
@@ -62,11 +62,16 @@ function captionFor(short: PodcastShort): string {
   return short.title.length > 26 ? `${short.title.slice(0, 26).trim()}…` : short.title
 }
 
-const MAX_STORIES = 12
+/** Matches the widest column count below, so the row is always exactly full. */
+const MAX_STORIES = 10
 
 /**
- * The strip's story list: newest Shorts first, at most one per guest, and
- * preferring the ones we can actually put a name to.
+ * The strip's story list: the channel's MOST-WATCHED Shorts, at most one
+ * per guest, preferring the ones we can actually put a name to.
+ *
+ * Ranked by real YouTube view counts rather than by date (2026-08-28
+ * brief) - the strip is the page's introduction to the show, so it should
+ * lead with the conversations that actually travelled.
  *
  * 2026-08-27 brief ("more stories at the top, don't repeat the same name
  * twice"). Two things make that harder than a `slice`:
@@ -88,8 +93,11 @@ const MAX_STORIES = 12
 function pickStories(shorts: PodcastShort[]): PodcastShort[] {
   const usedNames = new Set<string>()
   const picked: PodcastShort[] = []
+  // Shorts with no view count sort last rather than being dropped: missing
+  // data shouldn't outrank a real number, but it shouldn't hide a clip either.
+  const byViews = [...shorts].sort((a, b) => (b.viewCount ?? -1) - (a.viewCount ?? -1))
 
-  for (const short of shorts) {
+  for (const short of byViews) {
     const name = guestNameFrom(short.title)?.trim()
     if (!name || usedNames.has(name)) continue
     usedNames.add(name)
@@ -98,7 +106,7 @@ function pickStories(shorts: PodcastShort[]): PodcastShort[] {
   }
 
   const usedCaptions = new Set(picked.map((s) => captionFor(s)))
-  for (const short of shorts) {
+  for (const short of byViews) {
     if (picked.includes(short)) continue
     if ([...usedNames].some((name) => short.title.includes(name))) continue
     const caption = captionFor(short).trim()
@@ -146,11 +154,26 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
   return (
     <div
       data-stories
-      // Wraps onto a second row rather than scrolling sideways (2026-08-28
-      // brief): a horizontal scroller hides half the guests behind a gesture
-      // that isn't obvious on desktop, and these are the page's introduction
-      // to who has been on the show.
-      className="flex flex-wrap gap-x-[22px] gap-y-5 py-[7px] pb-[10px]"
+      /*
+       * Exactly one row, at every width, with no horizontal scrolling
+       * (2026-08-28 brief). A scroller hid half the guests behind a gesture
+       * that isn't obvious on a desktop, and wrapping to a second row was
+       * not what was wanted either.
+       *
+       * So: a grid whose column count steps with the viewport, plus
+       * nth-child rules that hide whatever wouldn't fit on that single row.
+       * Rendering ten and hiding the surplus in CSS keeps the markup (and
+       * the story-viewer indices) identical at every breakpoint, which a
+       * JS-measured slice would not.
+       */
+      className={cn(
+        'grid grid-cols-4 gap-x-3 py-[7px] pb-[10px]',
+        'min-[560px]:grid-cols-6 min-[860px]:grid-cols-8 min-[1100px]:grid-cols-10',
+        '[&>*:nth-child(n+5)]:hidden',
+        'min-[560px]:[&>*:nth-child(n+5)]:flex min-[560px]:[&>*:nth-child(n+7)]:hidden',
+        'min-[860px]:[&>*:nth-child(n+7)]:flex min-[860px]:[&>*:nth-child(n+9)]:hidden',
+        'min-[1100px]:[&>*:nth-child(n+9)]:flex',
+      )}
     >
       {shown.map((short, i) => {
         const caption = captionFor(short)
@@ -160,11 +183,11 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
             key={short.id}
             type="button"
             onClick={() => setOpenIndex(i)}
-            className="group flex w-[104px] shrink-0 flex-col items-center gap-[9px] text-center text-text no-underline"
+            className="group flex min-w-0 flex-col items-center gap-[9px] text-center text-text no-underline"
           >
             <motion.span
               aria-hidden="true"
-              className="box-border block h-[92px] w-[92px] shrink-0 rounded-full p-[3px] outline outline-2 outline-offset-[3px] outline-transparent transition-[outline-color] duration-300 ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:outline-accent group-focus-visible:outline-accent"
+              className="box-border block aspect-square w-full max-w-[92px] rounded-full p-[3px] outline outline-2 outline-offset-[3px] outline-transparent transition-[outline-color] duration-300 ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:outline-accent group-focus-visible:outline-accent"
               initial={false}
               animate={
                 shouldReduceMotion
@@ -183,7 +206,7 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
                     }
               }
             >
-              <span className="block h-[86px] w-[86px] overflow-hidden rounded-full bg-tint-cream">
+              <span className="block h-full w-full overflow-hidden rounded-full bg-tint-cream">
                 {short.thumbnailUrl ? (
                   // Real per-video YouTube thumbnail (src/lib/youtube.ts) —
                   // a plain <img>, not next/image: these are remote
