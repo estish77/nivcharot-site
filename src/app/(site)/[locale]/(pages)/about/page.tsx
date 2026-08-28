@@ -156,9 +156,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 {paragraph}
               </p>
             ))}
-            <p className="m-0 mb-4 max-w-[580px] text-[12.5px] leading-[1.6] text-neutral-700">
-              {t(locale, aboutContent.schenirer.sources)}
-            </p>
             <Link href={`/${locale}/story`} className={arrowLinkClass}>
               {arrowLabel(locale, t(locale, aboutContent.schenirer.timelineLinkLabel))}
             </Link>

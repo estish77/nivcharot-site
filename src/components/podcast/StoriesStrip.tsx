@@ -90,12 +90,35 @@ const MAX_STORIES = 10
  * chosen guest's name appears anywhere in the title, which is what catches
  * the case above.
  */
+/**
+ * Shorts whose YouTube thumbnail frames the HOST rather than the named
+ * guest (2026-08-28: "in the story, crop the interviewee, not me").
+ *
+ * This can't be fixed by cropping. YouTube picks the thumbnail frame, and
+ * on these clips the guest is not in the frame at all — it is Esty alone,
+ * mid-question. The circle then shows her under someone else's name, which
+ * is the part that actually reads as wrong.
+ *
+ * So they're skipped, and that guest falls through to their next
+ * most-watched Short. Nor can this be detected in code: nothing in the
+ * data says who is on screen, so each entry here was checked by eye
+ * against her photo. Add an id when a circle shows the wrong person.
+ */
+const HOST_FRAMED_SHORTS = new Set<string>([
+  '5dckgt-xivA', // captioned "יעקב וידר"
+  'j9PqsemL3iI', // captioned "מוישי ליפשיץ"
+  'jLZWsPEluyQ', // captioned "מלכי רוטנר"
+  '1EEB4ilJyVs', // captioned "אורי צייטלין"
+])
+
 function pickStories(shorts: PodcastShort[]): PodcastShort[] {
   const usedNames = new Set<string>()
   const picked: PodcastShort[] = []
   // Shorts with no view count sort last rather than being dropped: missing
   // data shouldn't outrank a real number, but it shouldn't hide a clip either.
-  const byViews = [...shorts].sort((a, b) => (b.viewCount ?? -1) - (a.viewCount ?? -1))
+  const byViews = [...shorts]
+    .filter((short) => !HOST_FRAMED_SHORTS.has(short.videoId))
+    .sort((a, b) => (b.viewCount ?? -1) - (a.viewCount ?? -1))
 
   for (const short of byViews) {
     const name = guestNameFrom(short.title)?.trim()

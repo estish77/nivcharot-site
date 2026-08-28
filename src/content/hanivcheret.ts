@@ -1,3 +1,5 @@
+import { hallSentence } from './home'
+
 import type { Localized } from '@/lib/i18n'
 
 /**
@@ -62,11 +64,11 @@ export const hanivcheretHero = {
   /**
    * Spelled out letter by letter around the hall's outer ring, which holds
    * 30 seats — so this has to stay well under 30 characters.
+   *
+   * Deliberately the same line the home hero's hall spells (2026-08-28
+   * brief), reused rather than retyped so the two can't drift apart.
    */
-  seatHallSentence: {
-    he: 'הכיסא שלך מחכה',
-    en: 'YOUR SEAT IS WAITING',
-  } satisfies Localized,
+  seatHallSentence: hallSentence,
 }
 
 /**

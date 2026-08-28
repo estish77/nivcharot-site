@@ -147,10 +147,6 @@ export const aboutContent = {
         `She herself rejected any feminist label, and claimed what was due to her “according to the rights the Torah granted us”. That is exactly why we chose her for the Nivcharot logo: one woman, an outsider, who built an institution the whole of Haredi society still lives in. Haredi women's leadership is not a new invention. It was here first.`,
       ],
     } satisfies Localized<string[]>,
-    sources: {
-      he: `מקורות: ערכי “שרה שנירר” בויקיפדיה ובהמכלול; נעמי זיידמן, “שרה שנירר ותנועת בית יעקב: מהפכה בשם המסורת”; ברנדה סוכצ׳בסקי־בקון, “מייסדת בית יעקב שהפכה להרבה יותר ממורה”, מקור ראשון, 12.7.2020.`,
-      en: `Sources: the “Sarah Schenirer” entries in Hebrew Wikipedia and HaMichlol; Naomi Seidman, “Sarah Schenirer and the Bais Yaakov Movement: A Revolution in the Name of Tradition”; Brenda Socachevsky Bacon, Makor Rishon, 12 July 2020.`,
-    } satisfies Localized,
     timelineLinkLabel: { he: `איך זה התחיל, ציר הזמן`, en: `How it began, the timeline` } satisfies Localized,
   },
 
