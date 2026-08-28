@@ -840,21 +840,39 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
     )
     if (!res.docs.length) return fallback
 
+    /*
+     * Photo fallback, by Hebrew name.
+     *
+     * The team photos ship with the repo under /public/assets/team and were
+     * never in the media library. Once the roster lives in the collection
+     * (so it can be edited in the dashboard) a row with no uploaded photo
+     * would otherwise render a placeholder, and the page would lose every
+     * portrait it had been showing.
+     *
+     * So a row without its own photo borrows the bundled one. Uploading a
+     * photo in the dashboard overrides it, which is the direction that
+     * should win.
+     */
+    const bundledPhotoByName = new Map(
+      fallback.filter((member) => member.photo).map((member) => [member.name.he, member.photo]),
+    )
+
     return res.docs.map((doc) => {
       const d = doc as unknown as Record<string, unknown>
       const photo = d.photo && typeof d.photo === 'object' ? (d.photo as Record<string, unknown>) : null
+      const names = toLocalizedPair(d.name)
       const bioField = d.bio as Record<string, unknown> | undefined
       const bioHe = lexicalToParagraphs(bioField?.he).join(' ')
       const bioEn = lexicalToParagraphs(bioField?.en).join(' ')
 
       return {
         id: String(d.id ?? ''),
-        name: toLocalizedPair(d.name),
+        name: names,
         role: toLocalizedPair(d.role),
         bio: bioHe || bioEn ? { he: bioHe || bioEn, en: bioEn || bioHe } : undefined,
         photo: photo
           ? { src: String(photo.url ?? ''), alt: toLocalizedPair(photo.alt) }
-          : null,
+          : (bundledPhotoByName.get(names.he) ?? null),
         order: Number(d.order ?? 0),
         active: Boolean(d.active),
         category: (d.category as TeamMember['category']) ?? 'staff',

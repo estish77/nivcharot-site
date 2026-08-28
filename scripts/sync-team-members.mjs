@@ -116,8 +116,22 @@ for (const member of teamMembers) {
   })
   const existing = found.docs[0]
 
+  /*
+   * Photos are only uploaded when blob storage is actually configured for
+   * this process. Running against production from a laptop, it is not:
+   * Vercel refuses to hand out production secrets, so `vercelBlobStorage`
+   * disables itself and the bytes would land on the local disk while the
+   * production row recorded a filename the blob store has never seen -
+   * broken images on the live page.
+   *
+   * Skipping the upload is safe because `getTeamMembers()` falls back to
+   * the photo bundled at /public/assets/team for any row that has none, so
+   * the portraits keep rendering either way, and uploading through the
+   * dashboard (which does have the token) overrides them.
+   */
+  const canUploadPhotos = Boolean(process.env.BLOB_READ_WRITE_TOKEN) || !process.env.DATABASE_URI?.startsWith('postgres')
   let photoId = existing?.photo ?? null
-  if (member.photo && !photoId) {
+  if (member.photo && !photoId && canUploadPhotos) {
     photoId = await uploadPhoto(member.photo.src, member.photo.alt.he, member.photo.alt.en)
   }
 
