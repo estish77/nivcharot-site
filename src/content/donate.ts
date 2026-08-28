@@ -78,6 +78,9 @@ export type GivingOption = {
   body: Localized
 }
 
+/** A giving option with no blurb — the bank card leads straight into its account table. */
+export type GivingOptionHeading = Omit<GivingOption, 'body'>
+
 export const standingOrderOption: GivingOption = {
   number: '01',
   title: { he: 'הוראת קבע חודשית', en: 'Monthly standing order' },
@@ -96,13 +99,10 @@ export const cardOption: GivingOption = {
   },
 }
 
-export const bankOption: GivingOption = {
+export const bankOption: GivingOptionHeading = {
   number: '03',
   title: { he: 'העברה בנקאית', en: 'Bank transfer' },
-  body: {
-    he: 'להעברה ישירה, כולל תרומות גדולות וקרנות.',
-    en: 'For direct transfers, including major gifts and foundations.',
-  },
+  // No blurb by request (2026-08-28): the account details below say it.
 }
 
 /**

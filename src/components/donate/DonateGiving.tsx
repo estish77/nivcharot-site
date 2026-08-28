@@ -211,7 +211,6 @@ export function DonateGiving({ locale, donationLinks, receiptEmail, children }: 
                 {bankOption.number}
               </span>
               <h3 className="text-[23px] max-[860px]:text-[clamp(19px,5.2vw,24px)]">{t(locale, bankOption.title)}</h3>
-              <p className="text-[14.5px] leading-[1.7] text-neutral-800">{t(locale, bankOption.body)}</p>
               <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-[18px] gap-y-0 text-[14.5px] leading-[1.6]">
                 {[
                   [t(locale, { he: 'בנק', en: 'Bank' }), t(locale, bankDetails.bankName)],

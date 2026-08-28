@@ -31,6 +31,34 @@ import config from '../payload.config.ts'
 import { teamMembers } from '../src/content/team.ts'
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+/*
+ * Guard against the trap this script fell into on 2026-08-28.
+ *
+ * Payload's postgres adapter enables schema `push` whenever NODE_ENV isn't
+ * 'production'. Run this against the production database without it and
+ * Payload pushes, then records a `dev` row with batch -1 in
+ * payload_migrations. From that point on EVERY production start and every
+ * Vercel build stops on an interactive "you've run Payload in dev mode"
+ * prompt (@payloadcms/drizzle/dist/migrate.js) and hangs forever with no
+ * TTY to answer it. Two builds hung for 20+ minutes before anyone noticed,
+ * and clearing it needs a manual DELETE against production.
+ *
+ * The header above has always said to set NODE_ENV=production. Saying so
+ * is evidently not enough, so refuse instead.
+ */
+if (process.env.DATABASE_URI?.startsWith('postgres') && process.env.NODE_ENV !== 'production') {
+  console.error(
+    [
+      'Refusing to run: DATABASE_URI points at postgres but NODE_ENV is not "production".',
+      'Payload would push schema changes and leave a `dev` marker that hangs every',
+      'subsequent build. Re-run as:',
+      '',
+      '  NODE_ENV=production DATABASE_URI="<uri>" npm run sync-team-members',
+    ].join('\n'),
+  )
+  process.exit(1)
+}
+
 const payload = await getPayload({ config })
 
 /** Payload's richText wants Lexical JSON, not a string. */
