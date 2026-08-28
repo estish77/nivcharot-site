@@ -55,12 +55,32 @@ export function SiteNotice({ locale }: SiteNoticeProps) {
         animate={shouldReduceMotion ? undefined : { opacity: [0.4, 1, 0.4], scale: [0.8, 1.05, 0.8] }}
         transition={{ duration: 2.2, ease: 'easeInOut', repeat: Infinity }}
       />
-      <span>
+      {/*
+        The text pulses between white and the brand red (2026-08-28 brief).
+        Two deliberate choices in how:
+
+        - It blinks to --color-accent-300, not the raw brand red. That token
+          exists for exactly this situation: red text on the brand slate
+          measures 2.04:1 and fails WCAG AA, so the raw red would leave the
+          notice unreadable for half of every cycle. #efa8ac reads as red on
+          this ground and holds 5.23:1.
+        - The cycle is slow (1.8s, eased). Anything flashing more than three
+          times a second is a seizure risk under WCAG 2.3.1; this is a gentle
+          pulse, and it stops entirely under prefers-reduced-motion.
+
+        The hexes are inlined because Motion interpolates between concrete
+        colours - a var() reference does not animate - matching what
+        StoriesStrip already does with its ring colours.
+      */}
+      <motion.span
+        animate={shouldReduceMotion ? undefined : { color: ['#ffffff', '#efa8ac', '#ffffff'] }}
+        transition={{ duration: 1.8, ease: 'easeInOut', repeat: Infinity }}
+      >
         {t(locale, {
-          he: 'האתר החדש עולה לאוויר. התוכן עדיין בבנייה ומתעדכן בימים הקרובים.',
-          en: 'The new site is launching. Content is still being finalized over the coming days.',
+          he: 'אתר חדש באוויר, עדיין בבנייה, התוכן מתעדכן, תישארו איתנו.',
+          en: 'A new site is live and still being built. Content is updating — stay with us.',
         })}
-      </span>
+      </motion.span>
     </div>
   )
 }

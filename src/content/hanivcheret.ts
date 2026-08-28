@@ -68,10 +68,18 @@ export const hanivcheretHero = {
  * Payload global (only `hero.{eyebrow,title,body}` exists there) — flagging
  * as a schema gap for whoever owns that file.
  */
-export type HeroVideoKey = 'estiStory' | 'hareditMeduberet' | 'nonTypicalLeadership' | 'none'
+/**
+ * `estiStory` (the founder's personal-story clip) was removed on the
+ * 2026-08-28 brief — that video now lives only on the media page, with the
+ * rest of the video coverage. `programPromo` replaces it as the default:
+ * the programme's own trailer is what this page is actually about.
+ */
+export type HeroVideoKey = 'programPromo' | 'hareditMeduberet' | 'nonTypicalLeadership' | 'none'
 
 const HERO_VIDEO_IDS: Record<Exclude<HeroVideoKey, 'none'>, string> = {
-  estiStory: 'C2SQgyVKo_c',
+  // "הנבחרת - את רוצה להיות שם כשזה קורה!" — the programme's own trailer,
+  // from Nivcharot's media channel.
+  programPromo: 'TSpKYym-CBI',
   hareditMeduberet: 'RXdFa9ghP4U',
   nonTypicalLeadership: 'Io2XwQxpKcM',
 }
@@ -81,9 +89,9 @@ export type HanivcheretHeroMediaConfig = {
   customVideoUrl?: string
 }
 
-/** Default selection — matches the mockup's `default: 'הסיפור האישי של אסתי'`. */
+/** Default selection — the programme's own trailer (2026-08-28 brief). */
 export const hanivcheretHeroMedia: HanivcheretHeroMediaConfig = {
-  heroVideo: 'estiStory',
+  heroVideo: 'programPromo',
 }
 
 export type ResolvedHeroMedia =
@@ -233,3 +241,91 @@ export const hanivcheretAlumnaPlaceholder = {
   he: (cohort: number) => `שם הבוגרת · בוגרת מחזור ${cohort}`,
   en: (cohort: number) => `Name · Cohort ${cohort} alumna`,
 }
+
+/**
+ * The programme's own facts, and the sign-up form's chrome (2026-08-28
+ * brief). Structure, topics, session count, format and cost are taken from
+ * Nivcharot's registration landing page (lp.vp4.me/ifrk).
+ *
+ * NO DATES ARE STATED. That page describes the cycle that ran May-July 2026,
+ * with a March 2026 application deadline — both already past — so repeating
+ * them here would advertise a closed cycle as the upcoming one. The form
+ * below is therefore an expression of interest in the NEXT cycle, and the
+ * copy says exactly that. Add the real dates here once they are set.
+ */
+export const hanivcheretProgram = {
+  eyebrow: { he: 'עתודת מנהיגות חרדיות', en: 'A HAREDI WOMEN’S LEADERSHIP RESERVE' } satisfies Localized,
+  title: { he: 'מה יש בתוכנית', en: 'What the programme holds' } satisfies Localized,
+  lead: {
+    he: 'תוכנית הכשרה לנשים חרדיות, לקידום מעורבות במוקדי קבלת החלטות ובזירה הציבורית.',
+    en: "A training programme for Haredi women, to advance their involvement in decision-making centres and in public life.",
+  } satisfies Localized,
+  facts: [
+    {
+      label: { he: 'מפגשים', en: 'Sessions' } satisfies Localized,
+      value: { he: 'עשרה מפגשים פרונטליים', en: 'Ten in-person sessions' } satisfies Localized,
+    },
+    {
+      label: { he: 'מתכונת', en: 'Format' } satisfies Localized,
+      value: {
+        he: 'מפגש שבועי בימי ראשון אחר הצהריים, ומתוכם יום עיון מלא בכנסת',
+        en: 'Weekly on Sunday afternoons, including one full study day at the Knesset',
+      } satisfies Localized,
+    },
+    {
+      label: { he: 'מיקום', en: 'Location' } satisfies Localized,
+      value: { he: 'מרכז הארץ', en: 'Central Israel' } satisfies Localized,
+    },
+    {
+      label: { he: 'למי', en: 'Who for' } satisfies Localized,
+      value: { he: 'נשים חרדיות מכל רחבי הארץ', en: 'Haredi women from across the country' } satisfies Localized,
+    },
+  ],
+  topicsTitle: { he: 'הנושאים', en: 'The topics' } satisfies Localized,
+  topics: [
+    { he: 'היסטוריה מגזרית ונשים בעמדות השפעה', en: 'Sectoral history, and women in positions of influence' } satisfies Localized,
+    { he: 'תיאוריות מנהיגות ויחסי מגדר', en: 'Leadership theory and gender relations' } satisfies Localized,
+    { he: 'מפגשי השראה עם מנהיגות', en: 'Inspiration sessions with women leaders' } satisfies Localized,
+    { he: 'קונפליקטים וחסמים ייחודיים לנשים חרדיות', en: 'Conflicts and barriers specific to Haredi women' } satisfies Localized,
+    { he: 'פמיניזם הלכתי וזרמים בהגות הפמיניסטית', en: 'Halakhic feminism and streams of feminist thought' } satisfies Localized,
+    { he: 'אסטרטגיה פוליטית ובניית רשת קשרים', en: 'Political strategy and network building' } satisfies Localized,
+    { he: 'רשתות חברתיות למנהיגות אזרחית', en: 'Social media for civic leadership' } satisfies Localized,
+    { he: 'סביבות עבודה מוניציפליות וארציות', en: 'Municipal and national working environments' } satisfies Localized,
+  ],
+  mentoringNote: {
+    he: 'המפגשים כוללים מנטורינג קבוצתי ודיונים מעמיקים.',
+    en: 'Sessions include group mentoring and in-depth discussion.',
+  } satisfies Localized,
+} as const
+
+export const hanivcheretApply = {
+  eyebrow: { he: 'הרשמה למחזור הבא', en: 'NEXT COHORT' } satisfies Localized,
+  title: { he: 'רוצה להיות שם כשזה קורה?', en: 'Want to be there when it happens?' } satisfies Localized,
+  lead: {
+    he: 'המחזור הבא טרם נפתח להרשמה. השאירי פרטים ונחזור אלייך עם הפתיחה, לפני כולם.',
+    en: "Registration for the next cohort isn't open yet. Leave your details and we'll come back to you when it opens, before anyone else.",
+  } satisfies Localized,
+  processNote: {
+    he: 'תהליך הקבלה במחזורים הקודמים כלל טופס פרטים, שאלון, וראיון אישי בזום עם מנהלות התוכנית.',
+    en: 'In previous cohorts the admissions process was a details form, a questionnaire, and a personal Zoom interview with the programme managers.',
+  } satisfies Localized,
+
+  nameLabel: { he: 'שם מלא', en: 'Full name' } satisfies Localized,
+  emailLabel: { he: 'כתובת אימייל', en: 'Email address' } satisfies Localized,
+  phoneLabel: { he: 'טלפון', en: 'Phone' } satisfies Localized,
+  motivationLabel: { he: 'למה את חושבת שהתוכנית מתאימה לך?', en: 'Why do you think this programme suits you?' } satisfies Localized,
+  submitLabel: { he: 'שליחת פרטים', en: 'Send my details' } satisfies Localized,
+  submittingLabel: { he: 'שולחת...', en: 'Sending...' } satisfies Localized,
+
+  requiredError: { he: 'נא למלא את כל השדות', en: 'Please fill in every field' } satisfies Localized,
+  emailError: { he: 'נא להזין כתובת אימייל תקינה', en: 'Please enter a valid email address' } satisfies Localized,
+  phoneError: { he: 'נא להזין מספר טלפון תקין', en: 'Please enter a valid phone number' } satisfies Localized,
+  submitError: {
+    he: 'הפרטים לא נשלחו. אפשר לנסות שוב, או לכתוב ישירות ל-',
+    en: 'Your details could not be sent. Please try again, or write directly to ',
+  } satisfies Localized,
+  successNote: {
+    he: 'הפרטים נשמרו אצלנו. נחזור אלייך כשההרשמה למחזור הבא תיפתח.',
+    en: "Your details are saved with us. We'll be in touch when registration for the next cohort opens.",
+  } satisfies Localized,
+} as const

@@ -11,6 +11,7 @@ import { NewsletterSubscribers } from './NewsletterSubscribers'
 import { PodcastEpisodes } from './PodcastEpisodes'
 import { Posts } from './Posts'
 import { PressArchive } from './PressArchive'
+import { ProgramApplications } from './ProgramApplications'
 import { TeamMembers } from './TeamMembers'
 import { TimelineMilestones } from './TimelineMilestones'
 
@@ -26,6 +27,9 @@ import { TimelineMilestones } from './TimelineMilestones'
  * `Inquiries` added 2026-08-19 — transactional contact-form submissions,
  * not editorial content, but it lives in this barrel anyway so
  * payload.config.ts has one place that lists every collection.
+ *
+ * `ProgramApplications` added 2026-08-28 — the same kind of thing for the
+ * "הנבחרת" leadership programme's own sign-up form.
  */
 export const collections: CollectionConfig[] = [
   Media,
@@ -40,5 +44,6 @@ export const collections: CollectionConfig[] = [
   Faqs,
   AlumnaeQuotes,
   Inquiries,
+  ProgramApplications,
   NewsletterSubscribers,
 ]

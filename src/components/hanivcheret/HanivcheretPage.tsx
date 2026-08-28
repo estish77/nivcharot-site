@@ -14,6 +14,8 @@ import { getHanivcheretContent, getHanivcheretQuotes } from '@/lib/cms'
 import { t, type Locale, type Localized } from '@/lib/i18n'
 import { Button, Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SectionHead, Tag, cn } from '@/components/ui'
 import { AlumnaeVideosSection } from './AlumnaeVideosSection'
+import { ApplySection } from './ApplySection'
+import { NivcharotVoicesSection } from './NivcharotVoicesSection'
 import { SeatHall } from './SeatHall'
 
 const FOCUS_RING = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
@@ -239,6 +241,12 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
 
       {/* Alumnae-speaking video grid (item 13) — see AlumnaeVideosSection.tsx for why its fixture is intentionally empty. */}
       <AlumnaeVideosSection locale={locale} />
+
+      {/* Nivcharot activists speaking, from the movement's own media channel. */}
+      <NivcharotVoicesSection locale={locale} />
+
+      {/* What the programme is, and sign-up for the next cycle. */}
+      <ApplySection locale={locale} />
     </>
   )
 }
