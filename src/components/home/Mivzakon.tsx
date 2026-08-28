@@ -10,7 +10,7 @@ import type { MivzakonItem } from '@/content/mivzakon'
 const text = {
   label: { he: 'מבזקון', en: 'MIVZAKON' },
   sub: { he: 'הנצפים ביותר בחרדית מדוברת', en: 'MOST WATCHED ON HAREDIT MEDUBERET' },
-  more: { he: 'עוד', en: 'More' },
+  more: { he: 'עוד בחרדית מדוברת', en: 'More on Haredit Meduberet' },
   prev: { he: 'המבזק הקודם', en: 'Previous flash' },
   next: { he: 'המבזק הבא', en: 'Next flash' },
   region: { he: 'מבזקון, מתוך השורטס של הערוץ', en: 'Mivzakon, from the channel shorts' },
@@ -31,6 +31,12 @@ export type MivzakonProps = { locale: Locale; items: MivzakonItem[]; className?:
  * Headlines only: no thumbnail and no view count (2026-08-28 follow-up).
  * A row of images reads as a gallery rather than a ticker, and the number
  * competed with the sentence for the same glance.
+ *
+ * Everything lives INSIDE the bar. A bell and a "more" pill used to hang
+ * off the top and bottom edges, which left the page background showing
+ * around them; the pill is now a full-height red block at the leading edge
+ * that the headlines slide under and disappear behind, and the bell is
+ * gone.
  *
  * Motion is a transform on a track holding TWO copies of the list: the
  * track slides one copy's width and resets to 0, at which point the second
@@ -133,42 +139,34 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
 
   if (items.length === 0) return null
 
+  /*
+   * Minimal chevrons: a hairline stroke, no circle and no fill, sitting in
+   * their own cell inside the bar (2026-08-28 follow-up). The round white
+   * buttons they replace floated over the headlines and read as a control
+   * bolted on top of the strip rather than part of it.
+   */
   const arrowClass =
-    'absolute top-1/2 z-20 flex h-[30px] w-[30px] -translate-y-1/2 items-center justify-center rounded-full border border-divider bg-white text-niv-slate transition-colors duration-200 ease-out hover:border-accent hover:bg-accent hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
+    'flex h-7 w-7 items-center justify-center text-neutral-600 transition-colors duration-200 ease-out hover:text-accent focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
 
   return (
     <div
-      className={cn('relative mb-9 mt-4 border-y-2 border-divider bg-tint-cream', className)}
+      className={cn('relative mb-9 mt-4 overflow-hidden border-y-2 border-divider bg-tint-cream', className)}
       onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      <span aria-hidden="true" className="absolute -top-[14px] z-20 text-accent start-[18px]">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" className="block">
-          <path d="M12 22a2.4 2.4 0 0 0 2.4-2.4H9.6A2.4 2.4 0 0 0 12 22Zm7.2-5.6v-5.2c0-3.3-1.8-6-4.8-6.7v-.7a2.4 2.4 0 0 0-4.8 0v.7c-3 .7-4.8 3.4-4.8 6.7v5.2L3 18v1h18v-1l-1.8-1.6Z" />
-        </svg>
-      </span>
-
-      {/* In RTL `start` is the right edge, so it takes the right-pointing chevron. */}
-      <button type="button" aria-label={t(locale, text.prev)} onClick={() => step(-1)} className={cn(arrowClass, 'start-2')}>
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="block rtl:hidden">
-          <path d="m15 5-7 7 7 7" />
-        </svg>
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="hidden rtl:block">
-          <path d="m9 5 7 7-7 7" />
-        </svg>
-      </button>
-      <button type="button" aria-label={t(locale, text.next)} onClick={() => step(1)} className={cn(arrowClass, 'end-2')}>
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="block rtl:hidden">
-          <path d="m9 5 7 7-7 7" />
-        </svg>
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="hidden rtl:block">
-          <path d="m15 5-7 7 7 7" />
-        </svg>
-      </button>
-
-      <div className="overflow-hidden px-11 max-[860px]:px-[50px]">
+      {/*
+       * The track runs the FULL width of the bar and is clipped by it, while
+       * the red block and the arrow cell sit on top at either end. That is
+       * what makes headlines slide underneath them and vanish, rather than
+       * stopping short at a padded edge.
+       *
+       * Both overlays are `inset-y-0`, so they meet the bar's top and bottom
+       * rules exactly and no page background shows through between them and
+       * the strip.
+       */}
+      <div className="ps-[140px] pe-[74px] max-[860px]:ps-[112px] max-[860px]:pe-[62px]">
         <div
           ref={trackRef}
           role="list"
@@ -184,7 +182,7 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
                 rel="noopener noreferrer"
                 role="listitem"
                 {...(copy === 1 ? { 'aria-hidden': true, tabIndex: -1 } : {})}
-                className="flex w-[306px] flex-none items-center border-s border-divider px-5 py-3.5 text-text no-underline transition-colors duration-200 ease-out hover:bg-white focus-visible:bg-white focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent max-[860px]:w-[252px] max-[860px]:px-4"
+                className="flex w-[306px] flex-none items-center border-s border-divider px-5 py-3.5 text-text no-underline transition-colors duration-200 ease-out hover:bg-white focus-visible:bg-white focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent max-[860px]:w-[236px] max-[860px]:px-4"
               >
                 <span className="line-clamp-3 block font-heading text-[14.5px] font-extrabold leading-[1.35] text-niv-slate">
                   <span className="text-accent-700">{t(locale, item.speaker)}: </span>
@@ -196,12 +194,33 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
         </div>
       </div>
 
+      {/* The red block the headlines disappear behind. Opaque and above the track. */}
       <a
         href={`/${locale}/podcast#episodes`}
-        className="absolute -bottom-[23px] z-20 inline-flex items-center rounded-full bg-accent px-3.5 py-1 font-heading text-[12px] font-extrabold text-white no-underline transition-colors duration-200 ease-out hover:bg-accent-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-niv-slate end-[26px]"
+        className="absolute inset-y-0 z-20 flex w-[140px] items-center justify-center bg-accent px-3 text-center font-heading text-[13px] font-extrabold leading-[1.25] text-white no-underline transition-colors duration-200 ease-out hover:bg-accent-600 focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-white start-0 max-[860px]:w-[112px] max-[860px]:px-2 max-[860px]:text-[11.5px]"
       >
         {t(locale, text.more)}
       </a>
+
+      {/* Arrows get their own cell at the far end, opaque so headlines vanish behind it too. */}
+      <div className="absolute inset-y-0 z-20 flex items-center gap-0.5 border-s border-divider bg-tint-cream px-2 end-0 max-[860px]:px-1.5">
+        <button type="button" aria-label={t(locale, text.prev)} onClick={() => step(-1)} className={arrowClass}>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="block rtl:hidden">
+            <path d="m15 5-7 7 7 7" />
+          </svg>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="hidden rtl:block">
+            <path d="m9 5 7 7-7 7" />
+          </svg>
+        </button>
+        <button type="button" aria-label={t(locale, text.next)} onClick={() => step(1)} className={arrowClass}>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="block rtl:hidden">
+            <path d="m9 5 7 7-7 7" />
+          </svg>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="hidden rtl:block">
+            <path d="m15 5-7 7 7 7" />
+          </svg>
+        </button>
+      </div>
     </div>
   )
 }
