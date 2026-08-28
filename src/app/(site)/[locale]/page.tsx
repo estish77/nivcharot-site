@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-import { DonateBand, GoalSection, Hero, MediaArchive, StatsBand, Timeline } from '@/components/home'
+import { DonateBand, GoalSection, Hero, MediaArchive, Mivzakon, StatsBand, Timeline } from '@/components/home'
 import { Footer } from '@/components/ui/Footer'
 import { Header } from '@/components/ui/Header'
+import { getMivzakonItems } from '@/content/mivzakon'
 import { getHomeContent, getNavigationLinks, getSiteSettings } from '@/lib/cms'
 import { isLocale, locales, t, type Locale } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
@@ -49,6 +50,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <>
+      {/*
+        The ticker sits ABOVE the header (2026-08-28 brief). It can live here
+        rather than in the layout because this page composes its own chrome —
+        so it appears on the home page only, and the header below keeps its
+        own sticky offset untouched since the strip isn't sticky itself.
+      */}
+      <Mivzakon locale={locale} items={getMivzakonItems()} />
       {/* Home is the one mockup page with no divider under the header — see `Header`'s `bordered` doc comment. */}
       <Header locale={locale} navLinks={navLinks} bordered={false} />
       <main id="main-content" className="flex-1">
