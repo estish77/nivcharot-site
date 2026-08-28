@@ -166,24 +166,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         </Section>
       </Reveal>
 
-      {/* Transparency */}
-      <Reveal as="section" index={4}>
-        <Section as="div" maxWidth={1080} paddingBlockStart="48px" paddingBlockEnd="48px">
-          <Eyebrow className="mb-3">{t(locale, aboutContent.transparency.eyebrow)}</Eyebrow>
-          <p className="m-0 max-w-[620px] text-[15px] leading-[1.7] text-neutral-800">
-            {t(locale, aboutContent.transparency.bodyPrefix)}{' '}
-            <a
-              href={`mailto:${aboutContent.transparency.email}`}
-              className="focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              {aboutContent.transparency.email}
-            </a>
-          </p>
-        </Section>
-      </Reveal>
-
       {/* By the numbers */}
-      <Reveal as="section" index={5}>
+      <Reveal as="section" index={4}>
         <Section as="div" maxWidth={1080} paddingBlockStart="48px" paddingBlockEnd="24px">
           <Eyebrow className="mb-2.5">{t(locale, aboutContent.stats.eyebrow)}</Eyebrow>
           <p className="m-0 mb-[30px] max-w-[620px] text-[15px] leading-[1.7] text-neutral-800">
@@ -205,7 +189,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </Reveal>
 
       {/* Facts */}
-      <Reveal as="section" index={6}>
+      <Reveal as="section" index={5}>
         <Section as="div" maxWidth={1080} paddingBlockStart="48px" paddingBlockEnd="48px">
           <Eyebrow className="mb-2.5">{t(locale, aboutContent.facts.eyebrow)}</Eyebrow>
           <p className="m-0 mb-7 max-w-[620px] text-[15px] leading-[1.7] text-neutral-800">{t(locale, aboutContent.facts.lead)}</p>

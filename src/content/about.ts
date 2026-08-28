@@ -154,15 +154,6 @@ export const aboutContent = {
     timelineLinkLabel: { he: `איך זה התחיל, ציר הזמן`, en: `How it began, the timeline` } satisfies Localized,
   },
 
-  transparency: {
-    eyebrow: { he: `שקיפות`, en: `Transparency` } satisfies Localized,
-    bodyPrefix: {
-      he: `נבחרות היא עמותה רשומה (580619120), הנתמכת בקרנות ובתורמים פרטיים בישראל ובחו"ל, בשיתוף מוסדות אקדמיים וגורמי חברה אזרחית. לדוחות ולפניות בנושא תמיכה:`,
-      en: `Nivcharot is a registered Israeli NGO (580619120), supported by foundations and private donors in Israel and abroad, in partnership with academic and civil-society institutions. For reports and support inquiries:`,
-    } satisfies Localized,
-    email: `estish@nivcharot.com`,
-  },
-
   stats: {
     eyebrow: { he: `במספרים`, en: `By the numbers` } satisfies Localized,
     leadPrefix: {
