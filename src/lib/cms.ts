@@ -940,11 +940,14 @@ export async function getStoryTimeline(): Promise<TimelineMilestone[]> {
       const d = doc as unknown as Record<string, unknown>
       const year = typeof d.year === 'string' ? d.year : ''
       const rawArticles = Array.isArray(d.externalArticles) ? (d.externalArticles as Record<string, unknown>[]) : []
-      const externalArticles = rawArticles.map((a) => ({
-        label: toLocalizedPair(a.label),
-        outlet: String(a.outlet ?? ''),
-        url: String(a.url ?? ''),
-      }))
+      const externalArticles = rawArticles.map((a) => {
+        const outlet = String(a.outlet ?? '')
+        return {
+          label: toLocalizedPair(a.label),
+          outlet: TIMELINE_OUTLET_EN.get(outlet) ?? outlet,
+          url: String(a.url ?? ''),
+        }
+      })
 
       // `body` is richText, not plain text: locale:'all' returns
       // { he: <Lexical doc>, en: <Lexical doc> }, which toLocalizedPair
@@ -957,7 +960,7 @@ export async function getStoryTimeline(): Promise<TimelineMilestone[]> {
 
       return {
         id: String(d.id ?? `milestone-${i}`),
-        year: { he: year, en: year },
+        year: { he: year, en: TIMELINE_YEAR_EN.get(year) ?? year },
         title: toLocalizedPair(d.title),
         body: { he: bodyHe, en: bodyEn || bodyHe },
         visible: toLocalizedBoolPair(d.visible, { he: true, en: true }),
@@ -968,6 +971,32 @@ export async function getStoryTimeline(): Promise<TimelineMilestone[]> {
     return fallback
   }
 }
+
+/*
+ * `timeline-milestones` stores `year` and each article's `outlet` as plain,
+ * NON-localized strings, so the English timeline was rendering the Hebrew
+ * value for both: "רקע" instead of "Origins", "ינואר 2018" instead of
+ * "January 2018", "ערוץ 7" instead of "Arutz Sheva".
+ *
+ * Rather than migrate two fields to localized (and re-enter every English
+ * value by hand in the dashboard), the pairs are read off the fixtures that
+ * already hold them — `storyTimeline` for the year labels and the press
+ * archive for outlet names. Anything with no pair maps to itself, which is
+ * right for a bare year like "2015".
+ */
+const TIMELINE_YEAR_EN = new Map(
+  timelineMilestones
+    .filter((milestone) => milestone.year.he !== milestone.year.en)
+    .map((milestone) => [milestone.year.he, milestone.year.en]),
+)
+
+const TIMELINE_OUTLET_EN = new Map<string, string>([
+  ...staticPressArchiveItemsSorted
+    .filter((item) => item.outlet.he !== item.outlet.en)
+    .map((item) => [item.outlet.he, item.outlet.en] as const),
+  // Only appears on the timeline, so the press archive has no pair for it.
+  ['ערוץ 7', 'Arutz Sheva'],
+])
 
 export type ActivismFaqContent = { id: string; number: string; question: string; answerParagraphs: string[] }
 
@@ -1053,10 +1082,23 @@ export async function getHanivcheretQuotes(locale: Locale): Promise<AlumnaQuoteC
 
     return res.docs.map((doc, i) => {
       const d = doc as unknown as Record<string, unknown>
+      const cohort = Number(d.cohort ?? 0)
+      const stored = typeof d.name === 'string' ? d.name.trim() : ''
+      /*
+       * `alumnae-quotes.name` is not a localized field, and what was seeded
+       * into it is the HEBREW placeholder text — so the English page was
+       * printing "שם הבוגרת · בוגרת מחזור 4" under an English quote. Real
+       * names (once anyone enters them) pass straight through; only a value
+       * that still is the placeholder gets swapped for this locale's.
+       */
+      const isPlaceholder = !stored || stored === hanivcheretAlumnaPlaceholder.he(cohort)
+      const placeholder =
+        locale === 'he' ? hanivcheretAlumnaPlaceholder.he(cohort) : hanivcheretAlumnaPlaceholder.en(cohort)
+
       return {
         id: String(d.id ?? `quote-${i}`),
-        cohort: Number(d.cohort ?? 0),
-        name: typeof d.name === 'string' && d.name ? d.name : '',
+        cohort,
+        name: isPlaceholder ? placeholder : stored,
         quote: typeof d.quote === 'string' ? d.quote : '',
       }
     })

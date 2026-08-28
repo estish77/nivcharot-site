@@ -7,6 +7,7 @@ import { useReducedMotion } from '@/lib/useReducedMotion'
 
 import type { PodcastShort } from '@/content/podcast'
 import { podcastText } from '@/content/podcast'
+import { localizedName } from '@/content/hebrewNames'
 import { cn, ImageSlot } from '@/components/ui'
 import type { Locale } from '@/lib/i18n'
 import { t } from '@/lib/i18n'
@@ -56,9 +57,12 @@ function guestNameFrom(title: string): string | null {
   return match ? match[1].trim() : null
 }
 
-function captionFor(short: PodcastShort): string {
+function captionFor(short: PodcastShort, locale: Locale = 'he'): string {
   const guestName = guestNameFrom(short.title)
-  if (guestName) return guestName
+  // Transliterated for English: the caption is cut out of a Hebrew YouTube
+  // title, so without this the English page printed Hebrew names. A name
+  // with no known spelling stays Hebrew rather than being invented.
+  if (guestName) return localizedName(guestName, locale)
   return short.title.length > 26 ? `${short.title.slice(0, 26).trim()}…` : short.title
 }
 
@@ -171,7 +175,7 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
   const storyItems: StoryViewerItem[] = shown.map((short) => ({
     id: short.id,
     videoId: short.videoId,
-    caption: captionFor(short),
+    caption: captionFor(short, locale),
   }))
 
   return (
@@ -199,7 +203,7 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
       )}
     >
       {shown.map((short, i) => {
-        const caption = captionFor(short)
+        const caption = captionFor(short, locale)
 
         return (
           <button

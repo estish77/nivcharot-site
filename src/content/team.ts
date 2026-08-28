@@ -197,6 +197,16 @@ export const teamMembers: TeamMember[] = [
       he: 'מנכ"לית שותפה בנבחרות, 2016–2018',
       en: 'Co-CEO of Nivcharot, 2016–2018',
     },
+    /*
+     * Restored 2026-08-29. Her entry was cut to a title only on request,
+     * then this bio was written back in through the dashboard — and the
+     * sync, seeing no bio in the fixture, cleared it again on its next
+     * run. Keeping it here is what stops the two from fighting.
+     */
+    bio: {
+      he: 'מרצה, סופרת וחוקרת. ספרה "ושאינן נראות" מספר את סיפור הקמת התנועה.',
+      en: 'A lecturer, author and researcher. Her book “VeShe’einan Nir’ot” (“And Those Who Are Not Seen”) tells the story of how the movement began.',
+    },
     photo: {
       src: '/assets/team/esty-reader-indursky.jpg',
       alt: { he: 'אסתי רידר אינדורסקי', en: 'Esty Reader Indursky' },

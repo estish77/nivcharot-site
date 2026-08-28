@@ -20,8 +20,13 @@ import { t, type Locale, type Localized } from '@/lib/i18n'
  */
 type Voice = {
   videoId: string
-  /** Real name — not localized; person names aren't translated. */
-  name: string
+  /**
+   * Real name. Localized only to transliterate it: the English page was
+   * printing Hebrew names among English text, and every other name on the
+   * site (team members, the ticker's speakers) is transliterated for `en`.
+   * The name is never translated — only written in the reader's alphabet.
+   */
+  name: Localized
   role: Localized
   topic: Localized
 }
@@ -29,7 +34,7 @@ type Voice = {
 const VOICES: Voice[] = [
   {
     videoId: 'WMhUIEMB8Vc',
-    name: 'יפעת חיים',
+    name: { he: 'יפעת חיים', en: 'Yifat Haim' },
     role: { he: 'פעילת נבחרות', en: 'Nivcharot activist' },
     topic: {
       he: 'בוועדת הרווחה בכנסת, על צורכי הציבור מאז ה-7 באוקטובר',
@@ -38,7 +43,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'evf1KvUDZL4',
-    name: 'לאה שיינברום',
+    name: { he: 'לאה שיינברום', en: 'Leah Shainbrom' },
     role: { he: 'עובדת סוציאלית ופעילה חברתית בנבחרות', en: 'Social worker and Nivcharot activist' },
     topic: {
       he: 'בוועדה, על הצורך בהרחבת המענים בקהילה למתמודדי ומתמודדות נפש',
@@ -47,7 +52,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'X_cyqJsiFAo',
-    name: 'ציפי לביא',
+    name: { he: 'ציפי לביא', en: 'Tzipi Lavi' },
     role: { he: 'אקטיביסטית חרדית בנבחרות', en: 'Haredi activist with Nivcharot' },
     topic: {
       he: 'על הפגיעה הצפויה בזכויות נשים עם הרחבת סמכויות בתי הדין הרבניים',
@@ -56,7 +61,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'V3RKW7y86s4',
-    name: 'רעיה חתוכה מרי',
+    name: { he: 'רעיה חתוכה מרי', en: 'Raaya Hatuka Mari' },
     role: { he: 'מנהלת הפרויקטים בנבחרות', en: 'Projects manager at Nivcharot' },
     topic: {
       he: 'נכנסת לכנס פוליטי המיועד לגברים בלבד ומבקשת מיו"ר אגודת ישראל לאפשר לנשים להשתתף',
@@ -65,7 +70,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'omQeHUDvNBE',
-    name: 'טובה בוריה',
+    name: { he: 'טובה בוריה', en: 'Tova Buria' },
     role: { he: 'פעילת נבחרות ומנכ"לית עמותת טוב בלב', en: 'Nivcharot activist, CEO of the Tov BaLev association' },
     topic: {
       he: 'על המחסור במגרשי ספורט בבני ברק וההשפעה על הנוער החרדי',
@@ -74,7 +79,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'cU8WSUgdAp0',
-    name: 'אפרת שוקרון',
+    name: { he: 'אפרת שוקרון', en: 'Efrat Shukrun' },
     role: { he: 'פעילת נבחרות', en: 'Nivcharot activist' },
     topic: {
       he: 'על מצב הנשים החרדיות בתקופת הקורונה, ולמה יש מקום לאופטימיות',
@@ -108,7 +113,7 @@ export function NivcharotVoicesSection({ locale }: { locale: Locale }) {
             <Cell key={voice.videoId} className="gap-3">
               <div className="aspect-video w-full border-2 border-niv-slate bg-[#141210]">
                 <iframe
-                  title={`${voice.name} — ${t(locale, voice.topic)}`}
+                  title={`${t(locale, voice.name)} — ${t(locale, voice.topic)}`}
                   src={`https://www.youtube.com/embed/${voice.videoId}?rel=0`}
                   loading="lazy"
                   className="block h-full w-full border-0"
@@ -116,7 +121,7 @@ export function NivcharotVoicesSection({ locale }: { locale: Locale }) {
                   allowFullScreen
                 />
               </div>
-              <h3 className="text-[18px] leading-[1.3]">{voice.name}</h3>
+              <h3 className="text-[18px] leading-[1.3]">{t(locale, voice.name)}</h3>
               <p className="m-0 font-heading text-[11.5px] font-extrabold tracking-[0.04em] text-accent-700">
                 {t(locale, voice.role)}
               </p>

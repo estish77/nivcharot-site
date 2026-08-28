@@ -10,7 +10,9 @@ import {
   hanivcheretQuotesEyebrow,
   resolveHeroMedia,
 } from '@/content/hanivcheret'
-import { getHanivcheretContent, getHanivcheretQuotes } from '@/lib/cms'
+import { getHanivcheretContent } from '@/lib/cms'
+import { alumnaeTestimonials } from '@/content/alumnae'
+import { AlumnaeWall } from './AlumnaeWall'
 import { t, type Locale, type Localized } from '@/lib/i18n'
 import { Button, Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SeatHall, SectionHead, Tag, cn } from '@/components/ui'
 import { AlumnaeVideosSection } from './AlumnaeVideosSection'
@@ -33,6 +35,12 @@ const hanivcheretSectionTitles = {
   curriculum: { he: 'ידע, כלים, קהילה ועשייה', en: 'Knowledge, tools, community, action' } satisfies Localized,
   quotes: { he: 'במילים שלהן', en: 'In their own words' } satisfies Localized,
 }
+
+/** Counts what's actually in the fixture, so the line can't drift from it. */
+const alumnaeWallLead = {
+  he: `${alumnaeTestimonials.length} משובים מבוגרות התוכנית, ממחזור 2 ועד מחזור 9.`,
+  en: `${alumnaeTestimonials.length} responses from graduates of the programme, from cohort 2 through cohort 9.`,
+} satisfies Localized
 
 function HeroMedia({ locale }: { locale: Locale }) {
   const media = resolveHeroMedia(hanivcheretHeroMedia)
@@ -77,7 +85,7 @@ function HeroMedia({ locale }: { locale: Locale }) {
 export async function HanivcheretPage({ locale }: { locale: Locale }) {
   const isHe = locale === 'he'
   const ctaHref = `/${locale}${hanivcheretHero.cta.href}`
-  const [hero, quotes] = await Promise.all([getHanivcheretContent(locale), getHanivcheretQuotes(locale)])
+  const hero = await getHanivcheretContent(locale)
 
   return (
     <>
@@ -217,28 +225,25 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
         </Section>
       </Reveal>
 
-      {/* Alumnae voices carousel */}
+      {/*
+        Alumnae feedback. Was a carousel of six placeholder quotes credited
+        to "שם הבוגרת · בוגרת מחזור N"; it now carries 20 real responses from
+        cohorts 2 to 9, supplied 2026-08-29, as a wall of drifting cards.
+
+        It reads the fixture directly rather than `getHanivcheretQuotes`:
+        that getter is bound to the `alumnae-quotes` collection, whose rows
+        are still the six placeholders and whose `name` field isn't
+        localized, so it can neither hold these nor render them in English.
+      */}
       <Reveal as="section">
-        <Section as="div" maxWidth={1240} paddingBlockStart="48px" paddingBlockEnd="48px">
-          {/* Consistency fix (item 12 audit): same bare-Eyebrow/no-h2 gap as the Curriculum section above — see that section's comment. */}
+        <Section as="div" maxWidth={1240} paddingBlockStart="48px" paddingBlockEnd="56px">
           <SectionHead
-            className="mb-6"
+            className="mb-7"
             eyebrow={t(locale, hanivcheretQuotesEyebrow)}
             title={t(locale, hanivcheretSectionTitles.quotes)}
+            lead={t(locale, alumnaeWallLead)}
           />
-          <Carousel
-            locale={locale}
-            ariaLabel={t(locale, hanivcheretQuotesEyebrow)}
-            autoScrollMs={4200}
-            itemClassName="min-w-[260px]"
-          >
-            {quotes.map((entry) => (
-              <blockquote key={entry.id} className="m-0 h-full border-s-2 border-accent ps-[18px]">
-                <p className="mb-2 text-[16px] font-semibold leading-[1.65]">{entry.quote}</p>
-                <div className="text-[13px] text-neutral-700">{entry.name}</div>
-              </blockquote>
-            ))}
-          </Carousel>
+          <AlumnaeWall locale={locale} />
         </Section>
       </Reveal>
 
