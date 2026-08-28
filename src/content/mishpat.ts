@@ -14,9 +14,15 @@ import type { Localized } from '@/lib/i18n'
 export const mishpatHero: { eyebrow: Localized; title: Localized; lead: Localized } = {
   eyebrow: { he: 'משפט', en: 'LAW' },
   title: { he: 'הכלים המשפטיים של נבחרות', en: "Nivcharot's legal tools" },
+  /*
+   * The trailing "this page will be expanded" sentence was dropped on
+   * 2026-08-29: the page now carries a full article, so the line
+   * contradicted what sits directly beneath it. Removed in both languages,
+   * since both said it.
+   */
   lead: {
-    he: 'לצד הפעילות הציבורית, נבחרות פועלת גם בזירה המשפטית לקידום ייצוג נשים חרדיות. עמוד זה יתעדכן בהמשך בפירוט נוסף.',
-    en: "Alongside its public activity, Nivcharot also works in the legal arena to advance Haredi women's representation. This page will be expanded with further detail.",
+    he: 'לצד הפעילות הציבורית, נבחרות פועלת גם בזירה המשפטית לקידום ייצוג נשים חרדיות.',
+    en: "Alongside its public activity, Nivcharot also works in the legal arena to advance Haredi women's representation.",
   },
 }
 
