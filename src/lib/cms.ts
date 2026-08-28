@@ -85,8 +85,26 @@ async function getPayloadInstance() {
  * halves finally meet: a save now busts exactly the right cache entry and
  * the next visitor gets the fresh content, no redeploy required.
  */
+/*
+ * The `revalidate` window is a backstop, not the main mechanism.
+ *
+ * Tag invalidation only fires from the afterChange hooks, which need a
+ * request context — so a dashboard save is instant, but anything written
+ * outside a request never busts its tag. Our own seed and sync scripts are
+ * exactly that: they pass `context: { disableRevalidate: true }` because
+ * `revalidateTag` throws outside a request. Without an expiry, entries live
+ * forever, and Vercel's Data Cache survives redeploys — so content written
+ * by a script stayed invisible on the live site indefinitely. That is how
+ * the team bios synced on 2026-08-28 could be correct in Postgres and
+ * absent from the page after a successful deploy.
+ *
+ * Five minutes keeps saves feeling immediate (the tag still busts them at
+ * once) while guaranteeing every other write path self-heals.
+ */
+const CACHE_REVALIDATE_SECONDS = 300
+
 function cachedPayloadRead<T>(tag: string, keyParts: string[], fn: () => Promise<T>): Promise<T> {
-  return unstable_cache(fn, [tag, ...keyParts], { tags: [tag] })()
+  return unstable_cache(fn, [tag, ...keyParts], { tags: [tag], revalidate: CACHE_REVALIDATE_SECONDS })()
 }
 
 export async function getHomeContent(locale: Locale): Promise<PayloadHomeContent> {
