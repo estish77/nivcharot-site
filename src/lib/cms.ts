@@ -15,7 +15,7 @@ import { donateHero } from '@/content/donate'
 import { archivePosts as staticArchivePosts, type ArchivePost } from '@/content/media'
 import { otherPodcasts as staticOtherPodcasts, talksAndConferences as staticTalksAndConferences, videoArticles as staticVideoArticles, type ElsewhereMediaItem } from '@/content/elsewhere-media'
 import { pressArchiveItemsSorted as staticPressArchiveItemsSorted, sortPressItemsDesc, type PressArchiveItem } from '@/content/press-archive'
-import { teamMembers as staticTeamMembers, type TeamMember } from '@/content/team'
+import { teamHero, teamMembers as staticTeamMembers, teamSectionIntro, type TeamMember } from '@/content/team'
 import { navLinksFor } from '@/lib/nav'
 import { type Locale, type Localized } from '@/lib/i18n'
 
@@ -247,6 +247,68 @@ export async function getAboutContent(
             body: resolveLocalizedValue(purposeIntro.body, locale, fallback.purpose.body),
           }
         : fallback.purpose,
+    }
+  } catch {
+    return fallback
+  }
+}
+
+/**
+ * Editable copy for the team page: the hero, and the intro above the member
+ * lists.
+ *
+ * 2026-08-28 brief ("check the whole page is editable in the system"). The
+ * member cards were already fully editable through the `team-members`
+ * collection (name, role, bio, photo, category, order, active) but this
+ * surrounding copy was hardcoded in `src/content/team.ts` with no way to
+ * change it from the dashboard.
+ *
+ * It rides on the `about` global's existing `sectionIntros` array, which was
+ * built for exactly this — its `key` field is documented as "a stable
+ * identifier the page template matches, e.g. team, faq" — so this needs no
+ * new collection and no database migration. Add a `team-hero` or `team`
+ * entry under Pages -> About -> Section intros and it takes effect; leave
+ * it out and the fixture text below is used unchanged.
+ */
+export async function getTeamPageContent(locale: Locale): Promise<{
+  hero: SimpleHeroContent
+  intro: { eyebrow: string; title: string }
+}> {
+  const fallback = {
+    hero: {
+      eyebrow: teamHero.eyebrow[locale],
+      title: teamHero.title[locale],
+      body: teamHero.lead[locale],
+    },
+    intro: {
+      eyebrow: teamSectionIntro.eyebrow[locale],
+      title: teamSectionIntro.title[locale],
+    },
+  }
+
+  const payload = await getPayloadInstance()
+  if (!payload) return fallback
+
+  try {
+    const doc = await cachedPayloadRead('about', [locale], () => payload.findGlobal({ slug: 'about', locale }))
+    const intros = Array.isArray(doc?.sectionIntros) ? (doc.sectionIntros as Record<string, unknown>[]) : []
+    const heroIntro = intros.find((intro) => intro?.key === 'team-hero')
+    const listIntro = intros.find((intro) => intro?.key === 'team')
+
+    return {
+      hero: heroIntro
+        ? {
+            eyebrow: resolveLocalizedValue(heroIntro.eyebrow, locale, fallback.hero.eyebrow),
+            title: resolveLocalizedValue(heroIntro.title, locale, fallback.hero.title),
+            body: resolveLocalizedValue(heroIntro.body, locale, fallback.hero.body),
+          }
+        : fallback.hero,
+      intro: listIntro
+        ? {
+            eyebrow: resolveLocalizedValue(listIntro.eyebrow, locale, fallback.intro.eyebrow),
+            title: resolveLocalizedValue(listIntro.title, locale, fallback.intro.title),
+          }
+        : fallback.intro,
     }
   } catch {
     return fallback

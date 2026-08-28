@@ -27,6 +27,7 @@
     "upload-halacha-docs": "payload run scripts/upload-halacha-docs.mjs",
     "sync-podcast-archive": "payload run scripts/sync-podcast-archive.mjs",
     "sync-nivcharot-channel": "payload run scripts/sync-nivcharot-channel.mjs",
+    "sync-team-members": "payload run scripts/sync-team-members.mjs",
     "seed-legacy-posts": "payload run scripts/seed-legacy-posts.mjs"
   },
   "dependencies": {
