@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { Eyebrow, Reveal } from '@/components/ui'
 import { halachaIntro, halachaSections, halachaSourceMeta, type HalachaQuote } from '@/content/halacha'
 import { getHalachaContent } from '@/lib/cms'
-import { isLocale, locales, type Locale } from '@/lib/i18n'
+import { isLocale, locales, t, type Locale } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
 
 type Params = { locale: string }
@@ -12,10 +12,12 @@ type Params = { locale: string }
 /**
  * `/halacha` — a comparative overview of two halakhic rulings on women's
  * eligibility for public office. Hero copy is Payload-backed
- * (`getHalachaContent`); the write-up itself (`halachaIntro`/
- * `halachaSections`) is real, precisely-quoted Hebrew-only source material
- * from `src/content/halacha.ts` — rendered as-is under both locales, same
- * convention as the archive posts (`src/content/media.ts`).
+ * (`getHalachaContent`); the write-up itself lives in
+ * `src/content/halacha.ts` and is bilingual as of 2026-08-29 — it used to
+ * render its Hebrew source material as-is under both locales, so an
+ * English reader met an English hero followed by ninety lines of Hebrew.
+ * Each quotation's Hebrew original is still shown on the English page,
+ * beneath its translation; see `QuoteBlock`.
  */
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -28,13 +30,25 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return pageMetadata({ locale, path: '/halacha', title: content.hero.title, description: content.hero.body })
 }
 
-function QuoteBlock({ quote }: { quote: HalachaQuote }) {
+function QuoteBlock({ quote, locale }: { quote: HalachaQuote; locale: Locale }) {
   const meta = halachaSourceMeta[quote.source]
   return (
     <blockquote className="m-0 border-s-2 border-accent ps-[18px]">
-      <p className="m-0 mb-2 text-[15px] leading-[1.8] text-text">{quote.text}</p>
+      <p className="m-0 mb-2 text-[15px] leading-[1.8] text-text">{t(locale, quote.text)}</p>
+      {/*
+        The Hebrew original stays on the English page, under the
+        translation. These are verbatim citations from named poskim, and a
+        translation of a psak is an interpretation of it — keeping the
+        original alongside is the ordinary scholarly convention, and it
+        means the English rendering can never be mistaken for the ruling.
+      */}
+      {locale === 'en' ? (
+        <p dir="rtl" lang="he" className="m-0 mb-2 text-[13.5px] leading-[1.9] text-neutral-600">
+          {quote.text.he}
+        </p>
+      ) : null}
       <footer className="text-[12.5px] text-neutral-600">
-        — {quote.attribution} <span className="text-neutral-400">·</span> {meta.name}
+        — {t(locale, quote.attribution)} <span className="text-neutral-400">·</span> {t(locale, meta.name)}
       </footer>
     </blockquote>
   )
@@ -55,13 +69,14 @@ export default async function HalachaPage({ params }: { params: Promise<Params> 
 
         {locale === 'en' ? (
           <p className="mb-8 border-2 border-divider bg-tint-cream px-4 py-3 text-[13px] leading-[1.6] text-neutral-700">
-            The rulings and quotations below are real Hebrew-language halakhic source material, presented as-is —
-            they have not been translated.
+            The quotations below are translated from Hebrew halakhic sources, with each original kept underneath
+            its translation. Where a term carries the argument — <em>serarah</em>, the category of authority the
+            whole question turns on — it is transliterated rather than flattened into English.
           </p>
         ) : null}
 
         <div className="border-t-2 border-divider pt-8">
-          {halachaIntro.map((paragraph, i) => (
+          {t(locale, halachaIntro).map((paragraph, i) => (
             <p key={i} className="mb-5 text-[15.5px] leading-[1.8] text-text">
               {paragraph}
             </p>
@@ -71,10 +86,10 @@ export default async function HalachaPage({ params }: { params: Promise<Params> 
         {halachaSections.map((section) => (
           <section key={section.id} id={section.id} className="mt-12 scroll-mt-24 border-t-2 border-divider pt-8">
             <h2 className="m-0 mb-4 text-[21px] leading-[1.3]">
-              <span className="me-2 font-heading font-extrabold text-accent-700">{section.letter}.</span>
-              {section.title}
+              <span className="me-2 font-heading font-extrabold text-accent-700">{t(locale, section.letter)}.</span>
+              {t(locale, section.title)}
             </h2>
-            {section.intro?.map((paragraph, i) => (
+            {(section.intro ? t(locale, section.intro) : []).map((paragraph, i) => (
               <p key={i} className="mb-4 text-[15px] leading-[1.8] text-text">
                 {paragraph}
               </p>
@@ -82,11 +97,11 @@ export default async function HalachaPage({ params }: { params: Promise<Params> 
             {section.quotes && section.quotes.length > 0 ? (
               <div className="my-6 flex flex-col gap-5">
                 {section.quotes.map((quote, i) => (
-                  <QuoteBlock key={i} quote={quote} />
+                  <QuoteBlock key={i} quote={quote} locale={locale} />
                 ))}
               </div>
             ) : null}
-            {section.closing?.map((paragraph, i) => (
+            {(section.closing ? t(locale, section.closing) : []).map((paragraph, i) => (
               <p key={i} className="mt-4 text-[14.5px] leading-[1.75] text-neutral-800">
                 {paragraph}
               </p>
