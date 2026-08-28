@@ -78,13 +78,13 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
 
       {overTheYears.length > 0 ? (
         <Reveal as="section" className="bg-tint-cream">
-          <div className="mx-auto max-w-[1080px] px-8 pb-16 pt-14 max-[860px]:px-[18px] max-[860px]:pb-10 max-[860px]:pt-10">
+          <div className="mx-auto max-w-[1080px] px-8 pb-20 pt-16 max-[860px]:px-[18px] max-[860px]:pb-12 max-[860px]:pt-12">
             {overTheYears.map(([category, members], i) => (
               <div key={category} className={i > 0 ? 'mt-10' : undefined}>
-                <h2 className="mb-6 text-[clamp(20px,2.4vw,26px)] max-[860px]:text-[clamp(19px,5.5vw,24px)]">
+                <h2 className="mb-7 text-[clamp(22px,2.7vw,30px)] max-[860px]:text-[clamp(20px,6vw,26px)]">
                   {t(locale, teamMemberCategoryLabels[category])}
                 </h2>
-                <div className="grid grid-cols-4 gap-x-5 gap-y-7 max-[860px]:grid-cols-3 max-[560px]:grid-cols-2">
+                <div className="grid grid-cols-3 gap-x-[26px] gap-y-9 max-[860px]:grid-cols-2 max-[560px]:grid-cols-1">
                   {members.map((member) => (
                     <TeamMemberCard key={member.id} member={member} locale={locale} compact />
                   ))}

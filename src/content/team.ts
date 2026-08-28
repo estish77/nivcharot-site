@@ -212,6 +212,10 @@ export const teamMembers: TeamMember[] = [
       he: 'מייסדת שותפה של ארגון "מעורבות", פעילה בקמפיין "לא נבחרות לא בוחרות", 2015',
       en: 'Co-founded "Meoravot" with Esty Shushan; activist in the "No Voice, No Vote" campaign, 2015',
     },
+    bio: {
+      he: 'ילידת 1986, חסידת גור, ממקימות ארגון "מעורבות" ומייסדת "מובילות" ו"אשכולות". בעלת תואר שני בלימודי מדינת ישראל, ופועלת לשילוב נשים חרדיות בתעסוקה, באקדמיה ובפוליטיקה.',
+      en: "Born 1986, of a Gur hasidic family; a co-founder of \"Meoravut\" and founder of \"Movilot\" and \"Eshkolot\". Holds a master's in Israel Studies and works to bring Haredi women into employment, academia and politics.",
+    },
     photo: null,
     order: 2,
     active: true,
@@ -240,6 +244,10 @@ export const teamMembers: TeamMember[] = [
     id: 'racheli-rushgold-gottlieb',
     name: { he: 'רחלי רושגולד גוטליב', en: 'Racheli Rushgold Gottlieb' },
     role: { he: 'מנהלת קשרי ממשל, 2018', en: 'Government-relations manager, 2018' },
+    bio: {
+      he: 'מנהלת קשרי הממשל של נבחרות ב-2018. ייצגה את התנועה בוועדת החינוך של הכנסת בדיון על החינוך הממלכתי-חרדי, בדרישה לייצוג נשים במפלגות החרדיות.',
+      en: "Nivcharot's government-relations lead in 2018. She represented the movement at the Knesset Education Committee's hearing on Haredi state education, pressing for women's representation in the Haredi parties.",
+    },
     photo: null,
     order: 4,
     active: true,
@@ -251,6 +259,10 @@ export const teamMembers: TeamMember[] = [
     role: {
       he: 'פעילה בקמפיין "לא נבחרות לא בוחרות", 2015',
       en: 'Activist in the "No Voice, No Vote" campaign, 2015',
+    },
+    bio: {
+      he: 'חברה בתנועת נבחרות ומקימת התא החרדי במפלגת העבודה, מתוך הקמפיין "לא נבחרות לא בוחרות".',
+      en: 'A member of Nivcharot and founder of the Haredi caucus in the Labor party, out of the "Lo Nivcharot Lo Bocharot" campaign.',
     },
     photo: null,
     order: 5,
@@ -264,6 +276,10 @@ export const teamMembers: TeamMember[] = [
       he: 'מנחת תוכניות מנהיגות',
       en: 'Leadership-programme facilitator',
     },
+    bio: {
+      he: 'מנחה את תוכניות המנהיגות של התנועה, ובהן מחזורי "הנבחרת" של 2022 ושל 2026.',
+      en: "Facilitates the movement's leadership programmes, including the 2022 and 2026 \"HaNivcheret\" cohorts.",
+    },
     photo: null,
     order: 9,
     active: true,
@@ -276,6 +292,10 @@ export const teamMembers: TeamMember[] = [
       he: 'מנחת סדנאות חזון',
       en: 'Vision-workshop facilitator',
     },
+    bio: {
+      he: 'מנחת סדנאות החזון בתוכניות התנועה. הנחתה את "הנבחרת" במחזור 2019, בשיתוף ויצו.',
+      en: "Facilitator of the movement's vision workshops. She led the 2019 \"HaNivcheret\" cohort, in partnership with WIZO.",
+    },
     photo: null,
     order: 8,
     active: true,
@@ -285,6 +305,10 @@ export const teamMembers: TeamMember[] = [
     id: 'tzipi-lavi',
     name: { he: 'ציפי לביא', en: 'Tzipi Lavi' },
     role: { he: 'מנהלת פרויקטים וקשרי ממשל, 2024', en: 'Projects and government-relations manager, 2024' },
+    bio: {
+      he: 'אקטיביסטית חרדית בנבחרות. דיברה בוועדה לענייני ביקורת המדינה על הסבל של נשים בהליכי גירושין, והתריעה על הפגיעה הצפויה בזכויות נשים עם הרחבת סמכויות בתי הדין הרבניים.',
+      en: "A Haredi activist with Nivcharot. She spoke at the State Control Committee about what women endure in divorce proceedings, and warned of the harm to women's rights as the rabbinical courts' powers widen.",
+    },
     photo: null,
     order: 6,
     active: true,
@@ -294,6 +318,10 @@ export const teamMembers: TeamMember[] = [
     id: 'leah-shainbrom',
     name: { he: 'לאה שיינברום', en: 'Leah Shainbrom' },
     role: { he: 'מנהלת קבוצות "שיח.ה"', en: 'Manager of the "Sicha" discussion groups' },
+    bio: {
+      he: 'עובדת סוציאלית ופעילה חברתית בנבחרות, ומנחת קבוצות "שיח.ה". דיברה בוועדת הכנסת על הצורך בהרחבת המענים בקהילה למתמודדות ומתמודדי נפש.',
+      en: "A social worker and social activist with Nivcharot who facilitates the \"Si'aH\" groups. She spoke at a Knesset committee on the need to widen community mental-health provision.",
+    },
     photo: null,
     order: 7,
     active: true,
@@ -305,6 +333,10 @@ export const teamMembers: TeamMember[] = [
     role: {
       he: 'מנהלת פרויקטים, 2022–2025, ועותרת ראשית בתיק נגד ש"ס',
       en: 'Projects manager, 2022–2025, and lead petitioner in the case against Shas',
+    },
+    bio: {
+      he: 'מנהלת הפרויקטים של נבחרות ועותרת ראשית בעתירה נגד המפלגות החרדיות. נכנסה לכנס פוליטי שיועד לגברים בלבד וביקשה מיו"ר אגודת ישראל לאפשר לנשים להשתתף.',
+      en: "Nivcharot's projects manager and lead petitioner in the case against the Haredi parties. She walked into a men-only political conference and asked Agudat Yisrael's chair to let women take part.",
     },
     photo: null,
     order: 8,
@@ -318,6 +350,10 @@ export const teamMembers: TeamMember[] = [
       he: 'בוגרת "הנבחרת" 1, מרצה בתוכניות לענייני קשרי ממשל ועבודת ועדות הכנסת',
       en: 'HaNivcheret cohort 1 alumna; lecturer on government relations and Knesset committee work',
     },
+    bio: {
+      he: 'בוגרת המחזור הראשון של "הנבחרת", ומרצה בתוכניות התנועה בנושאי קשרי ממשל.',
+      en: "A graduate of the first \"HaNivcheret\" cohort, and a lecturer on government relations in the movement's programmes.",
+    },
     photo: null,
     order: 7,
     active: true,
@@ -327,6 +363,10 @@ export const teamMembers: TeamMember[] = [
     id: 'reuven-bitton',
     name: { he: 'עו"ד ראובן ביטון', en: 'Adv. Reuven Bitton' },
     role: { he: 'יועץ משפטי', en: 'Legal advisor' },
+    bio: {
+      he: 'עורך דין, המלווה את התנועה בייעוץ משפטי.',
+      en: 'A lawyer, providing the movement with legal counsel.',
+    },
     photo: null,
     order: 11,
     active: true,

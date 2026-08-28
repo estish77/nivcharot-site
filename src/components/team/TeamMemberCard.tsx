@@ -6,7 +6,14 @@ import { t, type Locale } from '@/lib/i18n'
 import type { TeamMember } from '@/content/team'
 
 export type TeamMemberCardProps = {
-  /** Smaller photo, smaller type, no bio — used by the "over the years" group. */
+  /**
+   * Slightly smaller photo and type, used by the "over the years" group.
+   *
+   * It used to drop the bio too. It no longer does (2026-08-28 brief:
+   * "enlarge that section's area and content") — those entries have real
+   * bios now, and hiding them was the main thing making the group feel
+   * like a footnote.
+   */
   compact?: boolean
   member: TeamMember
   locale: Locale
@@ -35,7 +42,7 @@ export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCa
       <div
         className={cn(
           'group relative overflow-hidden rounded-full',
-          compact ? 'mb-[10px] h-[96px] w-[96px]' : 'mb-[14px] h-[150px] w-[150px]',
+          compact ? 'mb-[12px] h-[120px] w-[120px]' : 'mb-[14px] h-[150px] w-[150px]',
         )}
       >
         {member.photo ? (
@@ -43,7 +50,7 @@ export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCa
             src={member.photo.src}
             alt={t(locale, member.photo.alt)}
             fill
-            sizes={compact ? '96px' : '150px'}
+            sizes={compact ? '120px' : '150px'}
             loading="lazy"
             className="object-cover object-[center_20%] transition-transform duration-[600ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:scale-[1.03] group-focus-within:scale-[1.03]"
           />
@@ -55,22 +62,19 @@ export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCa
           />
         )}
       </div>
-      <h3 className={cn('mb-[3px] leading-[1.2]', compact ? 'text-[15px]' : 'text-[17px]')}>{name}</h3>
+      <h3 className={cn('mb-[3px] leading-[1.2]', compact ? 'text-[16px]' : 'text-[17px]')}>{name}</h3>
       <p
         className={cn(
           'font-heading font-extrabold tracking-[0.03em] text-accent-700',
-          compact ? 'm-0 text-[11.5px] leading-[1.45]' : 'mb-[9px] text-[12px]',
+          compact ? 'mb-[8px] text-[11.5px] leading-[1.45]' : 'mb-[9px] text-[12px]',
         )}
       >
         {t(locale, member.role)}
       </p>
-      {/*
-        The compact variant drops the bio on purpose: that group is a long
-        roll of names across the movement's history, and a paragraph each
-        would make the section taller than the current team above it.
-      */}
-      {member.bio && !compact ? (
-        <p className="m-0 text-[13.5px] leading-[1.6] text-neutral-800">{t(locale, member.bio)}</p>
+      {member.bio ? (
+        <p className={cn('m-0 leading-[1.6] text-neutral-800', compact ? 'text-[13px]' : 'text-[13.5px]')}>
+          {t(locale, member.bio)}
+        </p>
       ) : null}
     </div>
   )

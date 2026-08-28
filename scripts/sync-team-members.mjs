@@ -138,7 +138,11 @@ for (const member of teamMembers) {
   const he = {
     name: member.name.he,
     role: member.role.he,
-    bio: member.bio ? textToLexical([member.bio.he], 'rtl') : undefined,
+    // `null`, not `undefined`: a member whose bio was deliberately removed
+    // from the fixture (Reader-Indursky is meant to be title-only) must have
+    // it cleared in the CMS too. `undefined` reads as "leave unchanged" and
+    // would strand the old paragraph in the database forever.
+    bio: member.bio ? textToLexical([member.bio.he], 'rtl') : null,
     photo: photoId ?? undefined,
     category: member.category ?? 'staff',
     order: member.order,
@@ -147,7 +151,7 @@ for (const member of teamMembers) {
   const en = {
     name: member.name.en,
     role: member.role.en,
-    bio: member.bio ? textToLexical([member.bio.en], 'ltr') : undefined,
+    bio: member.bio ? textToLexical([member.bio.en], 'ltr') : null,
   }
 
   const id = existing
@@ -181,10 +185,25 @@ for (const member of teamMembers) {
   console.log(`  ok: ${member.name.he}`)
 }
 
-// Anyone in the collection but no longer in the fixture is hidden, not lost.
+/*
+ * Retiring people.
+ *
+ * This used to hide EVERY row the fixture didn't mention. That was fine
+ * while the fixture was the only source of truth, but it stopped being safe
+ * the moment the roster became editable in /admin: a person added through
+ * the dashboard is, by definition, not in the fixture, so the next run of
+ * this script quietly deactivated her. That is exactly what happened to
+ * שני מונצ'ק, added at 08:17 and hidden by a sync at 11:30 the same day.
+ *
+ * So the sweep is now explicit. Only names listed here get retired, and a
+ * row this script has never heard of is left exactly as the dashboard has
+ * it. Add a name below when someone is deliberately taken off the roster.
+ */
+const RETIRED = ['מירי רוזן', 'מירה זוהר']
+
 const all = await payload.find({ collection: 'team-members', limit: 500, locale: 'he', depth: 0 })
 for (const doc of all.docs) {
-  if (seenNames.has(doc.name) || doc.active === false) continue
+  if (!RETIRED.includes(doc.name) || seenNames.has(doc.name) || doc.active === false) continue
   await payload.update({
     collection: 'team-members',
     id: doc.id,
@@ -193,7 +212,7 @@ for (const doc of all.docs) {
     data: { active: false },
   })
   deactivated++
-  console.log(`  deactivated (no longer in the roster): ${doc.name}`)
+  console.log(`  deactivated (retired from the roster): ${doc.name}`)
 }
 
 console.log(`\ncreated=${created} updated=${updated} deactivated=${deactivated}`)
