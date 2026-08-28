@@ -263,8 +263,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: '"Not Elected, Not Voting"',
     },
     summary: {
-      he: 'מאמר הדעה המייסד של אסתי שושן ב-Ynet (דצמבר 2012) תוקף את ש"ס ויהדות התורה על הפיכת הדרת נשים ממועמדות לסעיף תקנוני קבוע, ללא איסור הלכתי ממשי. ההצדקה "מקומה של האישה במקום אחר", לטענתה, נשענת על "קודים חברתיים" בלבד. שושן חושפת מה שהיא מכנה צביעות: המפלגות מעסיקות נשים לתעמולה בטלוויזיה אך שוללות מהן קבלת החלטות: "נשים ראויות לפקח ולנהל... אבל חברת כנסת זה תפקיד השמור רק לגברים חרדים". המאמר קורא להימנעות מהצבעה עד שהמפלגות יכירו בזכות ההתמודדות, המניפסט שממנו צמחה נבחרות.',
-      en: 'Esty Shushan\'s founding manifesto op-ed in Ynet (December 2012) attacks Shas and United Torah Judaism for enshrining women\'s exclusion from candidacy in a standing bylaw clause despite no real halachic prohibition. The "a woman\'s place is elsewhere" justification, she argues, rests on "social codes" alone. She points to what she calls hypocrisy: parties use women for TV campaign appearances but deny them decision-making power: "Women are worthy of supervising and managing... but Knesset member is a position reserved only for Haredi men." She calls for withholding votes until the parties recognize the right to run, the manifesto Nivcharot grew out of.',
+      he: 'מאמר הדעה המייסד של אסתי שושן ב-Ynet (דצמבר 2012) עוסק בכך שש"ס ויהדות התורה עיגנו את הדרת הנשים ממועמדות בסעיף תקנוני קבוע, ללא איסור הלכתי ממשי. ההצדקה "מקומה של האישה במקום אחר", לטענתה, נשענת על "קודים חברתיים" בלבד. המאמר מצביע על הפער שבין השניים: המפלגות מעסיקות נשים לתעמולה בטלוויזיה אך אינן מאפשרות להן קבלת החלטות: "נשים ראויות לפקח ולנהל... אבל חברת כנסת זה תפקיד השמור רק לגברים חרדים". המאמר קורא להימנעות מהצבעה עד שהמפלגות יכירו בזכות ההתמודדות, המניפסט שממנו צמחה נבחרות.',
+      en: 'Esty Shushan\'s founding manifesto op-ed in Ynet (December 2012) addresses how Shas and United Torah Judaism enshrined women\'s exclusion from candidacy in a standing bylaw clause despite no real halachic prohibition. The "a woman\'s place is elsewhere" justification, she argues, rests on "social codes" alone. The piece points to the gap between the two: parties use women for TV campaign appearances but do not allow them decision-making power: "Women are worthy of supervising and managing... but Knesset member is a position reserved only for Haredi men." She calls for withholding votes until the parties recognize the right to run, the manifesto Nivcharot grew out of.',
     },
     dateLabel: { he: '31.12.2012', en: 'Dec 31, 2012' },
     sortDate: '2012-12-31',
@@ -396,8 +396,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: 'Why I Oppose the Haredi-Women-to-Knesset Campaign',
     },
     summary: {
-      he: 'טור דעה מאת שיפי חריטון (פברואר 2015) נגד הקמפיין, מפרט שלוש טענות: היעדר גיבוי רבני מפורש למהלך; טקטיקה שהיא מכנה תוקפנית מדי: "אני רואה את הדרישה הלוחמנית של נשות הקמפיין וחושבת שהן פועלות כמו הגברים שאיתם הן נלחמות"; וטענה שהמסר מרחיק דווקא את הנשים החרדיות שהוא אמור לייצג. חריטון עצמה בעד קידום נשים חרדיות, אך דרך ערוצים אחרים ותוך היוועצות עם רבנים, התנגדות מפורטת ולא סתמית.',
-      en: 'A Shiffi Chariton opinion column (February 2015) against the campaign lays out three arguments: no explicit rabbinic backing for the move; tactics she calls too combative: "I see the militant demand of the campaign\'s women and think they\'re acting like the men they\'re fighting"; and a claim that the messaging alienates the very Haredi women it claims to represent. Chariton herself favors advancing Haredi women, but through other, rabbi-consulted channels, a detailed objection, not a dismissive one.',
+      he: 'טור דעה מאת שיפי חריטון (פברואר 2015) נגד הקמפיין, מפרט שלוש טענות: היעדר גיבוי רבני מפורש למהלך; טקטיקה שאינה מקובלת עליה: "אני רואה את הדרישה הלוחמנית של נשות הקמפיין וחושבת שהן פועלות כמו הגברים שאיתם הן נלחמות"; וטענה שהמסר מרחיק דווקא את הנשים החרדיות שהוא אמור לייצג. חריטון עצמה בעד קידום נשים חרדיות, אך דרך ערוצים אחרים ותוך היוועצות עם רבנים, התנגדות מפורטת ולא סתמית.',
+      en: 'A Shiffi Chariton opinion column (February 2015) against the campaign lays out three arguments: no explicit rabbinic backing for the move; tactics she does not agree with: "I see the militant demand of the campaign\'s women and think they\'re acting like the men they\'re fighting"; and a claim that the messaging alienates the very Haredi women it claims to represent. Chariton herself favors advancing Haredi women, but through other, rabbi-consulted channels, a detailed objection, not a dismissive one.',
     },
     dateLabel: { he: '12.2.2015', en: 'Feb 12, 2015' },
     sortDate: '2015-02-12',
@@ -710,8 +710,8 @@ export const pressArchiveItems: PressArchiveItem[] = [
       en: "Nivcharot's Founder vs. Shas",
     },
     summary: {
-      he: 'כתבה מדצמבר 2012 שבה שושן מאשימה את ש"ס ואת יהדות התורה במפורש ב"הנהגה דו-פרצופית", וקוראת לנשים: "אל תצביעו למי שלא בוחר בכן".',
-      en: 'A December 2012 piece in which Shushan directly accuses Shas and United Torah Judaism of "two-faced leadership," and calls on women voters: "do not vote for those who do not choose you."',
+      he: 'כתבה מדצמבר 2012 שבה שושן אומרת במפורש כי ש"ס ויהדות התורה מתנהלות ב"הנהגה דו-פרצופית", וקוראת לנשים: "אל תצביעו למי שלא בוחר בכן".',
+      en: 'A December 2012 piece in which Shushan says outright that Shas and United Torah Judaism practise "two-faced leadership," and calls on women voters: "do not vote for those who do not choose you."',
     },
     dateLabel: { he: '27.12.2012', en: 'Dec 27, 2012' },
     sortDate: '2012-12-27',

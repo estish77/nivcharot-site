@@ -162,12 +162,13 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
           <span id="elsewhere" aria-hidden="true" className="block" />
           <span id="archive" aria-hidden="true" className="block" />
 
-          <div className="mb-7 max-w-[720px]">
-            <Eyebrow className="mb-3">{t(locale, mediaDeskText.eyebrow)}</Eyebrow>
-            <h2 className="text-[clamp(24px,3vw,32px)]">{t(locale, mediaDeskText.title)}</h2>
-            <p className="mt-4 text-[16px] leading-[1.7] text-neutral-800">{t(locale, mediaDeskText.lead)}</p>
-          </div>
-
+          {/*
+            The desk's own eyebrow/title/lead block ("ארכיון חי · שולחן
+            התקשורת · כל מה שנכתב…") was removed on the 2026-08-27 brief:
+            the page title above already says what this is, and the desk's
+            controls are self-evident, so the block was a second heading
+            explaining the thing directly under it.
+          */}
           <MediaDesk entries={entries} locale={locale} />
         </Section>
       </Reveal>

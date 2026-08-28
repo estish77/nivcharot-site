@@ -44,8 +44,8 @@ import { HAREDIT_MEDUBERET_CHANNEL_ID } from './youtube'
  * content.
  */
 
-const CHANNEL_TAB_URL = (tab: 'videos' | 'shorts') =>
-  `https://www.youtube.com/channel/${HAREDIT_MEDUBERET_CHANNEL_ID}/${tab}`
+const CHANNEL_TAB_URL = (channelId: string, tab: 'videos' | 'shorts') =>
+  `https://www.youtube.com/channel/${channelId}/${tab}`
 
 /** Matches the browser's own headers closely enough that YouTube serves the full, non-consent-walled page. */
 const BROWSER_HEADERS: Record<string, string> = {
@@ -210,9 +210,13 @@ async function mapPool<T, R>(items: T[], limit: number, worker: (item: T) => Pro
  * excludes Shorts and vice versa, so this is only a backstop against
  * YouTube reclassifying something.
  */
-async function walkTab(tab: 'videos' | 'shorts', minSeconds: number): Promise<YoutubeFeedEntry[]> {
+export async function walkTab(
+  channelId: string,
+  tab: 'videos' | 'shorts',
+  minSeconds: number,
+): Promise<YoutubeFeedEntry[]> {
   try {
-    const res = await fetch(CHANNEL_TAB_URL(tab), { headers: BROWSER_HEADERS, cache: 'no-store' })
+    const res = await fetch(CHANNEL_TAB_URL(channelId, tab), { headers: BROWSER_HEADERS, cache: 'no-store' })
     if (!res.ok) return []
 
     const extracted = extractInitialData(await res.text())
@@ -273,7 +277,7 @@ async function walkTab(tab: 'videos' | 'shorts', minSeconds: number): Promise<Yo
  * see this module's header for why that matters.
  */
 export function fetchHareditMeduberetChannelVideos(): Promise<YoutubeFeedEntry[]> {
-  return walkTab('videos', MIN_EPISODE_SECONDS)
+  return walkTab(HAREDIT_MEDUBERET_CHANNEL_ID, 'videos', MIN_EPISODE_SECONDS)
 }
 
 /**
@@ -288,5 +292,5 @@ export function fetchHareditMeduberetChannelVideos(): Promise<YoutubeFeedEntry[]
  * No duration floor — a Short is short by definition.
  */
 export function fetchHareditMeduberetChannelShorts(): Promise<YoutubeFeedEntry[]> {
-  return walkTab('shorts', 0)
+  return walkTab(HAREDIT_MEDUBERET_CHANNEL_ID, 'shorts', 0)
 }
