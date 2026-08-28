@@ -1,6 +1,7 @@
 import type { Localized } from '@/lib/i18n'
 import type { YoutubeFeedEntry } from '@/lib/youtube'
 import { fetchHareditMeduberetLongform, fetchHareditMeduberetShorts } from '@/lib/youtube'
+import podcastArchive from './podcast-archive.json'
 
 /**
  * Fixture data for /podcast (docs/Podcast.dc.html), shaped to match the
@@ -277,14 +278,38 @@ function toLiveEpisode(entry: YoutubeFeedEntry, number: number): PodcastEpisode 
  * the moment a new episode ships. Fetching live here is the fix.
  */
 export async function getPodcastEpisodes(): Promise<PodcastEpisode[]> {
-  // Long-form-only playlist (src/lib/youtube.ts), not the general channel
-  // feed: guarantees every section reading from this list — Binge/archive,
-  // the "recently" 3-up, the latest-episode hero — only ever shows full
-  // episodes, never a Short mixed in (2026-08-13 brief, item 32).
+  /*
+   * Two sources, merged (2026-08-27 brief: "a lot of full episodes are
+   * missing, bring the whole YouTube channel"):
+   *
+   *   1. `podcast-archive.json` — the FULL back catalogue, ~100 episodes,
+   *      produced offline by `npm run sync-podcast-archive`. YouTube's
+   *      public RSS feeds are hard capped at 15 entries, which is exactly
+   *      why the page used to show only the newest sixth of the show. The
+   *      walk that produces this file cannot run in a render: it costs ~105
+   *      requests, which is 4s in plain Node but 61 minutes inside Next,
+   *      whose data cache buffers every response (see
+   *      src/lib/youtubeChannel.ts).
+   *   2. The long-form RSS playlist, live — the newest 15. This is what
+   *      keeps a freshly published episode on the page without anyone
+   *      re-running the sync, and its entries win on conflict since they
+   *      carry the more current view counts.
+   *
+   * Both sources are long-form only, so no Short can leak into the archive,
+   * the card grid or the latest-episode hero (2026-08-13 brief, item 32).
+   * The hardcoded fixture below remains the last resort.
+   */
+  const archiveEntries = podcastArchive.episodes as YoutubeFeedEntry[]
   const liveEntries = await fetchHareditMeduberetLongform()
-  if (liveEntries.length === 0) return podcastEpisodes
 
-  const newestFirst = [...liveEntries].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+  const byVideoId = new Map<string, YoutubeFeedEntry>()
+  for (const entry of archiveEntries) byVideoId.set(entry.videoId, entry)
+  for (const entry of liveEntries) byVideoId.set(entry.videoId, entry)
+
+  const merged = [...byVideoId.values()]
+  if (merged.length === 0) return podcastEpisodes
+
+  const newestFirst = merged.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
   return newestFirst.map((entry, i) => toLiveEpisode(entry, newestFirst.length - i))
 }
 
@@ -311,8 +336,23 @@ export type PodcastShort = {
  * "nothing to show" rather than an error.
  */
 export async function getPodcastShorts(): Promise<PodcastShort[]> {
-  const entries = await fetchHareditMeduberetShorts()
-  const newestFirst = [...entries].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+  /*
+   * Same two-source merge as `getPodcastEpisodes()`, for the same reason.
+   * The stories strip used to read the Shorts RSS feed and nothing else,
+   * and that feed is the endpoint YouTube rate-limits hardest: once it
+   * starts answering 404 the strip renders empty with nothing behind it.
+   * `podcast-archive.json` now carries the full Shorts catalogue (synced by
+   * `npm run sync-podcast-archive`), with the live feed layered on top so a
+   * newly published Short still appears on its own.
+   */
+  const archived = (podcastArchive.shorts ?? []) as YoutubeFeedEntry[]
+  const live = await fetchHareditMeduberetShorts()
+
+  const byVideoId = new Map<string, YoutubeFeedEntry>()
+  for (const entry of archived) byVideoId.set(entry.videoId, entry)
+  for (const entry of live) byVideoId.set(entry.videoId, entry)
+
+  const newestFirst = [...byVideoId.values()].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
   return newestFirst.map((entry) => ({
     id: `yt-short-${entry.videoId}`,
     videoId: entry.videoId,

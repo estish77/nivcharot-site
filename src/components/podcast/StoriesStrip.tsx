@@ -62,8 +62,36 @@ function captionFor(short: PodcastShort): string {
   return short.title.length > 26 ? `${short.title.slice(0, 26).trim()}…` : short.title
 }
 
+const MAX_STORIES = 12
+
 /**
- * The Instagram-style horizontal "stories" strip: up to 6 circular avatars
+ * The strip's story list: newest Shorts first, at most one per guest.
+ *
+ * 2026-08-27 brief ("more stories at the top, don't repeat the same name
+ * twice"). The channel regularly cuts several Shorts from one episode, so
+ * a plain `slice(0, 6)` of the newest ones routinely showed the same guest
+ * two or three times in a row — the strip reads as a row of PEOPLE, and a
+ * repeated face makes it look broken. Shorts whose guest can't be
+ * identified from the title (`guestNameFrom` returns null for the freeform
+ * ones — see its comment) are never treated as duplicates of each other,
+ * since there is no name to compare; they're kept and deduplicated by
+ * their own caption instead, which is the truncated title.
+ */
+function pickStories(shorts: PodcastShort[]): PodcastShort[] {
+  const seen = new Set<string>()
+  const picked: PodcastShort[] = []
+  for (const short of shorts) {
+    const key = (guestNameFrom(short.title) ?? captionFor(short)).trim()
+    if (!key || seen.has(key)) continue
+    seen.add(key)
+    picked.push(short)
+    if (picked.length === MAX_STORIES) break
+  }
+  return picked
+}
+
+/**
+ * The Instagram-style horizontal "stories" strip: up to 12 circular avatars
  * from the channel's real Shorts (2026-08-13 brief, item 30 — each story
  * IS a real YouTube Short, not a full episode), each wrapped in a ring that
  * pulses steel-blue -> accent-red and back (mockup: `@keyframes
@@ -87,7 +115,7 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
   const shouldReduceMotion = useReducedMotion()
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
-  const shown = shorts.slice(0, 6)
+  const shown = pickStories(shorts)
   const storyItems: StoryViewerItem[] = shown.map((short) => ({
     id: short.id,
     videoId: short.videoId,

@@ -62,7 +62,10 @@ export function EpisodeDesk({
   const [tab, setTab] = useState<TabKey>('episodes')
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortKey>('popular')
-  const [view, setView] = useState<ViewKey>('list')
+  // Cards by default (2026-08-27 brief): every episode has a real thumbnail,
+  // and the grid is what makes the catalogue browsable at a glance. The list
+  // stays one click away for scanning many titles quickly.
+  const [view, setView] = useState<ViewKey>('grid')
   const [openId, setOpenId] = useState<string | null>(null)
   const [page, setPage] = useState(0)
   const [openShort, setOpenShort] = useState<number | null>(null)

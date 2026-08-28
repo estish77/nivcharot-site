@@ -31,6 +31,11 @@ export async function StoriesSection({
   locale: Locale
 }) {
   const shorts = await getPodcastShorts()
+  // No stories, no strip: rendering the heading over an empty row reads as a
+  // broken page rather than an empty state, and this list can legitimately
+  // come back empty (see `getPodcastShorts`).
+  if (shorts.length === 0) return null
+
   return (
     <Reveal as="section">
       <Section as="div" tint="tint-cream" className="border-b-2 border-divider" paddingBlockStart="17px" paddingBlockEnd="26px">
