@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { ArchiveHighlightsSection } from '@/components/podcast/ArchiveHighlightsSection'
 import { EpisodeDeskSection } from '@/components/podcast/EpisodeDeskSection'
+import { TopShortsSection } from '@/components/podcast/TopShortsSection'
 import { PodcastHeroSection } from '@/components/podcast/PodcastHeroSection'
 import { StoriesSection } from '@/components/podcast/StoriesSection'
 import { isLocale, locales, t } from '@/lib/i18n'
@@ -50,7 +50,9 @@ export async function generateMetadata({
  *      episode and its player side by side;
  *   3. `EpisodeDeskSection`, one searchable, sortable, paginated desk over
  *      every full episode AND every Short (replacing sections 3, 5 and 6);
- *   4. the from-the-archive strip through to `/media`.
+ *   4. `TopShortsSection`, the channel's most-watched Shorts. This replaced
+ *      the "מהארכיון · מגזין ווידאו" strip through to `/media` on the
+ *      2026-08-28 brief.
  *
  * No episode, Short, link or field was dropped in the merge — see
  * `EpisodeDesk`'s comment for where each one now lives.
@@ -69,7 +71,7 @@ export default async function PodcastPage({ params }: { params: Promise<{ locale
       <StoriesSection locale={locale} />
       <PodcastHeroSection locale={locale} />
       <EpisodeDeskSection locale={locale} />
-      <ArchiveHighlightsSection locale={locale} />
+      <TopShortsSection locale={locale} />
     </>
   )
 }

@@ -86,6 +86,16 @@ const SPEAKER_PATTERNS = [
   new RegExp(`נציגת ארגון נבחרות,\\s+(${NAME} ${NAME})`),
 ]
 
+/*
+ * Speakers the channel itself never names in full, supplied by the site
+ * owner. "רחלי בוועדת חינוך בנושא הממ\"ח" has no description and no
+ * keywords, and seven different women named רחלי appear in this site's own
+ * content, so nothing in the source could disambiguate her.
+ */
+const SPEAKER_OVERRIDES = {
+  kFEN64vVnKo: 'רחלי סלומון',
+}
+
 function speakerFrom(description) {
   const text = (description || '').replace(/\s+/g, ' ').trim()
   if (!text) return null
@@ -117,7 +127,7 @@ if (videos.length === 0) {
 
 const items = videos.map((video) => {
   const kind = classify(video)
-  const speaker = kind === 'knesset' ? speakerFrom(video.description) : null
+  const speaker = kind === 'knesset' ? (SPEAKER_OVERRIDES[video.videoId] ?? speakerFrom(video.description)) : null
   return {
     slug: `nivcharot-media-${video.videoId}`,
     kind,

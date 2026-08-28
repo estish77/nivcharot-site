@@ -114,4 +114,12 @@ export const episodeDeskText = {
   views: { he: 'צפיות', en: 'views' } satisfies Localized,
   empty: { he: 'אין פרקים שתואמים לחיפוש הזה.', en: 'No episodes match this search.' } satisfies Localized,
   playShort: { he: 'נגנו את השורט', en: 'Play this short' } satisfies Localized,
+
+  topShortsEyebrow: { he: 'הכי נצפים', en: 'MOST WATCHED' } satisfies Localized,
+  topShortsTitle: { he: 'הרגעים שתפסו הכי הרבה עיניים', en: 'The moments that caught the most eyes' } satisfies Localized,
+  topShortsLead: {
+    he: 'השורטס הנצפים ביותר בערוץ, לפי מספר הצפיות ביוטיוב. לחיצה פותחת אותם כאן, בלי לצאת מהעמוד.',
+    en: "The channel's most-watched shorts, ranked by their YouTube view count. Tap one to play it here, without leaving the page.",
+  } satisfies Localized,
+  allShortsOnYoutube: { he: 'לכל השורטס ביוטיוב', en: 'All shorts on YouTube' } satisfies Localized,
 } as const

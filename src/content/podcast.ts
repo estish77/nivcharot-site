@@ -326,6 +326,8 @@ export type PodcastShort = {
   publishedAt: string
   thumbnailUrl: string
   videoUrl: string
+  /** Real view count from YouTube, used to rank the most-watched feed. */
+  viewCount?: number
 }
 
 /**
@@ -365,6 +367,7 @@ export async function getPodcastShorts(): Promise<PodcastShort[]> {
     publishedAt: entry.publishedDate,
     thumbnailUrl: entry.thumbnailUrl,
     videoUrl: entry.videoUrl,
+    viewCount: entry.viewCount ?? undefined,
   }))
 }
 

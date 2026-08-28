@@ -265,6 +265,20 @@ export function EpisodeDesk({
   )
 }
 
+/**
+ * Real YouTube view count for one episode, or null when the source didn't
+ * carry one (the hardcoded fallback episodes have none).
+ *
+ * Re-added on the 2026-08-28 brief. An earlier pass in this session removed
+ * view counts along with the "most watched" ordering; the counts themselves
+ * were wanted, the ordering was not, so only the number comes back.
+ */
+function viewsLabel(episode: PodcastEpisode, locale: Locale): string | null {
+  if (episode.viewCount == null) return null
+  const formatted = new Intl.NumberFormat(locale === 'he' ? 'he-IL' : 'en-US').format(episode.viewCount)
+  return `${formatted} ${t(locale, episodeDeskText.views)}`
+}
+
 function PlatformLinks({ episode, locale }: { episode: PodcastEpisode; locale: Locale }) {
   return (
     <div className="flex flex-wrap gap-2">
@@ -297,6 +311,7 @@ function EpisodeRow({
   const shouldReduceMotion = useReducedMotion()
   const panelId = `episode-panel-${episode.id}`
   const guest = guestLine(episode, locale)
+  const views = viewsLabel(episode, locale)
 
   return (
     <article className={cn('border-b-2 border-divider transition-colors duration-200 ease-out', open && 'bg-tint-cream')}>
@@ -330,8 +345,11 @@ function EpisodeRow({
           <span className={cn('font-heading text-[17.5px] font-extrabold leading-[1.33]', open && 'text-accent-700')}>
             {episodeLabel(episode, locale)}
           </span>
-          {!open && guest ? (
-            <span className="text-[12.5px] font-semibold leading-[1.5] text-neutral-700">{guest}</span>
+          {!open && (guest || views) ? (
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] leading-[1.5] text-neutral-700">
+              {guest ? <span className="font-semibold">{guest}</span> : null}
+              {views ? <span className="tabular-nums text-neutral-600">{views}</span> : null}
+            </span>
           ) : null}
         </span>
         <span
@@ -362,7 +380,12 @@ function EpisodeRow({
               <span aria-hidden="true" className="max-[720px]:hidden" />
               <span aria-hidden="true" className="max-[720px]:hidden" />
               <div className="flex flex-col items-start gap-3">
-                {guest ? <p className="m-0 text-[12.5px] font-semibold text-neutral-700">{guest}</p> : null}
+                {guest || views ? (
+                  <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] text-neutral-700">
+                    {guest ? <span className="font-semibold">{guest}</span> : null}
+                    {views ? <span className="tabular-nums text-neutral-600">{views}</span> : null}
+                  </p>
+                ) : null}
                 <p className="m-0 max-w-[760px] text-[14.5px] leading-[1.75] text-neutral-800">
                   {t(locale, episode.description)}
                 </p>
@@ -378,6 +401,7 @@ function EpisodeRow({
 
 function EpisodeCard({ episode, locale }: { episode: PodcastEpisode; locale: Locale }) {
   const guest = guestLine(episode, locale)
+  const views = viewsLabel(episode, locale)
   return (
     <article className="flex flex-col gap-2.5">
       <div className="relative aspect-video w-full overflow-hidden border-2 border-divider bg-tint-cream">
@@ -397,6 +421,9 @@ function EpisodeCard({ episode, locale }: { episode: PodcastEpisode; locale: Loc
       <h3 className="m-0 text-[18px] leading-[1.3]">{episodeLabel(episode, locale)}</h3>
       {guest ? <div className="text-[13px] font-semibold text-neutral-700">{guest}</div> : null}
       <p className="m-0 line-clamp-3 text-[14px] leading-[1.65] text-neutral-800">{t(locale, episode.description)}</p>
+      {views ? (
+        <span className="font-heading text-[11.5px] font-extrabold tabular-nums text-neutral-600">{views}</span>
+      ) : null}
       <div className="mt-auto pt-1">
         <PlatformLinks episode={episode} locale={locale} />
       </div>

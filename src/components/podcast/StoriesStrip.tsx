@@ -146,7 +146,11 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
   return (
     <div
       data-stories
-      className="flex gap-[22px] overflow-x-auto py-[7px] pb-[10px] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:bg-divider"
+      // Wraps onto a second row rather than scrolling sideways (2026-08-28
+      // brief): a horizontal scroller hides half the guests behind a gesture
+      // that isn't obvious on desktop, and these are the page's introduction
+      // to who has been on the show.
+      className="flex flex-wrap gap-x-[22px] gap-y-5 py-[7px] pb-[10px]"
     >
       {shown.map((short, i) => {
         const caption = captionFor(short)

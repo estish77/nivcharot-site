@@ -28,23 +28,38 @@ function parseIsoDate(iso: string): Date | null {
   return Number.isNaN(d.getTime()) ? null : d
 }
 
-/** "2 באוגוסט" (he) / "August 2" (en) — mockup: `dateHe`, always Hebrew-grammar there regardless of language; ported to be locale-aware since this is structured data, not static chrome text. */
+/**
+ * "2 באוגוסט 2026" (he) / "August 2, 2026" (en) — mockup: `dateHe`, always
+ * Hebrew-grammar there regardless of language; ported to be locale-aware
+ * since this is structured data, not static chrome text.
+ *
+ * The year was added on the 2026-08-28 brief. The mockup omitted it, which
+ * was tolerable when the page only ever showed the newest handful of
+ * episodes; now that the archive spans two years, "2 באוגוסט" alone doesn't
+ * say which one.
+ */
 export function shortDateLabel(iso: string, locale: Locale): string {
   const d = parseIsoDate(iso)
   if (!d) return ''
   return new Intl.DateTimeFormat(locale === 'he' ? 'he' : 'en', {
     day: 'numeric',
     month: 'long',
+    year: 'numeric',
     timeZone: 'UTC',
   }).format(d)
 }
 
-/** "02/08/26" — mockup: `dateFull`, locale-neutral (numeric) in the source, kept that way here. */
+/**
+ * "02/08/2026" — mockup: `dateFull`, locale-neutral (numeric) in the source,
+ * kept that way here. The four-digit year replaces the mockup's two-digit
+ * one (2026-08-28 brief): across a two-year archive an unambiguous year is
+ * worth the two extra characters.
+ */
 export function numericDateLabel(iso: string): string {
   const d = parseIsoDate(iso)
   if (!d) return ''
   const pad = (v: number) => String(v).padStart(2, '0')
-  return `${pad(d.getUTCDate())}/${pad(d.getUTCMonth() + 1)}/${String(d.getUTCFullYear()).slice(-2)}`
+  return `${pad(d.getUTCDate())}/${pad(d.getUTCMonth() + 1)}/${d.getUTCFullYear()}`
 }
 
 /** Hebrew numeral (gematria) with the מ/ה geresh/gershayim convention — ports the mockup's `__heNum(n)` exactly (including its יה→טו / יו→טז substitutions, which avoid spelling the divine name). */
