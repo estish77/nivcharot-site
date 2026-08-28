@@ -38,6 +38,9 @@ export type { FooterProps } from './Footer'
 export { Section } from './Section'
 export type { SectionProps, SectionTint } from './Section'
 
+export { RichText, hasRichText } from './RichText'
+export type { RichTextProps } from './RichText'
+
 export { Eyebrow } from './Eyebrow'
 export type { EyebrowProps } from './Eyebrow'
 

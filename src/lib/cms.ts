@@ -424,7 +424,9 @@ export async function getHalachaContent(
 }
 
 /** Hero + body paragraphs for `/mishpat` — a placeholder page meant to be rewritten from `/admin` (a free-text richText field), unlike `/halacha`'s hardcoded write-up. */
-export async function getMishpatContent(locale: Locale): Promise<{ hero: SimpleHeroContent; body: string[] }> {
+export async function getMishpatContent(
+  locale: Locale,
+): Promise<{ hero: SimpleHeroContent; body: string[]; bodyRich: unknown | null }> {
   const fallback = {
     hero: {
       eyebrow: mishpatHero.eyebrow[locale],
@@ -432,6 +434,8 @@ export async function getMishpatContent(locale: Locale): Promise<{ hero: SimpleH
       body: mishpatHero.lead[locale],
     },
     body: mishpatFallbackBody,
+    // The fixture is plain prose; only Payload can supply rich text.
+    bodyRich: null,
   }
 
   const payload = await getPayloadInstance()
@@ -449,6 +453,12 @@ export async function getMishpatContent(locale: Locale): Promise<{ hero: SimpleH
         body: resolveLocalizedValue(hero.body, locale, fallback.hero.body),
       },
       body: paragraphs.length > 0 ? paragraphs : fallback.body,
+      /*
+       * The whole tree, so the page can render links, headings, lists and
+       * emphasis. `paragraphs` above is kept only as the plain-text form
+       * `generateMetadata` and the fallback path still want.
+       */
+      bodyRich: doc?.body ?? null,
     }
   } catch {
     return fallback

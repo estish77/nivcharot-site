@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-import { Eyebrow, Reveal } from '@/components/ui'
+import { Eyebrow, hasRichText, Reveal, RichText } from '@/components/ui'
 import { getMishpatContent } from '@/lib/cms'
 import { isLocale, locales, type Locale } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
@@ -39,11 +39,20 @@ export default async function MishpatPage({ params }: { params: Promise<Params> 
         <h1 className="m-0 mb-4 text-[clamp(28px,4vw,44px)] leading-[1.15]">{content.hero.title}</h1>
         <p className="m-0 mb-8 text-[16px] leading-[1.7] text-neutral-800">{content.hero.body}</p>
         <div className="border-t-2 border-divider pt-8">
-          {content.body.map((paragraph, i) => (
-            <p key={i} className="mb-5 text-[15.5px] leading-[1.8] text-text">
-              {paragraph}
-            </p>
-          ))}
+          {/*
+            Rich text when the dashboard has any, so an article written in
+            /admin keeps its links, headings, quotes and emphasis. The plain
+            paragraph list stays as the fallback for the static fixture.
+          */}
+          {hasRichText(content.bodyRich) ? (
+            <RichText value={content.bodyRich} />
+          ) : (
+            content.body.map((paragraph, i) => (
+              <p key={i} className="mb-5 text-[15.5px] leading-[1.8] text-text">
+                {paragraph}
+              </p>
+            ))
+          )}
         </div>
       </article>
     </Reveal>
