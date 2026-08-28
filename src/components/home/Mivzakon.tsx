@@ -10,7 +10,6 @@ import type { MivzakonItem } from '@/content/mivzakon'
 const text = {
   label: { he: 'מבזקון', en: 'MIVZAKON' },
   sub: { he: 'הנצפים ביותר בחרדית מדוברת', en: 'MOST WATCHED ON HAREDIT MEDUBERET' },
-  more: { he: 'עוד בחרדית מדוברת', en: 'More on Haredit Meduberet' },
   prev: { he: 'המבזק הקודם', en: 'Previous flash' },
   next: { he: 'המבזק הבא', en: 'Next flash' },
   region: { he: 'מבזקון, מתוך השורטס של הערוץ', en: 'Mivzakon, from the channel shorts' },
@@ -33,10 +32,10 @@ export type MivzakonProps = { locale: Locale; items: MivzakonItem[]; className?:
  * competed with the sentence for the same glance.
  *
  * Everything lives INSIDE the bar. A bell and a "more" pill used to hang
- * off the top and bottom edges, which left the page background showing
- * around them; the pill is now a full-height red block at the leading edge
- * that the headlines slide under and disappear behind, and the bell is
- * gone.
+ * off the top and bottom edges, which left page background showing around
+ * them; both are gone, as is the red "more" block that replaced the pill
+ * (2026-08-28). The headlines are the only content, and each links to its
+ * own Short.
  *
  * Motion is a transform on a track holding TWO copies of the list: the
  * track slides one copy's width and resets to 0, at which point the second
@@ -158,15 +157,12 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
     >
       {/*
        * The track runs the FULL width of the bar and is clipped by it, while
-       * the red block and the arrow cell sit on top at either end. That is
-       * what makes headlines slide underneath them and vanish, rather than
-       * stopping short at a padded edge.
-       *
-       * Both overlays are `inset-y-0`, so they meet the bar's top and bottom
-       * rules exactly and no page background shows through between them and
-       * the strip.
+       * the arrow cell sits on top at the far end. That is what makes
+       * headlines slide underneath it and vanish, rather than stopping short
+       * at a padded edge. The cell is `inset-y-0`, so it meets the bar's top
+       * and bottom rules exactly with no background showing between.
        */}
-      <div className="ps-[140px] pe-[74px] max-[860px]:ps-[112px] max-[860px]:pe-[62px]">
+      <div className="pe-[74px] max-[860px]:pe-[62px]">
         <div
           ref={trackRef}
           role="list"
@@ -193,14 +189,6 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
           )}
         </div>
       </div>
-
-      {/* The red block the headlines disappear behind. Opaque and above the track. */}
-      <a
-        href={`/${locale}/podcast#episodes`}
-        className="absolute inset-y-0 z-20 flex w-[140px] items-center justify-center bg-accent px-3 text-center font-heading text-[13px] font-extrabold leading-[1.25] text-white no-underline transition-colors duration-200 ease-out hover:bg-accent-600 focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-white start-0 max-[860px]:w-[112px] max-[860px]:px-2 max-[860px]:text-[11.5px]"
-      >
-        {t(locale, text.more)}
-      </a>
 
       {/* Arrows get their own cell at the far end, opaque so headlines vanish behind it too. */}
       <div className="absolute inset-y-0 z-20 flex items-center gap-0.5 border-s border-divider bg-tint-cream px-2 end-0 max-[860px]:px-1.5">
