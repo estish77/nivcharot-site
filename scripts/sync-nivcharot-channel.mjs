@@ -56,6 +56,48 @@ function classify(video) {
   return 'video'
 }
 
+/**
+ * Pulls the speaking activist's full name out of a Knesset item's own
+ * description (2026-08-28 brief: "include the surnames of the activists
+ * speaking"). Several of those videos are titled with the topic only, or
+ * with a first name, while the description underneath names the person in
+ * full.
+ *
+ * Only the phrasings the channel actually uses are matched, and only a
+ * two-or-three word Hebrew name is accepted, so this cannot pick up a
+ * sentence fragment and present it as somebody's name. Anything it isn't
+ * sure about returns null and the title is left exactly as written.
+ */
+// Hebrew letters plus geresh/gershayim and hyphen \u2014 enough for every name
+// the channel writes, and narrow enough that it cannot swallow punctuation
+// and turn a clause into a "name".
+const NAME = '[\u05d0-\u05ea\u05f3\u05f4-]+'
+const SPEAKER_PATTERNS = [
+  // "אפרת שוקרון בועדה לביטחון לאומי" / "יפעת חיים בועדת הרווחה"
+  // `\\s` in a template literal, not `\s`: an unrecognised escape there is
+  // silently dropped, which turns the pattern into a search for a literal "s".
+  new RegExp(`^(${NAME}(?: ${NAME}){1,2})\\s+ב(?:ו?ועד)`),
+  // "ציפי לביא, אקטיביסטית חרדית…" / "לאה שיינברום, עובדת סוציאלית…"
+  new RegExp(`^(${NAME}(?: ${NAME}){1,2}),\\s`),
+  // "…נציגת ארגון נבחרות, רעיה מרי והעלתה…" — exactly two words here, unlike
+  // the patterns above: this one has no comma or "בוועדה" after the name to
+  // stop at, so a looser bound runs straight on into the next verb
+  // ("רעיה מרי והעלתה").
+  new RegExp(`נציגת ארגון נבחרות,\\s+(${NAME} ${NAME})`),
+]
+
+function speakerFrom(description) {
+  const text = (description || '').replace(/\s+/g, ' ').trim()
+  if (!text) return null
+  for (const pattern of SPEAKER_PATTERNS) {
+    const match = text.match(pattern)
+    const name = match?.[1]?.trim()
+    // A single word is a first name, not the full name the brief asks for.
+    if (name && name.split(' ').length >= 2) return name
+  }
+  return null
+}
+
 /** First paragraph only: channel descriptions often end in link boilerplate. */
 function firstParagraph(text) {
   const [lead] = (text || '').split(/\n\s*\n/)
@@ -73,16 +115,23 @@ if (videos.length === 0) {
   process.exit(1)
 }
 
-const items = videos.map((video) => ({
-  slug: `nivcharot-media-${video.videoId}`,
-  kind: classify(video),
-  videoId: video.videoId,
-  title: video.title.replace(/\s+/g, ' ').trim(),
-  summary: firstParagraph(video.description),
-  publishedDate: video.publishedDate,
-  url: video.videoUrl,
-  thumbnailUrl: video.thumbnailUrl,
-}))
+const items = videos.map((video) => {
+  const kind = classify(video)
+  const speaker = kind === 'knesset' ? speakerFrom(video.description) : null
+  return {
+    slug: `nivcharot-media-${video.videoId}`,
+    kind,
+    videoId: video.videoId,
+    title: video.title.replace(/\s+/g, ' ').trim(),
+    summary: firstParagraph(video.description),
+    // Only set where the description named the person in full; the title
+    // is left untouched and the two are joined at render time.
+    ...(speaker ? { speaker } : {}),
+    publishedDate: video.publishedDate,
+    url: video.videoUrl,
+    thumbnailUrl: video.thumbnailUrl,
+  }
+})
 
 const previous = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : { items: [] }
 const previousIds = new Set(previous.items?.map((i) => i.slug) ?? [])
@@ -95,4 +144,7 @@ const withSummary = items.filter((i) => i.summary.length > 0).length
 console.log(`wrote ${items.length} videos to ${path.relative(process.cwd(), OUT)} in ${Date.now() - started}ms`)
 console.log(`  by kind: ${JSON.stringify(byKind)}`)
 console.log(`  with a real description: ${withSummary}/${items.length}`)
+const named = items.filter((i) => i.speaker)
+console.log(`  knesset items with a named speaker: ${named.length}`)
+for (const i of named) console.log(`    · ${i.speaker} — ${i.title.slice(0, 60)}`)
 console.log(`  new since last sync: ${added.length}`)

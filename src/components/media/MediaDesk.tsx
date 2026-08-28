@@ -23,7 +23,7 @@ import { MediaEntryRow } from './MediaEntryRow'
 import { MediaTheater } from './MediaTheater'
 
 type TabKey = 'all' | MediaGroup
-type SortKey = 'newest' | 'oldest'
+type SortKey = 'newest' | 'oldest' | 'englishFirst'
 type ViewKey = 'list' | 'grid'
 
 const PAGE_SIZE = 12
@@ -77,7 +77,21 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
   const [query, setQuery] = useState('')
   const [facet, setFacet] = useState<string | null>(null)
   const [year, setYear] = useState<number | null>(null)
-  const [sort, setSort] = useState<SortKey>('newest')
+  /*
+   * Default order (2026-08-28 brief), and it differs by locale on purpose:
+   *
+   *   Hebrew — oldest first. The archive reads as a chronology of the
+   *   movement's coverage, and starting at the beginning is how you follow it.
+   *
+   *   English — English-language sources first. Most of this archive is
+   *   Hebrew-language material shown untranslated, so an English reader
+   *   landing on a chronological list meets a wall of Hebrew before
+   *   reaching anything they can read. Within each language group the
+   *   chronological order still holds.
+   *
+   * Either way it is only a default; every order stays one click away.
+   */
+  const [sort, setSort] = useState<SortKey>(locale === 'en' ? 'englishFirst' : 'oldest')
   const [view, setView] = useState<ViewKey>('list')
   const [openId, setOpenId] = useState<string | null>(null)
   const [page, setPage] = useState(0)
@@ -168,9 +182,12 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
     const list = searched
       .filter((entry) => facet === null || entry.facets.some((f) => f.slug === facet))
       .filter((entry) => year === null || entry.year === year)
-    return [...list].sort((a, b) =>
-      sort === 'newest' ? b.sortDate.localeCompare(a.sortDate) : a.sortDate.localeCompare(b.sortDate),
-    )
+    return [...list].sort((a, b) => {
+      if (sort === 'englishFirst' && a.sourceLanguage !== b.sourceLanguage) {
+        return a.sourceLanguage === 'en' ? -1 : 1
+      }
+      return sort === 'newest' ? b.sortDate.localeCompare(a.sortDate) : a.sortDate.localeCompare(b.sortDate)
+    })
   }, [searched, facet, year, sort])
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
@@ -292,6 +309,12 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
               setPage(0)
             }}
             options={[
+              // Offered on the English page only: on the Hebrew page nearly
+              // every item is already a Hebrew source, so the option would
+              // sort almost nothing.
+              ...(locale === 'en'
+                ? [{ value: 'englishFirst' as const, label: t(locale, mediaDeskText.sortEnglishFirst) }]
+                : []),
               { value: 'newest', label: t(locale, mediaDeskText.sortNewest) },
               { value: 'oldest', label: t(locale, mediaDeskText.sortOldest) },
             ]}

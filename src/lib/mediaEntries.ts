@@ -56,6 +56,8 @@ export type MediaEntry = {
   ctaLabel: string
   /** Set only when the piece's original language differs from the active locale. */
   langBadge: string | null
+  /** The language the piece was actually published in — drives the English page's default ordering. */
+  sourceLanguage: 'he' | 'en'
   /** YouTube id when the item can be embedded in the watch theater. */
   youtubeId: string | null
   note: string | null
@@ -116,6 +118,7 @@ function pressEntry(item: PressArchiveItem, locale: Locale): MediaEntry {
       item.sourceLanguage !== locale
         ? t(locale, pressArchiveText.originalLanguageBadge[item.sourceLanguage])
         : null,
+    sourceLanguage: item.sourceLanguage,
     youtubeId: item.link.kind === 'external' ? youtubeVideoId(item.link.url) : null,
     note: item.note ? t(locale, item.note) : null,
     facets: [{ slug: item.category, name: t(locale, pressArchiveText.categoryFilter[item.category]) }],
@@ -157,6 +160,7 @@ function elsewhereEntry(item: ElsewhereMediaItem, locale: Locale): MediaEntry {
       item.sourceLanguage !== locale
         ? t(locale, elsewhereMediaText.originalLanguageBadge[item.sourceLanguage])
         : null,
+    sourceLanguage: item.sourceLanguage,
     // Podcasts never get a video embed even when a YouTube upload exists —
     // 2026-08-16 brief: audio pieces keep their own, visually distinct
     // treatment (the waveform panel) rather than an iframe.
@@ -192,6 +196,8 @@ function archiveEntry(post: ArchivePost, locale: Locale): MediaEntry {
     external: false,
     ctaLabel: t(locale, { he: 'לרשומה המלאה', en: 'Read the full post' }),
     langBadge: locale === 'en' ? 'In Hebrew' : null,
+    // Archive posts are Hebrew-only source material (see src/content/media.ts).
+    sourceLanguage: 'he',
     youtubeId: null,
     note: null,
     facets: cats.map((c) => ({ slug: c.slug, name: c.name })),

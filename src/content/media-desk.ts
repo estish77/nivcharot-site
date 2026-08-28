@@ -59,6 +59,8 @@ export const mediaDeskText = {
   sortLabel: { he: 'סדר', en: 'Order' } satisfies Localized,
   sortNewest: { he: 'מהחדש', en: 'Newest' } satisfies Localized,
   sortOldest: { he: 'מהישן', en: 'Oldest' } satisfies Localized,
+  /** English page only — see MediaDesk's sort comment. */
+  sortEnglishFirst: { he: 'מקורות באנגלית', en: 'English sources first' } satisfies Localized,
 
   viewLabel: { he: 'תצוגה', en: 'View' } satisfies Localized,
   viewList: { he: 'רשימה', en: 'List' } satisfies Localized,

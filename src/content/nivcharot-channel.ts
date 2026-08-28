@@ -30,6 +30,8 @@ type RawChannelItem = {
   videoId: string
   title: string
   summary: string
+  /** Knesset items only, and only where the channel's own description named the person in full. */
+  speaker?: string
   publishedDate: string
   url: string
   thumbnailUrl: string
@@ -65,10 +67,20 @@ function isKind(value: string): value is ElsewhereMediaItem['kind'] {
 
 export const nivcharotChannelItems: ElsewhereMediaItem[] = (channel.items as RawChannelItem[]).map((item) => {
   const label = dateLabel(item.publishedDate)
+  /*
+   * 2026-08-28 brief: "include the surnames of the activists speaking" on
+   * the Knesset videos. Several of those are titled with the topic alone
+   * ("הציבור צריך שירות רווחה טוב יותר") while the description underneath
+   * names the woman in full, so the name is put in front of the title here.
+   * The channel's own wording is never edited - the two are just joined -
+   * and the prefix is skipped when the title already names her, so
+   * "ציפי לביא פעילת נבחרות…" doesn't become "ציפי לביא · ציפי לביא…".
+   */
+  const title = item.speaker && !item.title.includes(item.speaker) ? `${item.speaker} · ${item.title}` : item.title
   return {
     slug: item.slug,
     kind: isKind(item.kind) ? item.kind : 'video',
-    title: { he: item.title, en: item.title },
+    title: { he: title, en: title },
     summary: { he: item.summary, en: item.summary },
     host: 'מדיה נבחרות',
     dateLabel: label,
