@@ -17,11 +17,11 @@ import { podcastText } from '@/content/podcast'
 import { arrowBack, arrowForward, dict, t, type Locale } from '@/lib/i18n'
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
-import { episodeLabel, guestLine, hebrewCalendarLabel, numericDateLabel, shortDateLabel, sortForBinge } from './podcastUtils'
+import { episodeLabel, guestLine, hebrewCalendarLabel, numericDateLabel, shortDateLabel } from './podcastUtils'
 import { StoryViewer, type StoryViewerItem } from './StoryViewer'
 
 type TabKey = 'episodes' | 'shorts'
-type SortKey = 'popular' | 'newest' | 'oldest'
+type SortKey = 'newest' | 'oldest'
 type ViewKey = 'list' | 'grid'
 
 const EPISODE_PAGE_SIZE = 12
@@ -61,7 +61,7 @@ export function EpisodeDesk({
 
   const [tab, setTab] = useState<TabKey>('episodes')
   const [query, setQuery] = useState('')
-  const [sort, setSort] = useState<SortKey>('popular')
+  const [sort, setSort] = useState<SortKey>('newest')
   // Cards by default (2026-08-27 brief): every episode has a real thumbnail,
   // and the grid is what makes the catalogue browsable at a glance. The list
   // stays one click away for scanning many titles quickly.
@@ -69,8 +69,6 @@ export function EpisodeDesk({
   const [openId, setOpenId] = useState<string | null>(null)
   const [page, setPage] = useState(0)
   const [openShort, setOpenShort] = useState<number | null>(null)
-
-  const numberFormat = useMemo(() => new Intl.NumberFormat(locale === 'he' ? 'he-IL' : 'en-US'), [locale])
 
   const filteredEpisodes = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -82,7 +80,6 @@ export function EpisodeDesk({
             .includes(q),
         )
       : episodes
-    if (sort === 'popular') return sortForBinge(matched)
     return [...matched].sort((a, b) =>
       sort === 'newest'
         ? b.publishedAt.localeCompare(a.publishedAt)
@@ -95,8 +92,6 @@ export function EpisodeDesk({
     const matched = q
       ? shorts.filter((short) => `${short.title} \n ${short.summary}`.toLowerCase().includes(q))
       : shorts
-    // Shorts carry no view count, so "popular" has nothing real behind it
-    // here — it falls through to newest rather than inventing an order.
     return [...matched].sort((a, b) =>
       sort === 'oldest' ? a.publishedAt.localeCompare(b.publishedAt) : b.publishedAt.localeCompare(a.publishedAt),
     )
@@ -145,10 +140,6 @@ export function EpisodeDesk({
           setTab(next as TabKey)
           setOpenId(null)
           setPage(0)
-          // "Most watched" only exists for full episodes — the Shorts feed
-          // carries no view counts — so switching tabs falls back to the
-          // order that does mean something there.
-          if (next === 'shorts' && sort === 'popular') setSort('newest')
         }}
       />
 
@@ -174,9 +165,6 @@ export function EpisodeDesk({
               setPage(0)
             }}
             options={[
-              ...(tab === 'episodes'
-                ? [{ value: 'popular' as const, label: t(locale, episodeDeskText.sortPopular) }]
-                : []),
               { value: 'newest', label: t(locale, episodeDeskText.sortNewest) },
               { value: 'oldest', label: t(locale, episodeDeskText.sortOldest) },
             ]}
@@ -228,11 +216,6 @@ export function EpisodeDesk({
                     key={episode.id}
                     episode={episode}
                     locale={locale}
-                    viewsLabel={
-                      episode.viewCount != null
-                        ? `${numberFormat.format(episode.viewCount)} ${t(locale, episodeDeskText.views)}`
-                        : null
-                    }
                   />
                 ))}
               </div>
@@ -246,11 +229,6 @@ export function EpisodeDesk({
                     ordinal={safePage * pageSize + i + 1}
                     open={openId === episode.id}
                     onToggle={() => setOpenId(openId === episode.id ? null : episode.id)}
-                    viewsLabel={
-                      episode.viewCount != null
-                        ? `${numberFormat.format(episode.viewCount)} ${t(locale, episodeDeskText.views)}`
-                        : null
-                    }
                   />
                 ))}
               </div>
@@ -309,14 +287,12 @@ function EpisodeRow({
   ordinal,
   open,
   onToggle,
-  viewsLabel,
 }: {
   episode: PodcastEpisode
   locale: Locale
   ordinal: number
   open: boolean
   onToggle: () => void
-  viewsLabel: string | null
 }) {
   const shouldReduceMotion = useReducedMotion()
   const panelId = `episode-panel-${episode.id}`
@@ -354,11 +330,8 @@ function EpisodeRow({
           <span className={cn('font-heading text-[17.5px] font-extrabold leading-[1.33]', open && 'text-accent-700')}>
             {episodeLabel(episode, locale)}
           </span>
-          {!open ? (
-            <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] leading-[1.5] text-neutral-700">
-              {guest ? <span className="font-semibold">{guest}</span> : null}
-              {viewsLabel ? <span className="tabular-nums text-neutral-600">{viewsLabel}</span> : null}
-            </span>
+          {!open && guest ? (
+            <span className="text-[12.5px] font-semibold leading-[1.5] text-neutral-700">{guest}</span>
           ) : null}
         </span>
         <span
@@ -389,12 +362,7 @@ function EpisodeRow({
               <span aria-hidden="true" className="max-[720px]:hidden" />
               <span aria-hidden="true" className="max-[720px]:hidden" />
               <div className="flex flex-col items-start gap-3">
-                {guest || viewsLabel ? (
-                  <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] text-neutral-700">
-                    {guest ? <span className="font-semibold">{guest}</span> : null}
-                    {viewsLabel ? <span className="tabular-nums text-neutral-600">{viewsLabel}</span> : null}
-                  </p>
-                ) : null}
+                {guest ? <p className="m-0 text-[12.5px] font-semibold text-neutral-700">{guest}</p> : null}
                 <p className="m-0 max-w-[760px] text-[14.5px] leading-[1.75] text-neutral-800">
                   {t(locale, episode.description)}
                 </p>
@@ -408,15 +376,7 @@ function EpisodeRow({
   )
 }
 
-function EpisodeCard({
-  episode,
-  locale,
-  viewsLabel,
-}: {
-  episode: PodcastEpisode
-  locale: Locale
-  viewsLabel: string | null
-}) {
+function EpisodeCard({ episode, locale }: { episode: PodcastEpisode; locale: Locale }) {
   const guest = guestLine(episode, locale)
   return (
     <article className="flex flex-col gap-2.5">
@@ -437,9 +397,6 @@ function EpisodeCard({
       <h3 className="m-0 text-[18px] leading-[1.3]">{episodeLabel(episode, locale)}</h3>
       {guest ? <div className="text-[13px] font-semibold text-neutral-700">{guest}</div> : null}
       <p className="m-0 line-clamp-3 text-[14px] leading-[1.65] text-neutral-800">{t(locale, episode.description)}</p>
-      {viewsLabel ? (
-        <span className="font-heading text-[11.5px] font-extrabold tabular-nums text-neutral-600">{viewsLabel}</span>
-      ) : null}
       <div className="mt-auto pt-1">
         <PlatformLinks episode={episode} locale={locale} />
       </div>

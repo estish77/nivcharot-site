@@ -25,12 +25,17 @@ const EASE = [0.22, 0.61, 0.36, 1] as const
  * One dense, expandable row in the media desk's list view.
  *
  * The redesign brief's core tension is "don't remove any data" + "make it
- * a short page". Progressive disclosure is what resolves it: collapsed,
- * a row is a single ~76px line (catalogue number, date, kind, title, a
- * one-line summary, outlet); expanded in place, it shows everything the
- * old full-height card showed — the complete summary, any extra body
- * paragraphs, the honest source note, the original-language badge and the
- * outbound link. Twelve rows fit in roughly one screen instead of ten.
+ * a short page". Progressive disclosure is what resolves it: collapsed, a
+ * row shows the catalogue number, date, kind, title, the first two lines
+ * of the summary, the outlet and any language badge; expanded in place, it
+ * adds the complete summary, any extra body paragraphs, the honest source
+ * note and the outbound link.
+ *
+ * The collapsed row was tightened to a single summary line in the first
+ * pass and opened back up on the 2026-08-28 brief ("space the items out a
+ * bit, and show more information in the feed before expanding"): reading a
+ * row is how you decide whether to open it, and one clipped line rarely
+ * carried enough to make that call.
  *
  * The whole header is one `<button>` and the outbound link lives only in
  * the expanded panel, so there is never a link nested inside a button.
@@ -47,7 +52,7 @@ export function MediaEntryRow({ entry, ordinal, open, onToggle, locale }: MediaE
         aria-expanded={open}
         aria-controls={panelId}
         className={cn(
-          'grid w-full grid-cols-[34px_112px_1fr_26px] items-start gap-x-4 gap-y-1 px-1 py-[15px] text-start',
+          'grid w-full grid-cols-[34px_112px_1fr_26px] items-start gap-x-5 gap-y-2 px-1 py-[26px] text-start',
           'transition-colors duration-200 ease-out hover:bg-neutral-200/70',
           'focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent',
           'max-[720px]:grid-cols-[30px_1fr_24px]',
@@ -74,16 +79,27 @@ export function MediaEntryRow({ entry, ordinal, open, onToggle, locale }: MediaE
           ) : null}
         </span>
 
-        <span className="flex min-w-0 flex-col gap-[5px] max-[720px]:col-span-2 max-[720px]:col-start-2">
-          <span className={cn('font-heading text-[17.5px] font-extrabold leading-[1.32]', open && 'text-accent-700')}>
+        <span className="flex min-w-0 flex-col gap-[7px] max-[720px]:col-span-2 max-[720px]:col-start-2">
+          <span className={cn('font-heading text-[18px] font-extrabold leading-[1.35]', open && 'text-accent-700')}>
             {entry.title}
           </span>
           {!open && entry.summary ? (
-            <span className="line-clamp-1 text-[13.5px] leading-[1.6] text-neutral-700">{entry.summary}</span>
+            <span className="line-clamp-2 max-w-[760px] text-[14px] leading-[1.7] text-neutral-800">
+              {entry.summary}
+            </span>
           ) : null}
-          {!open && entry.outlet ? (
-            <span className="font-heading text-[11.5px] font-extrabold tracking-[0.04em] text-neutral-600">
-              {entry.outlet}
+          {!open && (entry.outlet || entry.langBadge) ? (
+            <span className="mt-0.5 flex flex-wrap items-center gap-2.5">
+              {entry.outlet ? (
+                <span className="font-heading text-[11.5px] font-extrabold tracking-[0.04em] text-neutral-600">
+                  {entry.outlet}
+                </span>
+              ) : null}
+              {entry.langBadge ? (
+                <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-600">
+                  {entry.langBadge}
+                </span>
+              ) : null}
             </span>
           ) : null}
         </span>
@@ -91,7 +107,7 @@ export function MediaEntryRow({ entry, ordinal, open, onToggle, locale }: MediaE
         <span
           aria-hidden="true"
           className={cn(
-            'relative mt-[6px] block h-[13px] w-[13px] flex-none text-accent-700',
+            'relative mt-[7px] block h-[13px] w-[13px] flex-none text-accent-700',
             'transition-transform duration-300 ease-[cubic-bezier(0.22,0.61,0.36,1)] motion-reduce:transition-none',
             open && 'rotate-45',
             "before:absolute before:inset-0 before:m-auto before:h-[1.6px] before:w-[13px] before:bg-current before:content-['']",

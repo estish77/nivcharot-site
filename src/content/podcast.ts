@@ -309,7 +309,11 @@ export async function getPodcastEpisodes(): Promise<PodcastEpisode[]> {
   const merged = [...byVideoId.values()]
   if (merged.length === 0) return podcastEpisodes
 
-  const newestFirst = merged.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+  // Compared as real instants, not as strings: these timestamps carry
+  // timezone offsets ("2026-08-23T03:07:35-07:00"), and comparing those
+  // lexicographically can order two uploads wrongly. The hero shows
+  // episodes[0], so this is what decides which episode is "the latest".
+  const newestFirst = merged.sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
   return newestFirst.map((entry, i) => toLiveEpisode(entry, newestFirst.length - i))
 }
 
@@ -352,7 +356,7 @@ export async function getPodcastShorts(): Promise<PodcastShort[]> {
   for (const entry of archived) byVideoId.set(entry.videoId, entry)
   for (const entry of live) byVideoId.set(entry.videoId, entry)
 
-  const newestFirst = [...byVideoId.values()].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+  const newestFirst = [...byVideoId.values()].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
   return newestFirst.map((entry) => ({
     id: `yt-short-${entry.videoId}`,
     videoId: entry.videoId,

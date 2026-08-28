@@ -65,28 +65,49 @@ function captionFor(short: PodcastShort): string {
 const MAX_STORIES = 12
 
 /**
- * The strip's story list: newest Shorts first, at most one per guest.
+ * The strip's story list: newest Shorts first, at most one per guest, and
+ * preferring the ones we can actually put a name to.
  *
  * 2026-08-27 brief ("more stories at the top, don't repeat the same name
- * twice"). The channel regularly cuts several Shorts from one episode, so
- * a plain `slice(0, 6)` of the newest ones routinely showed the same guest
- * two or three times in a row — the strip reads as a row of PEOPLE, and a
- * repeated face makes it look broken. Shorts whose guest can't be
- * identified from the title (`guestNameFrom` returns null for the freeform
- * ones — see its comment) are never treated as duplicates of each other,
- * since there is no name to compare; they're kept and deduplicated by
- * their own caption instead, which is the truncated title.
+ * twice"). Two things make that harder than a `slice`:
+ *
+ *   - The channel regularly cuts several Shorts from one episode, so the
+ *     newest few routinely feature the same guest. The strip reads as a row
+ *     of PEOPLE, and a repeated face looks broken.
+ *   - `guestNameFrom` only recognises the two title shapes it can parse
+ *     safely (see its comment), so some Shorts fall back to a truncated
+ *     title as their caption. Deduplicating on the caption alone therefore
+ *     missed real repeats: "אלי ביתאן" and "אלי ביתאן עושה לאסתי שושן…"
+ *     are the same person but two different captions.
+ *
+ * So named Shorts are taken first, one per name; then, only if there is
+ * still room, title-captioned ones — and those are skipped when an already
+ * chosen guest's name appears anywhere in the title, which is what catches
+ * the case above.
  */
 function pickStories(shorts: PodcastShort[]): PodcastShort[] {
-  const seen = new Set<string>()
+  const usedNames = new Set<string>()
   const picked: PodcastShort[] = []
+
   for (const short of shorts) {
-    const key = (guestNameFrom(short.title) ?? captionFor(short)).trim()
-    if (!key || seen.has(key)) continue
-    seen.add(key)
+    const name = guestNameFrom(short.title)?.trim()
+    if (!name || usedNames.has(name)) continue
+    usedNames.add(name)
+    picked.push(short)
+    if (picked.length === MAX_STORIES) return picked
+  }
+
+  const usedCaptions = new Set(picked.map((s) => captionFor(s)))
+  for (const short of shorts) {
+    if (picked.includes(short)) continue
+    if ([...usedNames].some((name) => short.title.includes(name))) continue
+    const caption = captionFor(short).trim()
+    if (!caption || usedCaptions.has(caption)) continue
+    usedCaptions.add(caption)
     picked.push(short)
     if (picked.length === MAX_STORIES) break
   }
+
   return picked
 }
 

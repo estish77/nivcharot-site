@@ -5,6 +5,7 @@ import { MediaDesk } from '@/components/media/MediaDesk'
 import { Eyebrow, Reveal, Section, SocialLinksRow, type SocialLinkItem } from '@/components/ui'
 import { mediaDeskText } from '@/content/media-desk'
 import { archivePostsVisible } from '@/content/media-visibility'
+import { nivcharotChannelItems } from '@/content/nivcharot-channel'
 import { getArchivePosts, getElsewhereMediaItems, getPressArchiveItems, getSiteSettings } from '@/lib/cms'
 import { isLocale, locales, t, type Locale } from '@/lib/i18n'
 import { buildMediaEntries } from '@/lib/mediaEntries'
@@ -79,6 +80,7 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
       podcasts: elsewhere.podcasts,
       videos: elsewhere.videos,
       talks: elsewhere.talks,
+      channel: nivcharotChannelItems,
       posts,
     },
     locale,

@@ -127,12 +127,14 @@ const ELSEWHERE_FACET_LABEL = {
   podcast: elsewhereMediaText.podcastsTitle,
   video: elsewhereMediaText.videoTitle,
   talk: elsewhereMediaText.talksTitle,
+  knesset: elsewhereMediaText.knessetTitle,
 } as const
 
 const ELSEWHERE_KIND_LABEL = {
   podcast: { he: 'פודקאסט', en: 'Podcast' },
   video: { he: 'וידאו', en: 'Video' },
   talk: { he: 'הרצאה', en: 'Talk' },
+  knesset: { he: 'דיון בוועדה', en: 'Committee session' },
 } as const satisfies Record<ElsewhereMediaItem['kind'], Localized<string>>
 
 function elsewhereEntry(item: ElsewhereMediaItem, locale: Locale): MediaEntry {
@@ -202,15 +204,21 @@ export type MediaEntrySources = {
   podcasts: ElsewhereMediaItem[]
   videos: ElsewhereMediaItem[]
   talks: ElsewhereMediaItem[]
+  /**
+   * Nivcharot's own media channel (src/content/nivcharot-channel.ts) —
+   * generated rather than curated, and carrying the `knesset` kind the
+   * hand-written fixtures never use.
+   */
+  channel: ElsewhereMediaItem[]
   posts: ArchivePost[]
 }
 
 /** Every source folded into one newest-first list of desk rows. */
 export function buildMediaEntries(sources: MediaEntrySources, locale: Locale): MediaEntry[] {
-  const { press, podcasts, videos, talks, posts } = sources
+  const { press, podcasts, videos, talks, channel, posts } = sources
   return [
     ...press.map((item) => pressEntry(item, locale)),
-    ...[...podcasts, ...videos, ...talks].map((item) => elsewhereEntry(item, locale)),
+    ...[...podcasts, ...videos, ...talks, ...channel].map((item) => elsewhereEntry(item, locale)),
     ...posts.map((post) => archiveEntry(post, locale)),
   ].sort((a, b) => b.sortDate.localeCompare(a.sortDate))
 }

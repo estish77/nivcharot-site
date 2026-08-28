@@ -17,7 +17,14 @@ import type { Localized } from '@/lib/i18n'
  * rather than included on a broken or second-hand link.
  */
 
-export type ElsewhereMediaKind = 'podcast' | 'video' | 'talk'
+/**
+ * `knesset` was added on the 2026-08-28 brief, for the Knesset committee
+ * sessions on Nivcharot's own media channel: activists giving testimony to
+ * a committee is a different kind of item from a TV interview, and lumping
+ * the two together hid it. Only `src/content/nivcharot-channel.ts` produces
+ * it today; the hand-written fixtures below are all podcasts/video/talks.
+ */
+export type ElsewhereMediaKind = 'podcast' | 'video' | 'talk' | 'knesset'
 
 export type ElsewhereMediaItem = {
   slug: string
@@ -356,6 +363,7 @@ export const elsewhereMediaText = {
   podcastsTitle: { he: 'פודקאסטים', en: 'Podcasts' } satisfies Localized,
   videoTitle: { he: 'וידאו וטלוויזיה', en: 'Video & TV' } satisfies Localized,
   talksTitle: { he: 'הרצאות וכנסים', en: 'Talks & conferences' } satisfies Localized,
+  knessetTitle: { he: 'דיונים בכנסת', en: 'Knesset committees' } satisfies Localized,
   listenLabel: { he: 'להאזנה ↗', en: 'Listen ↗' } satisfies Localized,
   watchLabel: { he: 'לצפייה ↗', en: 'Watch ↗' } satisfies Localized,
   ourPodcastLinkLabel: { he: 'לעמוד הפודקאסט שלנו', en: 'Our own podcast page' } satisfies Localized,
