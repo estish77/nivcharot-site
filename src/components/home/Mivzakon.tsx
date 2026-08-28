@@ -150,7 +150,7 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
 
   return (
     <div
-      className={cn('relative mb-9 mt-4 overflow-hidden border-y-2 border-divider bg-tint-cream', className)}
+      className={cn('relative overflow-hidden border-y-2 border-divider bg-tint-cream', className)}
       onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
