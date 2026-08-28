@@ -50,17 +50,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <>
-      {/*
-        The ticker sits ABOVE the header (2026-08-28 brief). It can live here
-        rather than in the layout because this page composes its own chrome —
-        so it appears on the home page only, and the header below keeps its
-        own sticky offset untouched since the strip isn't sticky itself.
-      */}
-      <Mivzakon locale={locale} items={getMivzakonItems()} />
       {/* Home is the one mockup page with no divider under the header — see `Header`'s `bordered` doc comment. */}
       <Header locale={locale} navLinks={navLinks} bordered={false} />
       <main id="main-content" className="flex-1">
         <Hero locale={locale} content={homeContent.hero} />
+        {/*
+          Directly under the hero — the section with the seat-hall animation
+          (2026-08-28 follow-up: moved down from above the header). It reads
+          as the first thing after the headline act rather than as chrome
+          stacked on top of the site notice.
+        */}
+        <Mivzakon locale={locale} items={getMivzakonItems()} />
         <StatsBand locale={locale} tiles={homeContent.statTiles} />
         <GoalSection locale={locale} section={homeContent.goalSection ?? undefined} cards={homeContent.pillarCards} />
         {/*

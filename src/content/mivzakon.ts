@@ -3,34 +3,48 @@ import podcastArchive from './podcast-archive.json'
 import type { Localized } from '@/lib/i18n'
 
 /**
- * "מבזקון" — the news-ticker strip above the home page header.
+ * "מבזקון" — the headline ticker on the home page, under the hero.
  *
  * Modelled on ynet's headline ticker (2026-08-28 brief, with a screenshot):
- * a row of cards with a divider between them, arrows at both edges, a
- * "more" pill, and continuous motion. Content is the channel's Shorts.
+ * a row of cards with a rule between them, arrows at both edges, a "more"
+ * pill, and continuous motion. Content is the channel's Shorts.
+ *
+ * HEADLINES ONLY. No thumbnail, no view count (2026-08-28 follow-up) — a
+ * row of images reads as a gallery rather than a ticker, and the number
+ * competed with the sentence for the same glance.
  *
  * WHY THIS LIST IS HAND-WRITTEN
  *
- * The brief asks for half the speakers to be women. That balance cannot be
- * derived at runtime: nothing in the YouTube data marks a speaker's gender,
- * and guessing it from a Hebrew first name would be both unreliable and a
- * bad thing to be wrong about — these are real people. So the ten below
- * were picked by hand from the 296 Shorts in `podcast-archive.json`, the
- * split checked by a person, and the order alternates so the balance is
- * visible on screen and not merely true in the aggregate:
+ * Two things the data can't give us:
  *
- *   women (5): Hilbron, Erlich, Shainbrom, Brodbaker, Rotner
- *   men   (5): Rabinovich, Amar, Vider, Lifshitz, Sabag
+ * 1. The brief asks for half the speakers to be women. Nothing in the
+ *    YouTube data marks a speaker's gender, and guessing it from a Hebrew
+ *    first name would be unreliable about real people. So the split was
+ *    checked by a person, and the order alternates woman/man so the balance
+ *    is visible on screen rather than only true in the aggregate.
+ *
+ * 2. The brief asks the subjects to keep varying. Ranking by view count
+ *    alone clusters — the same few popular guests recur, and one guest can
+ *    hold three of the top ten Shorts. These twenty are picked so no
+ *    speaker appears twice and no two neighbours share a subject: abuse and
+ *    its exposure, art, marriage, hasidic life, religion and state, ethnic
+ *    discrimination, earning a living, social media, education, early
+ *    motherhood — against investigative work, addiction, party politics,
+ *    gender, leaving religion, faith, admissions discrimination,
+ *    conscription, family, and philosophy.
+ *
+ * To add to the rotation, append a pair (one woman, one man) so the
+ * alternation and the balance both survive.
  *
  * `speaker` is a real person's name, so it is NOT localized — names are
  * transliterated for `en`, never translated. `headline` is the Short's own
- * title, trimmed of emoji and of the trailing "מתוך הפרק עם X" (the speaker
+ * title, trimmed of emoji and of the trailing "מתוך הפרק עם X": the speaker
  * has moved to the front of the line, the way the reference leads with the
- * source of a story).
+ * source of a story.
  *
- * View count, thumbnail and URL are resolved from the archive by `videoId`
- * rather than copied here, so `npm run sync-podcast-archive` keeps the
- * numbers current without anyone editing this file.
+ * The video URL is resolved from the archive by `videoId` rather than
+ * copied here, so `npm run sync-podcast-archive` keeps links current
+ * without anyone editing this file.
  */
 export type MivzakonEntry = {
   videoId: string
@@ -108,28 +122,87 @@ export const mivzakonEntries: MivzakonEntry[] = [
       en: 'The double life of leaving religion',
     },
   },
+  {
+    videoId: 'V0FJ_938bkE',
+    speaker: { he: 'שירה נרינסקי', en: 'Shira Nerinsky' },
+    headline: {
+      he: 'על הגזענות העדתית שחוותה בבני ברק',
+      en: 'On the ethnic discrimination she met in Bnei Brak',
+    },
+  },
+  {
+    videoId: 'zDCy0i9Z7ik',
+    speaker: { he: 'הרב ד״ר מיכאל אברהם', en: 'Rabbi Dr Michael Avraham' },
+    headline: { he: 'מה עושה אדם שאיבד את האמונה שלו', en: 'What does a person do who has lost their faith' },
+  },
+  {
+    videoId: 'pMv0ropnCFQ',
+    speaker: { he: 'פייני סוקניק', en: 'Faini Sokenik' },
+    headline: {
+      he: '״רוצים שאני אפרנס? אז תנו לי ללמוד ולעבוד״',
+      en: '"You want me to provide? Then let me study and work"',
+    },
+  },
+  {
+    videoId: 'B0yZTAuxkg8',
+    speaker: { he: 'עו״ד יואב ללום', en: 'Adv. Yoav Laloum' },
+    headline: {
+      he: 'על בתו שלא התקבלה ללימודים מטעמי גזענות',
+      en: 'On his daughter, refused a school place on racist grounds',
+    },
+  },
+  {
+    videoId: 'm_BAO1upCTU',
+    speaker: { he: 'סימי הרשקופ', en: 'Simi Hershkopf' },
+    headline: { he: 'מה המטרה של עמוד הבידור ״דוס סלבס״', en: 'What the "Dos Slebs" entertainment page is for' },
+  },
+  {
+    videoId: 'iRx6P_aMN54',
+    speaker: { he: 'הרב ד״ר בניהו טבילה', en: 'Rabbi Dr Benayahu Tavila' },
+    headline: {
+      he: 'הגיע הזמן לקחת אחריות על ההקצנה בחברה',
+      en: 'It is time to take responsibility for the radicalisation in society',
+    },
+  },
+  {
+    videoId: 'PYzArgA_i54',
+    speaker: { he: 'נעמי אברהם', en: 'Naomi Avraham' },
+    headline: { he: '״לא משנה מה נעשה, אנחנו פחות״', en: '"Whatever we do, we are lesser"' },
+  },
+  {
+    videoId: 'Y9nTe_ls3BQ',
+    speaker: { he: 'אורי צייטלין', en: 'Uri Zeitlin' },
+    headline: { he: 'עוד יש תקווה לשלום', en: 'There is still hope for peace' },
+  },
+  {
+    videoId: 'hWdB7h_iStQ',
+    speaker: { he: 'ציפי הורביץ', en: 'Tzipi Horowitz' },
+    headline: {
+      he: 'תמיד היו לה שאלות, גם על מחירי האימהות המוקדמת',
+      en: 'She always had questions, including about the price of early motherhood',
+    },
+  },
+  {
+    videoId: 'uEsJYygf2bo',
+    speaker: { he: 'ג׳רמי פוגל', en: 'Jeremy Fogel' },
+    headline: {
+      he: 'יהודים תמיד השפיעו והושפעו מסביבה תרבותית רחבה',
+      en: 'Jews have always shaped, and been shaped by, a wider culture',
+    },
+  },
 ]
 
-export type MivzakonItem = MivzakonEntry & {
-  videoUrl: string
-  thumbnailUrl: string
-  viewCount?: number
-}
+export type MivzakonItem = MivzakonEntry & { videoUrl: string }
 
-type ArchivedShort = {
-  videoId: string
-  videoUrl: string
-  thumbnailUrl: string
-  viewCount?: number | null
-}
+type ArchivedShort = { videoId: string; videoUrl: string }
 
 /**
  * Joins the curated list to the synced archive. Reads the bundled JSON, so
- * there is no network call in the home page's render — the ticker sits above
- * the header on every home visit, and the Shorts RSS feed is the endpoint
- * YouTube rate-limits hardest (it has answered 404 for stretches before,
- * see `getPodcastShorts`). An entry whose video has disappeared from the
- * archive is dropped rather than rendered without a link.
+ * there is no network call in the home page's render — the Shorts RSS feed
+ * is the endpoint YouTube rate-limits hardest and has answered 404 for
+ * stretches before (see `getPodcastShorts`). An entry whose video has
+ * disappeared from the archive is dropped rather than rendered without a
+ * working link.
  */
 export function getMivzakonItems(): MivzakonItem[] {
   const shorts = (podcastArchive.shorts ?? []) as ArchivedShort[]
@@ -138,13 +211,6 @@ export function getMivzakonItems(): MivzakonItem[] {
   return mivzakonEntries.flatMap((entry) => {
     const short = byVideoId.get(entry.videoId)
     if (!short) return []
-    return [
-      {
-        ...entry,
-        videoUrl: short.videoUrl,
-        thumbnailUrl: short.thumbnailUrl,
-        viewCount: short.viewCount ?? undefined,
-      },
-    ]
+    return [{ ...entry, videoUrl: short.videoUrl }]
   })
 }

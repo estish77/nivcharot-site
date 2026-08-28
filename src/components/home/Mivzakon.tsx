@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/components/ui'
@@ -14,8 +13,7 @@ const text = {
   more: { he: 'עוד', en: 'More' },
   prev: { he: 'המבזק הקודם', en: 'Previous flash' },
   next: { he: 'המבזק הבא', en: 'Next flash' },
-  region: { he: 'מבזקון, השורטס הנצפים ביותר', en: 'Mivzakon, the most-watched shorts' },
-  views: { he: 'צפיות', en: 'views' },
+  region: { he: 'מבזקון, מתוך השורטס של הערוץ', en: 'Mivzakon, from the channel shorts' },
 }
 
 /** Pixels per millisecond. Slow enough to read a headline as it passes. */
@@ -25,10 +23,14 @@ const STEP_MS = 400
 export type MivzakonProps = { locale: Locale; items: MivzakonItem[]; className?: string }
 
 /**
- * The news-ticker strip above the home page header (2026-08-28 brief, with
- * a screenshot of ynet's). Structure follows that reference — cards with a
+ * The news-ticker strip under the home page hero (2026-08-28 brief, with a
+ * screenshot of ynet's). Structure follows that reference — cards with a
  * rule between them, arrows at both edges, a bell, a "more" pill — but the
  * skin is the site's own rather than ynet's grey.
+ *
+ * Headlines only: no thumbnail and no view count (2026-08-28 follow-up).
+ * A row of images reads as a gallery rather than a ticker, and the number
+ * competed with the sentence for the same glance.
  *
  * Motion is a transform on a track holding TWO copies of the list: the
  * track slides one copy's width and resets to 0, at which point the second
@@ -41,8 +43,7 @@ export type MivzakonProps = { locale: Locale; items: MivzakonItem[]; className?:
  * hover and on focus matters: without it a keyboard user tabbing into a
  * moving row would be chasing a link across the screen.
  *
- * Not sticky, deliberately. It scrolls away with the page and the header
- * below it keeps its own sticky offset (`--site-notice-height`) untouched.
+ * Not sticky, deliberately — it scrolls with the page like any other band.
  */
 export function Mivzakon({ locale, items, className }: MivzakonProps) {
   const trackRef = useRef<HTMLDivElement>(null)
@@ -137,7 +138,7 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
 
   return (
     <div
-      className={cn('relative mb-[30px] mt-6 border-y-2 border-divider bg-tint-cream', className)}
+      className={cn('relative mb-9 mt-4 border-y-2 border-divider bg-tint-cream', className)}
       onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -175,7 +176,7 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
           className="flex w-max items-stretch will-change-transform"
         >
           {[0, 1].map((copy) =>
-            items.map((item, index) => (
+            items.map((item) => (
               <a
                 key={`${copy}-${item.videoId}`}
                 href={item.videoUrl}
@@ -183,28 +184,11 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
                 rel="noopener noreferrer"
                 role="listitem"
                 {...(copy === 1 ? { 'aria-hidden': true, tabIndex: -1 } : {})}
-                className="flex w-[306px] flex-none items-center gap-3 border-s border-divider px-5 py-3.5 text-text no-underline transition-colors duration-200 ease-out hover:bg-white focus-visible:bg-white focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent max-[860px]:w-[252px] max-[860px]:px-4"
+                className="flex w-[306px] flex-none items-center border-s border-divider px-5 py-3.5 text-text no-underline transition-colors duration-200 ease-out hover:bg-white focus-visible:bg-white focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent max-[860px]:w-[252px] max-[860px]:px-4"
               >
-                {/* Every third card carries its thumbnail, as the reference does — a full row of images would read as a gallery, not a ticker. */}
-                {index % 3 === 0 && item.thumbnailUrl ? (
-                  <span className="relative block h-[54px] w-[76px] flex-none overflow-hidden bg-niv-slate">
-                    <Image src={item.thumbnailUrl} alt="" fill sizes="76px" className="object-cover" />
-                    <span aria-hidden="true" className="absolute inset-0 m-auto flex h-[19px] w-[26px] items-center justify-center rounded-[4px] bg-accent">
-                      <span className="ms-[2px] block h-0 w-0 border-y-[5px] border-y-transparent border-s-[8px] border-s-white" />
-                    </span>
-                  </span>
-                ) : null}
-
-                <span className="min-w-0 flex-1">
-                  <span className="line-clamp-2 block font-heading text-[14.5px] font-extrabold leading-[1.35] text-niv-slate">
-                    <span className="text-accent-700">{t(locale, item.speaker)}: </span>
-                    {t(locale, item.headline)}
-                  </span>
-                  {item.viewCount ? (
-                    <span className="mt-[7px] block text-end font-heading text-[12px] font-extrabold tabular-nums text-accent">
-                      {item.viewCount.toLocaleString('en-US')} {t(locale, text.views)}
-                    </span>
-                  ) : null}
+                <span className="line-clamp-3 block font-heading text-[14.5px] font-extrabold leading-[1.35] text-niv-slate">
+                  <span className="text-accent-700">{t(locale, item.speaker)}: </span>
+                  {t(locale, item.headline)}
                 </span>
               </a>
             )),
