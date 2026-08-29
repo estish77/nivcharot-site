@@ -39,7 +39,7 @@ export { Section } from './Section'
 export type { SectionProps, SectionTint } from './Section'
 
 export { SeatHall } from './SeatHall'
-export type { SeatHallProps, SeatHallHoverMode } from './SeatHall'
+export type { SeatHallProps, SeatHallHoverMode, SeatHallScrollMode } from './SeatHall'
 
 export { HeartIcon } from './HeartIcon'
 

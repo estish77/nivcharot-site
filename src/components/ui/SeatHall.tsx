@@ -111,14 +111,13 @@ type ScatterDatum = { x: number; y: number; delay: number }
 
 /**
  * Each seat's "flung outward" point (its resting position plus a random
- * direction/distance) — used both to converge the hall in on mount
- * (entrance) and, in reverse, as the `scrollBurst` target (2026-08-29
- * follow-up: "פיזור רחב יותר בגלילה, ממש כמו בכניסה אז יציאה" — the
- * scroll-out dispersal should read exactly as large as the entrance flight,
- * not a smaller, separate push, so it reuses these exact same points rather
- * than a second, more modest generator). Computed once at module load —
- * same shuffled arrangement all session, matching `STATIC_LIT`'s stability
- * convention.
+ * direction/distance) — used to converge the hall in on mount (entrance).
+ * A same-distance reverse-entrance scroll effect was tried and reported
+ * back as too much ("פיזור רחב יותר... ממש כמו בכניסה", then "זה כבר פיזור
+ * חזק מידי ולא יפה") — the scroll modes below (`SeatHallScrollMode`) use
+ * their own, smaller, purpose-built motion instead. Computed once at module
+ * load — same shuffled arrangement all session, matching `STATIC_LIT`'s
+ * stability convention.
  *
  * Real `Math.random()`, not `pseudoRandom()` (below) — 2026-08-29 fix: this
  * ran at MODULE LOAD time, once in the server process and once again in the
@@ -153,7 +152,7 @@ const SCATTER = generateScatter(SEATS)
  * Experimental hover/scroll behaviors (2026-08-29 lab brief: "אחרי שהעיגולים
  * הסתדרו, במצב הובר... יזוזו ויתפזרו עם תנועת העכבר ואז יחזרו... וכשגוללים
  * את המסך הם יפוצו למעלה ולצדדים"). Both are OFF by default (`hoverMode:
- * 'off'`, `scrollBurst: false`) so every existing caller (`Hero.tsx`,
+ * 'off'`, `scrollMode: 'off'`) so every existing caller (`Hero.tsx`,
  * `/hanivcheret`) renders exactly as before — these only activate where a
  * caller opts in, e.g. the comparison lab page.
  *
@@ -170,6 +169,59 @@ export type SeatHallHoverMode = 'off' | 'repel' | 'ripple' | 'jitter'
 const HOVER_RADIUS = 170
 const HOVER_MAX_PUSH = 46
 const JITTER_MAX = 20
+
+/**
+ * Four scroll "flavors" (2026-08-29 follow-up: the first attempt reused the
+ * entrance's own wide scatter distances verbatim for a symmetric "entrance
+ * in reverse" feel — reported back as "too strong a scatter, not pretty".
+ * These four go the other way: smaller, more deliberate motions with real
+ * differences in FEEL, not just distance —
+ *   - `fade`: barely moves, mostly dissolves (opacity down, not position)
+ *   - `riseAway`: drifts straight up and fades, like released lanterns
+ *   - `converge`: pulls inward toward the hall's own center and compresses
+ *     — the only one that moves the OPPOSITE direction from a burst
+ *   - `cascade`: the original modest outward push, but staggered by each
+ *     seat's own x position so the dispersal visibly ripples across the
+ *     hall left-to-right instead of every seat moving at once
+ * All four ease back to the settled formation on scrolling back up.
+ */
+export type SeatHallScrollMode = 'off' | 'fade' | 'riseAway' | 'converge' | 'cascade'
+
+const SCROLL_THRESHOLD_PX = 80
+
+type ScrollOffset = { dx: number; dy: number; delay: number; opacityMul: number }
+const SCROLL_OFFSET_REST: ScrollOffset = { dx: 0, dy: 0, delay: 0, opacityMul: 1 }
+
+function computeScrollOffset(seat: SeatPos, i: number, mode: SeatHallScrollMode): ScrollOffset {
+  if (mode === 'off') return SCROLL_OFFSET_REST
+
+  const dxFromCenter = seat.cx - 500
+  const dyFromCenter = seat.cy - 470
+  const r = Math.hypot(dxFromCenter, dyFromCenter) || 1
+  const ux = dxFromCenter / r
+  const uy = dyFromCenter / r
+
+  switch (mode) {
+    case 'fade': {
+      const dist = 20 + pseudoRandom(i * 8.2 + 4) * 25
+      return { dx: ux * dist, dy: uy * dist, delay: 0, opacityMul: 0.12 }
+    }
+    case 'riseAway': {
+      const dx = (pseudoRandom(i * 9.4 + 5) - 0.5) * 40
+      const dy = -(120 + pseudoRandom(i * 3.3 + 6) * 130)
+      return { dx, dy, delay: 0, opacityMul: 0.25 }
+    }
+    case 'converge': {
+      const factor = 0.55 + pseudoRandom(i * 5.9 + 7) * 0.15
+      return { dx: -dxFromCenter * factor, dy: -dyFromCenter * factor, delay: 0, opacityMul: 1 }
+    }
+    case 'cascade': {
+      const dist = 70 + pseudoRandom(i * 6.7 + 8) * 70
+      const delay = (Math.abs(dxFromCenter) / 500) * 0.4
+      return { dx: ux * dist, dy: uy * dist, delay, opacityMul: 1 }
+    }
+  }
+}
 
 /** Simple deterministic hash → [0,1), so `jitter` shakes reproducibly per seat+tick instead of needing `Math.random()` every frame (which would read as noise, not shimmer). */
 function pseudoRandom(seed: number): number {
@@ -203,6 +255,8 @@ const SeatCircle = memo(function SeatCircle({
   offsetX = 0,
   offsetY = 0,
   offsetActive = false,
+  offsetDelay = 0,
+  opacityMul = 1,
 }: {
   cx: number
   cy: number
@@ -216,6 +270,10 @@ const SeatCircle = memo(function SeatCircle({
   offsetY?: number
   /** True once any hover/scroll displacement has ever applied to this seat — switches cx/cy from the entrance's slow staggered tween to a snappy spring, since that tween is otherwise never exercised again post-entrance. */
   offsetActive?: boolean
+  /** Extra spring delay (seconds) — only the `cascade` scroll mode sets this, keyed to each seat's own position, so the dispersal visibly ripples rather than every seat moving at once. */
+  offsetDelay?: number
+  /** Multiplies the resting opacity — used by the `fade`/`riseAway` scroll modes to dissolve seats on scroll. 1 (no-op) for every real caller and for scroll modes that don't fade. */
+  opacityMul?: number
 }) {
   // `r` must be a valid length in the server-rendered markup and on first paint.
   // Motion only writes animated SVG attributes once it takes over on the client, so
@@ -236,13 +294,17 @@ const SeatCircle = memo(function SeatCircle({
         cx: targetCx,
         cy: targetCy,
         r: restingRadius,
-        opacity: hidden ? 0 : 1,
+        opacity: hidden ? 0 : opacityMul,
         fill: lit ? ACCENT : SLATE,
         scale: lit ? [null, 1.35, 1] : 1,
       }}
       transition={{
-        cx: offsetActive ? { type: 'spring', stiffness: 170, damping: 16 } : { duration: 2.1, ease: EASE, delay: scatter.delay },
-        cy: offsetActive ? { type: 'spring', stiffness: 170, damping: 16 } : { duration: 2.1, ease: EASE, delay: scatter.delay },
+        cx: offsetActive
+          ? { type: 'spring', stiffness: 170, damping: 16, delay: offsetDelay }
+          : { duration: 2.1, ease: EASE, delay: scatter.delay },
+        cy: offsetActive
+          ? { type: 'spring', stiffness: 170, damping: 16, delay: offsetDelay }
+          : { duration: 2.1, ease: EASE, delay: scatter.delay },
         r: { duration: 0.32, ease: EASE },
         // Reuses the same slower, staggered timing for any opacity change that lands mid-entrance
         // (e.g. a seat getting claimed by a ring letter before it's finished flying in); once
@@ -302,8 +364,8 @@ export type SeatHallProps = {
   className?: string
   /** @default 'off' — see the doc comment above `SeatHallHoverMode`. */
   hoverMode?: SeatHallHoverMode
-  /** @default false — see `generateScatter`'s own doc comment for why this reuses the entrance's `SCATTER` points as its target rather than a separate, smaller generator. */
-  scrollBurst?: boolean
+  /** @default 'off' — see the doc comment above `SeatHallScrollMode`. */
+  scrollMode?: SeatHallScrollMode
 }
 
 export function SeatHall({
@@ -312,7 +374,7 @@ export function SeatHall({
   sentence,
   className,
   hoverMode = 'off',
-  scrollBurst = false,
+  scrollMode = 'off',
 }: SeatHallProps) {
   const shouldReduceMotion = useReducedMotion()
   const reduced = shouldReduceMotion === true
@@ -331,12 +393,12 @@ export function SeatHall({
 
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
-    if (!scrollBurst || reduced) return
-    const onScroll = () => setScrolled(window.scrollY > 80)
+    if (scrollMode === 'off' || reduced) return
+    const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD_PX)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [scrollBurst, reduced])
+  }, [scrollMode, reduced])
 
   // Gates the seat circles' opacity-transition timing back to normal once the
   // scattered-dots entrance (see `SeatCircle`) has finished converging.
@@ -603,8 +665,7 @@ export function SeatHall({
         >
           {SEATS.map((s, i) => {
             const hover = hoverOffsets[i]
-            const burstDx = scrolled ? SCATTER[i].x - s.cx : 0
-            const burstDy = scrolled ? SCATTER[i].y - s.cy : 0
+            const burst = scrolled ? computeScrollOffset(s, i, scrollMode) : SCROLL_OFFSET_REST
             return (
               <SeatCircle
                 key={i}
@@ -615,9 +676,11 @@ export function SeatHall({
                 entrance={!reduced}
                 scatter={SCATTER[i]}
                 entranceDone={entranceDone}
-                offsetX={(hover?.dx ?? 0) + burstDx}
-                offsetY={(hover?.dy ?? 0) + burstDy}
-                offsetActive={hoverMode !== 'off' || scrollBurst}
+                offsetX={(hover?.dx ?? 0) + burst.dx}
+                offsetY={(hover?.dy ?? 0) + burst.dy}
+                offsetActive={hoverMode !== 'off' || scrollMode !== 'off'}
+                offsetDelay={burst.delay}
+                opacityMul={burst.opacityMul}
               />
             )
           })}

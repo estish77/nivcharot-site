@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { Reveal, SeatHall, type SeatHallHoverMode } from '@/components/ui'
+import { Reveal, SeatHall, type SeatHallHoverMode, type SeatHallScrollMode } from '@/components/ui'
 import { hallAriaLabel, hallSentence, heroContent } from '@/content/home'
 import { t, type Locale } from '@/lib/i18n'
 
@@ -13,20 +13,28 @@ const HOVER_OPTIONS: { value: SeatHallHoverMode; label: { he: string; en: string
   { value: 'jitter', label: { he: 'רטט חי', en: 'Lively jitter' } },
 ]
 
+const SCROLL_OPTIONS: { value: SeatHallScrollMode; label: { he: string; en: string } }[] = [
+  { value: 'off', label: { he: 'כבוי', en: 'Off' } },
+  { value: 'fade', label: { he: 'דעיכה עדינה', en: 'Gentle fade' } },
+  { value: 'riseAway', label: { he: 'מרחפים למעלה', en: 'Rise away' } },
+  { value: 'converge', label: { he: 'מתכנסים פנימה', en: 'Converge inward' } },
+  { value: 'cascade', label: { he: 'גל מדורג', en: 'Cascade wave' } },
+]
+
 /**
  * Throwaway comparison page (2026-08-29 lab brief) — NOT linked from nav,
  * not meant to ship as-is. Lets the site owner try a few real hover/scroll
  * behaviors on the actual `SeatHall` component, in the actual Home hero
  * layout, before picking one to wire into the real Hero permanently. See
- * `SeatHall.tsx`'s own doc comment on `SeatHallHoverMode`/`scrollBurst` for
- * what each option actually does.
+ * `SeatHall.tsx`'s own doc comment on `SeatHallHoverMode`/`SeatHallScrollMode`
+ * for what each option actually does.
  *
- * A floating control panel (bottom-start, fixed) switches `hoverMode` and
- * toggles `scrollBurst` — both plain client state, nothing persisted.
+ * A floating control panel switches `hoverMode` and `scrollMode` — both
+ * plain client state, nothing persisted.
  */
 export function SeatLabHero({ locale }: { locale: Locale }) {
   const [hoverMode, setHoverMode] = useState<SeatHallHoverMode>('repel')
-  const [scrollBurst, setScrollBurst] = useState(true)
+  const [scrollMode, setScrollMode] = useState<SeatHallScrollMode>('cascade')
   const titleLines = heroContent.title[locale].split('\n')
 
   return (
@@ -51,10 +59,23 @@ export function SeatLabHero({ locale }: { locale: Locale }) {
             </button>
           ))}
         </div>
-        <label className="flex items-center gap-2 text-[12.5px] font-semibold text-white/90">
-          <input type="checkbox" checked={scrollBurst} onChange={(e) => setScrollBurst(e.target.checked)} />
-          {t(locale, { he: 'פיזור בגלילה', en: 'Scroll burst' })}
-        </label>
+        <span className="text-[12.5px] font-semibold text-white/60">|</span>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {SCROLL_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setScrollMode(opt.value)}
+              className={`border-2 px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
+                scrollMode === opt.value
+                  ? 'border-accent bg-accent text-white'
+                  : 'border-white/30 bg-transparent text-white/80 hover:border-white/60'
+              }`}
+            >
+              {t(locale, opt.label)}
+            </button>
+          ))}
+        </div>
       </div>
 
       <Reveal
@@ -87,7 +108,7 @@ export function SeatLabHero({ locale }: { locale: Locale }) {
             ariaLabel={hallAriaLabel}
             sentence={hallSentence}
             hoverMode={hoverMode}
-            scrollBurst={scrollBurst}
+            scrollMode={scrollMode}
           />
         </div>
       </Reveal>
