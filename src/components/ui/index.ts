@@ -43,6 +43,8 @@ export type { SeatHallProps } from './SeatHall'
 
 export { HeartIcon } from './HeartIcon'
 
+export { HeadphonesIcon } from './HeadphonesIcon'
+
 export { PodcastIcon } from './PodcastIcon'
 export type { PodcastIconProps } from './PodcastIcon'
 

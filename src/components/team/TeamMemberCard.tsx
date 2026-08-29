@@ -4,9 +4,11 @@ import { AppreciateButton } from './AppreciateButton'
 
 import { Cell } from '@/components/ui/Cell'
 import { cn } from '@/components/ui/cn'
+import { HeadphonesIcon } from '@/components/ui/HeadphonesIcon'
 import { ImageSlot } from '@/components/ui/ImageSlot'
 import { t, type Locale } from '@/lib/i18n'
 import type { TeamMember } from '@/content/team'
+import { findTeamPodcastEpisode } from '@/content/teamPodcastEpisodes'
 
 export type TeamMemberCardProps = {
   /**
@@ -51,6 +53,9 @@ export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCa
   // fixture's ids are slugs like "esty-shushan", and the page falls back to
   // it only when the collection is empty — nothing to thank yet in that case.
   const canAppreciate = /^\d+$/.test(member.id)
+  // Real, hand-verified matches only (see the lookup's own doc comment) —
+  // most of the roster has no full episode and simply won't match here.
+  const episode = findTeamPodcastEpisode(member.name.he)
 
   return (
     <Cell
@@ -98,11 +103,30 @@ export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCa
         `mt-auto` pushes this to the card's foot regardless of bio length —
         `Cell` is a flex column, and CSS grid's default `align-items:
         stretch` already makes every card in a row match the tallest one, so
-        the rule and heart line up across the whole row, not just per card.
+        the rule lines up across the whole row, not just per card.
+        The heart sits at the row's logical START (`justify-start` — right
+        in Hebrew, left in English, matching `PostPrevNext`'s own use of
+        logical `justify-end`/`text-end` elsewhere), not centered
+        (2026-08-29 brief: "הלב שכוייח מתיישר לימין").
       */}
-      {canAppreciate ? (
-        <div className="mt-auto flex justify-center border-t border-divider pt-3.5">
-          <AppreciateButton memberId={member.id} memberName={name} locale={locale} />
+      {canAppreciate || episode ? (
+        <div className="mt-auto flex flex-col gap-2 border-t border-divider pt-3.5">
+          {canAppreciate ? (
+            <div className="flex justify-start">
+              <AppreciateButton memberId={member.id} memberName={name} locale={locale} />
+            </div>
+          ) : null}
+          {episode ? (
+            <a
+              href={episode.youtubeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 self-start text-[12px] font-semibold leading-[1.4] text-accent-700 hover:text-accent focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              <HeadphonesIcon size={14} className="flex-none" />
+              <span>{t(locale, { he: `בואו להכיר מקרוב את ${name}`, en: `Get to know ${name}` })}</span>
+            </a>
+          ) : null}
         </div>
       ) : null}
     </Cell>
