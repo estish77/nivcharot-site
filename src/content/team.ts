@@ -53,6 +53,17 @@ export type TeamMember = {
   role: Localized
   /** Optional: a few historical entries have only a role/title line, no separate longer bio. */
   bio?: Localized
+  /**
+   * The bio's raw Lexical tree, per locale — set only when the CMS supplied
+   * one (`getTeamMembers()`), never on this static fixture ("the fixture is
+   * plain prose; only Payload can supply rich text", matching
+   * `getMishpatContent`'s `bodyRich`). `TeamMemberCard` renders this via
+   * `<RichText>` when present so a link an editor adds in `/admin` (e.g. "buy
+   * the book") survives onto the site instead of silently vanishing the way
+   * plain-text `bio` — built by `lexicalToParagraphs`, which only reads a
+   * node's own `.text` and skips anything wrapped in a `link` node — used to.
+   */
+  bioRich?: { he: unknown; en: unknown }
   /** `null` → render an `ImageSlot` instead of a photo. */
   photo: TeamMemberPhoto | null
   order: number

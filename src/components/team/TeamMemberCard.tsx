@@ -5,6 +5,7 @@ import { AppreciateButton } from './AppreciateButton'
 import { Cell } from '@/components/ui/Cell'
 import { cn } from '@/components/ui/cn'
 import { HeadphonesIcon } from '@/components/ui/HeadphonesIcon'
+import { hasRichText, RichText } from '@/components/ui/RichText'
 import { ImageSlot } from '@/components/ui/ImageSlot'
 import { t, type Locale } from '@/lib/i18n'
 import type { TeamMember } from '@/content/team'
@@ -94,7 +95,16 @@ export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCa
       >
         {t(locale, member.role)}
       </p>
-      {member.bio ? (
+      {hasRichText(member.bioRich?.[locale]) ? (
+        <div
+          className={cn(
+            'mb-2 [&_p]:mb-2 [&_p]:leading-[1.6] [&_p]:text-neutral-800 [&_p:last-child]:mb-0',
+            compact ? '[&_p]:text-[13px]' : '[&_p]:text-[13.5px]',
+          )}
+        >
+          <RichText value={member.bioRich?.[locale]} />
+        </div>
+      ) : member.bio ? (
         <p className={cn('mb-2 leading-[1.6] text-neutral-800', compact ? 'text-[13px]' : 'text-[13.5px]')}>
           {t(locale, member.bio)}
         </p>

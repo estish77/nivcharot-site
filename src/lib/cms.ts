@@ -904,6 +904,9 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
         name: names,
         role: toLocalizedPair(d.role),
         bio: bioHe || bioEn ? { he: bioHe || bioEn, en: bioEn || bioHe } : undefined,
+        // Raw tree, not just the flattened text above — see `bioRich`'s own
+        // doc comment on `TeamMember` for why a link inside a bio needs this.
+        bioRich: { he: bioField?.he ?? null, en: bioField?.en ?? null },
         photo: photo
           ? { src: String(photo.url ?? ''), alt: toLocalizedPair(photo.alt) }
           : (bundledPhotoByName.get(names.he) ?? null),
