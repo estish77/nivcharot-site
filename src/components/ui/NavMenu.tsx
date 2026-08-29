@@ -21,11 +21,32 @@ export type NavLink = {
   children?: NavLink[]
 }
 
+/**
+ * Trigger-button treatments (2026-08-29 lab brief: "אני רוצה שננסה את
+ * ההמבורגר בלי המסגרת מסביב... תן לי כמה אופציות"). `'boxed'` is today's
+ * real look (a solid 2px accent square) and stays the default so every real
+ * caller (`Header.tsx`) is unaffected; the rest are borderless variants for
+ * the `/header-lab` comparison page to switch between live.
+ */
+export type NavMenuTriggerVariant = 'boxed' | 'borderless-red' | 'borderless-slate' | 'soft-hover' | 'underline'
+
+const TRIGGER_VARIANT_CLASSES: Record<NavMenuTriggerVariant, string> = {
+  boxed:
+    'border-2 border-accent text-accent hover:border-niv-slate hover:text-niv-slate',
+  'borderless-red': 'text-accent hover:text-niv-slate',
+  'borderless-slate': 'text-niv-slate hover:text-accent',
+  'soft-hover': 'rounded-full text-niv-slate hover:bg-tint-cream hover:text-accent',
+  underline:
+    'relative text-niv-slate hover:text-accent after:absolute after:-bottom-0.5 after:h-[2px] after:w-5 after:bg-accent after:opacity-0 after:transition-opacity hover:after:opacity-100',
+}
+
 export type NavMenuProps = {
   locale: Locale
   /** Empty by default — `niv-menu.js` (the mockups' nav data source) isn't part of this repo, so pass the real link set from wherever routes end up living. */
   links: NavLink[]
   className?: string
+  /** @default 'boxed' — see `NavMenuTriggerVariant`'s own doc comment. */
+  triggerVariant?: NavMenuTriggerVariant
 }
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
@@ -83,7 +104,7 @@ function NavLinkRow({
   )
 }
 
-export function NavMenu({ locale, links, className }: NavMenuProps) {
+export function NavMenu({ locale, links, className, triggerVariant = 'boxed' }: NavMenuProps) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const reactId = useId()
@@ -142,7 +163,10 @@ export function NavMenu({ locale, links, className }: NavMenuProps) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
-        className="group flex h-11 w-11 items-center justify-center border-2 border-accent text-accent transition-colors duration-300 ease-out hover:border-niv-slate hover:text-niv-slate focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className={cn(
+          'group flex h-11 w-11 items-center justify-center transition-colors duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+          TRIGGER_VARIANT_CLASSES[triggerVariant],
+        )}
       >
         <span className="sr-only">{open ? dict.closeMenu[locale] : dict.openMenu[locale]}</span>
         <HamburgerTriggerIcon open={open} />

@@ -12,7 +12,7 @@ import { HeartIcon } from './HeartIcon'
 import { Logo } from './Logo'
 import { LanguageToggle } from './LanguageToggle'
 import { HeaderDonateHeart } from './HeaderDonateHeart'
-import { NavMenu, type NavLink } from './NavMenu'
+import { NavMenu, type NavLink, type NavMenuTriggerVariant } from './NavMenu'
 import { PodcastIcon } from './PodcastIcon'
 
 export type { NavLink }
@@ -39,6 +39,8 @@ export type HeaderProps = {
    */
   bordered?: boolean
   className?: string
+  /** Pass-through to `NavMenu`'s `triggerVariant` — @default 'boxed', see its own doc comment. Only the `/header-lab` comparison page passes anything else. */
+  navMenuTriggerVariant?: NavMenuTriggerVariant
 }
 
 const SHADOW_REST = '0 0 0 0 rgba(49,68,81,0)'
@@ -81,7 +83,7 @@ const SHADOW_STATIC = '0 8px 20px -8px rgba(49,68,81,0.18)'
  * flat shadow — skipped under `prefers-reduced-motion`, which gets the
  * plain static shadow instead.
  */
-export function Header({ locale, navLinks = [], bordered = true, className }: HeaderProps) {
+export function Header({ locale, navLinks = [], bordered = true, className, navMenuTriggerVariant }: HeaderProps) {
   const shouldReduceMotion = useReducedMotion()
   const [scrolled, setScrolled] = useState(false)
 
@@ -150,7 +152,7 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
           <HeartIcon />
           {t(locale, { he: 'תרמו', en: 'Donate' })}
         </Button>
-        <NavMenu locale={locale} links={navLinks} />
+        <NavMenu locale={locale} links={navLinks} triggerVariant={navMenuTriggerVariant} />
       </nav>
     </motion.header>
   )

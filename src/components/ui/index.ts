@@ -22,7 +22,7 @@ export type { LanguageToggleProps } from './LanguageToggle'
 export { LocaleSwitcher } from './LocaleSwitcher'
 
 export { NavMenu } from './NavMenu'
-export type { NavMenuProps, NavLink } from './NavMenu'
+export type { NavMenuProps, NavLink, NavMenuTriggerVariant } from './NavMenu'
 
 export { Header } from './Header'
 export type { HeaderProps } from './Header'
