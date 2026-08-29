@@ -9,6 +9,7 @@ import { getSiteSettings } from '@/lib/cms'
 import { t, type Locale } from '@/lib/i18n'
 import { buildHareditLinks, buildNivcharotLinks } from '@/lib/socialLinks'
 import { joinCards, joinHero, joinQuote, joinTalkToUs } from '@/content/join'
+import { AlumnaeQuoteBanner } from './AlumnaeQuoteBanner'
 import { JoinCard } from './JoinCard'
 
 export type JoinPageContentProps = { locale: Locale }
@@ -16,8 +17,9 @@ export type JoinPageContentProps = { locale: Locale }
 /**
  * docs/Join.dc.html body: hero, a 3-across row of "get involved" CTA cards
  * (`CellGrid cols={3}` + `JoinCard`), a full-width "talk to us" band (real
- * contact form + follow row — see `joinTalkToUs`), and the closing
- * accent-red pull-quote banner with its decorative equalizer-dot motif.
+ * contact form + follow row — see `joinTalkToUs`), and a closing quote
+ * banner: the rotating real-alumnae `AlumnaeQuoteBanner` in Hebrew, the
+ * original static accent-red pull-quote in English (see its own comment).
  *
  * 2026-08-29 brief: the hero dropped its lead paragraph; the former fourth
  * grid card ("talk to us", journalists/researchers blurb + bare mailto) is
@@ -26,8 +28,8 @@ export type JoinPageContentProps = { locale: Locale }
  */
 export async function JoinPageContent({ locale }: JoinPageContentProps) {
   const siteSettings = await getSiteSettings()
-  const nivcharotLinks = buildNivcharotLinks(siteSettings, locale)
-  const hareditLinks = buildHareditLinks(siteSettings, locale)
+  const nivcharotLinks = buildNivcharotLinks(siteSettings.social, locale)
+  const hareditLinks = buildHareditLinks(siteSettings.social, locale)
 
   return (
     <>
@@ -64,23 +66,29 @@ export async function JoinPageContent({ locale }: JoinPageContentProps) {
           </div>
         </div>
 
-        <div className="max-w-[520px] border-2 border-divider bg-white px-6 py-7 max-[640px]:px-5 max-[640px]:py-6">
+        <div className="border-2 border-divider bg-white px-6 py-7 max-[640px]:px-5 max-[640px]:py-6">
           <ContactForm locale={locale} />
         </div>
       </Reveal>
 
-      <Reveal as="section" className="bg-accent">
-        <div className="relative mx-auto max-w-[1080px] px-8 py-[72px] max-[860px]:px-[18px] max-[860px]:py-9">
-          <div className="absolute top-8 end-8 leading-none max-[860px]:end-[18px]">
-            <EqualizerDots tone="accent" />
+      {locale === 'he' ? (
+        // Real alumnae testimonials, Hebrew only — see AlumnaeQuoteBanner's
+        // own comment and content/join.ts's joinQuote comment for why.
+        <AlumnaeQuoteBanner />
+      ) : (
+        <Reveal as="section" className="bg-accent">
+          <div className="relative mx-auto max-w-[1080px] px-8 py-[72px] max-[860px]:px-[18px] max-[860px]:py-9">
+            <div className="absolute top-8 end-8 leading-none max-[860px]:end-[18px]">
+              <EqualizerDots tone="accent" />
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-[22px]">
+              <h2 className="max-w-[720px] text-[clamp(26px,3.5vw,40px)] leading-[1.2] text-white max-[860px]:text-[clamp(24px,7vw,34px)] max-[860px]:leading-[1.08]">
+                {t(locale, joinQuote)}
+              </h2>
+            </div>
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-[22px]">
-            <h2 className="max-w-[720px] text-[clamp(26px,3.5vw,40px)] leading-[1.2] text-white max-[860px]:text-[clamp(24px,7vw,34px)] max-[860px]:leading-[1.08]">
-              {t(locale, joinQuote)}
-            </h2>
-          </div>
-        </div>
-      </Reveal>
+        </Reveal>
+      )}
     </>
   )
 }

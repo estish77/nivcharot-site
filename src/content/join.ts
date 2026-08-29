@@ -108,7 +108,7 @@ export const joinCards: JoinCard[] = [
  * quarter of a 4-card grid.
  */
 export const joinTalkToUs = {
-  eyebrow: { he: 'לדבר איתנו', en: 'TALK TO US' } satisfies Localized,
+  eyebrow: { he: 'דברו איתנו', en: 'TALK TO US' } satisfies Localized,
   title: { he: 'יש לך שאלה, או רעיון?', en: 'Have a question, or an idea?' } satisfies Localized,
   lead: {
     he: 'שיתוף פעולה, הצעה, או סתם רצית להגיד שלום? מלאו את הטופס ונחזור אליכן.',
@@ -128,8 +128,61 @@ export const joinTalkToUs = {
   followHaredit: { he: 'חרדית מדוברת', en: 'Haredit Meduberet' } satisfies Localized,
 }
 
-/** The closing accent-red pull-quote banner. */
+/**
+ * The closing pull-quote banner. English keeps the single static movement
+ * quote below; Hebrew instead rotates through `joinAlumnaeQuotes` (real,
+ * Hebrew-only testimonials — see `AlumnaeQuoteBanner`), since translating a
+ * real person's words would mean rewriting what she actually said.
+ */
 export const joinQuote: Localized = {
   he: '"כל עוד יש נשים חרדיות שרוצות לקחת חלק, צריך לתמוך בהן."',
   en: '"As long as there are Haredi women who want to take part, they must be supported."',
 }
+
+export type AlumnaQuote = {
+  /** The quote itself, verbatim — not edited/shortened. */
+  text: string
+  /** Name (already anonymized to "first name + initial"). */
+  name: string
+  /** "הנבחרת, מחזור X, שנה" — cohort context, never dropped. */
+  cohort: string
+}
+
+/** Real alumnae testimonials for the Hebrew Join page's rotating quote banner (2026-08-29 brief). Verbatim — do not edit. */
+export const joinAlumnaeQuotes: AlumnaQuote[] = [
+  {
+    text: 'שהקול שלי מעניין. שיש לי תפקיד וחובה ושליחות לחולל שינוי, ואין לי את הזכות לומר "אני לא יודעת" ולשבת מהצד.',
+    name: 'שושנה ס.',
+    cohort: 'הנבחרת, מחזור 9, 2026',
+  },
+  {
+    text: 'השינוי המרכזי שחל בי זה האמון בעצמי, והיכולת שלי, כבר עכשיו, לדבר ולהרים עיניים. להבין שרוצים לשמוע את דעתי, והכי חשוב: לדעת לפתח דעה עצמאית.',
+    name: 'פייגי ג.',
+    cohort: 'הנבחרת, מחזור 6, 2023',
+  },
+  {
+    text: 'יש מקום לשינוי בהלכה, והרצון לשינוי לא הופך אותי לרפורמית.',
+    name: 'פייגא ט.',
+    cohort: 'הנבחרת, מחזור 9, 2026',
+  },
+  {
+    text: 'גיליתי והבנתי שעוד לא אבדה תקווה, ויש מקום לשינויים מהפכניים בחברה החרדית. כל עוד יש כאלה כמוני שמדברות על העוולות והפגמים ורוצות לשנות אותן. בלי לפחד.',
+    name: 'אפרת ג׳.',
+    cohort: 'הנבחרת, מחזור 2, 2019',
+  },
+  {
+    text: 'התובנה המרכזית היא שחייבים נשים בפוליטיקה, אבל מסובך להגיע לשם. ובדרך לשם יש המון עשייה חברתית ועמדות השפעה נוספות, ולא פחות חשובות.',
+    name: 'רות כ.',
+    cohort: 'הנבחרת, מחזור 5, 2022',
+  },
+  {
+    text: 'שהיכולת לעשות שינוי הרבה יותר נגישה ממה שזה נראה מרחוק.',
+    name: 'שושנה ג.',
+    cohort: 'הנבחרת, מחזור 8, 2025',
+  },
+  {
+    text: 'שהכל אפשרי. שחייבת סבלנות והתמדה כדי לראות תוצאות.',
+    name: 'הדר ל.',
+    cohort: 'הנבחרת, מחזור 5, 2022',
+  },
+]
