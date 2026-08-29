@@ -181,9 +181,14 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
     id: short.id,
     videoId: short.videoId,
     caption: captionFor(short, locale),
+    // Real text scraped from the channel's own YouTube description — never
+    // translated (see joinAlumnaeQuotes/AlumnaeQuoteBanner for the same
+    // reasoning), so it only shows on the Hebrew page.
+    summary: locale === 'he' ? short.summary || undefined : undefined,
   }))
 
   return (
+    <>
     <div
       data-stories
       /*
@@ -275,7 +280,19 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
           </button>
         )
       })}
-      <StoryViewer items={storyItems} openIndex={openIndex} onClose={() => setOpenIndex(null)} onNavigate={setOpenIndex} locale={locale} />
     </div>
+    {/*
+      Outside `data-stories` on purpose (2026-08-29 fix): the grid above
+      hides its own overflow circles via `nth-child` selectors targeting
+      its DIRECT children (see that div's own comment) — `StoryViewer`'s
+      root element used to BE one of those children (the 11th, after ten
+      story buttons), so the exact same "hide child 5+" rule that's
+      supposed to hide extra circles was hiding the open story modal too,
+      below the 1100px breakpoint where child 9+ finally gets `:flex`
+      instead of `:hidden`. Below that width — every phone and most
+      tablets — tapping a story silently did nothing.
+    */}
+    <StoryViewer items={storyItems} openIndex={openIndex} onClose={() => setOpenIndex(null)} onNavigate={setOpenIndex} locale={locale} />
+    </>
   )
 }

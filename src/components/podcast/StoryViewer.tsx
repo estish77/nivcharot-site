@@ -10,6 +10,8 @@ export type StoryViewerItem = {
   id: string
   videoId: string
   caption: string
+  /** The Short's own YouTube description (first paragraph, real text) — omitted (not translated) for English, see `StoriesStrip`. */
+  summary?: string
 }
 
 export type StoryViewerProps = {
@@ -126,6 +128,13 @@ export function StoryViewer({ items, openIndex, onClose, onNavigate, locale }: S
                 className="absolute inset-y-0 end-0 w-1/3 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-white"
               />
             </div>
+
+            {/* The Short's own YouTube description (2026-08-29 brief: "תחת כל שורט את התקציר שלו") — real text, so capped and scrollable rather than assumed to always fit in one glance. */}
+            {current.summary ? (
+              <p className="m-0 mt-3 max-h-[88px] flex-none overflow-y-auto text-[13px] leading-[1.6] text-white/80">
+                {current.summary}
+              </p>
+            ) : null}
           </div>
         </motion.div>
       ) : null}
