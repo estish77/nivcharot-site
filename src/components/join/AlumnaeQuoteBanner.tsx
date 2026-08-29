@@ -1,13 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 
 import { EqualizerDots } from '@/components/team/EqualizerDots'
 import { joinAlumnaeQuotes } from '@/content/join'
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
-const ROTATE_MS = 7000
-const FADE_MS = 500
+/** 2026-08-29 brief: "קצת יותר מהר" — was 7000ms. */
+const ROTATE_MS = 4500
+const EASE = [0.22, 0.61, 0.36, 1] as const
 
 /**
  * Three background/text treatments the banner cycles through — index into
@@ -33,50 +35,47 @@ const VARIANTS = [
  * single static pull-quote (English keeps that one; these are real,
  * Hebrew-only testimonials, see `joinAlumnaeQuotes`).
  *
- * Sizing: every quote is stacked in the same grid cell (`grid-area: 1 / 1`)
- * so the container's height is always the tallest quote's natural height —
- * no measured or hardcoded pixel min-height, and no layout jump as shorter
- * quotes cycle in. The outgoing quote stays `visibility: visible` for the
- * `FADE_MS` crossfade and only then flips to `visibility: hidden`, so a
- * screen reader's accessibility tree — and therefore the `aria-live`
- * announcement — updates once the swap is visually complete, not mid-fade.
+ * Two stacks, one job each (2026-08-29 brief: faster rotation, a more
+ * interesting transition, and manual paging):
  *
- * Rotation is a `setTimeout` re-armed by its own effect on every
- * `activeIndex` change (not a `setInterval` read via an update callback) —
- * scheduling the next step is itself a side effect that belongs in the
- * effect body, not folded into `setActiveIndex`'s updater function (React
- * updaters must stay pure; a second `setState` call inside one runs more
- * than once under the dev double-invoke and silently breaks the sequence).
+ * - A `visibility: hidden` ghost holding all seven quotes stacked in the
+ *   same grid cell (`grid-area: 1 / 1`) sets the container's height to the
+ *   tallest quote's natural height (165 characters, the longest) — no
+ *   measured or hardcoded pixel min-height, and no layout jump switching
+ *   between a one-line and a four-line quote.
+ * - The real, visible quote sits absolutely positioned over that ghost and
+ *   is swapped via `AnimatePresence` — the outgoing quote slides up and
+ *   fades out while the incoming one slides up into place from below,
+ *   overlapping rather than sequential, which is what makes it read as one
+ *   continuous motion instead of a flat crossfade.
+ *
+ * The seven dots below the quote are real pagination, not decoration —
+ * each jumps straight to that testimonial (which also re-arms the
+ * auto-rotate timer, since it's keyed off `activeIndex`) — separate from
+ * `EqualizerDots` in the corner, which stays purely decorative.
  */
 export function AlumnaeQuoteBanner() {
   const quotes = joinAlumnaeQuotes
   const [activeIndex, setActiveIndex] = useState(0)
-  const [outgoingIndex, setOutgoingIndex] = useState<number | null>(null)
   const [paused, setPaused] = useState(false)
   const shouldReduceMotion = useReducedMotion()
-  const fadeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const liveRegionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (shouldReduceMotion || paused) return
     const id = setTimeout(() => {
-      setOutgoingIndex(activeIndex)
       setActiveIndex((activeIndex + 1) % quotes.length)
-      if (fadeTimeout.current) clearTimeout(fadeTimeout.current)
-      fadeTimeout.current = setTimeout(() => setOutgoingIndex(null), FADE_MS)
     }, ROTATE_MS)
     return () => clearTimeout(id)
   }, [activeIndex, shouldReduceMotion, paused, quotes.length])
 
-  useEffect(() => () => {
-    if (fadeTimeout.current) clearTimeout(fadeTimeout.current)
-  }, [])
-
   const variant = VARIANTS[activeIndex % VARIANTS.length]
+  const active = quotes[activeIndex]
 
   return (
     <section
       className="relative"
-      style={{ background: variant.bg, transition: `background-color ${FADE_MS}ms ease` }}
+      style={{ background: variant.bg, transition: `background-color 500ms ease` }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -87,35 +86,66 @@ export function AlumnaeQuoteBanner() {
           <EqualizerDots tone={variant.dots} />
         </div>
 
-        <div className="relative grid" aria-live="polite" aria-atomic="true">
-          {quotes.map((quote, i) => {
-            const isActive = i === activeIndex
-            const isVisible = isActive || i === outgoingIndex
-            return (
-              <div
-                key={quote.name + quote.cohort}
-                style={{
-                  gridArea: '1 / 1',
-                  opacity: isActive ? 1 : 0,
-                  visibility: isVisible ? 'visible' : 'hidden',
-                  transition: `opacity ${FADE_MS}ms ease`,
-                }}
-              >
-                <blockquote
-                  className="m-0 max-w-[26ch] text-[clamp(21px,2.8vw,30px)] font-extrabold leading-[1.3]"
-                  style={{ color: variant.text, transition: `color ${FADE_MS}ms ease` }}
-                >
+        <div className="relative">
+          {/* Sizing ghost — see comment above. Never announced or focusable. */}
+          <div aria-hidden="true" className="invisible grid">
+            {quotes.map((quote) => (
+              <div key={quote.name + quote.cohort} style={{ gridArea: '1 / 1' }}>
+                <blockquote className="m-0 max-w-[26ch] text-[clamp(21px,2.8vw,30px)] font-extrabold leading-[1.3]">
                   {quote.text}
                 </blockquote>
-                <cite
-                  className="mt-4 block text-[14px] font-bold not-italic"
-                  style={{ color: variant.cite, transition: `color ${FADE_MS}ms ease` }}
-                >
+                <cite className="mt-4 block text-[14px] font-bold not-italic">
                   {quote.name} · {quote.cohort}
                 </cite>
               </div>
-            )
-          })}
+            ))}
+          </div>
+
+          {/* Live, visible, animated quote — overlaid on the ghost above. */}
+          <div ref={liveRegionRef} className="absolute inset-0" aria-live="polite" aria-atomic="true">
+            <AnimatePresence initial={false}>
+              <motion.div
+                key={activeIndex}
+                className="absolute inset-0"
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={shouldReduceMotion ? undefined : { opacity: 0, y: -22 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: EASE }}
+              >
+                <blockquote
+                  className="m-0 max-w-[26ch] text-[clamp(21px,2.8vw,30px)] font-extrabold leading-[1.3]"
+                  style={{ color: variant.text }}
+                >
+                  {active.text}
+                </blockquote>
+                <cite className="mt-4 block text-[14px] font-bold not-italic" style={{ color: variant.cite }}>
+                  {active.name} · {active.cohort}
+                </cite>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+
+        <div className="mt-6 flex gap-1" role="group" aria-label="עדויות בוגרות">
+          {quotes.map((quote, i) => (
+            <button
+              key={quote.name + quote.cohort}
+              type="button"
+              onClick={() => setActiveIndex(i)}
+              aria-label={`עדות ${i + 1} מתוך ${quotes.length}, ${quote.name}`}
+              aria-current={i === activeIndex}
+              // p-[7px]/-m-[7px]: an 8px visual dot with a ~22px tap target,
+              // without the padding eating into the dot itself under
+              // border-box sizing (see LanguageToggle for the same trick).
+              className="flex-none cursor-pointer rounded-full p-[7px] -m-[7px] transition-transform duration-200 ease-out hover:scale-125 focus-visible:outline-2 focus-visible:outline-offset-2"
+              style={{ outlineColor: variant.text }}
+            >
+              <span
+                className="block h-2 w-2 rounded-full transition-opacity duration-200"
+                style={{ backgroundColor: variant.text, opacity: i === activeIndex ? 1 : 0.4 }}
+              />
+            </button>
+          ))}
         </div>
       </div>
     </section>
