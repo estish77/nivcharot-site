@@ -110,21 +110,88 @@ const OUTER_START = Math.max(0, TOTAL_SEATS - RING_SIZE)
 type ScatterDatum = { x: number; y: number; delay: number }
 
 /** Entrance-only: each seat's "flung outward" starting point (its resting position plus a random direction/distance), used to converge the hall in on mount. Computed once at module load — same shuffled arrangement all session, matching `STATIC_LIT`'s stability convention. */
+/**
+ * `Math.random()`, not `pseudoRandom()` (below) — 2026-08-29 fix: this ran
+ * at MODULE LOAD time, once in the server process and once again in the
+ * browser, on every single page load. Real `Math.random()` gives the server
+ * and the client two different scatter arrangements, so the server-rendered
+ * `initial={{cx: scatter.x, ...}}` markup never matched what the client
+ * expected on hydration — a real, live bug (confirmed present on the actual
+ * Home page, not something this brief's other changes introduced): a
+ * hydration-mismatch warning plus a cascade of ~150 "attribute r: Expected
+ * length, undefined" console errors on every load, the whole entrance flight
+ * silently re-rendering from scratch client-side after hydration gave up on
+ * it. Switched to the same deterministic seeded hash `generateBurst` (below)
+ * already used, so server and client compute the identical arrangement.
+ */
 function generateScatter(seats: SeatPos[]): ScatterDatum[] {
-  return seats.map((s) => {
-    const angle = Math.random() * Math.PI * 2
-    const dist = 220 + Math.random() * 380
+  return seats.map((s, i) => {
+    const angle = pseudoRandom(i * 2.13 + 1) * Math.PI * 2
+    const dist = 220 + pseudoRandom(i * 4.41 + 2) * 380
     return {
       x: +(s.cx + Math.cos(angle) * dist).toFixed(1),
       y: +(s.cy + Math.sin(angle) * dist).toFixed(1),
       // Wider stagger spread (was 0-0.4s) so seats visibly converge one
       // after another into the semicircle rather than nearly all at once.
-      delay: +(Math.random() * 0.9).toFixed(2),
+      delay: +(pseudoRandom(i * 6.65 + 3) * 0.9).toFixed(2),
     }
   })
 }
 
 const SCATTER = generateScatter(SEATS)
+
+/**
+ * Experimental hover/scroll behaviors (2026-08-29 lab brief: "אחרי שהעיגולים
+ * הסתדרו, במצב הובר... יזוזו ויתפזרו עם תנועת העכבר ואז יחזרו... וכשגוללים
+ * את המסך הם יפוצו למעלה ולצדדים"). Both are OFF by default (`hoverMode:
+ * 'off'`, `scrollBurst: false`) so every existing caller (`Hero.tsx`,
+ * `/hanivcheret`) renders exactly as before — these only activate where a
+ * caller opts in, e.g. the comparison lab page.
+ *
+ * Three hover "flavors", so there's something real to compare rather than
+ * one guess: `repel` pushes seats cleanly away from the pointer (a
+ * fields-of-force feel), `ripple` adds a traveling wave on top of that push
+ * (concentric, like water), and `jitter` replaces the clean push with a
+ * per-seat shimmer/shake (a startled, lively feel). All three ease back to
+ * the resting position once the pointer moves away — same spring, different
+ * offset math.
+ */
+export type SeatHallHoverMode = 'off' | 'repel' | 'ripple' | 'jitter'
+
+const HOVER_RADIUS = 170
+const HOVER_MAX_PUSH = 46
+const JITTER_MAX = 20
+
+/** Simple deterministic hash → [0,1), so `jitter` shakes reproducibly per seat+tick instead of needing `Math.random()` every frame (which would read as noise, not shimmer). */
+function pseudoRandom(seed: number): number {
+  const x = Math.sin(seed * 12.9898) * 43758.5453
+  return x - Math.floor(x)
+}
+
+/**
+ * Scroll-burst target: each seat pushed further out along its OWN existing
+ * radius from the hall's center (500, 470) — the semicircle already opens
+ * upward, so extending every seat's radius reads exactly as "up and to the
+ * sides" with no separate up/side-biased math needed. A little per-seat
+ * jitter on the extension keeps the burst from reading as a rigid, uniform
+ * scale-up.
+ */
+function generateBurst(seats: SeatPos[]): ScatterDatum[] {
+  return seats.map((s, i) => {
+    const dx = s.cx - 500
+    const dy = s.cy - 470
+    const r = Math.hypot(dx, dy) || 1
+    const extra = 150 + pseudoRandom(i * 3.7) * 110
+    const scale = (r + extra) / r
+    return {
+      x: +(500 + dx * scale).toFixed(1),
+      y: +(470 + dy * scale).toFixed(1),
+      delay: +(pseudoRandom(i * 5.3) * 0.15).toFixed(2),
+    }
+  })
+}
+
+const BURST = generateBurst(SEATS)
 // Was 0.9s cx/cy + up to 0.4s stagger (ENTRANCE_MS 1300) — the whole hall
 // assembled almost as fast as it faded in, reading as a snap rather than a
 // deliberate gathering into the semicircle. Slower flight (0.9s -> 2.1s)
@@ -148,6 +215,9 @@ const SeatCircle = memo(function SeatCircle({
   entrance,
   scatter,
   entranceDone,
+  offsetX = 0,
+  offsetY = 0,
+  offsetActive = false,
 }: {
   cx: number
   cy: number
@@ -156,6 +226,11 @@ const SeatCircle = memo(function SeatCircle({
   entrance: boolean
   scatter: ScatterDatum
   entranceDone: boolean
+  /** Hover/scroll displacement, additive on top of the resting position — 0 for every real (non-lab) caller today. */
+  offsetX?: number
+  offsetY?: number
+  /** True once any hover/scroll displacement has ever applied to this seat — switches cx/cy from the entrance's slow staggered tween to a snappy spring, since that tween is otherwise never exercised again post-entrance. */
+  offsetActive?: boolean
 }) {
   // `r` must be a valid length in the server-rendered markup and on first paint.
   // Motion only writes animated SVG attributes once it takes over on the client, so
@@ -163,6 +238,8 @@ const SeatCircle = memo(function SeatCircle({
   // Rendering the resting radius as a real attribute and starting from it
   // (`initial={false}`) keeps SSR valid while leaving state changes animated.
   const restingRadius = hidden ? 0 : lit ? 12 : 11
+  const targetCx = cx + offsetX
+  const targetCy = cy + offsetY
 
   return (
     <motion.circle
@@ -171,16 +248,16 @@ const SeatCircle = memo(function SeatCircle({
       r={restingRadius}
       initial={entrance ? { cx: scatter.x, cy: scatter.y, opacity: 0 } : false}
       animate={{
-        cx,
-        cy,
+        cx: targetCx,
+        cy: targetCy,
         r: restingRadius,
         opacity: hidden ? 0 : 1,
         fill: lit ? ACCENT : SLATE,
         scale: lit ? [null, 1.35, 1] : 1,
       }}
       transition={{
-        cx: { duration: 2.1, ease: EASE, delay: scatter.delay },
-        cy: { duration: 2.1, ease: EASE, delay: scatter.delay },
+        cx: offsetActive ? { type: 'spring', stiffness: 170, damping: 16 } : { duration: 2.1, ease: EASE, delay: scatter.delay },
+        cy: offsetActive ? { type: 'spring', stiffness: 170, damping: 16 } : { duration: 2.1, ease: EASE, delay: scatter.delay },
         r: { duration: 0.32, ease: EASE },
         // Reuses the same slower, staggered timing for any opacity change that lands mid-entrance
         // (e.g. a seat getting claimed by a ring letter before it's finished flying in); once
@@ -238,15 +315,43 @@ export type SeatHallProps = {
   ariaLabel: Localized
   sentence: Localized
   className?: string
+  /** @default 'off' — see the doc comment above `SeatHallHoverMode`. */
+  hoverMode?: SeatHallHoverMode
+  /** @default false — see `generateBurst`'s doc comment. */
+  scrollBurst?: boolean
 }
 
-export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallProps) {
+export function SeatHall({
+  locale,
+  ariaLabel,
+  sentence,
+  className,
+  hoverMode = 'off',
+  scrollBurst = false,
+}: SeatHallProps) {
   const shouldReduceMotion = useReducedMotion()
   const reduced = shouldReduceMotion === true
 
   const svgRef = useRef<SVGSVGElement>(null)
   const hallRef = useRef<HallState>({ lit: {}, order: [] })
   const [, bumpHall] = useReducer((c: number) => c + 1, 0)
+
+  // Hover displacement: a per-seat {dx, dy} offset, additive on top of the
+  // resting position. Empty (every seat at its resting spot) whenever
+  // `hoverMode === 'off'` — the real Home/HaNivcheret usage never touches
+  // this ref at all.
+  const offsetRef = useRef<Record<number, { dx: number; dy: number }>>({})
+  const rippleTickRef = useRef(0)
+  const [, bumpOffsets] = useReducer((c: number) => c + 1, 0)
+
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    if (!scrollBurst || reduced) return
+    const onScroll = () => setScrolled(window.scrollY > 80)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [scrollBurst, reduced])
 
   // Gates the seat circles' opacity-transition timing back to normal once the
   // scattered-dots entrance (see `SeatCircle`) has finished converging.
@@ -440,11 +545,50 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
       }
       hallRef.current = { lit: next, order }
       bumpHall()
+
+      if (hoverMode !== 'off') {
+        rippleTickRef.current += 1
+        const tick = rippleTickRef.current
+        const offsets: Record<number, { dx: number; dy: number }> = {}
+        SEATS.forEach((s, i) => {
+          const d = Math.hypot(s.cx - px, s.cy - py)
+          if (d >= HOVER_RADIUS) return
+          const strength = 1 - d / HOVER_RADIUS
+
+          if (hoverMode === 'jitter') {
+            const amp = JITTER_MAX * strength
+            offsets[i] = {
+              dx: (pseudoRandom(i * 13.1 + tick) - 0.5) * 2 * amp,
+              dy: (pseudoRandom(i * 7.7 + tick * 1.3) - 0.5) * 2 * amp,
+            }
+            return
+          }
+
+          // repel + ripple both push straight away from the pointer;
+          // ripple layers a traveling concentric wave on top of that push
+          // (a sine keyed to distance-from-pointer and the tick counter) so
+          // it reads as an outgoing ring rather than a flat cushion.
+          const ux = d === 0 ? 0 : (s.cx - px) / d
+          const uy = d === 0 ? 0 : (s.cy - py) / d
+          const wave = hoverMode === 'ripple' ? 0.55 + 0.45 * Math.sin(d / 16 - tick * 0.5) : 1
+          const push = HOVER_MAX_PUSH * strength * wave
+          offsets[i] = { dx: ux * push, dy: uy * push }
+        })
+        offsetRef.current = offsets
+        bumpOffsets()
+      }
     },
-    [reduced],
+    [reduced, hoverMode],
   )
 
+  const handlePointerLeave = useCallback(() => {
+    if (hoverMode === 'off') return
+    offsetRef.current = {}
+    bumpOffsets()
+  }, [hoverMode])
+
   const litNow = hallRef.current.lit
+  const hoverOffsets = offsetRef.current
 
   return (
     <div
@@ -452,6 +596,7 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
       aria-label={ariaLabel[locale]}
       onPointerMove={handlePointerMove}
       onPointerEnter={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
       className={cn('relative w-full cursor-crosshair max-[640px]:aspect-[1/2] max-[640px]:overflow-hidden', className)}
     >
       {/*
@@ -471,18 +616,26 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
           focusable="false"
           className="block h-auto max-h-full w-full overflow-visible"
         >
-          {SEATS.map((s, i) => (
-            <SeatCircle
-              key={i}
-              cx={s.cx}
-              cy={s.cy}
-              lit={Boolean(litNow[i])}
-              hidden={ringHidden.has(i)}
-              entrance={!reduced}
-              scatter={SCATTER[i]}
-              entranceDone={entranceDone}
-            />
-          ))}
+          {SEATS.map((s, i) => {
+            const hover = hoverOffsets[i]
+            const burstDx = scrolled ? BURST[i].x - s.cx : 0
+            const burstDy = scrolled ? BURST[i].y - s.cy : 0
+            return (
+              <SeatCircle
+                key={i}
+                cx={s.cx}
+                cy={s.cy}
+                lit={Boolean(litNow[i])}
+                hidden={ringHidden.has(i)}
+                entrance={!reduced}
+                scatter={SCATTER[i]}
+                entranceDone={entranceDone}
+                offsetX={(hover?.dx ?? 0) + burstDx}
+                offsetY={(hover?.dy ?? 0) + burstDy}
+                offsetActive={hoverMode !== 'off' || scrollBurst}
+              />
+            )
+          })}
           <g>
             {letters.map((datum) => (
               <RingLetter
