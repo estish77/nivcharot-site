@@ -54,14 +54,23 @@ export function Logo({ locale, className }: LogoProps) {
       alt={label}
       // Fixed-width per the mockup rule, but not a single fixed width: at
       // 230px (the mockup/desktop value) the English wordmark alone is
-      // wider than the available header row on every phone width from 320
-      // to 430px once the language toggle + menu button are accounted for
-      // (header padding 2*32px + gap-6 24px + nav ~118px), forcing the
-      // header onto two lines — unlike the Hebrew mark, which is narrow
-      // enough to never wrap. Scaling the width down at narrow viewports
-      // keeps the header on one line through the whole phone range;
-      // min-[440px] restores the exact original 230px once there's room.
-      className={cn('w-[110px] min-[356px]:w-[150px] min-[440px]:w-[230px]', className)}
+      // wider than the available header row on real phone widths, once the
+      // podcast icon + language toggle + Donate button + menu button are
+      // accounted for (measured via a real headless-browser render, not
+      // just computed from the class list — see 2026-08-29 brief below).
+      // Unlike the Hebrew mark, "NIVCHAROT" plus its tagline has no slack
+      // to give here, so this needed three width tiers rather than two to
+      // avoid a wrap at any width in between: 84px through 400px, 130px
+      // through 520px (where "Donate" + the toggle + both icons still add
+      // up to more than the room a bigger logo would leave), and the full
+      // 230px only once there's genuinely enough width to spare.
+      //
+      // 2026-08-29: the English-only version of this header wrap bug — the
+      // two smaller tiers above (110/150px) still wrapped through the whole
+      // 340-430px phone range, and 230px turned out to engage 80px too
+      // early at min-[440px]. Re-derived all three numbers from actual
+      // rendered widths instead of estimates.
+      className={cn('w-[84px] min-[401px]:w-[130px] min-[520px]:w-[230px]', className)}
       style={{ height: 'auto', display: 'block' }}
     />
   )

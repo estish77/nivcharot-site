@@ -148,7 +148,7 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
   return (
     <motion.header
       className={cn(
-        'sticky z-30 flex flex-wrap items-center justify-between gap-6 max-[640px]:gap-3 bg-bg px-8 max-[640px]:px-4 py-[18px] max-[640px]:py-3',
+        'sticky z-30 flex flex-wrap items-center justify-between gap-6 max-[640px]:gap-3 max-[519px]:gap-2 bg-bg px-8 max-[640px]:px-4 py-[18px] max-[640px]:py-3',
         bordered && 'border-b-2 border-divider',
         className,
       )}
@@ -167,7 +167,7 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
         <Logo locale={locale} />
       </Link>
       <nav
-        className="flex items-center gap-5 max-[640px]:gap-2"
+        className="flex items-center gap-5 max-[640px]:gap-2 max-[519px]:gap-1"
         aria-label={t(locale, { he: 'ניווט ראשי', en: 'Primary navigation' })}
       >
         <Link
@@ -182,7 +182,7 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
           href={`/${locale}/donate`}
           variant="primary"
           size="sm"
-          className="flex items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px]"
+          className="flex items-center gap-1.5 max-[519px]:gap-1 whitespace-nowrap max-[640px]:px-[12px] max-[519px]:px-[9px] max-[640px]:py-[8px] max-[640px]:text-[13px] max-[519px]:text-[12px]"
         >
           <HeartIcon />
           {t(locale, { he: 'תרמו', en: 'Donate' })}
