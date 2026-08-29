@@ -113,6 +113,11 @@ const HOST_FRAMED_SHORTS = new Set<string>([
   'j9PqsemL3iI', // captioned "מוישי ליפשיץ"
   'jLZWsPEluyQ', // captioned "מלכי רוטנר"
   '1EEB4ilJyVs', // captioned "אורי צייטלין"
+  // 2026-08-29: these two's next-most-watched Short (the one that had been
+  // showing after the entries above were added) turned out to be host-framed
+  // too — same issue, a different clip.
+  'AKgW4sj32CM', // captioned "רחלי סלומון"
+  '71xHXg4qtfM', // captioned "מלכי רוטנר" (her second host-framed clip)
 ])
 
 function pickStories(shorts: PodcastShort[]): PodcastShort[] {
