@@ -201,6 +201,7 @@
      * tabs) don't have this problem and use the raw brand accent directly.
      */
     color: var(--color-accent-700);
+    text-decoration: none;
   }
 
   a:hover,

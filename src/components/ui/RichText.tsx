@@ -32,7 +32,7 @@ const SUPERSCRIPT = 1 << 6
 type Node = Record<string, unknown>
 
 const linkClass =
-  'text-accent-700 underline underline-offset-[3px] decoration-[1.5px] hover:text-accent focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
+  'text-accent-700 no-underline hover:text-accent focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
 
 /**
  * Only schemes that are safe to put behind a click. An editor pasting a

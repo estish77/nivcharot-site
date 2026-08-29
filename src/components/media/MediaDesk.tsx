@@ -262,7 +262,7 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
         <button
           type="button"
           onClick={resetFilters}
-          className="font-heading text-[12.5px] font-extrabold text-accent-700 underline underline-offset-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="font-heading text-[12.5px] font-extrabold text-accent-700 no-underline hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           {t(locale, mediaDeskText.reset)}
         </button>
@@ -389,7 +389,7 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
               <button
                 type="button"
                 onClick={resetFilters}
-                className="font-heading text-[12px] font-extrabold text-accent-700 underline underline-offset-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="font-heading text-[12px] font-extrabold text-accent-700 no-underline hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 {t(locale, mediaDeskText.reset)}
               </button>
@@ -410,7 +410,7 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
                   <button
                     type="button"
                     onClick={resetFilters}
-                    className="font-heading text-[13px] font-extrabold text-accent-700 underline underline-offset-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    className="font-heading text-[13px] font-extrabold text-accent-700 no-underline hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     {t(locale, mediaDeskText.emptyAction)}
                   </button>
