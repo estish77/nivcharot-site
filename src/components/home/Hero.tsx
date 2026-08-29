@@ -6,7 +6,7 @@ import { motion } from 'motion/react'
 
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
-import { Button, Reveal, SeatHall } from '@/components/ui'
+import { Button, PodcastIcon, Reveal, SeatHall } from '@/components/ui'
 import { dict, t, type Locale } from '@/lib/i18n'
 import { hallAriaLabel, hallSentence, heroContent } from '@/content/home'
 
@@ -75,7 +75,21 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
             animate={shouldReduceMotion ? undefined : { scale: [1, 1.03, 1] }}
             transition={{ duration: CTA_BREATHE_DURATION_S, ease: 'easeInOut', repeat: Infinity, delay: 0.7 }}
           >
-            <Button href={`/${locale}/${content.tertiaryCta.slug}`} variant="ghost" size="lg" className="whitespace-nowrap">
+            {/*
+              variant="secondary" (framed, like the donate button) rather
+              than "ghost" — a borderless button here read as unstyled next
+              to the other two (2026-08-29 brief). The `PodcastIcon` (the
+              same pulsing glyph the header's own /podcast link uses) is
+              what keeps this from just being a second identical outlined
+              button: a visual cue tying it to "sound/listen" specifically.
+            */}
+            <Button
+              href={`/${locale}/${content.tertiaryCta.slug}`}
+              variant="secondary"
+              size="lg"
+              className="flex items-center gap-2.5 whitespace-nowrap text-accent-700"
+            >
+              <PodcastIcon className="h-[18px] w-[18px]" />
               {t(locale, content.tertiaryCta.label)}
             </Button>
           </motion.div>

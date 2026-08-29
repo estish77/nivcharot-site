@@ -43,6 +43,9 @@ export type { SeatHallProps } from './SeatHall'
 
 export { HeartIcon } from './HeartIcon'
 
+export { PodcastIcon } from './PodcastIcon'
+export type { PodcastIconProps } from './PodcastIcon'
+
 export { RichText, hasRichText } from './RichText'
 export type { RichTextProps } from './RichText'
 

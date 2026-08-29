@@ -126,7 +126,7 @@ export function AlumnaeQuoteBanner() {
             <div aria-hidden="true" className="invisible grid">
               {quotes.map((quote) => (
                 <div key={quote.name + quote.cohort} style={{ gridArea: '1 / 1' }}>
-                  <blockquote className="m-0 max-w-[26ch] text-[clamp(20px,2.6vw,28px)] font-extrabold leading-[1.45]">
+                  <blockquote className="m-0 max-w-[40ch] text-[clamp(20px,2.6vw,28px)] font-extrabold leading-[1.45]">
                     {quote.text}
                   </blockquote>
                   <cite className="mt-4 block text-[14px] font-bold not-italic">
@@ -148,7 +148,7 @@ export function AlumnaeQuoteBanner() {
                   transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: EASE }}
                 >
                   <blockquote
-                    className="m-0 max-w-[26ch] text-[clamp(20px,2.6vw,28px)] font-extrabold leading-[1.45]"
+                    className="m-0 max-w-[40ch] text-[clamp(20px,2.6vw,28px)] font-extrabold leading-[1.45]"
                     style={{ color: variant.text }}
                   >
                     {active.text}
