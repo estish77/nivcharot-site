@@ -12,13 +12,9 @@ export type EqualizerDotsProps = {
    * Matches the mockups' per-instance tone: the accent-red quote banner
    * (Join, `{{ eq0 }}`/`{{ eq1 }}`) uses `'accent'` — slate base dots, white
    * lit dots. The cream/bg team section (Team, `{{ eq1 }}`/`{{ eq3 }}`) uses
-   * `'light'` — slate base dots, accent-red lit dots. `'dark'` is for a
-   * `--niv-slate` background (the alumnae-quote banner's blue variant,
-   * 2026-08-29 brief) — a slate-colored base dot would be invisible against
-   * a same-color background, so this uses a translucent-white base instead,
-   * lit fully white. @default 'light'
+   * `'light'` — slate base dots, accent-red lit dots. @default 'light'
    */
-  tone?: 'accent' | 'light' | 'dark'
+  tone?: 'accent' | 'light'
   className?: string
 }
 
@@ -51,8 +47,8 @@ function pickLit(): number[] {
  * re-picks once but skips the scale exaggeration.
  */
 export function EqualizerDots({ tone = 'light', className }: EqualizerDotsProps) {
-  const base = tone === 'dark' ? 'rgba(255,255,255,0.35)' : 'var(--niv-slate)'
-  const lit = tone === 'light' ? 'var(--color-accent)' : '#fff'
+  const base = 'var(--niv-slate)'
+  const lit = tone === 'accent' ? '#fff' : 'var(--color-accent)'
   const [litSet, setLitSet] = useState<number[]>([0, 2, 4])
   const [hot, setHot] = useState(false)
   const shouldReduceMotion = useReducedMotion()
