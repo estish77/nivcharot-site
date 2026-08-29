@@ -120,6 +120,29 @@
     overflow-wrap: break-word;
   }
 
+  /*
+   * No word left alone on its own last line (2026-08-29 request: a line
+   * break should never leave a single orphaned word).
+   *
+   * `text-wrap: pretty` tells the browser to look ahead while laying out a
+   * paragraph and pull a word down from the line above rather than leave a
+   * one-word last line. It costs nothing where the text already breaks
+   * well, and it degrades to normal wrapping in browsers that don't
+   * support it yet — no layout shifts, no reflow risk.
+   *
+   * Headings get `balance` instead, which evens out the lines of a short
+   * block rather than only fixing the last one. Browsers cap it at a few
+   * lines, which is exactly the length a heading is.
+   */
+  p,
+  li,
+  dd,
+  dt,
+  figcaption,
+  blockquote {
+    text-wrap: pretty;
+  }
+
   h1,
   h2,
   h3,
@@ -130,6 +153,7 @@
     font-weight: 800;
     color: var(--color-text);
     margin: 0;
+    text-wrap: balance;
     /*
      * Safety net for narrow phones (found at 320px width on the EN home
      * hero, docs/2026-08-19 mobile QA): h1's font-size clamp has a hard

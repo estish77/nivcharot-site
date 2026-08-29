@@ -1,6 +1,6 @@
 import { Reveal, Section } from '@/components/ui'
 import type { Locale } from '@/lib/i18n'
-import { statsFootnoteEn, statTiles } from '@/content/home'
+import { statTiles } from '@/content/home'
 
 /** The "350,000" tile alone renders at a smaller clamp so the longer number doesn't overflow its cell, and never wraps. */
 const WIDE_VALUE = '350,000'
@@ -35,11 +35,9 @@ const GRID_CSS = `
 export function StatsBand({
   locale,
   tiles = statTiles[locale],
-  footnote = statsFootnoteEn,
 }: {
   locale: Locale
   tiles?: Array<{ value: string; description: string }>
-  footnote?: string
 }) {
   return (
     <Reveal as="section">
@@ -67,11 +65,6 @@ export function StatsBand({
             </div>
           ))}
         </div>
-        {locale === 'en' && footnote ? (
-          <p className="mt-[26px] max-w-[640px] text-[13px] leading-[1.6]" style={{ color: 'rgba(227,222,215,0.72)' }}>
-            {footnote}
-          </p>
-        ) : null}
       </Section>
     </Reveal>
   )
