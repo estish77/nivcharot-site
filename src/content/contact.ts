@@ -39,8 +39,8 @@ export const contactForm = {
    * message arrived.
    */
   successNote: {
-    he: 'ההודעה שלכן התקבלה ונשמרה, ונחזור אליכן בהקדם. אפשר גם לכתוב ישירות ל-',
-    en: 'Your message was received and saved, and we’ll get back to you soon. You can also write directly to ',
+    he: 'הודעתך נשלחה בהצלחה, נשתדל לשוב בהקדם.',
+    en: 'Your message was sent successfully — we will get back to you soon.',
   } satisfies Localized,
 }
 

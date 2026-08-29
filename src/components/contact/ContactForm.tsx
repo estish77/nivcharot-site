@@ -148,12 +148,7 @@ export function ContactForm({ locale }: ContactFormProps) {
       ) : null}
 
       {sent ? (
-        <p className="m-0 text-[14px] leading-[1.6] text-neutral-800">
-          {t(locale, contactForm.successNote)}
-          <a href={`mailto:${contactEmail}`} className="focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-            {contactEmail}
-          </a>
-        </p>
+        <p className="m-0 text-[14px] leading-[1.6] text-neutral-800">{t(locale, contactForm.successNote)}</p>
       ) : null}
 
       <button
