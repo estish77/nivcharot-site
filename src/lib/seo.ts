@@ -25,8 +25,19 @@ const ogLocale: Record<Locale, string> = { he: 'he_IL', en: 'en_US' }
  * falls back to its wordmark logo — a real, on-brand image beats no image
  * (the previous state: no `openGraph`/`twitter` metadata existed anywhere,
  * so shared links showed no preview image at all).
+ *
+ * Per-locale (2026-08-29 fix): this used to be a single hardcoded English
+ * logo regardless of which locale's URL was being shared — sharing a `/he/…`
+ * link on WhatsApp showed the English wordmark. `nivcharot-logo-he.png` is
+ * a new rasterization of the existing `nivcharot-logo-he.svg` (via `sharp`,
+ * matching this file's own density/quality bar) — OG/Twitter card scrapers
+ * don't reliably render SVG, so the SVG itself was never usable here the
+ * way it is for `Logo.tsx`'s real `<img>`.
  */
-const defaultOgImage = { url: `${siteUrl}/assets/nivcharot-logo-en.png`, width: 1339, height: 447 }
+const defaultOgImage: Record<Locale, { url: string; width: number; height: number }> = {
+  he: { url: `${siteUrl}/assets/nivcharot-logo-he.png`, width: 1200, height: 554 },
+  en: { url: `${siteUrl}/assets/nivcharot-logo-en.png`, width: 1339, height: 447 },
+}
 
 type PageMetadataInput = {
   locale: Locale
@@ -49,7 +60,7 @@ type PageMetadataInput = {
  */
 export function pageMetadata({ locale, path, title, description, image, type = 'website' }: PageMetadataInput): Metadata {
   const url = urlFor(locale, path)
-  const ogImage = image ? { url: image } : defaultOgImage
+  const ogImage = image ? { url: image } : defaultOgImage[locale]
 
   return {
     title,
