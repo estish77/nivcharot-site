@@ -223,6 +223,46 @@ function computeScrollOffset(seat: SeatPos, i: number, mode: SeatHallScrollMode)
   }
 }
 
+/**
+ * Three ways the outer-ring sentence letters can join a scroll mode's
+ * dispersal (2026-08-29 follow-up: "מרחפים למעלה גם האותיות צריכות
+ * להתפזר" — letters used to sit fixed in place while only the seats moved).
+ * All three are no-ops (`'off'`) unless a `scrollMode` is also active — a
+ * letter riding along makes no sense with nothing else moving.
+ *   - `withSeats`: exactly the same offset as the seat the letter currently
+ *     occupies — one unified system, letters and seats move together.
+ *   - `lead`: that same offset, amplified — letters fly further/faster than
+ *     the seats, reading as lighter than the dots.
+ *   - `independent`: the letter's own small scatter, unrelated to its
+ *     seat's motion — looks like the type is coming loose on its own.
+ */
+export type SeatHallLetterMode = 'off' | 'withSeats' | 'lead' | 'independent'
+
+const LETTER_LEAD_FACTOR = 1.6
+
+function computeLetterOffset(datum: LetterDatum, letterMode: SeatHallLetterMode, scrollMode: SeatHallScrollMode): ScrollOffset {
+  if (letterMode === 'off' || scrollMode === 'off') return SCROLL_OFFSET_REST
+
+  if (letterMode === 'independent') {
+    const dxFromCenter = datum.cx - 500
+    const dyFromCenter = datum.cy - 470
+    const r = Math.hypot(dxFromCenter, dyFromCenter) || 1
+    const dist = 90 + pseudoRandom(datum.key * 7.3 + 11) * 120
+    return {
+      dx: (dxFromCenter / r) * dist,
+      dy: (dyFromCenter / r) * dist - (60 + pseudoRandom(datum.key * 4.1 + 12) * 80),
+      delay: pseudoRandom(datum.key * 2.6 + 13) * 0.3,
+      opacityMul: 1,
+    }
+  }
+
+  const seatOffset = computeScrollOffset({ cx: datum.cx, cy: datum.cy }, datum.seatIdx, scrollMode)
+  if (letterMode === 'lead') {
+    return { ...seatOffset, dx: seatOffset.dx * LETTER_LEAD_FACTOR, dy: seatOffset.dy * LETTER_LEAD_FACTOR }
+  }
+  return seatOffset
+}
+
 /** Simple deterministic hash → [0,1), so `jitter` shakes reproducibly per seat+tick instead of needing `Math.random()` every frame (which would read as noise, not shimmer). */
 function pseudoRandom(seed: number): number {
   const x = Math.sin(seed * 12.9898) * 43758.5453
@@ -318,26 +358,52 @@ const SeatCircle = memo(function SeatCircle({
   )
 })
 
-type LetterDatum = { key: number; ch: string; cx: number; cy: number; angleDeg: number; on: boolean; hot: boolean }
+type LetterDatum = {
+  key: number
+  ch: string
+  cx: number
+  cy: number
+  /** The outer-ring seat this letter currently occupies — `withSeats`/`lead` letter-dispersal modes look up that seat's own scroll offset. */
+  seatIdx: number
+  angleDeg: number
+  on: boolean
+  hot: boolean
+}
 
 const RingLetter = memo(function RingLetter({
   datum,
   onHoverStart,
   onHoverEnd,
+  offsetX = 0,
+  offsetY = 0,
 }: {
   datum: LetterDatum
   onHoverStart: () => void
   onHoverEnd: () => void
+  /** Scroll displacement, additive on top of the resting position — 0 for every real (non-lab) caller today, see `SeatHallLetterMode`. */
+  offsetX?: number
+  offsetY?: number
 }) {
   const { ch, cx, cy, angleDeg, on, hot } = datum
+  // A `translate()` folded into the SAME transform string as the existing
+  // rotate/scale, animated by the SAME plain CSS `transition` below — NOT
+  // Motion's `animate`/`x`/`y`. `motion.text` has no special-cased SVG
+  // attribute support for `<text>`'s `x`/`y` the way `motion.circle` does
+  // for `cx`/`cy`/`r` (see `SeatCircle`); asking it to animate `x`/`y`
+  // anyway makes it drive them through a SEPARATE `transform:
+  // translateX()/translateY()` write, which clobbers this element's own
+  // rotate/scale transform outright — every letter silently lost its
+  // rotation and (via a knock-on effect) stopped showing up in testing at
+  // all. Plain CSS transitioning one unified transform string, like the
+  // rotate/scale already did before this offset existed, has no such conflict.
   const style: CSSProperties = {
     opacity: on ? 1 : 0,
     cursor: on ? 'pointer' : 'default',
     pointerEvents: on ? 'auto' : 'none',
-    transform: `rotate(${(90 - angleDeg).toFixed(1)}deg) ${on ? 'scale(1)' : 'scale(0.4)'}`,
+    transform: `translate(${offsetX.toFixed(1)}px, ${offsetY.toFixed(1)}px) rotate(${(90 - angleDeg).toFixed(1)}deg) ${on ? 'scale(1)' : 'scale(0.4)'}`,
     transformOrigin: `${cx}px ${cy}px`,
     transformBox: 'view-box',
-    transition: 'opacity 0.32s ease-out, fill 0.14s ease-out, transform 0.32s cubic-bezier(0.22,0.61,0.36,1)',
+    transition: 'opacity 0.32s ease-out, fill 0.14s ease-out, transform 0.4s cubic-bezier(0.22,0.61,0.36,1)',
   } as CSSProperties
   return (
     <text
@@ -366,6 +432,8 @@ export type SeatHallProps = {
   hoverMode?: SeatHallHoverMode
   /** @default 'off' — see the doc comment above `SeatHallScrollMode`. */
   scrollMode?: SeatHallScrollMode
+  /** @default 'off' — see the doc comment above `SeatHallLetterMode`. Only meaningful alongside an active `scrollMode`. */
+  letterMode?: SeatHallLetterMode
 }
 
 export function SeatHall({
@@ -375,6 +443,7 @@ export function SeatHall({
   className,
   hoverMode = 'off',
   scrollMode = 'off',
+  letterMode = 'off',
 }: SeatHallProps) {
   const shouldReduceMotion = useReducedMotion()
   const reduced = shouldReduceMotion === true
@@ -534,7 +603,7 @@ export function SeatHall({
       const on = k < shown && !outSet[k]
       if (on) hidden.add(slot.idx)
       const angleDeg = (Math.atan2(470 - slot.seat.cy, slot.seat.cx - 500) * 180) / Math.PI
-      letterEls.push({ key: k, ch, cx: slot.seat.cx, cy: slot.seat.cy, angleDeg, on, hot: hotLetter === k })
+      letterEls.push({ key: k, ch, cx: slot.seat.cx, cy: slot.seat.cy, seatIdx: slot.idx, angleDeg, on, hot: hotLetter === k })
     }
     return { ringHidden: hidden, letters: letterEls }
   }, [ring, sentenceText, letterState, hotLetter])
@@ -685,14 +754,19 @@ export function SeatHall({
             )
           })}
           <g>
-            {letters.map((datum) => (
-              <RingLetter
-                key={datum.key}
-                datum={datum}
-                onHoverStart={() => setHotLetter(datum.key)}
-                onHoverEnd={() => setHotLetter((h) => (h === datum.key ? null : h))}
-              />
-            ))}
+            {letters.map((datum) => {
+              const letterOffset = scrolled ? computeLetterOffset(datum, letterMode, scrollMode) : SCROLL_OFFSET_REST
+              return (
+                <RingLetter
+                  key={datum.key}
+                  datum={datum}
+                  onHoverStart={() => setHotLetter(datum.key)}
+                  onHoverEnd={() => setHotLetter((h) => (h === datum.key ? null : h))}
+                  offsetX={letterOffset.dx}
+                  offsetY={letterOffset.dy}
+                />
+              )
+            })}
           </g>
         </svg>
       </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { Reveal, SeatHall, type SeatHallHoverMode, type SeatHallScrollMode } from '@/components/ui'
+import { Reveal, SeatHall, type SeatHallHoverMode, type SeatHallScrollMode, type SeatHallLetterMode } from '@/components/ui'
 import { hallAriaLabel, hallSentence, heroContent } from '@/content/home'
 import { t, type Locale } from '@/lib/i18n'
 
@@ -21,6 +21,13 @@ const SCROLL_OPTIONS: { value: SeatHallScrollMode; label: { he: string; en: stri
   { value: 'cascade', label: { he: 'גל מדורג', en: 'Cascade wave' } },
 ]
 
+const LETTER_OPTIONS: { value: SeatHallLetterMode; label: { he: string; en: string } }[] = [
+  { value: 'off', label: { he: 'קבועות (מקורי)', en: 'Fixed (original)' } },
+  { value: 'withSeats', label: { he: 'עם המושב שלהן', en: 'With their seat' } },
+  { value: 'lead', label: { he: 'מובילות קדימה', en: 'Lead ahead' } },
+  { value: 'independent', label: { he: 'מתפזרות בעצמן', en: 'Scatter on their own' } },
+]
+
 /**
  * Throwaway comparison page (2026-08-29 lab brief) — NOT linked from nav,
  * not meant to ship as-is. Lets the site owner try a few real hover/scroll
@@ -29,12 +36,15 @@ const SCROLL_OPTIONS: { value: SeatHallScrollMode; label: { he: string; en: stri
  * `SeatHall.tsx`'s own doc comment on `SeatHallHoverMode`/`SeatHallScrollMode`
  * for what each option actually does.
  *
- * A floating control panel switches `hoverMode` and `scrollMode` — both
- * plain client state, nothing persisted.
+ * A floating control panel switches `hoverMode`, `scrollMode`, and (for
+ * whether/how the outer-ring sentence letters join the scroll dispersal
+ * instead of sitting fixed in place) `letterMode` — all plain client state,
+ * nothing persisted.
  */
 export function SeatLabHero({ locale }: { locale: Locale }) {
   const [hoverMode, setHoverMode] = useState<SeatHallHoverMode>('repel')
   const [scrollMode, setScrollMode] = useState<SeatHallScrollMode>('cascade')
+  const [letterMode, setLetterMode] = useState<SeatHallLetterMode>('withSeats')
   const titleLines = heroContent.title[locale].split('\n')
 
   return (
@@ -76,6 +86,26 @@ export function SeatLabHero({ locale }: { locale: Locale }) {
             </button>
           ))}
         </div>
+        <span className="w-full basis-full" />
+        <span className="font-heading text-[11.5px] font-extrabold tracking-[0.06em] text-niv-cream">
+          {t(locale, { he: 'האותיות בגלילה:', en: 'Letters on scroll:' })}
+        </span>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {LETTER_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setLetterMode(opt.value)}
+              className={`border-2 px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
+                letterMode === opt.value
+                  ? 'border-accent bg-accent text-white'
+                  : 'border-white/30 bg-transparent text-white/80 hover:border-white/60'
+              }`}
+            >
+              {t(locale, opt.label)}
+            </button>
+          ))}
+        </div>
       </div>
 
       <Reveal
@@ -109,6 +139,7 @@ export function SeatLabHero({ locale }: { locale: Locale }) {
             sentence={hallSentence}
             hoverMode={hoverMode}
             scrollMode={scrollMode}
+            letterMode={letterMode}
           />
         </div>
       </Reveal>
