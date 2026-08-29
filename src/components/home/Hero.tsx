@@ -70,6 +70,15 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
               {t(locale, content.secondaryCta.label)}
             </Link>
           </motion.div>
+          <motion.div
+            className="inline-block"
+            animate={shouldReduceMotion ? undefined : { scale: [1, 1.03, 1] }}
+            transition={{ duration: CTA_BREATHE_DURATION_S, ease: 'easeInOut', repeat: Infinity, delay: 0.7 }}
+          >
+            <Button href={`/${locale}/${content.tertiaryCta.slug}`} variant="ghost" size="lg" className="whitespace-nowrap">
+              {t(locale, content.tertiaryCta.label)}
+            </Button>
+          </motion.div>
         </div>
         <motion.div
           className="mt-10 font-heading text-[11.5px] font-extrabold tracking-[0.14em] text-neutral-700"

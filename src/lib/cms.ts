@@ -137,6 +137,7 @@ export async function getHomeContent(locale: Locale): Promise<PayloadHomeContent
       lead: { he: resolveLocalizedValue(hero.body, 'he', heroContent.lead.he), en: resolveLocalizedValue(hero.body, 'en', heroContent.lead.en) },
       primaryCta: heroContent.primaryCta,
       secondaryCta: heroContent.secondaryCta,
+      tertiaryCta: heroContent.tertiaryCta,
     }
 
     const nextTiles = rawTiles.length

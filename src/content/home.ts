@@ -38,6 +38,7 @@ export const heroContent: {
   lead: Localized
   primaryCta: HeroCta
   secondaryCta: HeroCta
+  tertiaryCta: HeroCta
 } = {
   eyebrow: { he: 'נבחרות · מאז 2012', en: 'NIVCHAROT · SINCE 2012' },
   title: {
@@ -50,6 +51,8 @@ export const heroContent: {
   },
   primaryCta: { label: { he: 'הסיפור שלנו', en: 'Our story' }, slug: 'story' },
   secondaryCta: { label: { he: 'לתרומה', en: 'Donate' }, slug: 'donate' },
+  /** 2026-08-29 brief: a third hero CTA, alongside "Our story" — the podcast. */
+  tertiaryCta: { label: { he: 'חרדית מדוברת', en: 'Haredit Meduberet' }, slug: 'podcast' },
 }
 
 /** The seat-hall's outer-ring sentence (`hallSentenceHe`/`hallSentenceEn` props, with their defaults). */
