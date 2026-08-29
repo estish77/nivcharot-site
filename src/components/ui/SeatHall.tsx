@@ -109,10 +109,19 @@ const OUTER_START = Math.max(0, TOTAL_SEATS - RING_SIZE)
 
 type ScatterDatum = { x: number; y: number; delay: number }
 
-/** Entrance-only: each seat's "flung outward" starting point (its resting position plus a random direction/distance), used to converge the hall in on mount. Computed once at module load — same shuffled arrangement all session, matching `STATIC_LIT`'s stability convention. */
 /**
- * `Math.random()`, not `pseudoRandom()` (below) — 2026-08-29 fix: this ran
- * at MODULE LOAD time, once in the server process and once again in the
+ * Each seat's "flung outward" point (its resting position plus a random
+ * direction/distance) — used both to converge the hall in on mount
+ * (entrance) and, in reverse, as the `scrollBurst` target (2026-08-29
+ * follow-up: "פיזור רחב יותר בגלילה, ממש כמו בכניסה אז יציאה" — the
+ * scroll-out dispersal should read exactly as large as the entrance flight,
+ * not a smaller, separate push, so it reuses these exact same points rather
+ * than a second, more modest generator). Computed once at module load —
+ * same shuffled arrangement all session, matching `STATIC_LIT`'s stability
+ * convention.
+ *
+ * Real `Math.random()`, not `pseudoRandom()` (below) — 2026-08-29 fix: this
+ * ran at MODULE LOAD time, once in the server process and once again in the
  * browser, on every single page load. Real `Math.random()` gives the server
  * and the client two different scatter arrangements, so the server-rendered
  * `initial={{cx: scatter.x, ...}}` markup never matched what the client
@@ -121,8 +130,8 @@ type ScatterDatum = { x: number; y: number; delay: number }
  * hydration-mismatch warning plus a cascade of ~150 "attribute r: Expected
  * length, undefined" console errors on every load, the whole entrance flight
  * silently re-rendering from scratch client-side after hydration gave up on
- * it. Switched to the same deterministic seeded hash `generateBurst` (below)
- * already used, so server and client compute the identical arrangement.
+ * it. Switched to the deterministic seeded hash below, so server and client
+ * compute the identical arrangement.
  */
 function generateScatter(seats: SeatPos[]): ScatterDatum[] {
   return seats.map((s, i) => {
@@ -168,30 +177,6 @@ function pseudoRandom(seed: number): number {
   return x - Math.floor(x)
 }
 
-/**
- * Scroll-burst target: each seat pushed further out along its OWN existing
- * radius from the hall's center (500, 470) — the semicircle already opens
- * upward, so extending every seat's radius reads exactly as "up and to the
- * sides" with no separate up/side-biased math needed. A little per-seat
- * jitter on the extension keeps the burst from reading as a rigid, uniform
- * scale-up.
- */
-function generateBurst(seats: SeatPos[]): ScatterDatum[] {
-  return seats.map((s, i) => {
-    const dx = s.cx - 500
-    const dy = s.cy - 470
-    const r = Math.hypot(dx, dy) || 1
-    const extra = 150 + pseudoRandom(i * 3.7) * 110
-    const scale = (r + extra) / r
-    return {
-      x: +(500 + dx * scale).toFixed(1),
-      y: +(470 + dy * scale).toFixed(1),
-      delay: +(pseudoRandom(i * 5.3) * 0.15).toFixed(2),
-    }
-  })
-}
-
-const BURST = generateBurst(SEATS)
 // Was 0.9s cx/cy + up to 0.4s stagger (ENTRANCE_MS 1300) — the whole hall
 // assembled almost as fast as it faded in, reading as a snap rather than a
 // deliberate gathering into the semicircle. Slower flight (0.9s -> 2.1s)
@@ -317,7 +302,7 @@ export type SeatHallProps = {
   className?: string
   /** @default 'off' — see the doc comment above `SeatHallHoverMode`. */
   hoverMode?: SeatHallHoverMode
-  /** @default false — see `generateBurst`'s doc comment. */
+  /** @default false — see `generateScatter`'s own doc comment for why this reuses the entrance's `SCATTER` points as its target rather than a separate, smaller generator. */
   scrollBurst?: boolean
 }
 
@@ -618,8 +603,8 @@ export function SeatHall({
         >
           {SEATS.map((s, i) => {
             const hover = hoverOffsets[i]
-            const burstDx = scrolled ? BURST[i].x - s.cx : 0
-            const burstDy = scrolled ? BURST[i].y - s.cy : 0
+            const burstDx = scrolled ? SCATTER[i].x - s.cx : 0
+            const burstDy = scrolled ? SCATTER[i].y - s.cy : 0
             return (
               <SeatCircle
                 key={i}
