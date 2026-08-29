@@ -4,11 +4,9 @@
  * + `pillarCardsField()` from src/payload/fields/globalSections.ts.
  *
  * One documented divergence from `pillarCardsField()`: that field models a
- * single `linkLabel`/`linkHref` pair per card, but the mockup's "Talk to
- * us" card renders two CTAs (an email button and a Facebook button). This
- * fixture's `JoinCard.links` is an array to capture that — flagged in this
- * agent's final report as a schema gap for `pillarCardsField()` to consider
- * (e.g. a repeatable `links` sub-array) once Payload data replaces this file.
+ * single `linkLabel`/`linkHref` pair per card — flagged in this agent's
+ * final report as a schema gap for `pillarCardsField()` to consider (e.g. a
+ * repeatable `links` sub-array) once Payload data replaces this file.
  *
  * The closing pull-quote banner has no dedicated field anywhere in the
  * schema; it's modeled here as a `sectionIntros`-shaped entry
@@ -31,19 +29,13 @@ export type JoinCard = {
   title: Localized
   body: Localized
   links: JoinCtaLink[]
-  /** In-page anchor id for the "contact" card only — the mockup uses two different ids per locale (`contact` / `contact-en`). */
-  anchorId?: Localized<string>
 }
 
-export const joinHero: { eyebrow: Localized; title: Localized; lead: Localized } = {
+export const joinHero: { eyebrow: Localized; title: Localized } = {
   eyebrow: { he: 'בואו לקחת חלק', en: 'TAKE PART' },
   title: {
     he: 'השינוי לא יקרה בלעדייך.',
     en: "Change won't happen without you.",
-  },
-  lead: {
-    he: 'יש הרבה דרכים להיות חלק מנבחרות, להצטרף לתוכנית המנהיגות, לפעול בשטח, לעקוב ולשתף, או לתמוך בפעילות. כל אחת מהן מקרבת את היום שבו נשים חרדיות יושבות ליד השולחן.',
-    en: 'There are many ways to be part of Nivcharot, join the leadership program, act on the ground, follow and share, or support the work. Each one brings closer the day Haredi women sit at the table.',
   },
 }
 
@@ -53,16 +45,13 @@ export const joinCards: JoinCard[] = [
     number: '01',
     title: { he: 'להצטרף לנבחרת', en: 'Join HaNivcheret' },
     body: {
-      he: 'מחזור חדש של תוכנית המנהיגות נפתח מדי שנה. ספרי לנו על עצמך ונחזור אלייך לקראת פתיחת ההרשמה.',
-      en: "A new leadership cohort opens every year. Tell us about yourself and we'll get back to you when registration opens.",
+      he: 'תוכנית המנהיגות פתוחה לנשים חרדיות מכל רחבי הארץ. מחזור חדש נפתח מדי שנה — השאירי פרטים בטופס ונחזור אלייך לקראת פתיחת ההרשמה.',
+      en: "The leadership program is open to Haredi women from across the country. A new cohort opens every year — leave your details in the form and we'll get back to you when registration opens.",
     },
     links: [
       {
-        label: { he: 'כתבי לנו', en: 'Write to us' },
-        href: {
-          he: 'mailto:estish@nivcharot.com?subject=' + encodeURIComponent('הצטרפות לתוכנית הנבחרת'),
-          en: 'mailto:estish@nivcharot.com?subject=' + encodeURIComponent('Joining HaNivcheret'),
-        },
+        label: { he: 'לטופס ההרשמה', en: 'To the sign-up form' },
+        href: { he: '/he/hanivcheret#apply', en: '/en/hanivcheret#apply' },
         variant: 'primary',
       },
     ],
@@ -108,33 +97,25 @@ export const joinCards: JoinCard[] = [
       },
     ],
   },
-  {
-    id: 'contact',
-    number: '04',
-    title: { he: 'לדבר איתנו', en: 'Talk to us' },
-    body: {
-      he: 'עיתונאיות, חוקרים, רשויות וארגונים, נשמח לשתף פעולה. וגם סתם לשמוע מכן.',
-      en: "Journalists, researchers, institutions and organizations, we're glad to collaborate. Or just say hello.",
-    },
-    anchorId: { he: 'contact', en: 'contact-en' },
-    links: [
-      {
-        label: { he: 'estish@nivcharot.com', en: 'estish@nivcharot.com' },
-        href: { he: 'mailto:estish@nivcharot.com', en: 'mailto:estish@nivcharot.com' },
-        variant: 'secondary',
-      },
-      {
-        label: { he: 'פייסבוק', en: 'Facebook' },
-        href: {
-          he: 'https://www.facebook.com/NoVoiceNoVote/',
-          en: 'https://www.facebook.com/NoVoiceNoVote/',
-        },
-        variant: 'ghost',
-        external: true,
-      },
-    ],
-  },
 ]
+
+/**
+ * The page's closing "talk to us" band (2026-08-29 brief) — replaces what
+ * used to be a fourth grid card (a "journalists, researchers, institutions"
+ * blurb plus a bare mailto link). It now holds a real `ContactForm` (the
+ * same one `/contact` uses, saved into the `inquiries` collection) and the
+ * site's own follow row, so it earns a full-width section instead of a
+ * quarter of a 4-card grid.
+ */
+export const joinTalkToUs = {
+  eyebrow: { he: 'לדבר איתנו', en: 'TALK TO US' } satisfies Localized,
+  title: { he: 'יש לך שאלה, או רעיון?', en: 'Have a question, or an idea?' } satisfies Localized,
+  lead: {
+    he: 'שיתוף פעולה, הצעה, או סתם רצית להגיד שלום — מלאו את הטופס ונחזור אליכן.',
+    en: "A collaboration, a suggestion, or just wanted to say hello — fill out the form and we'll get back to you.",
+  } satisfies Localized,
+  followHeading: { he: 'בואו לעקוב, עשו לייק', en: 'FOLLOW US, HIT LIKE' } satisfies Localized,
+}
 
 /** The closing accent-red pull-quote banner. */
 export const joinQuote: Localized = {

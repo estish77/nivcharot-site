@@ -58,7 +58,16 @@ export function ApplySection({ locale }: { locale: Locale }) {
         </Section>
       </Reveal>
 
-      <Reveal as="section">
+      {/*
+        `id="apply"` is the anchor the Join page's "join-program" card links
+        to (`/hanivcheret#apply`) so applying doesn't rely on a mailto click
+        — see src/content/join.ts. The scroll-margin accounts for the sticky
+        Header PLUS `SiteNotice` above it (see Header.tsx's own `top: var(
+        --site-notice-height, 0px)`) — a static px value here landed the
+        section head underneath both, since their combined height is ~146px,
+        not just the header's own ~108px.
+      */}
+      <Reveal as="section" id="apply" style={{ scrollMarginBlockStart: 'calc(var(--site-notice-height, 0px) + 128px)' }}>
         <Section as="div" tint="tint-cream" maxWidth={1240} borderBlock paddingBlockStart="48px" paddingBlockEnd="56px">
           <SectionHead
             eyebrow={t(locale, hanivcheretApply.eyebrow)}

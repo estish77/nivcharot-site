@@ -2,11 +2,12 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 import { ContactForm } from '@/components/contact/ContactForm'
-import { Eyebrow, Reveal, Section, SocialLinksRow, type SocialLinkItem } from '@/components/ui'
+import { Eyebrow, Reveal, Section, SocialLinksRow } from '@/components/ui'
 import { contactDirect, contactEmail, contactHero } from '@/content/contact'
 import { getSiteSettings } from '@/lib/cms'
 import { isLocale, locales, t } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
+import { buildFollowLinks } from '@/lib/socialLinks'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -37,16 +38,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const inbox = siteSettings.contactEmail || contactEmail
 
   // Same dashboard-editable source the footer and the media page read.
-  // Labels name the account rather than just the platform, so the two
-  // Instagram links don't end up with identical accessible names.
-  const socialLinks: SocialLinkItem[] = [
-    { network: 'facebook', href: siteSettings.social.facebook!, label: t(locale, { he: 'פייסבוק · נבחרות', en: 'Facebook · Nivcharot' }) },
-    { network: 'instagram', href: siteSettings.social.instagram!, label: t(locale, { he: 'אינסטגרם · נבחרות', en: 'Instagram · Nivcharot' }) },
-    { network: 'youtube', href: siteSettings.social.youtube!, label: t(locale, { he: 'יוטיוב · חרדית מדוברת', en: 'YouTube · Haredit Meduberet' }) },
-    { network: 'spotify', href: siteSettings.social.spotify!, label: t(locale, { he: 'ספוטיפיי · חרדית מדוברת', en: 'Spotify · Haredit Meduberet' }) },
-    { network: 'applePodcasts', href: siteSettings.social.applePodcasts!, label: t(locale, { he: 'אפל פודקאסטס · חרדית מדוברת', en: 'Apple Podcasts · Haredit Meduberet' }) },
-    { network: 'instagram', href: siteSettings.social.podcastInstagram!, label: t(locale, { he: 'אינסטגרם · חרדית מדוברת', en: 'Instagram · Haredit Meduberet' }) },
-  ]
+  const socialLinks = buildFollowLinks(siteSettings, locale)
 
   return (
     <Reveal as="section">

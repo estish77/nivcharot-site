@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 import { JoinPageContent } from '@/components/join/JoinPageContent'
-import { joinHero } from '@/content/join'
 import { isLocale, locales, t } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
 
@@ -23,7 +22,10 @@ export async function generateMetadata({
     locale,
     path: '/join',
     title: t(locale, { he: 'הצטרפות', en: 'Get involved' }),
-    description: t(locale, joinHero.lead),
+    description: t(locale, {
+      he: 'יש הרבה דרכים להיות חלק מנבחרות: להצטרף לתוכנית המנהיגות, לתמוך בפעילות, להישאר בקשר, או פשוט לדבר איתנו.',
+      en: 'There are many ways to be part of Nivcharot: join the leadership program, support the work, stay in touch, or just talk to us.',
+    }),
   })
 }
 
