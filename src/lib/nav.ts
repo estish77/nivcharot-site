@@ -17,12 +17,17 @@ import type { Locale } from '@/lib/i18n'
  * against the actual routes produced by `next build`.
  *
  * 2026-08-29 brief: the last slot — "צרו קשר"/Contact — now points at the
- * already-built `/join` page ("בואו לקחת חלק"/Get involved) instead of
+ * already-built `/join` page ("דברו איתנו"/Talk to us) instead of
  * `/contact`, since `/join` had no way to reach it from the nav. The email
  * address that lived at the bottom of the contact page is still reachable —
  * it's the footer's mailto icon (`Footer.tsx`'s `buildNivcharotLinks`) —
  * so removing this nav entry doesn't remove access to it. The `/contact`
  * route/form itself is untouched, just unlinked from primary nav.
+ *
+ * 2026-08-29 (later same day): that slot's own label changed again, from
+ * "בואו לקחת חלק"/Get involved to "דברו איתנו"/Talk to us — same
+ * destination, matching the wording already used for the page's own
+ * contact-form section (`joinTalkToUs.eyebrow` in `src/content/join.ts`).
  */
 export function navLinksFor(locale: Locale): NavLink[] {
   return [
@@ -47,6 +52,6 @@ export function navLinksFor(locale: Locale): NavLink[] {
     },
     { label: { he: 'תקשורת ומדיה', en: 'Media & Archive' }, href: `/${locale}/media` },
     { label: { he: 'תרומה', en: 'Donate' }, href: `/${locale}/donate` },
-    { label: { he: 'בואו לקחת חלק', en: 'Get involved' }, href: `/${locale}/join` },
+    { label: { he: 'דברו איתנו', en: 'Talk to us' }, href: `/${locale}/join` },
   ]
 }

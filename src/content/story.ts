@@ -374,7 +374,7 @@ export const storyContent = {
 
   cta: {
     title: { he: `ועוד ארוכה הדרך.`, en: `The road is still long.` } satisfies Localized,
-    buttonLabel: { he: `בואו לקחת חלק`, en: `Take part` } satisfies Localized,
+    buttonLabel: { he: `דברו איתנו`, en: `Talk to us` } satisfies Localized,
     hrefSlug: `/join`,
   },
 

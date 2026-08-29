@@ -32,7 +32,7 @@ export type JoinCard = {
 }
 
 export const joinHero: { eyebrow: Localized; title: Localized } = {
-  eyebrow: { he: 'בואו לקחת חלק', en: 'TAKE PART' },
+  eyebrow: { he: 'דברו איתנו', en: 'TALK TO US' },
   title: {
     he: 'השינוי לא יקרה בלעדייך.',
     en: "Change won't happen without you.",
