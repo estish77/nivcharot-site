@@ -59,8 +59,22 @@ const RING_RADII = [140, 185, 230, 275, 320, 365, 410, 455] as const
 const RING_SIZE = 30
 const RING_SHIFT = 2
 const LIGHT_RADIUS = 110
-/** Matches the `max-[860px]:` breakpoint the hall's own wrapper (and the rest of the site) uses for its mobile layout — see the rotated `<div>` wrapper in the render below. */
-const MOBILE_BREAKPOINT_QUERY = '(max-width: 860px)'
+/**
+ * Matches the `max-[640px]:` breakpoint the hall's own wrapper uses for its
+ * rotated-portrait treatment below — see the rotated `<div>` wrapper in the
+ * render below.
+ *
+ * 2026-08-29 brief: this used to match the Hero's own `max-[860px]:` column
+ * collapse (and the rest of the site's mobile breakpoint), but a real iPad
+ * (768px portrait) sits inside that range too — wide enough that "rotate
+ * the landscape hall 90deg and render it at 200% width to fill a portrait
+ * box" produced a ~689x1377px block, taller than the viewport itself. 640px
+ * (the same phone cutoff `Header.tsx` and others already use) keeps that
+ * treatment for genuinely narrow phones only; an iPad now gets the hall's
+ * ordinary desktop-style landscape sizing, just inside the Hero's still-
+ * single-column layout at that width (unrelated to this hall-specific fix).
+ */
+const MOBILE_BREAKPOINT_QUERY = '(max-width: 640px)'
 const AMBIENT_INTERVAL_MS = 1100
 const LETTER_INTERVAL_MS = 130
 const LETTER_HOLD_TICKS = 22
@@ -438,10 +452,10 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
       aria-label={ariaLabel[locale]}
       onPointerMove={handlePointerMove}
       onPointerEnter={handlePointerMove}
-      className={cn('relative w-full cursor-crosshair max-[860px]:aspect-[1/2] max-[860px]:overflow-hidden', className)}
+      className={cn('relative w-full cursor-crosshair max-[640px]:aspect-[1/2] max-[640px]:overflow-hidden', className)}
     >
       {/*
-        Below 860px this inner wrapper is rotated -90deg so the (otherwise
+        Below 640px this inner wrapper is rotated -90deg so the (otherwise
         landscape, 1000x500-viewBox) hall reads portrait on narrow screens.
         The "reserve the rotated footprint" trick: the outer `<div>` above
         reserves the FINAL portrait box (`aspect-[1/2]`), while this wrapper
@@ -449,7 +463,7 @@ export function SeatHall({ locale, ariaLabel, sentence, className }: SeatHallPro
         exactly so that once rotated 90deg, its footprint (width becomes the
         old height, height becomes the old width) fills that portrait box.
       */}
-      <div className="max-[860px]:absolute max-[860px]:left-1/2 max-[860px]:top-1/2 max-[860px]:w-[200%] max-[860px]:-translate-x-1/2 max-[860px]:-translate-y-1/2 max-[860px]:rotate-[-90deg]">
+      <div className="max-[640px]:absolute max-[640px]:left-1/2 max-[640px]:top-1/2 max-[640px]:w-[200%] max-[640px]:-translate-x-1/2 max-[640px]:-translate-y-1/2 max-[640px]:rotate-[-90deg]">
         <svg
           ref={svgRef}
           viewBox="0 0 1000 500"
