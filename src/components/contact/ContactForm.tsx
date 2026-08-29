@@ -66,7 +66,7 @@ export function ContactForm({ locale }: ContactFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex max-w-[560px] flex-col gap-5">
+    <form onSubmit={handleSubmit} noValidate className="flex max-w-[560px] flex-col gap-4">
       <div className="absolute h-px w-px overflow-hidden" aria-hidden="true">
         <label htmlFor="niv-contact-website">Leave this field empty</label>
         <input
@@ -79,7 +79,7 @@ export function ContactForm({ locale }: ContactFormProps) {
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1">
         <label htmlFor="niv-contact-name" className="font-heading text-[13px] font-extrabold tracking-[0.04em] text-neutral-700">
           {t(locale, contactForm.nameLabel)}
         </label>
@@ -92,11 +92,11 @@ export function ContactForm({ locale }: ContactFormProps) {
             setName(event.target.value)
             if (error) setError(null)
           }}
-          className="w-full border-2 border-divider bg-white px-4 py-[13px] text-[15px] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="w-full border-2 border-divider bg-white px-4 py-[11px] text-[15px] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1">
         <label htmlFor="niv-contact-email" className="font-heading text-[13px] font-extrabold tracking-[0.04em] text-neutral-700">
           {t(locale, contactForm.emailLabel)}
         </label>
@@ -112,23 +112,23 @@ export function ContactForm({ locale }: ContactFormProps) {
             if (error) setError(null)
           }}
           aria-invalid={error === 'email'}
-          className="w-full border-2 border-divider bg-white px-4 py-[13px] text-[15px] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="w-full border-2 border-divider bg-white px-4 py-[11px] text-[15px] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
       </div>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1">
         <label htmlFor="niv-contact-message" className="font-heading text-[13px] font-extrabold tracking-[0.04em] text-neutral-700">
           {t(locale, contactForm.messageLabel)}
         </label>
         <textarea
           id="niv-contact-message"
-          rows={6}
+          rows={5}
           value={message}
           onChange={(event) => {
             setMessage(event.target.value)
             if (error) setError(null)
           }}
-          className="w-full resize-y border-2 border-divider bg-white px-4 py-[13px] text-[15px] leading-[1.6] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="w-full resize-y border-2 border-divider bg-white px-4 py-[11px] text-[15px] leading-[1.6] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
       </div>
 

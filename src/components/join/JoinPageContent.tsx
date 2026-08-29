@@ -7,7 +7,7 @@ import { SectionHead } from '@/components/ui/SectionHead'
 import { SocialLinksRow } from '@/components/ui/SocialLinks'
 import { getSiteSettings } from '@/lib/cms'
 import { t, type Locale } from '@/lib/i18n'
-import { buildFollowLinks } from '@/lib/socialLinks'
+import { buildHareditLinks, buildNivcharotLinks } from '@/lib/socialLinks'
 import { joinCards, joinHero, joinQuote, joinTalkToUs } from '@/content/join'
 import { JoinCard } from './JoinCard'
 
@@ -26,7 +26,8 @@ export type JoinPageContentProps = { locale: Locale }
  */
 export async function JoinPageContent({ locale }: JoinPageContentProps) {
   const siteSettings = await getSiteSettings()
-  const followLinks = buildFollowLinks(siteSettings, locale)
+  const nivcharotLinks = buildNivcharotLinks(siteSettings, locale)
+  const hareditLinks = buildHareditLinks(siteSettings, locale)
 
   return (
     <>
@@ -53,12 +54,19 @@ export async function JoinPageContent({ locale }: JoinPageContentProps) {
           titleClassName="text-[clamp(26px,3.2vw,36px)]"
           className="mb-8"
         />
-        <SocialLinksRow
-          heading={t(locale, joinTalkToUs.followHeading)}
-          links={followLinks}
-          className="mb-10 border-b-2 border-divider pb-7"
-        />
-        <ContactForm locale={locale} />
+        <div className="mb-10 border-2 border-divider bg-tint-cream px-6 py-6 max-[640px]:px-4 max-[640px]:py-5">
+          <p className="mb-4 max-w-[640px] text-[14px] leading-[1.7] text-neutral-800">
+            {t(locale, joinTalkToUs.followIntro)}
+          </p>
+          <div className="flex flex-col gap-4 min-[560px]:flex-row min-[560px]:items-start min-[560px]:gap-10">
+            <SocialLinksRow heading={t(locale, joinTalkToUs.followNivcharot)} links={nivcharotLinks} />
+            <SocialLinksRow heading={t(locale, joinTalkToUs.followHaredit)} links={hareditLinks} />
+          </div>
+        </div>
+
+        <div className="max-w-[520px] border-2 border-divider bg-white px-6 py-7 max-[640px]:px-5 max-[640px]:py-6">
+          <ContactForm locale={locale} />
+        </div>
       </Reveal>
 
       <Reveal as="section" className="bg-accent">

@@ -20,7 +20,8 @@ export function JoinCard({ card, locale }: JoinCardProps) {
         {t(locale, card.title)}
       </h3>
       <p className="mb-[14px] text-sm leading-[1.65] text-neutral-800">{t(locale, card.body)}</p>
-      <div className="flex flex-wrap gap-3">
+      {/* `mt-auto` pushes the button(s) to the card's foot regardless of body length, so all three cards' buttons line up across the row. */}
+      <div className="mt-auto flex flex-wrap gap-3">
         {card.links.map((link) => (
           <Button key={t(locale, link.label)} href={t(locale, link.href)} variant={link.variant}>
             {t(locale, link.label)}

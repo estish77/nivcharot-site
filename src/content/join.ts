@@ -45,8 +45,8 @@ export const joinCards: JoinCard[] = [
     number: '01',
     title: { he: 'להצטרף לנבחרת', en: 'Join HaNivcheret' },
     body: {
-      he: 'תוכנית המנהיגות פתוחה לנשים חרדיות מכל רחבי הארץ. מחזור חדש נפתח מדי שנה — השאירי פרטים בטופס ונחזור אלייך לקראת פתיחת ההרשמה.',
-      en: "The leadership program is open to Haredi women from across the country. A new cohort opens every year — leave your details in the form and we'll get back to you when registration opens.",
+      he: 'תוכנית המנהיגות פתוחה לנשים חרדיות מכל רחבי הארץ. מחזור חדש נפתח מדי שנה. השאירי פרטים בטופס ונחזור אלייך לקראת פתיחת ההרשמה.',
+      en: "The leadership program is open to Haredi women from across the country. A new cohort opens every year. Leave your details in the form and we'll get back to you when registration opens.",
     },
     links: [
       {
@@ -111,10 +111,21 @@ export const joinTalkToUs = {
   eyebrow: { he: 'לדבר איתנו', en: 'TALK TO US' } satisfies Localized,
   title: { he: 'יש לך שאלה, או רעיון?', en: 'Have a question, or an idea?' } satisfies Localized,
   lead: {
-    he: 'שיתוף פעולה, הצעה, או סתם רצית להגיד שלום — מלאו את הטופס ונחזור אליכן.',
-    en: "A collaboration, a suggestion, or just wanted to say hello — fill out the form and we'll get back to you.",
+    he: 'שיתוף פעולה, הצעה, או סתם רצית להגיד שלום? מלאו את הטופס ונחזור אליכן.',
+    en: "A collaboration, a suggestion, or just want to say hi? Fill out the form and we'll get back to you.",
   } satisfies Localized,
-  followHeading: { he: 'בואו לעקוב, עשו לייק', en: 'FOLLOW US, HIT LIKE' } satisfies Localized,
+  /**
+   * Intro line above the two follow-link groups (2026-08-29 brief: "כתבו
+   * טקסט מזמין לבוא לעקוב ולהביע תמיכה") — an invitation to follow and
+   * show support, not just a bare "follow us" label.
+   */
+  followIntro: {
+    he: 'כל עוקבת, כל לייק וכל שיתוף עוזרים לקול שלנו להישמע רחוק יותר. בואו לעקוב ולהראות תמיכה.',
+    en: 'Every follower, every like and every share helps our voice carry further. Come follow us and show your support.',
+  } satisfies Localized,
+  /** Sub-headings for the two separated follow-link groups (see `buildNivcharotLinks`/`buildHareditLinks`). */
+  followNivcharot: { he: 'נבחרות', en: 'Nivcharot' } satisfies Localized,
+  followHaredit: { he: 'חרדית מדוברת', en: 'Haredit Meduberet' } satisfies Localized,
 }
 
 /** The closing accent-red pull-quote banner. */
