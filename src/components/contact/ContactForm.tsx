@@ -12,11 +12,12 @@ export type ContactFormProps = { locale: Locale }
 /**
  * Submits to Payload's `inquiries` collection (POST /api/inquiries) so
  * every message is durably saved and visible in the admin dashboard, even
- * on a device with no mail client configured. There's still no outbound-
- * email adapter wired up (see .env.example) — that needs a real SMTP/ESP
- * provider, a separate decision — so this doesn't auto-reply or forward
- * anything yet; an editor has to check the dashboard. `website` is a
- * honeypot the real fields don't use; see Inquiries.ts for why.
+ * if outbound email is ever down. Production has SMTP configured (2026-08-29
+ * — see .env.example), so `Inquiries.ts`'s `afterChange` hook also forwards
+ * every new submission to `CONTACT_INBOX` (estish@nivcharot.com) — but that
+ * forward is a best-effort extra, not something this form waits on or
+ * surfaces: a mail outage never blocks or fails the visitor's submission.
+ * `website` is a honeypot the real fields don't use; see Inquiries.ts for why.
  */
 export function ContactForm({ locale }: ContactFormProps) {
   const [name, setName] = useState('')
