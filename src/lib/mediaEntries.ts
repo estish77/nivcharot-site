@@ -29,6 +29,23 @@ import { t, type Locale, type Localized } from '@/lib/i18n'
  * languages so a Hebrew visitor still finds an English-titled piece, which
  * is the only place the other locale was actually being used.
  */
+/*
+ * Our own YouTube channel is not an outlet worth citing on our own site
+ * (2026-08-29: "it's just our YouTube channel, there's no need to quote
+ * it"). The provenance stays in the data — it is true, and the search index
+ * still uses it — but nothing on the page credits us as our own source.
+ *
+ * Applied here rather than by blanking the field, because `host` is
+ * required on the `elsewhere-media` collection and the value also arrives
+ * from the CMS, where an editor could type it again.
+ */
+const OWN_CHANNEL = /^\s*מדיה\s+נבחרות/
+
+function outletOf(host: string | undefined): string {
+  const value = (host ?? '').trim()
+  return OWN_CHANNEL.test(value) ? '' : value
+}
+
 export type MediaGroup = 'press' | 'watch' | 'archive'
 
 export type MediaFacet = { slug: string; name: string }
@@ -149,7 +166,7 @@ function elsewhereEntry(item: ElsewhereMediaItem, locale: Locale): MediaEntry {
     title: t(locale, item.title),
     summary: t(locale, item.summary),
     paragraphs: [],
-    outlet: item.host,
+    outlet: outletOf(item.host),
     dateLabel: t(locale, item.dateLabel),
     sortDate: item.sortDate,
     year: Number(item.sortDate.slice(0, 4)),

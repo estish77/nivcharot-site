@@ -1,4 +1,5 @@
 import { Cell, CellGrid, Reveal, Section, SectionHead } from '@/components/ui'
+import { getTeamMembers } from '@/lib/cms'
 import { t, type Locale, type Localized } from '@/lib/i18n'
 
 /**
@@ -20,6 +21,17 @@ import { t, type Locale, type Localized } from '@/lib/i18n'
  */
 type Voice = {
   videoId: string
+  /**
+   * This person's Hebrew name in the `team-members` collection, when she
+   * appears there. The role printed under her clip is then read from the
+   * team page rather than written out a second time here — the two used to
+   * disagree, because the roles in the dashboard are edited and these were
+   * not (2026-08-29: "compare them to what the team page says").
+   *
+   * Left unset for speakers who aren't on the team page; those fall back to
+   * the `role` below.
+   */
+  teamName?: string
   /**
    * Real name. Localized only to transliterate it: the English page was
    * printing Hebrew names among English text, and every other name on the
@@ -43,6 +55,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'evf1KvUDZL4',
+    teamName: 'לאה שיינברום',
     name: { he: 'לאה שיינברום', en: 'Leah Shainbrom' },
     role: { he: 'עובדת סוציאלית ופעילה חברתית בנבחרות', en: 'Social worker and Nivcharot activist' },
     topic: {
@@ -52,6 +65,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'X_cyqJsiFAo',
+    teamName: 'ציפי לביא',
     name: { he: 'ציפי לביא', en: 'Tzipi Lavi' },
     role: { he: 'אקטיביסטית חרדית בנבחרות', en: 'Haredi activist with Nivcharot' },
     topic: {
@@ -61,6 +75,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'V3RKW7y86s4',
+    teamName: 'רעיה מרי',
     name: { he: 'רעיה חתוכה מרי', en: 'Raaya Hatuka Mari' },
     role: { he: 'מנהלת הפרויקטים בנבחרות', en: 'Projects manager at Nivcharot' },
     topic: {
@@ -79,6 +94,7 @@ const VOICES: Voice[] = [
   },
   {
     videoId: 'cU8WSUgdAp0',
+    teamName: 'אפרת שוקרון',
     name: { he: 'אפרת שוקרון', en: 'Efrat Shukrun' },
     role: { he: 'פעילת נבחרות', en: 'Nivcharot activist' },
     topic: {
@@ -92,12 +108,17 @@ const sectionText = {
   eyebrow: { he: 'קולות מהשטח', en: 'VOICES FROM THE FIELD' } satisfies Localized,
   title: { he: 'נשים מנבחרות מדברות', en: 'Women of Nivcharot, speaking' } satisfies Localized,
   lead: {
-    he: 'פעילות נבחרות בוועדות הכנסת, בכנסים ובאולפנים, מציגות את הדברים בעצמן. מתוך ערוץ המדיה של נבחרות.',
-    en: "Nivcharot activists at Knesset committees, conferences and studios, making the case themselves. From Nivcharot's own media channel.",
+    he: 'פעילות נבחרות בוועדות הכנסת, בכנסים ובאולפנים, מציגות את הדברים בעצמן.',
+    en: 'Nivcharot activists at Knesset committees, conferences and studios, making the case themselves.',
   } satisfies Localized,
 }
 
-export function NivcharotVoicesSection({ locale }: { locale: Locale }) {
+export async function NivcharotVoicesSection({ locale }: { locale: Locale }) {
+  // Roles come from the team collection where the speaker appears there, so
+  // editing someone's role in /admin updates it here too.
+  const team = await getTeamMembers()
+  const roleByName = new Map(team.map((member) => [member.name.he, member.role]))
+
   return (
     <Reveal as="section">
       <Section as="div" maxWidth={1240} borderBlockStart paddingBlockStart="48px" paddingBlockEnd="52px">
@@ -123,7 +144,7 @@ export function NivcharotVoicesSection({ locale }: { locale: Locale }) {
               </div>
               <h3 className="text-[18px] leading-[1.3]">{t(locale, voice.name)}</h3>
               <p className="m-0 font-heading text-[11.5px] font-extrabold tracking-[0.04em] text-accent-700">
-                {t(locale, voice.role)}
+                {t(locale, (voice.teamName ? roleByName.get(voice.teamName) : undefined) ?? voice.role)}
               </p>
               <p className="m-0 text-[14px] leading-[1.65] text-neutral-800">{t(locale, voice.topic)}</p>
             </Cell>

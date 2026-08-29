@@ -37,7 +37,6 @@ export const hanivcheretHero = {
    * literal h1 was already just "HaNivcheret" with no equivalent tagline,
    * so there's nothing to restore on that side.
    */
-  titleSrOnlySuffix: { he: 'עתודת מנהיגות חרדיות, מבית תנועת נבחרות', en: '' } satisfies Localized,
   /**
    * The two body paragraphs genuinely differ in length between locales in
    * the source (English carries an extra "no open registration right now"

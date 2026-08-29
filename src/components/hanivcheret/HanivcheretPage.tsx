@@ -101,11 +101,13 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
                 page has a valid h1 (the source's image-only hero left the
                 page with none).
               */}
+              {/*
+                The sr-only suffix that used to sit here said "עתודת מנהיגות
+                חרדיות" — which the visible title now says itself, so a
+                screen reader was reading it twice.
+              */}
               <h1 className="mb-[26px] max-w-[470px] text-[clamp(38px,5vw,60px)] leading-[1.05]">
                 {hero.title}
-                {locale === 'he' ? (
-                  <span className="sr-only">, {t(locale, hanivcheretHero.titleSrOnlySuffix)}</span>
-                ) : null}
               </h1>
               <p className="mb-3 max-w-[600px] text-[17.5px] leading-[1.7] text-niv-slate">
                 {hero.body}
