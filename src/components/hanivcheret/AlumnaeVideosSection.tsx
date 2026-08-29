@@ -49,7 +49,12 @@ export const alumnaeFeatureVideo = {
 
 const alumnaeVideosSection = {
   eyebrow: { he: 'בוגרות בוידאו', en: 'ALUMNAE ON VIDEO' } satisfies Localized,
-  title: { he: 'לשמוע אותן מספרות', en: 'Hear them tell it' } satisfies Localized,
+  /** 2026-08-29 brief: replaces the old "לשמוע אותן מספרות" title with a real title + lead pair. */
+  title: { he: 'נשים מנבחרות מדברות', en: 'Women of Nivcharot, speaking' } satisfies Localized,
+  lead: {
+    he: 'פעילות נבחרות בוועדות הכנסת, בכנסים ובאולפנים, מציגות את הדברים בעצמן.',
+    en: 'Nivcharot activists at Knesset committees, conferences and studios, making the case themselves.',
+  } satisfies Localized,
   comingSoonLabel: {
     he: 'בקרוב: ראיונות וידאו עם בוגרות התוכנית, מספרות בעצמן',
     en: 'Coming soon: video interviews with program alumnae, in their own words',
@@ -82,6 +87,7 @@ export function AlumnaeVideosSection({ locale }: { locale: Locale }) {
           className="mb-6"
           eyebrow={t(locale, alumnaeVideosSection.eyebrow)}
           title={t(locale, alumnaeVideosSection.title)}
+          lead={t(locale, alumnaeVideosSection.lead)}
         />
         <div className="mb-7 aspect-video w-full border-2 border-niv-slate bg-[#141210]">
           <iframe
