@@ -6,21 +6,23 @@ import type { Locale } from '@/lib/i18n'
  * `niv-menu.js` — the mockups' own nav data source — is missing from the
  * repo (flagged by both the scaffold and shared-UI agents), so this used to
  * be a from-scratch, on-theme UI-chrome addition rather than a ported
- * value. The order, Hebrew labels, and "צרו קשר"/Contact entry now match a
- * screenshot of the design tool's own mobile-menu preview (the actual,
- * previously-unrecoverable niv-menu.js content) — see the site owner's
- * 2026-08-13 review. English labels for "פעילות ומשפט" and "תקשורת ומדיה"
- * weren't visible in that screenshot (it was showing the Hebrew branch), so
- * they reuse this project's own already-established English copy for those
- * pages (`activismHero.eyebrow`, media/page.tsx's `generateMetadata` title)
- * rather than inventing new phrasing. "הצטרפות"/Join was dropped from the
- * nav entirely (not present in the reference screenshot) even though the
- * route itself still exists — reachable via its own page's CTAs instead.
- * Every `href` below is verified against the actual routes produced by
- * `next build`. "צרו קשר"/Contact points at the real `/contact` page (site
- * owner brief item 36) rather than a bare `mailto:` — that page's own form
- * still hands off to mailto under the hood, but a real page is a better nav
- * destination than jumping straight to the visitor's mail client.
+ * value. The order and Hebrew labels originally matched a screenshot of the
+ * design tool's own mobile-menu preview (the actual, previously-unrecoverable
+ * niv-menu.js content) — see the site owner's 2026-08-13 review. English
+ * labels for "פעילות ומשפט" and "תקשורת ומדיה" weren't visible in that
+ * screenshot (it was showing the Hebrew branch), so they reuse this
+ * project's own already-established English copy for those pages
+ * (`activismHero.eyebrow`, media/page.tsx's `generateMetadata` title)
+ * rather than inventing new phrasing. Every `href` below is verified
+ * against the actual routes produced by `next build`.
+ *
+ * 2026-08-29 brief: the last slot — "צרו קשר"/Contact — now points at the
+ * already-built `/join` page ("בואו לקחת חלק"/Get involved) instead of
+ * `/contact`, since `/join` had no way to reach it from the nav. The email
+ * address that lived at the bottom of the contact page is still reachable —
+ * it's the footer's mailto icon (`Footer.tsx`'s `buildNivcharotLinks`) —
+ * so removing this nav entry doesn't remove access to it. The `/contact`
+ * route/form itself is untouched, just unlinked from primary nav.
  */
 export function navLinksFor(locale: Locale): NavLink[] {
   return [
@@ -45,6 +47,6 @@ export function navLinksFor(locale: Locale): NavLink[] {
     },
     { label: { he: 'תקשורת ומדיה', en: 'Media & Archive' }, href: `/${locale}/media` },
     { label: { he: 'תרומה', en: 'Donate' }, href: `/${locale}/donate` },
-    { label: { he: 'צרו קשר', en: 'Contact us' }, href: `/${locale}/contact` },
+    { label: { he: 'בואו לקחת חלק', en: 'Get involved' }, href: `/${locale}/join` },
   ]
 }

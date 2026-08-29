@@ -20,10 +20,18 @@ import { isAdminOrEditor } from '../access/isAdminOrEditor'
  * throws, so a mail outage or missing SMTP credentials can delay the
  * notification but can never lose the message or fail the visitor's
  * submission.
+ *
+ * 2026-08-29 brief: `/contact` was dropped from primary nav in favor of
+ * `/join` (see `src/lib/nav.ts`) — the page/form still work for anyone who
+ * lands on `/contact` directly, so submissions can still arrive here, but
+ * this is no longer a page editors are actively steering visitors to.
+ * Grouped under its own admin sidebar section for that reason, rather than
+ * removed — the data (and the collection itself) isn't going anywhere.
  */
 export const Inquiries: CollectionConfig = {
   slug: 'inquiries',
   admin: {
+    group: 'דפים לא בשימוש',
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'status', 'createdAt'],
     description: 'Messages submitted through the site contact form.',
