@@ -108,7 +108,7 @@ export const joinCards: JoinCard[] = [
  * quarter of a 4-card grid.
  */
 export const joinTalkToUs = {
-  eyebrow: { he: 'דברו איתנו', en: 'TALK TO US' } satisfies Localized,
+  eyebrow: { he: 'כתבו לנו', en: 'WRITE TO US' } satisfies Localized,
   title: { he: 'יש לך שאלה, או רעיון?', en: 'Have a question, or an idea?' } satisfies Localized,
   lead: {
     he: 'שיתוף פעולה, הצעה, או סתם רצית להגיד שלום? מלאו את הטופס ונחזור אליכן.',
