@@ -12,6 +12,7 @@ import { PodcastEpisodes } from './PodcastEpisodes'
 import { Posts } from './Posts'
 import { PressArchive } from './PressArchive'
 import { ProgramApplications } from './ProgramApplications'
+import { TeamAppreciations } from './TeamAppreciations'
 import { TeamMembers } from './TeamMembers'
 import { TimelineMilestones } from './TimelineMilestones'
 
@@ -32,6 +33,7 @@ import { TimelineMilestones } from './TimelineMilestones'
  * "הנבחרת" leadership programme's own sign-up form.
  */
 export const collections: CollectionConfig[] = [
+  TeamAppreciations,
   Media,
   Categories,
   Posts,

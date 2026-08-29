@@ -4,6 +4,7 @@ import * as migration_20260826_140531_add_events_summary from './20260826_140531
 import * as migration_20260826_155435_add_press_archive_home_excerpt from './20260826_155435_add_press_archive_home_excerpt';
 import * as migration_20260827_103725_backlog_2026_08_27 from './20260827_103725_backlog_2026_08_27';
 import * as migration_20260828_074727_program_applications from './20260828_074727_program_applications';
+import * as migration_20260829_121954_appreciations from './20260829_121954_appreciations';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260828_074727_program_applications.up,
     down: migration_20260828_074727_program_applications.down,
-    name: '20260828_074727_program_applications'
+    name: '20260828_074727_program_applications',
+  },
+  {
+    up: migration_20260829_121954_appreciations.up,
+    down: migration_20260829_121954_appreciations.down,
+    name: '20260829_121954_appreciations'
   },
 ];

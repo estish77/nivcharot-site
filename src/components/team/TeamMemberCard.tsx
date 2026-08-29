@@ -1,5 +1,8 @@
 import Image from 'next/image'
 
+import { AppreciateButton } from './AppreciateButton'
+
+import { Cell } from '@/components/ui/Cell'
 import { cn } from '@/components/ui/cn'
 import { ImageSlot } from '@/components/ui/ImageSlot'
 import { t, type Locale } from '@/lib/i18n'
@@ -25,6 +28,13 @@ export type TeamMemberCardProps = {
  * `figure:hover img { transform: scale(1.03) }` rule) + name (h3) + role
  * caption + bio paragraph.
  *
+ * Renders as a `Cell` — the site's existing bordered-grid unit (About,
+ * Home, Hanivcheret, Join, Shop, Activism all use the same one) — so a row
+ * of members reads as a row of cards, thin dividers between them, rather
+ * than photos floating loose on the page background. `TeamPageContent`
+ * must render these directly inside a `CellGrid` for the borders to land
+ * (they key off direct-child CSS selectors).
+ *
  * Uses `next/image` (not the shared `Figure`, which renders a plain
  * `<img>`) per this agent's assignment — photos hotlink to
  * www.nivcharot.co.il and need `images.remotePatterns` registered in
@@ -36,9 +46,17 @@ export type TeamMemberCardProps = {
  */
 export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCardProps) {
   const name = t(locale, member.name)
+  // Only for people who came from the CMS: `member.id` has to be the
+  // collection's own id for the vote to attach to anyone. The static
+  // fixture's ids are slugs like "esty-shushan", and the page falls back to
+  // it only when the collection is empty — nothing to thank yet in that case.
+  const canAppreciate = /^\d+$/.test(member.id)
 
   return (
-    <div className="flex flex-col">
+    <Cell
+      paddingBlockStart={compact ? '20px' : '24px'}
+      paddingBlockEnd={compact ? '18px' : '22px'}
+    >
       <div
         className={cn(
           'group relative overflow-hidden rounded-full',
@@ -72,10 +90,21 @@ export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCa
         {t(locale, member.role)}
       </p>
       {member.bio ? (
-        <p className={cn('m-0 leading-[1.6] text-neutral-800', compact ? 'text-[13px]' : 'text-[13.5px]')}>
+        <p className={cn('mb-2 leading-[1.6] text-neutral-800', compact ? 'text-[13px]' : 'text-[13.5px]')}>
           {t(locale, member.bio)}
         </p>
       ) : null}
-    </div>
+      {/*
+        `mt-auto` pushes this to the card's foot regardless of bio length —
+        `Cell` is a flex column, and CSS grid's default `align-items:
+        stretch` already makes every card in a row match the tallest one, so
+        the rule and heart line up across the whole row, not just per card.
+      */}
+      {canAppreciate ? (
+        <div className="mt-auto flex justify-center border-t border-divider pt-3.5">
+          <AppreciateButton memberId={member.id} memberName={name} locale={locale} />
+        </div>
+      ) : null}
+    </Cell>
   )
 }

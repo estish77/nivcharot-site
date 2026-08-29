@@ -113,6 +113,13 @@ const TRANSLATIONS = {
     // "נבחרותת" in the Hebrew is a typo for "נבחרות"; rendered correctly here.
     bio: 'A Haredi activist and influencer, formerly the organisation\'s projects and government-relations manager. Among other things she ran Nivcharot\'s "Haredot Shutafot" project. A graduate of HaNivcheret cohort 5.',
   },
+  'רחלי סלומון (מורגנשטרן)': {
+    // Created while /admin was on the English tab, so the English slots held
+    // her Hebrew text — name included.
+    name: 'Racheli Salomon (Morgenstern)',
+    role: 'Social and political activist',
+    bio: 'A counsellor for couples in second marriages, an actress and a social activist, one of the initiators of the Mamlachti-Haredi (state-Haredi) schooling project in Petah Tikva, a graduate of HaNivcheret cohort 1, and one of the first women to run for city council in 2018.',
+  },
   'לאה שיינברום': {
     role: 'Founder and community manager',
     bio: 'A clinical social worker (M.S.W.), emotional therapist and activist, founder of the "Si\'aH" groups. A graduate of HaNivcheret cohort 5.',
@@ -136,6 +143,7 @@ for (const doc of all.docs) {
     continue
   }
   const data = {}
+  if (t.name) data.name = t.name
   if (t.role) data.role = t.role
   if (t.bio) data.bio = textToLexical([t.bio], 'ltr')
   if (!Object.keys(data).length) continue

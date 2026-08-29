@@ -1,3 +1,4 @@
+import { CellGrid } from '@/components/ui/Cell'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Reveal } from '@/components/ui/Reveal'
 import { TabBar } from '@/components/ui/TabBar'
@@ -69,11 +70,11 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
         <h2 className="mb-[30px] max-[860px]:text-[clamp(24px,7vw,34px)]">
           {staff.length > 0 ? t(locale, teamMemberCategoryLabels.staff) : pageContent.intro.title}
         </h2>
-        <div className="grid grid-cols-3 gap-x-[26px] gap-y-8 max-[860px]:grid-cols-2 max-[560px]:grid-cols-1">
+        <CellGrid cols={3} bottomDivider className="border-2 border-divider">
           {(staff.length > 0 ? staff : visibleMembers).map((member) => (
             <TeamMemberCard key={member.id} member={member} locale={locale} />
           ))}
-        </div>
+        </CellGrid>
       </Reveal>
 
       {overTheYears.length > 0 ? (
@@ -84,11 +85,11 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
                 <h2 className="mb-7 text-[clamp(22px,2.7vw,30px)] max-[860px]:text-[clamp(20px,6vw,26px)]">
                   {t(locale, teamMemberCategoryLabels[category])}
                 </h2>
-                <div className="grid grid-cols-3 gap-x-[26px] gap-y-9 max-[860px]:grid-cols-2 max-[560px]:grid-cols-1">
+                <CellGrid cols={3} bottomDivider className="border-2 border-divider">
                   {members.map((member) => (
                     <TeamMemberCard key={member.id} member={member} locale={locale} compact />
                   ))}
-                </div>
+                </CellGrid>
               </div>
             ))}
           </div>

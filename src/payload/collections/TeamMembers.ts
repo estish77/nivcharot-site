@@ -16,7 +16,7 @@ export const TeamMembers: CollectionConfig = {
   admin: {
     group: 'People',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'role', 'category', 'active', 'order'],
+    defaultColumns: ['name', 'role', 'category', 'active', 'order', 'appreciations'],
   },
   access: {
     read: publishedOrAdmin({ active: { equals: true } }),
@@ -32,6 +32,24 @@ export const TeamMembers: CollectionConfig = {
     { name: 'role', type: 'text', required: true, localized: true },
     { name: 'bio', type: 'richText', localized: true },
     { name: 'photo', type: 'upload', relationTo: 'media' },
+    {
+      /*
+       * Running total of "שכוייח" clicks. Kept here rather than counted on
+       * demand so it shows in the admin list beside each person, and so the
+       * public page never has to query the votes table at all.
+       *
+       * Read-only: it is maintained by the server action that records a
+       * vote, and editing it by hand would just drift from the rows.
+       */
+      name: 'appreciations',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'How many visitors said שכוייח. Not shown anywhere on the site.',
+      },
+    },
     {
       name: 'category',
       type: 'select',
