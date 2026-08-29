@@ -48,7 +48,9 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
         <h1 className="mb-[18px] text-[clamp(34px,4.6vw,52px)] leading-[1.08] max-[860px]:text-[clamp(30px,9vw,46px)]">
           {pageContent.hero.title}
         </h1>
-        <p className="max-w-[680px] text-[17px] leading-[1.7] text-neutral-800">{pageContent.hero.body}</p>
+        {pageContent.hero.body ? (
+          <p className="max-w-[680px] text-[17px] leading-[1.7] text-neutral-800">{pageContent.hero.body}</p>
+        ) : null}
       </Reveal>
 
       <Reveal as="section" className="mx-auto max-w-[1080px] px-8 max-[860px]:px-[18px]">

@@ -297,7 +297,12 @@ export async function getTeamPageContent(locale: Locale): Promise<{
     hero: {
       eyebrow: teamHero.eyebrow[locale],
       title: teamHero.title[locale],
-      body: teamHero.lead[locale],
+      // 2026-08-29 brief: drop the hero lead paragraph. Left as an empty
+      // string, not removed from `SimpleHeroContent` (shared by every page
+      // hero) — `TeamPageContent` skips rendering the `<p>` entirely when
+      // it's empty, and an admin can still fill it back in per-locale via
+      // Pages -> About -> Section intros -> "team-hero" without a code change.
+      body: '',
     },
     intro: {
       eyebrow: teamSectionIntro.eyebrow[locale],
