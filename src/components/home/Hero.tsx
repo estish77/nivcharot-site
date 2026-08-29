@@ -87,7 +87,7 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
               href={`/${locale}/${content.tertiaryCta.slug}`}
               variant="secondary"
               size="lg"
-              className="flex items-center gap-2.5 whitespace-nowrap text-accent-700"
+              className="flex items-center gap-2.5 whitespace-nowrap text-accent-700 hover:text-white focus-visible:text-white"
             >
               <PodcastIcon className="h-[18px] w-[18px]" />
               {t(locale, content.tertiaryCta.label)}
