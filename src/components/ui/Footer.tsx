@@ -2,6 +2,8 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 
 import { dict, t, type Locale } from '@/lib/i18n'
+import type { PayloadSiteSettings } from '@/lib/cms'
+import { buildHareditLinks, buildNivcharotLinks } from '@/lib/socialLinks'
 import { cn } from './cn'
 // Shared brand glyphs — these paths used to be inlined below, and are now
 // used by the media page's social row too (src/components/ui/SocialLinks.tsx).
@@ -12,18 +14,7 @@ export type FooterProps = {
   /** @default `/${locale}/donate` */
   donateHref?: string
   contactEmail?: string
-  social?: {
-    facebook?: string
-    instagram?: string
-    youtube?: string
-    spotify?: string
-    applePodcasts?: string
-    podcastInstagram?: string
-    hostInstagram?: string
-    hostFacebook?: string
-    hostX?: string
-    hostTiktok?: string
-  }
+  social?: PayloadSiteSettings['social']
   className?: string
 }
 
@@ -33,49 +24,22 @@ type SocialLink = {
   path: ReactNode
 }
 
-function buildNivcharotLinks(social?: FooterProps['social'], contactEmail?: string): SocialLink[] {
-  return [
-    {
-      href: social?.facebook ?? 'https://www.facebook.com/NoVoiceNoVote/',
-      label: 'Facebook',
-      path: socialIconPaths.facebook,
-    },
-    {
-      href: social?.instagram ?? 'https://www.instagram.com/nivcharot/',
-      label: 'Instagram',
-      path: socialIconPaths.instagram,
-    },
-    {
-      href: contactEmail ? `mailto:${contactEmail}` : 'mailto:estish@nivcharot.com',
-      label: 'Email',
-      path: socialIconPaths.email,
-    },
-  ]
-}
-
-function buildHareditLinks(social?: FooterProps['social']): SocialLink[] {
-  return [
-    {
-      href: social?.youtube ?? 'https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA',
-      label: 'YouTube',
-      path: socialIconPaths.youtube,
-    },
-    {
-      href: social?.spotify ?? 'https://open.spotify.com/show/1n2xdgVAKlIhcJqBiVfHFY',
-      label: 'Spotify',
-      path: socialIconPaths.spotify,
-    },
-    {
-      href: social?.applePodcasts ?? 'https://podcasts.apple.com/il/podcast/id1767223746',
-      label: 'Apple Podcasts',
-      path: socialIconPaths.applePodcasts,
-    },
-    {
-      href: social?.podcastInstagram ?? 'https://www.instagram.com/haredit_meduberet/',
-      label: 'Instagram',
-      path: socialIconPaths.instagram,
-    },
-  ]
+/**
+ * Falls back to `PayloadSiteSettings['social']`'s real defaults (not a
+ * second, separately-hand-typed set of URLs) when a caller passes no
+ * `social` prop at all — every real call site does pass one, but the prop
+ * stays optional for callers that don't have it yet.
+ */
+const FALLBACK_SOCIAL: PayloadSiteSettings['social'] = {
+  facebook: 'https://www.facebook.com/NoVoiceNoVote/',
+  instagram: 'https://www.instagram.com/nivcharot/',
+  youtube: 'https://www.youtube.com/@%D7%97%D7%A8%D7%93%D7%99%D7%AA%D7%9E%D7%93%D7%95%D7%91%D7%A8%D7%AA',
+  spotify: 'https://open.spotify.com/show/7HwVj9J7rnUFqoiUDtc1oL',
+  applePodcasts: 'https://podcasts.apple.com/il/podcast/id1767223746',
+  podcastInstagram: 'https://www.instagram.com/haredit_meduberet/',
+  hostFacebook: 'https://www.facebook.com/profile.php?id=61565500745331',
+  hostX: 'https://x.com/estyshushan',
+  hostTiktok: 'https://www.tiktok.com/@estybittonshushan',
 }
 
 function SocialIconLink({ href, label, path }: SocialLink) {
@@ -86,9 +50,9 @@ function SocialIconLink({ href, label, path }: SocialLink) {
       title={label}
       target={href.startsWith('http') ? '_blank' : undefined}
       rel={href.startsWith('http') ? 'noopener' : undefined}
-      className="flex h-8 w-8 items-center justify-center text-neutral-700 transition-colors duration-200 ease-out hover:text-accent focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="flex h-8 w-8 items-center justify-center text-neutral-700 transition-colors duration-200 ease-out hover:text-accent focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent max-[480px]:h-7 max-[480px]:w-7"
     >
-      <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" className="block">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true" className="block max-[480px]:w-4">
         {path}
       </svg>
     </a>
@@ -98,12 +62,29 @@ function SocialIconLink({ href, label, path }: SocialLink) {
 /**
  * Site footer: 2px top divider, `padding: 34px 24px 28px`, max-width 1240px
  * centered — a single row of social icons (Nivcharot's Facebook/Instagram/
- * email followed by the podcast's YouTube/Spotify/Apple Podcasts/Instagram),
- * then a donate link + the copyright line.
+ * X/email, then Haredit Meduberet's Facebook/Instagram/TikTok/YouTube/
+ * Spotify/Apple Podcasts — see `src/lib/socialLinks.ts` for which account
+ * backs each), then a donate link + the copyright line.
  */
 export function Footer({ locale, donateHref, contactEmail, social, className }: FooterProps) {
-  const nivchaLinks = buildNivcharotLinks(social, contactEmail)
-  const podcastLinks = buildHareditLinks(social)
+  const resolvedSocial = social ?? FALLBACK_SOCIAL
+  const nivchaLinks: SocialLink[] = [
+    ...buildNivcharotLinks(resolvedSocial, locale).map((item) => ({
+      href: item.href,
+      label: item.label,
+      path: socialIconPaths[item.network],
+    })),
+    {
+      href: contactEmail ? `mailto:${contactEmail}` : 'mailto:estish@nivcharot.com',
+      label: t(locale, { he: 'מייל', en: 'Email' }),
+      path: socialIconPaths.email,
+    },
+  ]
+  const podcastLinks: SocialLink[] = buildHareditLinks(resolvedSocial, locale).map((item) => ({
+    href: item.href,
+    label: item.label,
+    path: socialIconPaths[item.network],
+  }))
 
   return (
     <footer className={cn('border-t-2 border-divider px-6 pb-7 pt-[34px]', className)}>
@@ -117,13 +98,14 @@ export function Footer({ locale, donateHref, contactEmail, social, className }: 
       <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-6 max-[720px]:flex-col max-[720px]:items-center max-[720px]:gap-3 max-[720px]:text-center">
         {/*
           One unbroken row of icons (2026-08-28 brief: drop the "נבחרות" and
-          "חרדית מדוברת" captions and put them all on one line). The captions
-          were what forced a second row on a phone — seven glyphs fit across
-          390px comfortably, two words plus seven glyphs do not.
-
-          `flex-nowrap` keeps it a single row at every width; each link still
-          names its own destination for screen readers, which is what the
-          captions were doing visually.
+          "חרדית מדוברת" captions and put them all on one line) — kept that
+          way rather than reintroducing captions when the account list grew
+          to ten icons (2026-08-29 brief: Nivcharot's X, Haredit Meduberet's
+          own Facebook and TikTok). `flex-nowrap` keeps it a single row at
+          every width; each link still names its own destination for screen
+          readers, which is what captions would otherwise do visually. Icons
+          shrink a step below 480px (`max-[480px]:h-7/w-7`) so ten of them
+          still fit one row on the narrowest real phones.
         */}
         <div className="flex flex-nowrap items-center justify-start gap-1 max-[720px]:justify-center">
           {[...nivchaLinks, ...podcastLinks].map((link) => (

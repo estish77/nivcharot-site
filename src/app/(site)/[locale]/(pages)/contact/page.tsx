@@ -38,7 +38,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const inbox = siteSettings.contactEmail || contactEmail
 
   // Same dashboard-editable source the footer and the media page read.
-  const socialLinks = buildFollowLinks(siteSettings, locale)
+  const socialLinks = buildFollowLinks(siteSettings.social, locale)
 
   return (
     <Reveal as="section">

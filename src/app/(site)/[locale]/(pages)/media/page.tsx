@@ -10,6 +10,7 @@ import { getArchivePosts, getElsewhereMediaItems, getPressArchiveItems, getSiteS
 import { isLocale, locales, t, type Locale } from '@/lib/i18n'
 import { buildMediaEntries } from '@/lib/mediaEntries'
 import { pageMetadata } from '@/lib/seo'
+import { buildFollowLinks } from '@/lib/socialLinks'
 
 type Params = { locale: string }
 
@@ -87,40 +88,8 @@ export default async function MediaArchivePage({ params }: { params: Promise<Par
   )
 
   // Dashboard-editable (site-settings.social), same source the footer reads.
-  // Labels name the account, not just the platform: this row links two
-  // different Instagram accounts, so "Instagram" alone would give two
-  // controls the same accessible name.
   const socialLinks: SocialLinkItem[] = [
-    {
-      network: 'facebook',
-      href: siteSettings.social.facebook!,
-      label: t(locale, { he: 'פייסבוק · נבחרות', en: 'Facebook · Nivcharot' }),
-    },
-    {
-      network: 'instagram',
-      href: siteSettings.social.instagram!,
-      label: t(locale, { he: 'אינסטגרם · נבחרות', en: 'Instagram · Nivcharot' }),
-    },
-    {
-      network: 'youtube',
-      href: siteSettings.social.youtube!,
-      label: t(locale, { he: 'יוטיוב · חרדית מדוברת', en: 'YouTube · Haredit Meduberet' }),
-    },
-    {
-      network: 'spotify',
-      href: siteSettings.social.spotify!,
-      label: t(locale, { he: 'ספוטיפיי · חרדית מדוברת', en: 'Spotify · Haredit Meduberet' }),
-    },
-    {
-      network: 'applePodcasts',
-      href: siteSettings.social.applePodcasts!,
-      label: t(locale, { he: 'אפל פודקאסטס · חרדית מדוברת', en: 'Apple Podcasts · Haredit Meduberet' }),
-    },
-    {
-      network: 'instagram',
-      href: siteSettings.social.podcastInstagram!,
-      label: t(locale, { he: 'אינסטגרם · חרדית מדוברת', en: 'Instagram · Haredit Meduberet' }),
-    },
+    ...buildFollowLinks(siteSettings.social, locale),
     {
       network: 'email',
       href: `mailto:${siteSettings.contactEmail}`,
