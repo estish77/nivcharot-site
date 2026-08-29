@@ -1,14 +1,14 @@
 import type { Localized } from '@/lib/i18n'
 
 /**
- * Real feedback from HaNivcheret graduates — 20 responses across cohorts
+ * Real feedback from HaNivcheret graduates, 20 responses across cohorts
  * 2 to 9 (2019–2026), supplied by the movement on 2026-08-29.
  *
  * These REPLACE the six placeholder quotes this page shipped with, which
  * were the mockup's own dummy text attributed to "שם הבוגרת · בוגרת מחזור N".
  *
- * Names are given as the graduates themselves signed them — a first name
- * and a surname initial — and are transliterated for `en`, never
+ * Names are given as the graduates themselves signed them, a first name
+ * and a surname initial, and are transliterated for `en`, never
  * translated. One response came in unsigned and is credited to the cohort
  * rather than given an invented name.
  *
@@ -24,7 +24,7 @@ export type AlumnaTestimonial = {
   quote: Localized
 }
 
-/** Cohort 2 ran in 2019, cohort 9 in 2026 — one cohort a year, no gaps in between. */
+/** Cohort 2 ran in 2019, cohort 9 in 2026, one cohort a year, no gaps in between. */
 export function alumnaYear(cohort: number): number {
   return 2017 + cohort
 }
@@ -36,7 +36,7 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     name: { he: 'אפרת ג׳.', en: 'Efrat G.' },
     quote: {
       he: 'גיליתי והבנתי שעוד לא אבדה תקווה, ויש מקום לשינויים מהפכניים בחברה החרדית. כל עוד יש כאלה כמוני שמדברות על העוולות והפגמים ורוצות לשנות אותן. בלי לפחד.',
-      en: 'I discovered that hope is not lost, and that there is room for revolutionary change in Haredi society — as long as there are women like me who name the wrongs and the flaws and want to change them. Without being afraid.',
+      en: 'I discovered that hope is not lost, and that there is room for revolutionary change in Haredi society, as long as there are women like me who name the wrongs and the flaws and want to change them. Without being afraid.',
     },
   },
   {
@@ -44,7 +44,7 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 2,
     name: { he: 'ללי ש.', en: 'Lali S.' },
     quote: {
-      he: 'רוב הדברים שהיו מבחינתי מובנים מאליהם — ייתכן שהם ממש לא כך. השקפות, דעות קדומות ומוסכמות שנופצו לי במהלך הקורס. למדתי שהעולם לא בדיוק שחור ולבן כפי שחונכתי. למדתי להיעצר, לחשוב ולבחון מחדש דברים שפעם לא העזתי בכלל.',
+      he: 'רוב הדברים שהיו מבחינתי מובנים מאליהם, ייתכן שהם ממש לא כך. השקפות, דעות קדומות ומוסכמות שנופצו לי במהלך הקורס. למדתי שהעולם לא בדיוק שחור ולבן כפי שחונכתי. למדתי להיעצר, לחשוב ולבחון מחדש דברים שפעם לא העזתי בכלל.',
       en: 'Most of what I took for granted may be nothing of the sort. Outlooks, prejudices and received wisdom were all broken open for me during the course. I learned that the world is not quite as black and white as I was raised to believe. I learned to stop, to think, and to re-examine things I once would not have dared to.',
     },
   },
@@ -62,8 +62,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 2,
     name: { he: 'שושי א.', en: 'Shoshi A.' },
     quote: {
-      he: 'התוכנית עשתה לי סדר בראש — גם מבחינה מקצועית וגם מבחינת הדעות הפוליטיות והחברתיות שלי. השינוי הגדול: לא למתג ולא לשפוט אף אדם באשר הוא.',
-      en: 'The programme put my thinking in order — professionally, and in my political and social views. The big change: not to label and not to judge any person, whoever they are.',
+      he: 'התוכנית עשתה לי סדר בראש, גם מבחינה מקצועית וגם מבחינת הדעות הפוליטיות והחברתיות שלי. השינוי הגדול: לא למתג ולא לשפוט אף אדם באשר הוא.',
+      en: 'The programme put my thinking in order: professionally, and in my political and social views. The big change: not to label and not to judge any person, whoever they are.',
     },
   },
   {
@@ -90,8 +90,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 5,
     name: { he: 'אילה מ.', en: 'Ayala M.' },
     quote: {
-      he: 'פעם ראשונה שאני חלק ממעגל נשים — וזה מדהים!',
-      en: 'The first time I have been part of a circle of women — and it is extraordinary!',
+      he: 'פעם ראשונה שאני חלק ממעגל נשים, וזה מדהים!',
+      en: 'The first time I have been part of a circle of women, and it is extraordinary!',
     },
   },
   {
@@ -108,8 +108,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 5,
     name: { he: 'רות כ.', en: 'Ruth C.' },
     quote: {
-      he: 'התובנה המרכזית היא שחייבים נשים בפוליטיקה — אבל מסובך להגיע לשם. ובדרך לשם יש המון עשייה חברתית ועמדות השפעה נוספות, ולא פחות חשובות.',
-      en: 'The central insight is that we need women in politics — but getting there is complicated. And on the way there is a great deal of social work and other positions of influence, no less important.',
+      he: 'התובנה המרכזית היא שחייבים נשים בפוליטיקה, אבל מסובך להגיע לשם. ובדרך לשם יש המון עשייה חברתית ועמדות השפעה נוספות, ולא פחות חשובות.',
+      en: 'The central insight is that we need women in politics, but getting there is complicated. And on the way there is a great deal of social work and other positions of influence, no less important.',
     },
   },
   {
@@ -117,8 +117,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 6,
     name: { he: 'פייגי ג.', en: 'Faigy G.' },
     quote: {
-      he: 'השינוי המרכזי שחל בי זה האמון בעצמי, והיכולת שלי — כבר עכשיו — לדבר ולהרים עיניים. להבין שרוצים לשמוע את דעתי, והכי חשוב: לדעת לפתח דעה עצמאית.',
-      en: 'The main change in me is trust in myself, and my ability — already now — to speak and to raise my eyes. To understand that people want to hear what I think, and above all: to know how to form an opinion of my own.',
+      he: 'השינוי המרכזי שחל בי זה האמון בעצמי, והיכולת שלי, כבר עכשיו, לדבר ולהרים עיניים. להבין שרוצים לשמוע את דעתי, והכי חשוב: לדעת לפתח דעה עצמאית.',
+      en: 'The main change in me is trust in myself, and my ability, already now, to speak and to raise my eyes. To understand that people want to hear what I think, and above all: to know how to form an opinion of my own.',
     },
   },
   {
@@ -126,8 +126,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 6,
     name: { he: 'הודיה ב.', en: 'Hodaya B.' },
     quote: {
-      he: 'התחדדה לי ההבנה בגודל הנחיצות בהתפקדות של כל אישה חרדית לעשייה חברתית וציבורית, קטנה כגדולה — בהשמעת קולנו ובקידום האינטרסים שלנו.',
-      en: 'It sharpened my sense of how badly every Haredi woman is needed in social and public work, small or large — in making our voices heard and advancing our interests.',
+      he: 'התחדדה לי ההבנה בגודל הנחיצות בהתפקדות של כל אישה חרדית לעשייה חברתית וציבורית, קטנה כגדולה, בהשמעת קולנו ובקידום האינטרסים שלנו.',
+      en: 'It sharpened my sense of how badly every Haredi woman is needed in social and public work, small or large, in making our voices heard and advancing our interests.',
     },
   },
   {
@@ -135,8 +135,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 6,
     name: { he: 'חיה פ.', en: 'Chaya P.' },
     quote: {
-      he: 'קיבלתי אומץ לעשות שינויים קטנים שחששתי מהם. עובדת על עצמי להיות יותר אמיצה לחלוק את הדעה שלי — ופחות לספור אנשים ומוסדות.',
-      en: 'I gained the courage to make small changes I had been afraid of. I am working on being braver about sharing what I think — and on counting people and institutions less.',
+      he: 'קיבלתי אומץ לעשות שינויים קטנים שחששתי מהם. עובדת על עצמי להיות יותר אמיצה לחלוק את הדעה שלי, ופחות לספור אנשים ומוסדות.',
+      en: 'I gained the courage to make small changes I had been afraid of. I am working on being braver about sharing what I think, and on counting people and institutions less.',
     },
   },
   {
@@ -153,7 +153,7 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 7,
     name: { he: 'שרה ח.', en: 'Sarah Ch.' },
     quote: {
-      he: 'בעבר חשבתי שאם אין לי פתרון למשהו — חבל על האנרגיה של לדבר עליו בכלל. כאן קיבלתי תפנית בחשיבה: להיות ערה לסביבה שלי, לא להתעלם מדברים לא הוגנים גם אם אין להם פתרון, לדבר עליהם.',
+      he: 'בעבר חשבתי שאם אין לי פתרון למשהו, חבל על האנרגיה של לדבר עליו בכלל. כאן קיבלתי תפנית בחשיבה: להיות ערה לסביבה שלי, לא להתעלם מדברים לא הוגנים גם אם אין להם פתרון, לדבר עליהם.',
       en: 'I used to think that if I had no solution to something, it was a waste of energy to talk about it at all. Here my thinking turned around: to stay alert to what is around me, not to look away from what is unfair even when there is no solution, and to speak about it.',
     },
   },
@@ -162,8 +162,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 8,
     name: { he: 'אורה כ.', en: 'Ora C.' },
     quote: {
-      he: 'שלא צריך לבחור. לא בין הלכה לחשיבה, לא בין צניעות לעוצמה, לא בין שקט פנימי לקול חיצוני. הנבחרת לא נתנה לי "עוד כלים" — היא שמה לי מראה מול הפנים, והבנתי שאני לא צריכה להצטמצם כדי להשתלב.',
-      en: 'That you do not have to choose. Not between halakha and thinking, not between modesty and strength, not between inner quiet and an outward voice. HaNivcheret did not hand me "more tools" — it held up a mirror, and I understood that I do not have to make myself smaller in order to fit in.',
+      he: 'שלא צריך לבחור. לא בין הלכה לחשיבה, לא בין צניעות לעוצמה, לא בין שקט פנימי לקול חיצוני. הנבחרת לא נתנה לי "עוד כלים". היא שמה לי מראה מול הפנים, והבנתי שאני לא צריכה להצטמצם כדי להשתלב.',
+      en: 'That you do not have to choose. Not between halakha and thinking, not between modesty and strength, not between inner quiet and an outward voice. HaNivcheret did not hand me "more tools". It held up a mirror, and I understood that I do not have to make myself smaller in order to fit in.',
     },
   },
   {
@@ -189,8 +189,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 9,
     name: { he: 'פייגא ט.', en: 'Faiga T.' },
     quote: {
-      he: 'יש מקום לשינוי בהלכה — והרצון לשינוי לא הופך אותי לרפורמית.',
-      en: 'There is room for change within halakha — and wanting change does not make me a Reform Jew.',
+      he: 'יש מקום לשינוי בהלכה, והרצון לשינוי לא הופך אותי לרפורמית.',
+      en: 'There is room for change within halakha, and wanting change does not make me a Reform Jew.',
     },
   },
   {
@@ -198,8 +198,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 9,
     name: { he: 'אירינה ד.', en: 'Irina D.' },
     quote: {
-      he: 'מנהיגות אינה תפקיד או תואר, אלא בחירה לקחת אחריות ולהשפיע. הבנתי שגם כאישה חרדית אפשר לשמור על הערכים, הצניעות והזהות שלנו — ובמקביל להשמיע קול, להוביל תהליכים ולהיות חלק ממעגלי קבלת ההחלטות.',
-      en: 'Leadership is not a role or a title but a choice to take responsibility and to have an effect. I understood that as a Haredi woman I can hold on to our values, our modesty and our identity — and at the same time speak up, lead processes and be part of the circles where decisions are made.',
+      he: 'מנהיגות אינה תפקיד או תואר, אלא בחירה לקחת אחריות ולהשפיע. הבנתי שגם כאישה חרדית אפשר לשמור על הערכים, הצניעות והזהות שלנו, ובמקביל להשמיע קול, להוביל תהליכים ולהיות חלק ממעגלי קבלת ההחלטות.',
+      en: 'Leadership is not a role or a title but a choice to take responsibility and to have an effect. I understood that as a Haredi woman I can hold on to our values, our modesty and our identity, and at the same time speak up, lead processes and be part of the circles where decisions are made.',
     },
   },
   {
@@ -207,8 +207,8 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
     cohort: 9,
     name: { he: 'שושנה ס.', en: 'Shoshana S.' },
     quote: {
-      he: 'שהקול שלי מעניין. שיש לי תפקיד וחובה ושליחות לחולל שינוי — ואין לי את הזכות לומר "אני לא יודעת" ולשבת מהצד.',
-      en: 'That my voice is worth hearing. That I have a role, a duty and a mission to bring about change — and that I do not have the right to say "I don\'t know" and sit on the sidelines.',
+      he: 'שהקול שלי מעניין. שיש לי תפקיד וחובה ושליחות לחולל שינוי, ואין לי את הזכות לומר "אני לא יודעת" ולשבת מהצד.',
+      en: 'That my voice is worth hearing. That I have a role, a duty and a mission to bring about change, and that I do not have the right to say "I don\'t know" and sit on the sidelines.',
     },
   },
 ]
@@ -219,7 +219,7 @@ export const alumnaeTestimonials: AlumnaTestimonial[] = [
  * round-robin, one per cohort per pass, which spreads eight cohorts across
  * the wall instead of showing four cohort-2 cards in a row.
  *
- * Deterministic on purpose — a shuffle would render differently on the
+ * Deterministic on purpose, a shuffle would render differently on the
  * server and the client and break hydration.
  */
 export function interleavedTestimonials(items: AlumnaTestimonial[] = alumnaeTestimonials): AlumnaTestimonial[] {

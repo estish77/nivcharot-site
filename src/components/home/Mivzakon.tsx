@@ -62,10 +62,25 @@ export function Mivzakon({ locale, items, className }: MivzakonProps) {
   const steppingRef = useRef(false)
   const [paused, setPaused] = useState(false)
 
+  /*
+   * Which way the track has to slide depends on the writing direction, and
+   * getting it wrong doesn't just mirror the motion — it breaks the loop.
+   *
+   * The track holds two copies. Under RTL the first sits on the RIGHT, so
+   * sliding right pulls the second copy in from the left. Under LTR the
+   * first copy sits on the LEFT, so sliding right drags the whole track off
+   * into empty space and the strip runs out of content partway through.
+   * That is why the English home page stalled while the Hebrew one looped.
+   *
+   * The offset itself stays positive in [0, half) either way; only the sign
+   * it is applied with flips.
+   */
+  const sign = locale === 'he' ? 1 : -1
+
   const apply = useCallback(() => {
     const track = trackRef.current
-    if (track) track.style.transform = `translateX(${offsetRef.current}px)`
-  }, [])
+    if (track) track.style.transform = `translateX(${sign * offsetRef.current}px)`
+  }, [sign])
 
   const wrap = useCallback((value: number) => {
     const half = halfRef.current

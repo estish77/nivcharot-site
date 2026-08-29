@@ -46,14 +46,34 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
  * The header above has always said to set NODE_ENV=production. Saying so
  * is evidently not enough, so refuse instead.
  */
-if (process.env.DATABASE_URI?.startsWith('postgres') && process.env.NODE_ENV !== 'production') {
+/*
+ * THIS SCRIPT MAY NO LONGER TOUCH PRODUCTION.
+ *
+ * It was written to seed the roster into an empty collection so that the
+ * team page could be edited in /admin at all. It did that job. But it
+ * rewrites name, role, bio, category, order and active for every person in
+ * the fixture on every run — so it silently reverts anything edited in the
+ * dashboard since the last run.
+ *
+ * That is exactly what it did on 2026-08-28: a day's work on the team page
+ * in /admin was overwritten by runs of this script. The collection is the
+ * source of truth now, not `src/content/team.ts`, and the instruction is
+ * that the team changes through the dashboard only.
+ *
+ * So it refuses against postgres outright, regardless of NODE_ENV. It stays
+ * usable against the local sqlite database for development. If a production
+ * seed is ever genuinely needed again, that must be a deliberate reviewed
+ * one-off, not something this script can do just by being run.
+ */
+if (process.env.DATABASE_URI?.startsWith('postgres')) {
   console.error(
     [
-      'Refusing to run: DATABASE_URI points at postgres but NODE_ENV is not "production".',
-      'Payload would push schema changes and leave a `dev` marker that hangs every',
-      'subsequent build. Re-run as:',
+      'Refusing to run against production.',
       '',
-      '  NODE_ENV=production DATABASE_URI="<uri>" npm run sync-team-members',
+      'This script overwrites name, role, bio, category, order and active for every',
+      'person in the fixture, so it reverts anything edited in /admin since the last',
+      'run. The team-members collection is the source of truth — edit the team in the',
+      'dashboard instead.',
     ].join('\n'),
   )
   process.exit(1)

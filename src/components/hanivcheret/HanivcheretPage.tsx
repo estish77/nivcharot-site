@@ -11,7 +11,6 @@ import {
   resolveHeroMedia,
 } from '@/content/hanivcheret'
 import { getHanivcheretContent } from '@/lib/cms'
-import { alumnaeTestimonials } from '@/content/alumnae'
 import { AlumnaeWall } from './AlumnaeWall'
 import { t, type Locale, type Localized } from '@/lib/i18n'
 import { Button, Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SeatHall, SectionHead, Tag, cn } from '@/components/ui'
@@ -35,12 +34,6 @@ const hanivcheretSectionTitles = {
   curriculum: { he: 'ידע, כלים, קהילה ועשייה', en: 'Knowledge, tools, community, action' } satisfies Localized,
   quotes: { he: 'במילים שלהן', en: 'In their own words' } satisfies Localized,
 }
-
-/** Counts what's actually in the fixture, so the line can't drift from it. */
-const alumnaeWallLead = {
-  he: `${alumnaeTestimonials.length} משובים מבוגרות התוכנית, ממחזור 2 ועד מחזור 9.`,
-  en: `${alumnaeTestimonials.length} responses from graduates of the programme, from cohort 2 through cohort 9.`,
-} satisfies Localized
 
 function HeroMedia({ locale }: { locale: Locale }) {
   const media = resolveHeroMedia(hanivcheretHeroMedia)
@@ -241,7 +234,6 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
             className="mb-7"
             eyebrow={t(locale, hanivcheretQuotesEyebrow)}
             title={t(locale, hanivcheretSectionTitles.quotes)}
-            lead={t(locale, alumnaeWallLead)}
           />
           <AlumnaeWall locale={locale} />
         </Section>
