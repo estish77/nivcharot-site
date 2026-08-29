@@ -11,6 +11,7 @@ import { cn } from './cn'
 import { HeartIcon } from './HeartIcon'
 import { Logo } from './Logo'
 import { LanguageToggle } from './LanguageToggle'
+import { HeaderDonateHeart } from './HeaderDonateHeart'
 import { NavMenu, type NavLink } from './NavMenu'
 import { PodcastIcon } from './PodcastIcon'
 
@@ -131,11 +132,20 @@ export function Header({ locale, navLinks = [], bordered = true, className }: He
           <PodcastIcon className="max-[640px]:h-[18px] max-[640px]:w-[18px] transition-transform duration-300 ease-out group-hover:scale-110" />
         </Link>
         <LanguageToggle locale={locale} />
+        {/*
+          Below 520px: a bare heart (HeaderDonateHeart) instead of the
+          "תרמו ♥" pill — the pill read as cramped once squeezed this far
+          (2026-08-29 brief). At 520px+ it's the reverse: the full labelled
+          button, hidden heart. Two elements, CSS-toggled, rather than one
+          JS-conditional — avoids a hydration mismatch between server and
+          client on which one should render at the client's actual width.
+        */}
+        <HeaderDonateHeart locale={locale} className="hidden max-[519px]:flex" />
         <Button
           href={`/${locale}/donate`}
           variant="primary"
           size="sm"
-          className="flex items-center gap-1.5 max-[519px]:gap-1 whitespace-nowrap max-[640px]:px-[12px] max-[519px]:px-[9px] max-[640px]:py-[8px] max-[640px]:text-[13px] max-[519px]:text-[12px]"
+          className="hidden items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px] min-[520px]:flex"
         >
           <HeartIcon />
           {t(locale, { he: 'תרמו', en: 'Donate' })}

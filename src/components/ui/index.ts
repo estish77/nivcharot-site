@@ -46,6 +46,8 @@ export { HeartIcon } from './HeartIcon'
 export { PodcastIcon } from './PodcastIcon'
 export type { PodcastIconProps } from './PodcastIcon'
 
+export { HeaderDonateHeart } from './HeaderDonateHeart'
+
 export { RichText, hasRichText } from './RichText'
 export type { RichTextProps } from './RichText'
 

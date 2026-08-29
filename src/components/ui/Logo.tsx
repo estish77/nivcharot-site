@@ -42,7 +42,12 @@ export function Logo({ locale, className }: LogoProps) {
         // min-[356px]/min-[440px] steps below were already written to
         // avoid). Same two breakpoints, scaled by height instead of width
         // so the SVG's own aspect ratio still governs the actual width.
-        className={cn('h-10 min-[356px]:h-[52px] min-[440px]:h-[70px]', className)}
+        //
+        // 2026-08-29: the mobile Donate button dropped its label for a bare
+        // heart (HeaderDonateHeart), freeing up real width in the nav row —
+        // both tiers below grew a bit to use some of it ("תגדיל קצת את
+        // הלוגו"), re-measured against the real (now much narrower) nav.
+        className={cn('h-11 min-[356px]:h-[58px] min-[440px]:h-[70px]', className)}
         style={{ width: 'auto', display: 'block' }}
       />
     )
@@ -70,7 +75,13 @@ export function Logo({ locale, className }: LogoProps) {
       // 340-430px phone range, and 230px turned out to engage 80px too
       // early at min-[440px]. Re-derived all three numbers from actual
       // rendered widths instead of estimates.
-      className={cn('w-[84px] min-[401px]:w-[130px] min-[520px]:w-[230px]', className)}
+      //
+      // 2026-08-29 (later same day): the mobile Donate button dropped its
+      // label for a bare heart (HeaderDonateHeart), freeing up real width
+      // in the nav row — the two smaller tiers grew a bit to use some of it
+      // ("תגדיל קצת את הלוגו"), re-measured against the real (now much
+      // narrower) nav rather than guessed.
+      className={cn('w-[100px] min-[401px]:w-[160px] min-[520px]:w-[230px]', className)}
       style={{ height: 'auto', display: 'block' }}
     />
   )
