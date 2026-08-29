@@ -104,27 +104,33 @@ export function TeamMemberCard({ member, locale, compact = false }: TeamMemberCa
         `Cell` is a flex column, and CSS grid's default `align-items:
         stretch` already makes every card in a row match the tallest one, so
         the rule lines up across the whole row, not just per card.
-        The heart sits at the row's logical START (`justify-start` — right
-        in Hebrew, left in English, matching `PostPrevNext`'s own use of
-        logical `justify-end`/`text-end` elsewhere), not centered
-        (2026-08-29 brief: "הלב שכוייח מתיישר לימין").
+        The heart sits at the row's logical START (right in Hebrew, left in
+        English, matching `PostPrevNext`'s own use of logical
+        `justify-end`/`text-end` elsewhere), not centered (2026-08-29 brief:
+        "הלב שכוייח מתיישר לימין"). The episode link, when there is one,
+        shares that SAME row rather than a row of its own — `ms-auto`
+        (margin-inline-start: auto) pushes it to the row's opposite,
+        logical-END edge (left in Hebrew) regardless of whether the heart is
+        present at all (2026-08-29 follow-up: "אייקון האוזניות והמשפט צריך
+        להיות באותה שורה של הלב, מיושר לשמאל").
       */}
       {canAppreciate || episode ? (
-        <div className="mt-auto flex flex-col gap-2 border-t border-divider pt-3.5">
-          {canAppreciate ? (
-            <div className="flex justify-start">
-              <AppreciateButton memberId={member.id} memberName={name} locale={locale} />
-            </div>
-          ) : null}
+        <div className="mt-auto flex items-center gap-3 border-t border-divider pt-3.5">
+          {canAppreciate ? <AppreciateButton memberId={member.id} memberName={name} locale={locale} /> : null}
           {episode ? (
             <a
               href={episode.youtubeUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 self-start text-[12px] font-semibold leading-[1.4] text-accent-700 hover:text-accent focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="ms-auto inline-flex items-center gap-1.5 text-[12px] font-semibold leading-[1.4] text-accent-700 hover:text-accent focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               <HeadphonesIcon size={14} className="flex-none" />
-              <span>{t(locale, { he: `בואו להכיר מקרוב את ${name}`, en: `Get to know ${name}` })}</span>
+              <span>
+                {t(locale, {
+                  he: `בואו להכיר מקרוב את ${episode.firstName.he}`,
+                  en: `Get to know ${episode.firstName.en}`,
+                })}
+              </span>
             </a>
           ) : null}
         </div>
