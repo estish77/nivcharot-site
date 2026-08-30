@@ -142,14 +142,10 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
               </Link>
             </div>
             <div className="flex min-w-0 items-center justify-center py-2">
-              {/* Same hover/scroll/letter behavior as the Home hero's SeatHall — see its own doc comment for why. */}
               <SeatHall
                 locale={locale}
                 ariaLabel={hanivcheretHero.seatHallAriaLabel}
                 sentence={hanivcheretHero.seatHallSentence}
-                hoverMode="repel"
-                scrollMode="riseAway"
-                letterMode="withSeats"
               />
             </div>
           </Section>
