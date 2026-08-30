@@ -187,7 +187,8 @@ const JITTER_MAX = 20
  */
 export type SeatHallScrollMode = 'off' | 'fade' | 'riseAway' | 'converge' | 'cascade'
 
-const SCROLL_THRESHOLD_PX = 80
+/** Disperses once less than half the hall is still on screen — see the `IntersectionObserver` effect below for why this replaced a fixed scrollY pixel threshold. */
+const SCROLL_VISIBLE_THRESHOLD = 0.5
 
 type ScrollOffset = { dx: number; dy: number; delay: number; opacityMul: number }
 const SCROLL_OFFSET_REST: ScrollOffset = { dx: 0, dy: 0, delay: 0, opacityMul: 1 }
@@ -472,10 +473,37 @@ export function SeatHall({
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
     if (scrollMode === 'off' || reduced) return
-    const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD_PX)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const svg = svgRef.current
+    if (!svg) return
+    /*
+     * An `IntersectionObserver` on the hall itself, not a fixed
+     * `window.scrollY` pixel threshold (2026-08-29 fix: "במובייל ההעלמות
+     * קורית מהר מידי, כשאני עוד במסך" — a fixed 80px threshold fires after
+     * a tiny fraction of a real mobile scroll gesture, well before the hall
+     * has actually scrolled out of view, since phone flicks commonly move
+     * 300px+ at once).
+     *
+     * Visibility ratio ALONE is still wrong on mobile, though (found while
+     * testing this fix): below the Hero's `max-[860px]:grid-cols-1`
+     * breakpoint the hall sits BELOW the hero's text, not beside it, so on
+     * page load — before scrolling at all — it already starts out mostly
+     * below the fold (ratio ~0.2). A pure ratio check reads that as
+     * "already scrolled past" on the very first frame. What actually
+     * distinguishes "scrolled past" from "not reached yet" is DIRECTION:
+     * only once the hall's own top edge has gone above the viewport's top
+     * edge (`boundingClientRect.top < 0`) has anything actually been
+     * scrolled away — checking ratio alone can't tell "approaching from
+     * below" and "leaving above" apart, since both read as partially/not
+     * visible.
+     */
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setScrolled(entry.boundingClientRect.top < 0 && entry.intersectionRatio < SCROLL_VISIBLE_THRESHOLD)
+      },
+      { threshold: [0, SCROLL_VISIBLE_THRESHOLD, 1] },
+    )
+    observer.observe(svg)
+    return () => observer.disconnect()
   }, [scrollMode, reduced])
 
   // Gates the seat circles' opacity-transition timing back to normal once the
