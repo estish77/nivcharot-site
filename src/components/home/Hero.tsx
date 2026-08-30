@@ -115,8 +115,28 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
         }
         onAnimationComplete={() => setHallSettled(true)}
       >
-        {/* The hall's own seats fly in from scattered points and converge into shape (`SeatHall`'s `entrance`) — this wrapper just fades in alongside them rather than adding its own competing scale/rotate. */}
-        <SeatHall locale={locale} ariaLabel={hallAriaLabel} sentence={hallSentence} />
+        {/*
+          The hall's own seats fly in from scattered points and converge into
+          shape (`SeatHall`'s `entrance`) — this wrapper just fades in
+          alongside them rather than adding its own competing scale/rotate.
+
+          hoverMode/scrollMode/letterMode (2026-08-29 brief, picked after
+          comparing several live options on /seat-lab): seats gently push
+          away from the pointer and spring back ("repel"); scrolling past
+          the hero sends the whole hall drifting upward and fading
+          ("riseAway"), with the outer-ring sentence letters riding along
+          with whichever seat they're currently occupying ("withSeats")
+          rather than staying fixed in place. Scrolling back near the top
+          returns everything to its settled formation.
+        */}
+        <SeatHall
+          locale={locale}
+          ariaLabel={hallAriaLabel}
+          sentence={hallSentence}
+          hoverMode="repel"
+          scrollMode="riseAway"
+          letterMode="withSeats"
+        />
       </motion.div>
     </Reveal>
   )
