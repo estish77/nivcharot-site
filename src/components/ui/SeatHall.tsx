@@ -305,10 +305,19 @@ const SeatCircle = memo(function SeatCircle({
   entrance: boolean
   scatter: ScatterDatum
   entranceDone: boolean
-  /** Hover/scroll displacement, additive on top of the resting position — 0 for every real (non-lab) caller today. */
+  /** Hover/scroll displacement, additive on top of the resting position — always 0 until the caller's own hoverMode/scrollMode actually pushes a seat. */
   offsetX?: number
   offsetY?: number
-  /** True once any hover/scroll displacement has ever applied to this seat — switches cx/cy from the entrance's slow staggered tween to a snappy spring, since that tween is otherwise never exercised again post-entrance. */
+  /**
+   * Switches cx/cy from the entrance's slow staggered tween to a snappy
+   * spring. MUST stay false until `entranceDone` — 2026-08-29 fix: this used
+   * to be driven off hoverMode/scrollMode alone, so on a caller with
+   * hoverMode="repel" (a permanently-on mode, unlike scroll) it was true
+   * from the very first frame, and the entrance itself silently animated on
+   * the spring instead of its own tuned tween — every seat's carefully
+   * staggered "arriving one after another" flight collapsed into one
+   * uniform snap (reported back as "the entrance changed, put it back").
+   */
   offsetActive?: boolean
   /** Extra spring delay (seconds) — only the `cascade` scroll mode sets this, keyed to each seat's own position, so the dispersal visibly ripples rather than every seat moving at once. */
   offsetDelay?: number
@@ -747,7 +756,7 @@ export function SeatHall({
                 entranceDone={entranceDone}
                 offsetX={(hover?.dx ?? 0) + burst.dx}
                 offsetY={(hover?.dy ?? 0) + burst.dy}
-                offsetActive={hoverMode !== 'off' || scrollMode !== 'off'}
+                offsetActive={entranceDone && (hoverMode !== 'off' || scrollMode !== 'off')}
                 offsetDelay={burst.delay}
                 opacityMul={burst.opacityMul}
               />
