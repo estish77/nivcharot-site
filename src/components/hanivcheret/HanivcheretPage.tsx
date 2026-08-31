@@ -141,7 +141,17 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
                 {t(locale, hanivcheretHero.cta.label)}
               </Link>
             </div>
-            <div className="flex min-w-0 items-center justify-center py-2">
+            {/*
+              Hidden below 640px (2026-08-31 brief: "במובייל, תוותר על
+              האלמנט אנימציה של הנקודות, הוא סתם תופס מקום") — on a real
+              phone the rotated-portrait hall still ran ~700px tall (see
+              its own MOBILE_BREAKPOINT_QUERY), pushing the actual hero
+              copy and CTA a full screen down before a visitor ever reached
+              them. 640px matches the same phone cutoff the hall's own
+              rotation logic already uses, so tablets (which render it
+              landscape, already fixed for iPad specifically) keep it.
+            */}
+            <div className="hidden min-w-0 items-center justify-center py-2 min-[641px]:flex">
               <SeatHall
                 locale={locale}
                 ariaLabel={hanivcheretHero.seatHallAriaLabel}
