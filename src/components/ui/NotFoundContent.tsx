@@ -14,9 +14,12 @@ import { Section } from './Section'
  * Copy (2026-08-31 brief: "בוא נעשה אותו מצחיק, הדף לא נמצא, אבל גם אנחנו
  * לא מצאנו עדיין נשים חרדיות בכנסת ואנחנו פועלות כדי לשנות את זה"). The
  * headline stays the literal "page not found" (it's still true, and it's
- * the joke's setup); only the line under it changes, from an explanation
- * of *why* the link might be broken to the joke, keeping its closing
- * "back to the homepage" sentence exactly as it read before.
+ * the joke's setup); the line under it changes from an explanation of
+ * *why* the link might be broken to the joke, split into its own bold,
+ * accent-colored line (2026-08-31 follow-up: "השטיק... לא מספיק בולט. אז
+ * תבליט אותו", the joke itself wasn't standing out enough), with the
+ * practical "back to the homepage" sentence kept as its own plain line
+ * right below, exactly as it read before.
  */
 export function NotFoundContent() {
   return (
@@ -27,9 +30,10 @@ export function NotFoundContent() {
       <div dir="rtl" className="mb-8">
         <Eyebrow className="mb-2 justify-center">שגיאה 404</Eyebrow>
         <h1 className="m-0 mb-3 text-[clamp(26px,4vw,36px)] leading-[1.15]">הדף לא נמצא</h1>
-        <p className="m-0 text-[16px] leading-[1.7] text-neutral-800">
-          אבל גם אנחנו עוד לא מצאנו נשים חרדיות בכנסת, ואנחנו פועלות לשנות את זה. אפשר לחזור לעמוד הבית.
+        <p className="m-0 mb-2 text-[19px] font-extrabold leading-[1.5] text-accent-700">
+          אבל גם אנחנו עוד לא מצאנו נשים חרדיות בכנסת, ואנחנו פועלות לשנות את זה.
         </p>
+        <p className="m-0 text-[16px] leading-[1.7] text-neutral-800">אפשר לחזור לעמוד הבית.</p>
       </div>
 
       <div aria-hidden="true" className="mx-auto mb-8 h-px w-16 bg-divider" />
@@ -37,10 +41,11 @@ export function NotFoundContent() {
       <div dir="ltr" className="mb-10">
         <Eyebrow className="mb-2 justify-center">404 error</Eyebrow>
         <h2 className="m-0 mb-3 text-[clamp(26px,4vw,36px)] leading-[1.15]">Page not found</h2>
-        <p className="m-0 text-[16px] leading-[1.7] text-neutral-800">
+        <p className="m-0 mb-2 text-[19px] font-extrabold leading-[1.5] text-accent-700">
           But then, we haven&rsquo;t found Haredi women in the Knesset yet either, and we&rsquo;re working to change
-          that. You can head back to the homepage.
+          that.
         </p>
+        <p className="m-0 text-[16px] leading-[1.7] text-neutral-800">You can head back to the homepage.</p>
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-4">

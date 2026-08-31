@@ -48,8 +48,8 @@ export const hanivcheretHero = {
     en: "Nivcharot's public, social and political leadership program: a year-long journey of knowledge, tools and community for Haredi women who want to lead change, in their neighborhood, municipality, the media and civil society.",
   } satisfies Localized,
   bodySecondary: {
-    he: 'מאז המחזור הראשון ב־2018 עברו בתוכנית תשעה מחזורים ומעל מאה בוגרות.',
-    en: 'The ninth cohort has finished and there is no open registration right now. Leave your details and we will be in touch when the call for the tenth cohort opens. Since the first cohort in 2018, nine cohorts and over a hundred alumnae have passed through the program.',
+    he: 'מאז המחזור הראשון ב־2018 עברו בתוכנית תשעה מחזורים ומעל מאתיים בוגרות.',
+    en: 'The ninth cohort has finished and there is no open registration right now. Leave your details and we will be in touch when the call for the tenth cohort opens. Since the first cohort in 2018, nine cohorts and over two hundred alumnae have passed through the program.',
   } satisfies Localized,
   cta: {
     label: { he: 'אשמח להצטרף למחזור העשירי', en: 'Join the tenth cohort mailing list' } satisfies Localized,
