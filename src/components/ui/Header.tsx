@@ -10,7 +10,7 @@ import { Button } from './Button'
 import { cn } from './cn'
 import { HeartIcon } from './HeartIcon'
 import { Logo } from './Logo'
-import { LanguageToggle } from './LanguageToggle'
+import { CompactLanguageToggle } from './CompactLanguageToggle'
 import { HeaderDonateHeart } from './HeaderDonateHeart'
 import { NavMenu, type NavLink, type NavMenuTriggerVariant } from './NavMenu'
 import { PodcastIcon } from './PodcastIcon'
@@ -39,7 +39,7 @@ export type HeaderProps = {
    */
   bordered?: boolean
   className?: string
-  /** Pass-through to `NavMenu`'s `triggerVariant` — @default 'boxed', see its own doc comment. Only the `/header-lab` comparison page passes anything else. */
+  /** Pass-through to `NavMenu`'s `triggerVariant`. @default 'borderless-red' (this `Header`'s own real-site default — see its own doc comment for the rest of `NavMenuTriggerVariant`'s options). */
   navMenuTriggerVariant?: NavMenuTriggerVariant
 }
 
@@ -83,7 +83,7 @@ const SHADOW_STATIC = '0 8px 20px -8px rgba(49,68,81,0.18)'
  * flat shadow — skipped under `prefers-reduced-motion`, which gets the
  * plain static shadow instead.
  */
-export function Header({ locale, navLinks = [], bordered = true, className, navMenuTriggerVariant }: HeaderProps) {
+export function Header({ locale, navLinks = [], bordered = true, className, navMenuTriggerVariant = 'borderless-red' }: HeaderProps) {
   const shouldReduceMotion = useReducedMotion()
   const [scrolled, setScrolled] = useState(false)
 
@@ -126,14 +126,24 @@ export function Header({ locale, navLinks = [], bordered = true, className, navM
         className="flex items-center gap-5 max-[640px]:gap-2 max-[519px]:gap-1"
         aria-label={t(locale, { he: 'ניווט ראשי', en: 'Primary navigation' })}
       >
+        {/*
+          order-N, overridden by max-[519px]:order-N (2026-08-31 brief,
+          picked after comparing it live on /header-lab): below 519px the
+          row reads,
+          start to end, "hamburger, heart, sound, language" — swapping
+          the podcast icon and the language selector's positions relative
+          to desktop, where the order stays podcast/language/heart/menu.
+          Heart and the hamburger keep the same relative position at every
+          width, so only these two need a mobile override.
+        */}
         <Link
           href={`/${locale}/podcast`}
-          className="group flex items-center text-accent-700 hover:text-accent focus-visible:rounded-sm focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="group order-1 flex items-center text-accent-700 hover:text-accent focus-visible:rounded-sm focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent max-[519px]:order-2"
           aria-label={t(locale, { he: 'הפודקאסט של נבחרות', en: "Nivcharot's podcast" })}
         >
           <PodcastIcon className="max-[640px]:h-[18px] max-[640px]:w-[18px] transition-transform duration-300 ease-out group-hover:scale-110" />
         </Link>
-        <LanguageToggle locale={locale} />
+        <CompactLanguageToggle locale={locale} className="order-2 max-[519px]:order-1" />
         {/*
           Below 520px: a bare heart (HeaderDonateHeart) instead of the
           "תרמו ♥" pill — the pill read as cramped once squeezed this far
@@ -142,17 +152,17 @@ export function Header({ locale, navLinks = [], bordered = true, className, navM
           JS-conditional — avoids a hydration mismatch between server and
           client on which one should render at the client's actual width.
         */}
-        <HeaderDonateHeart locale={locale} className="hidden max-[519px]:flex" />
+        <HeaderDonateHeart locale={locale} className="order-3 hidden max-[519px]:flex" />
         <Button
           href={`/${locale}/donate`}
           variant="primary"
           size="sm"
-          className="hidden items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px] min-[520px]:flex"
+          className="order-3 hidden items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px] min-[520px]:flex"
         >
           <HeartIcon />
           {t(locale, { he: 'תרמו', en: 'Donate' })}
         </Button>
-        <NavMenu locale={locale} links={navLinks} triggerVariant={navMenuTriggerVariant} />
+        <NavMenu locale={locale} links={navLinks} triggerVariant={navMenuTriggerVariant} className="order-4" />
       </nav>
     </motion.header>
   )

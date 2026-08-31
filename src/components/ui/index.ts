@@ -18,6 +18,8 @@ export type { LogoProps } from './Logo'
 export { LanguageToggle } from './LanguageToggle'
 export type { LanguageToggleProps } from './LanguageToggle'
 
+export { CompactLanguageToggle } from './CompactLanguageToggle'
+
 /** @deprecated use `LanguageToggle` */
 export { LocaleSwitcher } from './LocaleSwitcher'
 

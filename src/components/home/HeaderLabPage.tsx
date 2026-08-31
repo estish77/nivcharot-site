@@ -9,7 +9,7 @@ import type { NavMenuTriggerVariant } from '@/components/ui/NavMenu'
 import { Logo, PodcastIcon, LanguageToggle, HeaderDonateHeart, Button, HeartIcon, NavMenu, type NavLink } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import type { PayloadSiteSettings } from '@/lib/cms'
-import { CompactLanguageToggle } from './CompactLanguageToggle'
+import { CompactLanguageToggle } from '@/components/ui/CompactLanguageToggle'
 
 const OPTIONS: { value: NavMenuTriggerVariant; label: { he: string; en: string } }[] = [
   { value: 'boxed', label: { he: 'היום (מסגרת)', en: 'Today (boxed)' } },

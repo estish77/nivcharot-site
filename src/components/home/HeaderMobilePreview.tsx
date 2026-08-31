@@ -2,9 +2,8 @@
 
 import Link from 'next/link'
 
-import { Logo, PodcastIcon, HeaderDonateHeart, NavMenu, type NavLink } from '@/components/ui'
+import { Logo, PodcastIcon, HeaderDonateHeart, NavMenu, CompactLanguageToggle, type NavLink } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
-import { CompactLanguageToggle } from './CompactLanguageToggle'
 
 /**
  * Just the header row, nothing else — meant to be embedded via a fixed-width
