@@ -30,6 +30,21 @@ const DURATION_S = 1.1
  *
  * Each bar scales along Y around its own center — `prefers-reduced-motion`
  * freezes every bar at full height instead of stopping mid-animation.
+ *
+ * No `initial={false}` (2026-08-31 fix — confirmed production-only, via
+ * `www.nivcharot.co.il`, never reproduced on `next dev`): with it, this
+ * bar's looping keyframe `animate` never actually started after a real
+ * production hydration — every bar sat frozen at its very first keyframe
+ * value indefinitely, confirmed by sampling the rendered transform matrix
+ * 15 times over 2+ seconds with zero change. The header's own
+ * `repeat: Infinity` shadow-breathe animation, which has no `initial`
+ * override and only starts once `scrolled` flips via a real state change,
+ * animated correctly the whole time — narrowing this to the specific
+ * combination of `initial={false}` with an `animate` value that's already
+ * identical on the very first render (nothing ever changes it later to
+ * nudge Motion into starting the loop). Dropping `initial={false}` costs a
+ * barely-perceptible one-time settle into the first keyframe on mount,
+ * which is a fair trade for the animation actually running at all.
  */
 export function PodcastIcon({ className }: PodcastIconProps) {
   const shouldReduceMotion = useReducedMotion()
@@ -46,7 +61,6 @@ export function PodcastIcon({ className }: PodcastIconProps) {
           rx={1.5}
           fill="currentColor"
           style={{ transformOrigin: 'center' }}
-          initial={false}
           animate={shouldReduceMotion ? { scaleY: 1 } : { scaleY: [0.55, 1, 0.55] }}
           transition={
             shouldReduceMotion
