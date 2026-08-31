@@ -2,14 +2,14 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 
 import { Footer } from '@/components/ui/Footer'
 import { Header } from '@/components/ui/Header'
 import type { NavMenuTriggerVariant } from '@/components/ui/NavMenu'
 import { Logo, PodcastIcon, LanguageToggle, HeaderDonateHeart, Button, HeartIcon, NavMenu, type NavLink } from '@/components/ui'
-import { dict, locales, t, type Locale } from '@/lib/i18n'
+import { t, type Locale } from '@/lib/i18n'
 import type { PayloadSiteSettings } from '@/lib/cms'
+import { CompactLanguageToggle } from './CompactLanguageToggle'
 
 const OPTIONS: { value: NavMenuTriggerVariant; label: { he: string; en: string } }[] = [
   { value: 'boxed', label: { he: 'היום (מסגרת)', en: 'Today (boxed)' } },
@@ -18,55 +18,6 @@ const OPTIONS: { value: NavMenuTriggerVariant; label: { he: string; en: string }
   { value: 'soft-hover', label: { he: 'רקע רך בהובר', en: 'Soft hover bg' } },
   { value: 'underline', label: { he: 'קו הדגשה', en: 'Underline accent' } },
 ]
-
-/** Swaps only the leading /he or /en path segment — same logic as `LanguageToggle`'s own private helper, not exported from there so duplicated here for this draft-only mock. */
-function withLocale(pathname: string, locale: Locale): string {
-  const segments = pathname.split('/')
-  segments[1] = locale
-  return segments.join('/') || `/${locale}`
-}
-
-/**
- * Draft-only mock (2026-08-31 brief: "בורר שנפתח שפחות יתפוס מקום") — a
- * collapsed language button (just the current locale's label + a caret)
- * that opens a small popover with the OTHER locale to switch to, instead
- * of showing both "עב | EN" side by side at all times. Real navigation
- * (same href-swap as `LanguageToggle`), just laid out to take less resting
- * width. Not a reusable component — if this direction is picked, it should
- * fold into `LanguageToggle.tsx` itself rather than staying a copy here.
- */
-function CompactLanguageToggle({ locale }: { locale: Locale }) {
-  const pathname = usePathname()
-  const [open, setOpen] = useState(false)
-  const other = locales.find((l) => l !== locale) as Locale
-
-  return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        className="flex items-center gap-1 font-heading text-[12.5px] font-bold tracking-[0.05em] text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-      >
-        {dict.languageToggle[locale]}
-        <svg viewBox="0 0 12 8" width="9" height="6" aria-hidden="true" className={open ? 'rotate-180' : ''}>
-          <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-      {open ? (
-        <div className="absolute end-0 top-full z-10 mt-2 min-w-[64px] border-2 border-divider bg-bg py-1 shadow-[0_8px_20px_-8px_rgba(49,68,81,0.25)]">
-          <Link
-            href={withLocale(pathname, other)}
-            onClick={() => setOpen(false)}
-            className="block px-3 py-1.5 font-heading text-[12.5px] font-semibold text-text no-underline hover:bg-tint-cream"
-          >
-            {dict.languageToggle[other]}
-          </Link>
-        </div>
-      ) : null}
-    </div>
-  )
-}
 
 /**
  * Throwaway comparison page (2026-08-29 lab brief: "תראה לי דוגמא פה קודם.
@@ -203,6 +154,37 @@ export function HeaderLabPage({
             </Button>
             <NavMenu locale={locale} links={navLinks} triggerVariant="borderless-red" />
           </nav>
+        </div>
+      </div>
+
+      {/*
+        2026-08-31 follow-up #3: "F12 מפעיל מצב טיסה" — window-resizing
+        (imprecise) and DevTools' own device-mode shortcut (remapped to a
+        hardware key on this keyboard) were both ruled out as ways to see
+        the row above at genuine mobile width. An `<iframe>` has its own
+        real, independent viewport — no resizing or shortcut needed — sized
+        to 390px here (an iPhone-ish width) so this always renders every
+        breakpoint-gated piece (the heart/Button toggle, icon sizes, gaps)
+        exactly as a real phone would, permanently. Points at
+        `/header-lab/mobile-preview`, a separate minimal route with no
+        iframe of its own — embedding THIS page inside itself would nest
+        infinitely.
+      */}
+      <div className="border-b-2 border-divider bg-bg px-8 py-4 max-[640px]:px-4">
+        <div className="mx-auto max-w-[1080px]">
+          <p className="mb-3 font-heading text-[12px] font-extrabold tracking-[0.06em] text-accent-700">
+            {t(locale, {
+              he: 'תצוגת מובייל אמיתית ותמידית (390px) — בלי לכווץ שום דבר',
+              en: 'Real, permanent mobile view (390px) — nothing to resize',
+            })}
+          </p>
+          <iframe
+            src={`/${locale}/header-lab/mobile-preview`}
+            title={t(locale, { he: 'תצוגה מקדימה של ההדר במובייל', en: 'Mobile header preview' })}
+            width={390}
+            height={150}
+            className="mx-auto block max-w-full border-2 border-divider"
+          />
         </div>
       </div>
 
