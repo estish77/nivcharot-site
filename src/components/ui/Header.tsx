@@ -145,19 +145,24 @@ export function Header({ locale, navLinks = [], bordered = true, className, navM
         </Link>
         <CompactLanguageToggle locale={locale} className="order-2 max-[519px]:order-1" />
         {/*
-          Below 520px: a bare heart (HeaderDonateHeart) instead of the
+          Below 860px: a bare heart (HeaderDonateHeart) instead of the
           "תרמו ♥" pill — the pill read as cramped once squeezed this far
-          (2026-08-29 brief). At 520px+ it's the reverse: the full labelled
-          button, hidden heart. Two elements, CSS-toggled, rather than one
-          JS-conditional — avoids a hydration mismatch between server and
-          client on which one should render at the client's actual width.
+          (2026-08-29 brief), later widened from the original 520px cutoff
+          to also cover iPad-portrait width (768px) — "גם תצוגה מינימליסטית
+          של לב השכוייח בהדר [ב]אייפד, במקום הכפתור האדום" (2026-08-31).
+          860px matches this site's other tablet-tier breakpoints (the
+          Hero's own grid-column collapse, SeatHall's old rotation cutoff).
+          At 860px+ it's the reverse: the full labelled button, hidden
+          heart. Two elements, CSS-toggled, rather than one JS-conditional
+          — avoids a hydration mismatch between server and client on which
+          one should render at the client's actual width.
         */}
-        <HeaderDonateHeart locale={locale} className="order-3 hidden max-[519px]:flex" />
+        <HeaderDonateHeart locale={locale} className="order-3 hidden max-[860px]:flex" />
         <Button
           href={`/${locale}/donate`}
           variant="primary"
           size="sm"
-          className="order-3 hidden items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px] min-[520px]:flex"
+          className="order-3 hidden items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px] min-[861px]:flex"
         >
           <HeartIcon />
           {t(locale, { he: 'תרמו', en: 'Donate' })}
