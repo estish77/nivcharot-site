@@ -38,6 +38,12 @@ export function NotFoundContent() {
         <p className="m-0 text-[16px] leading-[1.7] text-neutral-800">אפשר לחזור לעמוד הבית.</p>
       </div>
 
+      <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
+        <Button href="/" variant="primary">
+          בית · Home
+        </Button>
+      </div>
+
       <div aria-hidden="true" className="mx-auto mb-8 h-px w-16 bg-divider" />
 
       <div dir="ltr" className="mb-10">
@@ -49,12 +55,6 @@ export function NotFoundContent() {
           and we&rsquo;re working to change that.
         </p>
         <p className="m-0 text-[16px] leading-[1.7] text-neutral-800">You can head back to the homepage.</p>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-center gap-4">
-        <Button href="/" variant="primary">
-          בית · Home
-        </Button>
       </div>
     </Section>
   )
