@@ -237,7 +237,7 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
             eyebrow={t(locale, hanivcheretQuotesEyebrow)}
             title={t(locale, hanivcheretSectionTitles.quotes)}
           />
-          <AlumnaeWall locale={locale} />
+          <AlumnaeWall locale={locale} edgeTreatment="accentLine" />
         </Section>
       </Reveal>
 
