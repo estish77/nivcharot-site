@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import { Footer } from '@/components/ui/Footer'
 import { Header } from '@/components/ui/Header'
 import type { NavMenuTriggerVariant } from '@/components/ui/NavMenu'
-import type { NavLink } from '@/components/ui'
-import { t, type Locale } from '@/lib/i18n'
+import { Logo, PodcastIcon, LanguageToggle, HeaderDonateHeart, Button, HeartIcon, NavMenu, type NavLink } from '@/components/ui'
+import { dict, locales, t, type Locale } from '@/lib/i18n'
 import type { PayloadSiteSettings } from '@/lib/cms'
 
 const OPTIONS: { value: NavMenuTriggerVariant; label: { he: string; en: string } }[] = [
@@ -16,6 +18,55 @@ const OPTIONS: { value: NavMenuTriggerVariant; label: { he: string; en: string }
   { value: 'soft-hover', label: { he: 'רקע רך בהובר', en: 'Soft hover bg' } },
   { value: 'underline', label: { he: 'קו הדגשה', en: 'Underline accent' } },
 ]
+
+/** Swaps only the leading /he or /en path segment — same logic as `LanguageToggle`'s own private helper, not exported from there so duplicated here for this draft-only mock. */
+function withLocale(pathname: string, locale: Locale): string {
+  const segments = pathname.split('/')
+  segments[1] = locale
+  return segments.join('/') || `/${locale}`
+}
+
+/**
+ * Draft-only mock (2026-08-31 brief: "בורר שנפתח שפחות יתפוס מקום") — a
+ * collapsed language button (just the current locale's label + a caret)
+ * that opens a small popover with the OTHER locale to switch to, instead
+ * of showing both "עב | EN" side by side at all times. Real navigation
+ * (same href-swap as `LanguageToggle`), just laid out to take less resting
+ * width. Not a reusable component — if this direction is picked, it should
+ * fold into `LanguageToggle.tsx` itself rather than staying a copy here.
+ */
+function CompactLanguageToggle({ locale }: { locale: Locale }) {
+  const pathname = usePathname()
+  const [open, setOpen] = useState(false)
+  const other = locales.find((l) => l !== locale) as Locale
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex items-center gap-1 font-heading text-[12.5px] font-bold tracking-[0.05em] text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        {dict.languageToggle[locale]}
+        <svg viewBox="0 0 12 8" width="9" height="6" aria-hidden="true" className={open ? 'rotate-180' : ''}>
+          <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {open ? (
+        <div className="absolute end-0 top-full z-10 mt-2 min-w-[64px] border-2 border-divider bg-bg py-1 shadow-[0_8px_20px_-8px_rgba(49,68,81,0.25)]">
+          <Link
+            href={withLocale(pathname, other)}
+            onClick={() => setOpen(false)}
+            className="block px-3 py-1.5 font-heading text-[12.5px] font-semibold text-text no-underline hover:bg-tint-cream"
+          >
+            {dict.languageToggle[other]}
+          </Link>
+        </div>
+      ) : null}
+    </div>
+  )
+}
 
 /**
  * Throwaway comparison page (2026-08-29 lab brief: "תראה לי דוגמא פה קודם.
@@ -62,6 +113,92 @@ export function HeaderLabPage({
       </div>
 
       <Header locale={locale} navLinks={navLinks} bordered={false} navMenuTriggerVariant={variant} />
+
+      {/*
+        The actual requested draft (2026-08-31 brief: "דראפט מקומי של ההדר
+        כפי שהוא עכשיו, רק בלי מסגרת בהמבורגר, לפי הסדר: משמאל לימין,
+        המבורגר, לב, אייקון סאונד, בוררי השפה") — everything above is the
+        pre-existing hamburger-border comparison; this is the header ROW
+        ITSELF, reassembled from the same real sub-components in the
+        requested order (today's DOM order is podcast/language/heart/menu;
+        the request swaps the first two — logical start→end becomes
+        language, podcast, heart, menu, which in RTL reads right-to-left as
+        language nearest the logo then podcast then heart then the
+        hamburger at the far LEFT edge — "hamburger, heart, sound, language"
+        reading left to right, exactly as asked).
+      */}
+      <div className="border-b-2 border-divider bg-bg px-8 py-[18px] max-[640px]:px-4 max-[640px]:py-3">
+        <p className="mx-auto mb-3 max-w-[1080px] font-heading text-[12px] font-extrabold tracking-[0.06em] text-accent-700">
+          {t(locale, { he: 'הדראפט המבוקש — לפי הסדר: המבורגר · לב · סאונד · שפה', en: 'The requested draft — order: hamburger · heart · sound · language' })}
+        </p>
+        <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-6 max-[640px]:gap-3">
+          <Link href={`/${locale}`} className="inline-flex items-center rounded-sm text-text no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            <Logo locale={locale} />
+          </Link>
+          <nav className="flex items-center gap-5 max-[640px]:gap-2 max-[519px]:gap-1" aria-label={t(locale, { he: 'ניווט — דראפט', en: 'Navigation — draft' })}>
+            <LanguageToggle locale={locale} />
+            <Link
+              href={`/${locale}/podcast`}
+              className="group flex items-center text-accent-700 hover:text-accent focus-visible:rounded-sm focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              aria-label={t(locale, { he: 'הפודקאסט של נבחרות', en: "Nivcharot's podcast" })}
+            >
+              <PodcastIcon className="max-[640px]:h-[18px] max-[640px]:w-[18px] transition-transform duration-300 ease-out group-hover:scale-110" />
+            </Link>
+            <HeaderDonateHeart locale={locale} className="hidden max-[519px]:flex" />
+            <Button
+              href={`/${locale}/donate`}
+              variant="primary"
+              size="sm"
+              className="hidden items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px] min-[520px]:flex"
+            >
+              <HeartIcon />
+              {t(locale, { he: 'תרמו', en: 'Donate' })}
+            </Button>
+            <NavMenu locale={locale} links={navLinks} triggerVariant="borderless-red" />
+          </nav>
+        </div>
+      </div>
+
+      {/*
+        2026-08-31 follow-up: "אין שם את העיצוב למובייל עם הלב החלול" — the
+        hollow-heart mobile link (`HeaderDonateHeart`) was already correctly
+        in both header rows above, but only actually VISIBLE below the
+        max-[519px] breakpoint — easy to miss inside a full header row at
+        desktop width, and not something the two static screenshots sent
+        back made obvious either. Shown here on its own, at every width, so
+        it's unmistakable rather than something to have to resize the
+        window to notice.
+      */}
+      <div className="border-b-2 border-divider bg-bg px-8 py-4 max-[640px]:px-4">
+        <div className="mx-auto flex max-w-[1080px] flex-wrap items-center gap-4">
+          <p className="font-heading text-[12px] font-extrabold tracking-[0.06em] text-accent-700">
+            {t(locale, { he: 'תזכורת: הלב החלול של המובייל (זה כבר קיים למעלה, רק מוצג כאן תמיד כדי שיהיה ברור)', en: "Reminder: the mobile hollow heart (already above, just always shown here so it's unmistakable)" })}
+          </p>
+          <HeaderDonateHeart locale={locale} />
+          <p className="text-[12.5px] leading-[1.5] text-neutral-700">
+            {t(locale, {
+              he: 'ריק/חלול במנוחה, ממלא באדום עם אנימציית "פופ" בלחיצה — אותו לב ואותה אנימציה בדיוק כמו כפתור השכוייח בדף הצוות.',
+              en: 'Empty/outlined at rest, fills red with a "pop" animation on click — the exact same heart and animation as the שכוייח button on the Team page.',
+            })}
+          </p>
+        </div>
+      </div>
+
+      <div className="border-b-2 border-divider bg-tint-cream px-8 py-4 max-[640px]:px-4">
+        <div className="mx-auto flex max-w-[1080px] flex-wrap items-center gap-4">
+          <p className="font-heading text-[12px] font-extrabold tracking-[0.06em] text-accent-700">
+            {t(locale, { he: 'דוגמה: בורר שפה קומפקטי (סגור/פתוח)', en: 'Example: compact language selector (closed/open)' })}
+          </p>
+          <CompactLanguageToggle locale={locale} />
+          <p className="text-[12.5px] leading-[1.5] text-neutral-700">
+            {t(locale, {
+              he: 'לוחצים כדי לראות אותו נפתח. ברוחב מנוחה הוא תופס רק תווית אחת + חץ, לעומת "עב | EN" הקבוע.',
+              en: 'Click to see it open. At rest it takes only one label + a caret, instead of the always-visible "EN | עב".',
+            })}
+          </p>
+        </div>
+      </div>
+
       <main id="main-content" className="flex-1">
         <div className="mx-auto flex max-w-[1080px] flex-col gap-4 px-8 py-16 max-[860px]:px-[18px]">
           <h1 className="text-[clamp(28px,4vw,44px)] leading-[1.1]">
