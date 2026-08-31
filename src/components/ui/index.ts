@@ -33,6 +33,7 @@ export { SiteNotice } from './SiteNotice'
 export type { SiteNoticeProps } from './SiteNotice'
 
 export { NotFoundContent } from './NotFoundContent'
+export { NotFoundMascot } from './NotFoundMascot'
 
 export { Footer } from './Footer'
 export type { FooterProps } from './Footer'
