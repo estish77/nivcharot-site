@@ -46,7 +46,34 @@ const DEFAULT_COLUMNS = 3
  * (see `interleavedTestimonials`): a random shuffle would produce different
  * markup on the server and the client and break hydration.
  */
-export function AlumnaeWall({ locale, className }: { locale: Locale; className?: string }) {
+/**
+ * How the drifting columns meet the wall's top/bottom edge (2026-08-31
+ * follow-up: "אני רוצה תזוזה אוטומטית... אהבתי את מה שקיים, אבל השקיפות
+ * שקורית בתזוזה לא קשורה לשפה הויזואלית של האתר" — the continuous drift
+ * itself stays; only the soft gradient dissolve at the edges is up for
+ * comparison, since the rest of the site favors crisp borders and hard
+ * directional motion over opacity fades, e.g. `AlumnaeQuoteBanner` was
+ * explicitly asked to use a side-wipe "not a fade" for its own rotation).
+ *   - `fade`: today's exact treatment, a 64px soft gradient dissolve.
+ *   - `hardCut`: no gradient at all — cards are simply clipped by the
+ *     container's own edge, appearing/disappearing abruptly.
+ *   - `accentLine`: a solid 2px accent-red border at the top/bottom instead
+ *     of a gradient — same "framed by a hard line" language as every
+ *     bordered `Cell`/card on the site, no dissolve at all.
+ *   - `sharpFade`: still a gradient, but 8px instead of 64px — reads as a
+ *     plain anti-aliased edge rather than a visible "dissolve" effect.
+ */
+export type AlumnaeWallEdgeTreatment = 'fade' | 'hardCut' | 'accentLine' | 'sharpFade'
+
+export function AlumnaeWall({
+  locale,
+  className,
+  edgeTreatment = 'fade',
+}: {
+  locale: Locale
+  className?: string
+  edgeTreatment?: AlumnaeWallEdgeTreatment
+}) {
   const shouldReduceMotion = useReducedMotion()
   const [paused, setPaused] = useState(false)
 
@@ -88,13 +115,37 @@ export function AlumnaeWall({ locale, className }: { locale: Locale; className?:
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      {/*
-        Soft fades top and bottom so cards enter and leave the wall instead
-        of being sliced off by a hard edge. `bg` is the page ground, so the
-        gradient dissolves into whatever sits behind the section.
-      */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-bg to-transparent" />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-bg to-transparent" />
+      {edgeTreatment === 'fade' || edgeTreatment === 'sharpFade' ? (
+        // Soft fade so cards enter and leave the wall instead of being
+        // sliced off by a hard edge. `bg` is the page ground, so the
+        // gradient dissolves into whatever sits behind the section.
+        // `sharpFade` is the exact same technique, just an 8px band instead
+        // of 64px — a barely-there edge softener rather than a visible fade.
+        <>
+          <div
+            aria-hidden="true"
+            className={cn(
+              'pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-bg to-transparent',
+              edgeTreatment === 'fade' ? 'h-16' : 'h-2',
+            )}
+          />
+          <div
+            aria-hidden="true"
+            className={cn(
+              'pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-bg to-transparent',
+              edgeTreatment === 'fade' ? 'h-16' : 'h-2',
+            )}
+          />
+        </>
+      ) : null}
+      {edgeTreatment === 'accentLine' ? (
+        // No dissolve at all — a solid 2px line, the same "framed by a hard
+        // border" language every bordered Cell/card on the site already uses.
+        <>
+          <div aria-hidden="true" className="absolute inset-x-0 top-0 z-10 h-[2px] bg-accent" />
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 z-10 h-[2px] bg-accent" />
+        </>
+      ) : null}
 
       <div
         className="grid h-[560px] gap-5 overflow-hidden max-[900px]:h-[520px]"
