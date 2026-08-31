@@ -31,7 +31,9 @@ export function NotFoundContent() {
         <Eyebrow className="mb-2 justify-center">שגיאה 404</Eyebrow>
         <h1 className="m-0 mb-3 text-[clamp(26px,4vw,36px)] leading-[1.15]">הדף לא נמצא</h1>
         <p className="m-0 mb-2 text-[19px] font-extrabold leading-[1.5] text-accent-700">
-          אבל גם אנחנו עוד לא מצאנו נשים חרדיות בכנסת, ואנחנו פועלות לשנות את זה.
+          אבל גם אנחנו עוד לא מצאנו נשים חרדיות בכנסת,
+          <br />
+          ואנחנו פועלות לשנות את זה.
         </p>
         <p className="m-0 text-[16px] leading-[1.7] text-neutral-800">אפשר לחזור לעמוד הבית.</p>
       </div>
@@ -42,8 +44,9 @@ export function NotFoundContent() {
         <Eyebrow className="mb-2 justify-center">404 error</Eyebrow>
         <h2 className="m-0 mb-3 text-[clamp(26px,4vw,36px)] leading-[1.15]">Page not found</h2>
         <p className="m-0 mb-2 text-[19px] font-extrabold leading-[1.5] text-accent-700">
-          But then, we haven&rsquo;t found Haredi women in the Knesset yet either, and we&rsquo;re working to change
-          that.
+          But then, we haven&rsquo;t found Haredi women in the Knesset yet either,
+          <br />
+          and we&rsquo;re working to change that.
         </p>
         <p className="m-0 text-[16px] leading-[1.7] text-neutral-800">You can head back to the homepage.</p>
       </div>
