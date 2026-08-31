@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from 'react'
 
+import { CampaignCard } from './CampaignCard'
 import { EventGalleryCard } from '@/components/media/EventGalleryCard'
 import { pressItemHref } from '@/content/press-archive'
 import {
@@ -13,7 +14,7 @@ import {
   activismPositionPapersPlaceholder,
   type ActivismPillar,
 } from '@/content/activism'
-import { getActivismContent, getActivismFaqs, getEvents, getPressArchiveItems } from '@/lib/cms'
+import { getActivismContent, getActivismFaqs, getCampaigns, getEvents, getPressArchiveItems } from '@/lib/cms'
 import { arrowForward, t, type Locale, type Localized } from '@/lib/i18n'
 
 /** Renders a `\n`-joined CMS string's line breaks as real `<br>`s — same convention as the About/Story pages' fixture `\n` markers. */
@@ -38,8 +39,29 @@ import { EqualizerDots } from './EqualizerDots'
 const heroJumpLinks = [
   { href: '#legal', label: { he: 'למשפט והלכה ↓', en: 'Law & Halakha ↓' } satisfies Localized },
   { href: '#gatherings', label: { he: 'לכנסים ולגלריות ↓', en: 'Gatherings & galleries ↓' } satisfies Localized },
+  { href: '#campaigns', label: { he: 'לקמפיינים ↓', en: 'Campaigns ↓' } satisfies Localized },
   { href: '#archive', label: { he: 'לארכיון ↓', en: 'Archive ↓' } satisfies Localized },
 ] as const
+
+/**
+ * "קמפיינים" (2026-08-31 brief): a gallery of the org's own real Instagram
+ * campaign posts, styled like the post cards themselves. Starts empty
+ * until real posts are added through the admin (see `getCampaigns()`'s own
+ * doc comment in src/lib/cms.ts on why nothing is invented to fill it).
+ */
+const campaignsSectionText = {
+  eyebrow: { he: 'קמפיינים', en: 'CAMPAIGNS' } satisfies Localized,
+  title: { he: 'הקמפיינים שלנו', en: 'Our campaigns' } satisfies Localized,
+  lead: {
+    he: 'פוסטים נבחרים מהעמוד שלנו באינסטגרם.',
+    en: 'Selected posts from our Instagram page.',
+  } satisfies Localized,
+  empty: {
+    he: 'קמפיינים יתווספו כאן בקרוב.',
+    en: 'Campaigns will be added here soon.',
+  } satisfies Localized,
+  instagramCta: { he: 'לעמוד שלנו באינסטגרם', en: 'Visit our Instagram' } satisfies Localized,
+}
 
 /**
  * "כנסים, הקרנות וגלריות" / "Conferences, screenings & galleries" — moved
@@ -154,11 +176,12 @@ function PillarImage({ label }: { label: string }) {
 }
 
 export async function ActivismPage({ locale }: { locale: Locale }) {
-  const [content, faqs, pressArchiveItemsSorted, eventGalleries] = await Promise.all([
+  const [content, faqs, pressArchiveItemsSorted, eventGalleries, campaigns] = await Promise.all([
     getActivismContent(locale),
     getActivismFaqs(locale),
     getPressArchiveItems(),
     getEvents(locale),
+    getCampaigns(locale),
   ])
 
   return (
@@ -365,6 +388,35 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
               </p>
             )}
           </div>
+        </Section>
+      </Reveal>
+
+      {/* ===== Section: קמפיינים / Campaigns ===== */}
+      <Reveal as="section">
+        <Section as="div" id="campaigns" maxWidth={1080} paddingBlockStart="64px" paddingBlockEnd="64px">
+          <SectionHead
+            className="mb-2"
+            eyebrow={t(locale, campaignsSectionText.eyebrow)}
+            title={t(locale, campaignsSectionText.title)}
+            lead={t(locale, campaignsSectionText.lead)}
+          />
+          {campaigns.length > 0 ? (
+            <div className="mt-6 grid grid-cols-1 gap-7 min-[560px]:grid-cols-2 min-[861px]:grid-cols-3">
+              {campaigns.map((post) => (
+                <CampaignCard key={post.id} post={post} locale={locale} />
+              ))}
+            </div>
+          ) : (
+            <p className="mt-6 text-[14px] text-neutral-700">{t(locale, campaignsSectionText.empty)}</p>
+          )}
+          <a
+            href="https://www.instagram.com/nivcharot/"
+            target="_blank"
+            rel="noopener"
+            className={`mt-6 inline-block text-[14px] font-semibold ${FOCUS_RING}`}
+          >
+            <ArrowLabel locale={locale}>{t(locale, campaignsSectionText.instagramCta)}</ArrowLabel>
+          </a>
         </Section>
       </Reveal>
 

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { AlumnaeQuotes } from './AlumnaeQuotes'
+import { Campaigns } from './Campaigns'
 import { Categories } from './Categories'
 import { ElsewhereMedia } from './ElsewhereMedia'
 import { Events } from './Events'
@@ -31,6 +32,9 @@ import { TimelineMilestones } from './TimelineMilestones'
  *
  * `ProgramApplications` added 2026-08-28 — the same kind of thing for the
  * "הנבחרת" leadership programme's own sign-up form.
+ *
+ * `Campaigns` added 2026-08-31: the Instagram-post-card gallery on the
+ * Activism page's "קמפיינים" section.
  */
 export const collections: CollectionConfig[] = [
   TeamAppreciations,
@@ -45,6 +49,7 @@ export const collections: CollectionConfig[] = [
   TimelineMilestones,
   Faqs,
   AlumnaeQuotes,
+  Campaigns,
   Inquiries,
   ProgramApplications,
   NewsletterSubscribers,

@@ -1180,3 +1180,51 @@ export async function getEvents(locale: Locale): Promise<EventGalleryContent[]> 
     return []
   }
 }
+
+export type CampaignPost = {
+  id: string
+  image: { url: string; alt: string } | null
+  caption: string
+  postedAt: string
+  instagramUrl?: string
+}
+
+/**
+ * "קמפיינים" Instagram-post-card gallery on the Activism page (2026-08-31
+ * brief). Same honesty rule as `getEvents()` right above: no Instagram
+ * scraping API exists here, so there's nothing to fabricate a fallback
+ * from. An empty array (rendered as an empty state on the page) is the
+ * correct answer until real campaign posts are added through the admin.
+ */
+export async function getCampaigns(locale: Locale): Promise<CampaignPost[]> {
+  const payload = await getPayloadInstance()
+  if (!payload) return []
+
+  try {
+    const res = await cachedPayloadRead('campaigns', [locale], () =>
+      payload.find({
+        collection: 'campaigns',
+        locale,
+        sort: '-postedAt',
+        limit: 100,
+        depth: 1,
+      }),
+    )
+
+    return res.docs.map((doc) => {
+      const d = doc as unknown as Record<string, unknown>
+      const image = d.image && typeof d.image === 'object' ? (d.image as Record<string, unknown>) : null
+      const caption = typeof d.caption === 'string' ? d.caption : ''
+
+      return {
+        id: String(d.id ?? ''),
+        image: image?.url ? { url: String(image.url), alt: caption } : null,
+        caption,
+        postedAt: String(d.postedAt ?? '').slice(0, 10),
+        instagramUrl: typeof d.instagramUrl === 'string' && d.instagramUrl ? d.instagramUrl : undefined,
+      }
+    })
+  } catch {
+    return []
+  }
+}
