@@ -2,6 +2,7 @@ import type { Localized } from '@/lib/i18n'
 import type { YoutubeFeedEntry } from '@/lib/youtube'
 import { fetchHareditMeduberetLongform, fetchHareditMeduberetShorts } from '@/lib/youtube'
 import podcastArchive from './podcast-archive.json'
+import { translatedDescription, translatedTitle } from './podcastTranslations'
 
 /**
  * Fixture data for /podcast (docs/Podcast.dc.html), shaped to match the
@@ -17,13 +18,15 @@ import podcastArchive from './podcast-archive.json'
  * server-side sync populates the real collection.
  *
  * `title`/`description` are `Localized<string>` (the Payload fields are
- * `localized: true`) but currently carry the SAME Hebrew text on `he`/`en`:
- * the podcast itself is Hebrew-only content (the English hero copy says so
- * explicitly — "The episodes are in Hebrew"), no English translation has
- * been authored yet, and Payload's localization config
- * (`fallback: true`) would serve the `he` value for an empty `en` field
- * anyway — so duplicating it here reproduces the exact runtime behavior an
- * untranslated field will have once this data lives in Payload.
+ * `localized: true`). The show's audio itself stays Hebrew-only (the
+ * English hero copy still says so explicitly — "The episodes are in
+ * Hebrew"), but `en` no longer just echoes the Hebrew text: since the
+ * 2026-08-31 follow-up ("גם אם הקורא לא יקשיב, הוא יראה אלו סוגיות אני
+ * מכסה, זה חשוב בעיקר לתורמים" — even a reader who won't listen should be
+ * able to see what topics are covered, which matters most for donors),
+ * `translatedTitle()`/`translatedDescription()` (./podcastTranslations)
+ * look up a real English translation by id and fall back to the Hebrew
+ * text only for an episode not yet in that table.
  * `guestName` is intentionally NOT localized, matching the schema agent's
  * same call for `alumnae-quotes.name` — person names aren't translated.
  *
@@ -178,9 +181,9 @@ function toEpisode(raw: RawEpisode, number: number): PodcastEpisode {
   return {
     id: raw.id,
     number,
-    title: { he: raw.title, en: raw.title },
+    title: translatedTitle(raw.id, raw.title),
     guestName: raw.guestName,
-    description: { he: raw.description, en: raw.description },
+    description: translatedDescription(raw.id, raw.description),
     publishedAt: raw.publishedAt,
     appleId: PODCAST_APPLE_SHOW_ID,
     appleUrl: APPLE_URL(raw.id),
@@ -244,9 +247,9 @@ function toLiveEpisode(entry: YoutubeFeedEntry, number: number): PodcastEpisode 
   return {
     id: `yt-${entry.videoId}`,
     number,
-    title: { he: entry.title, en: entry.title },
+    title: translatedTitle(entry.videoId, entry.title),
     guestName: '',
-    description: { he: description, en: description },
+    description: translatedDescription(entry.videoId, description),
     publishedAt: entry.publishedDate,
     appleId: PODCAST_APPLE_SHOW_ID,
     appleUrl: APPLE_SHOW_URL,
