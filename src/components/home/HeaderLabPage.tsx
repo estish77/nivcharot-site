@@ -160,6 +160,53 @@ export function HeaderLabPage({
       </div>
 
       {/*
+        2026-08-31 follow-up #2: "אני רוצה לראות אותו בתצוגת מובייל משתלב,
+        עם בורר השפות המצומצם" — the requested-order row above still uses
+        the REGULAR `LanguageToggle`; this is the same row again with
+        `CompactLanguageToggle` swapped in, so both pieces are seen combined
+        in one header. Real responsive classes (same as the site's actual
+        header), not a fake fixed-width box — Tailwind's breakpoints read
+        the BROWSER's own width, so a box merely narrower than the page
+        can't force mobile sizing on its own at a wide viewport; only
+        actually narrowing the window (or a real mobile viewport
+        screenshot) shows the true mobile version.
+      */}
+      <div className="border-b-2 border-divider bg-bg px-8 py-[18px] max-[640px]:px-4 max-[640px]:py-3">
+        <p className="mx-auto mb-3 max-w-[1080px] font-heading text-[12px] font-extrabold tracking-[0.06em] text-accent-700">
+          {t(locale, {
+            he: 'שילוב מלא: הסדר המבוקש + בורר שפה מצומצם (כווצו את החלון לרוחב מובייל)',
+            en: 'Full integration: the requested order + compact language selector (narrow the window to mobile width)',
+          })}
+        </p>
+        <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-6 max-[640px]:gap-3">
+          <Link href={`/${locale}`} className="inline-flex items-center rounded-sm text-text no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            <Logo locale={locale} />
+          </Link>
+          <nav className="flex items-center gap-5 max-[640px]:gap-2 max-[519px]:gap-1" aria-label={t(locale, { he: 'ניווט — דראפט משולב', en: 'Navigation — combined draft' })}>
+            <CompactLanguageToggle locale={locale} />
+            <Link
+              href={`/${locale}/podcast`}
+              className="group flex items-center text-accent-700 hover:text-accent focus-visible:rounded-sm focus-visible:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              aria-label={t(locale, { he: 'הפודקאסט של נבחרות', en: "Nivcharot's podcast" })}
+            >
+              <PodcastIcon className="max-[640px]:h-[18px] max-[640px]:w-[18px] transition-transform duration-300 ease-out group-hover:scale-110" />
+            </Link>
+            <HeaderDonateHeart locale={locale} className="hidden max-[519px]:flex" />
+            <Button
+              href={`/${locale}/donate`}
+              variant="primary"
+              size="sm"
+              className="hidden items-center gap-1.5 whitespace-nowrap max-[640px]:px-[12px] max-[640px]:py-[8px] max-[640px]:text-[13px] min-[520px]:flex"
+            >
+              <HeartIcon />
+              {t(locale, { he: 'תרמו', en: 'Donate' })}
+            </Button>
+            <NavMenu locale={locale} links={navLinks} triggerVariant="borderless-red" />
+          </nav>
+        </div>
+      </div>
+
+      {/*
         2026-08-31 follow-up: "אין שם את העיצוב למובייל עם הלב החלול" — the
         hollow-heart mobile link (`HeaderDonateHeart`) was already correctly
         in both header rows above, but only actually VISIBLE below the
