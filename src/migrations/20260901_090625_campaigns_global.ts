@@ -1,6 +1,20 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+  // Defensive cleanup first: the previous "campaigns" migration (a
+  // collection, replaced same-day by this global) can resurface if an
+  // older deployment's own prodMigrations run concurrently with this one
+  // and recreates its now-unregistered tables before this migration's
+  // CREATE TABLE "campaigns" runs, colliding on the name. IF EXISTS makes
+  // this migration converge to the right state regardless of whether that
+  // race already happened.
+  await db.execute(sql`
+   ALTER TABLE IF EXISTS "campaigns" DISABLE ROW LEVEL SECURITY;
+  ALTER TABLE IF EXISTS "campaigns_locales" DISABLE ROW LEVEL SECURITY;
+  DROP TABLE IF EXISTS "campaigns_locales" CASCADE;
+  DROP TABLE IF EXISTS "campaigns" CASCADE;
+  ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "campaigns_id";`)
+
   await db.execute(sql`
    CREATE TABLE "campaigns_posts" (
   	"_order" integer NOT NULL,
