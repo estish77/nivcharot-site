@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
 import { AlumnaeQuotes } from './AlumnaeQuotes'
-import { Campaigns } from './Campaigns'
 import { Categories } from './Categories'
 import { ElsewhereMedia } from './ElsewhereMedia'
 import { Events } from './Events'
@@ -33,8 +32,15 @@ import { TimelineMilestones } from './TimelineMilestones'
  * `ProgramApplications` added 2026-08-28 — the same kind of thing for the
  * "הנבחרת" leadership programme's own sign-up form.
  *
- * `Campaigns` added 2026-08-31: the Instagram-post-card gallery on the
- * Activism page's "קמפיינים" section.
+ * A `Campaigns` collection briefly lived here (2026-08-31), one document
+ * per post. Replaced same-day by a `Campaigns` GLOBAL with an array field
+ * instead (see src/payload/globals/Campaigns.ts): "אני רוצה שתסדר לי
+ * במערכת אפשרות להעלות כמה תמונות ולתת לכל אחת כיתוב וכותרת... לא בא לי
+ * כל אחת בנפרד". She wants to add several posts in one sitting, on one
+ * screen, with one save, not repeat Payload's whole "create new document"
+ * flow per photo. An array field inside a single document is exactly that
+ * screen; a collection's per-document create flow is exactly what she
+ * didn't want.
  */
 export const collections: CollectionConfig[] = [
   TeamAppreciations,
@@ -49,7 +55,6 @@ export const collections: CollectionConfig[] = [
   TimelineMilestones,
   Faqs,
   AlumnaeQuotes,
-  Campaigns,
   Inquiries,
   ProgramApplications,
   NewsletterSubscribers,

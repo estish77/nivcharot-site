@@ -1190,40 +1190,41 @@ export type CampaignPost = {
 }
 
 /**
- * "קמפיינים" Instagram-post-card gallery on the Activism page (2026-08-31
- * brief). Same honesty rule as `getEvents()` right above: no Instagram
- * scraping API exists here, so there's nothing to fabricate a fallback
- * from. An empty array (rendered as an empty state on the page) is the
- * correct answer until real campaign posts are added through the admin.
+ * "קמפיינים" Instagram-post-card gallery on the Activism page. Reads the
+ * `campaigns` global's single `posts` array (2026-09-01: switched from a
+ * collection to a global specifically so the admin is one array-field
+ * screen, "add post" as many times as needed, one save — see
+ * src/payload/globals/Campaigns.ts's own doc comment for why). Sorted here
+ * in JS, newest first: `findGlobal` has no server-side `sort`, unlike
+ * `find` on a real collection.
+ *
+ * Same honesty rule as `getEvents()` above: no Instagram scraping API
+ * exists here, so there's nothing to fabricate a fallback from. An empty
+ * array (rendered as an empty state on the page) is correct until real
+ * posts are added through the admin.
  */
 export async function getCampaigns(locale: Locale): Promise<CampaignPost[]> {
   const payload = await getPayloadInstance()
   if (!payload) return []
 
   try {
-    const res = await cachedPayloadRead('campaigns', [locale], () =>
-      payload.find({
-        collection: 'campaigns',
-        locale,
-        sort: '-postedAt',
-        limit: 100,
-        depth: 1,
-      }),
-    )
+    const doc = await cachedPayloadRead('campaigns', [locale], () => payload.findGlobal({ slug: 'campaigns', locale, depth: 1 }))
+    const rawPosts = Array.isArray(doc?.posts) ? (doc.posts as Record<string, unknown>[]) : []
 
-    return res.docs.map((doc) => {
-      const d = doc as unknown as Record<string, unknown>
-      const image = d.image && typeof d.image === 'object' ? (d.image as Record<string, unknown>) : null
-      const caption = typeof d.caption === 'string' ? d.caption : ''
+    const posts: CampaignPost[] = rawPosts.map((p, i) => {
+      const image = p.image && typeof p.image === 'object' ? (p.image as Record<string, unknown>) : null
+      const caption = typeof p.caption === 'string' ? p.caption : ''
 
       return {
-        id: String(d.id ?? ''),
+        id: String(p.id ?? `campaign-${i}`),
         image: image?.url ? { url: String(image.url), alt: caption } : null,
         caption,
-        postedAt: String(d.postedAt ?? '').slice(0, 10),
-        instagramUrl: typeof d.instagramUrl === 'string' && d.instagramUrl ? d.instagramUrl : undefined,
+        postedAt: String(p.postedAt ?? '').slice(0, 10),
+        instagramUrl: typeof p.instagramUrl === 'string' && p.instagramUrl ? p.instagramUrl : undefined,
       }
     })
+
+    return posts.sort((a, b) => (a.postedAt < b.postedAt ? 1 : a.postedAt > b.postedAt ? -1 : 0))
   } catch {
     return []
   }

@@ -2,6 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 import { About } from './About'
 import { Activism } from './Activism'
+import { Campaigns } from './Campaigns'
 import { Donate } from './Donate'
 import { Halacha } from './Halacha'
 import { Hanivcheret } from './Hanivcheret'
@@ -24,6 +25,7 @@ export const globals: GlobalConfig[] = [
   About,
   Story,
   Activism,
+  Campaigns,
   Halacha,
   Mishpat,
   Podcast,
