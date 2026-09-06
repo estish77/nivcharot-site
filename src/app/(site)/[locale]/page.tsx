@@ -60,7 +60,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           as the first thing after the headline act rather than as chrome
           stacked on top of the site notice.
         */}
-        <Mivzakon locale={locale} items={getMivzakonItems()} />
+        <Mivzakon locale={locale} items={getMivzakonItems()} variant="cornerTab" />
         <StatsBand locale={locale} tiles={homeContent.statTiles} />
         <GoalSection locale={locale} section={homeContent.goalSection ?? undefined} cards={homeContent.pillarCards} />
         {/*

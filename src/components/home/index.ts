@@ -2,7 +2,7 @@ export { Hero } from './Hero'
 export { StatsBand } from './StatsBand'
 export { GoalSection } from './GoalSection'
 export { Mivzakon } from './Mivzakon'
-export type { MivzakonProps } from './Mivzakon'
+export type { MivzakonProps, MivzakonVariant } from './Mivzakon'
 
 export { Timeline } from './Timeline'
 export { DonateBand } from './DonateBand'
