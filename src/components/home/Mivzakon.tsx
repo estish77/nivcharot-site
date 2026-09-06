@@ -206,32 +206,29 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
       ) : null}
       {variant === 'cornerTabFused' ? (
         /*
-         * 2026-09-06, second fix: `absolute` + `translateY(-100%)` computes
-         * its offset from the tab's own RENDERED height, which isn't
-         * guaranteed to be a whole number of pixels (font metrics/line-height
-         * can land on a fraction). That fraction was still landing the tab a
-         * hair off the bar's actual border line, so its own left/right
-         * border kept "גולש" (leaking) a sliver past the seam at real zoom
-         * levels, no matter how the +Npx fudge factor was tuned — the bug
-         * was in relying on a computed, non-integer offset at all, not in
-         * which offset was picked.
-         *
-         * Normal document flow removes the guess entirely: the tab is a
-         * plain sibling directly above the bar, and `-mb-[2px]` is a literal
-         * integer-pixel value (matching the bar's own `border-y-2`), not a
-         * fraction of anything computed at render time. `justify-start`
-         * keeps the row from stretching so only the tab itself, not a full
-         * bar-width strip, sits above the ticker.
+         * 2026-09-06, third fix: dropping the bar's own `border-t` (so the
+         * tab is the only top-edge marker) left a faint seam anyway,
+         * because the bar's `bg-tint-cream` isn't quite the same shade as
+         * the page's own `bg-bg` behind it — a color step with no border to
+         * explain it read as "an unintentional line," not as no line at
+         * all ("הקו במבזקון ברח למעלה"). Matching the bar's background to
+         * the page (`bg-bg` instead of `bg-tint-cream`) for this variant
+         * removes the color step itself, so there is nothing left to read
+         * as a line outside the tab's own span, border or no border.
          */
         <div className="flex justify-start ps-5">
-          <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md border-2 border-b-0 border-divider bg-tint-cream px-3 py-1.5">
+          <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md border-2 border-b-0 border-divider bg-bg px-3 py-1.5">
             <PodcastIcon className="h-[13px] w-[13px] text-accent-700" />
             <span className="font-heading text-[11.5px] font-extrabold leading-none text-niv-slate">{t(locale, text.headline)}</span>
           </div>
         </div>
       ) : null}
       <div
-        className={cn('relative border-y-2 border-divider bg-tint-cream', className)}
+        className={cn(
+          'relative border-b-2 border-divider',
+          variant === 'cornerTabFused' ? 'bg-bg' : 'border-t-2 bg-tint-cream',
+          className,
+        )}
         onPointerEnter={() => setPaused(true)}
         onPointerLeave={() => setPaused(false)}
         onFocusCapture={() => setPaused(true)}
