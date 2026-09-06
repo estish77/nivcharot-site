@@ -206,29 +206,29 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
       ) : null}
       {variant === 'cornerTabFused' ? (
         /*
-         * 2026-09-06, third fix: dropping the bar's own `border-t` (so the
-         * tab is the only top-edge marker) left a faint seam anyway,
-         * because the bar's `bg-tint-cream` isn't quite the same shade as
-         * the page's own `bg-bg` behind it — a color step with no border to
-         * explain it read as "an unintentional line," not as no line at
-         * all ("הקו במבזקון ברח למעלה"). Matching the bar's background to
-         * the page (`bg-bg` instead of `bg-tint-cream`) for this variant
-         * removes the color step itself, so there is nothing left to read
-         * as a line outside the tab's own span, border or no border.
+         * 2026-09-06, fourth fix: the previous two attempts each traded one
+         * problem for another — dropping the bar's own border-t left the
+         * tab's OWN border as an orphaned line with no bar-frame around it
+         * to belong to ("הקו שתוחם את המבזקון העלמת אותו... הקו המיותר
+         * שתקוע למעלה על הכרטיסייה"), and matching backgrounds instead
+         * removed the bar's real frame entirely, which was never the ask.
+         *
+         * The actual fix: keep the bar's real border+background exactly as
+         * they were (see the box below, unconditional again). The tab
+         * itself carries NO border of its own at all, just the bar's own
+         * `bg-tint-cream` and rounded top corners, so it reads as a plain
+         * bump of the same material rising out of the bar's real frame,
+         * not as a second, separately-outlined shape stacked on top of it.
          */
         <div className="flex justify-start ps-5">
-          <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md border-2 border-b-0 border-divider bg-bg px-3 py-1.5">
+          <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md bg-tint-cream px-3 py-1.5">
             <PodcastIcon className="h-[13px] w-[13px] text-accent-700" />
             <span className="font-heading text-[11.5px] font-extrabold leading-none text-niv-slate">{t(locale, text.headline)}</span>
           </div>
         </div>
       ) : null}
       <div
-        className={cn(
-          'relative border-b-2 border-divider',
-          variant === 'cornerTabFused' ? 'bg-bg' : 'border-t-2 bg-tint-cream',
-          className,
-        )}
+        className={cn('relative border-y-2 border-divider bg-tint-cream', className)}
         onPointerEnter={() => setPaused(true)}
         onPointerLeave={() => setPaused(false)}
         onFocusCapture={() => setPaused(true)}
