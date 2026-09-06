@@ -217,21 +217,35 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
          * which offset was picked.
          *
          * Normal document flow removes the guess entirely: the tab is a
-         * plain sibling directly above the bar, and `-mb-[2px]` is a literal
-         * integer-pixel value (matching the bar's own `border-y-2`), not a
-         * fraction of anything computed at render time. `justify-start`
-         * keeps the row from stretching so only the tab itself, not a full
-         * bar-width strip, sits above the ticker.
+         * plain sibling directly above the bar. `justify-start` keeps the
+         * row from stretching so only the tab itself, not a full bar-width
+         * strip, sits above the ticker.
+         *
+         * Third fix, same day: "הקו שהוספת מעל הכרטיסיה מיותר" — the bar
+         * used to draw its OWN top border across its full width regardless,
+         * so everywhere the tab wasn't, that same border read as a second,
+         * unattached line. The bar's `border-t` is now dropped for this
+         * variant entirely (see the box's own className below); the tab is
+         * the only top edge, so it now sits flush with a plain `mb-0`
+         * instead of overlapping a border that no longer exists.
          */
         <div className="flex justify-start ps-5">
-          <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md border-2 border-b-0 border-divider bg-tint-cream px-3 py-1.5">
+          <div className="z-30 flex items-center gap-1.5 rounded-t-md border-2 border-b-0 border-divider bg-tint-cream px-3 py-1.5">
             <PodcastIcon className="h-[13px] w-[13px] text-accent-700" />
             <span className="font-heading text-[11.5px] font-extrabold leading-none text-niv-slate">{t(locale, text.headline)}</span>
           </div>
         </div>
       ) : null}
       <div
-        className={cn('relative border-y-2 border-divider bg-tint-cream', className)}
+        className={cn(
+          'relative border-b-2 border-divider bg-tint-cream',
+          // 2026-09-06: "הקו שהוספת מעל הכרטיסיה מיותר" — with the tab
+          // itself already marking the top edge, the plain border-line
+          // continuing past it (everywhere the tab isn't) read as a
+          // second, redundant line rather than part of the same one.
+          variant === 'cornerTabFused' ? undefined : 'border-t-2',
+          className,
+        )}
         onPointerEnter={() => setPaused(true)}
         onPointerLeave={() => setPaused(false)}
         onFocusCapture={() => setPaused(true)}
