@@ -1,6 +1,7 @@
 import { Fragment, type ReactNode } from 'react'
 
 import { CampaignCard } from './CampaignCard'
+import { GalleryPhotoCard } from './GalleryPhotoCard'
 import { EventGalleryCard } from '@/components/media/EventGalleryCard'
 import { pressItemHref } from '@/content/press-archive'
 import {
@@ -14,7 +15,7 @@ import {
   activismPositionPapersPlaceholder,
   type ActivismPillar,
 } from '@/content/activism'
-import { getActivismContent, getActivismFaqs, getCampaigns, getEvents, getPressArchiveItems } from '@/lib/cms'
+import { getActivismContent, getActivismFaqs, getEvents, getGalleries, getPressArchiveItems } from '@/lib/cms'
 import { arrowForward, t, type Locale, type Localized } from '@/lib/i18n'
 
 /** Renders a `\n`-joined CMS string's line breaks as real `<br>`s — same convention as the About/Story pages' fixture `\n` markers. */
@@ -46,8 +47,8 @@ const heroJumpLinks = [
 /**
  * "קמפיינים" (2026-08-31 brief): a gallery of the org's own real Instagram
  * campaign posts, styled like the post cards themselves. Starts empty
- * until real posts are added through the admin (see `getCampaigns()`'s own
- * doc comment in src/lib/cms.ts on why nothing is invented to fill it).
+ * until real galleries are added through the admin (see `getGalleries()`'s
+ * own doc comment in src/lib/cms.ts on why nothing is invented to fill it).
  */
 const campaignsSectionText = {
   eyebrow: { he: 'קמפיינים', en: 'CAMPAIGNS' } satisfies Localized,
@@ -176,12 +177,13 @@ function PillarImage({ label }: { label: string }) {
 }
 
 export async function ActivismPage({ locale }: { locale: Locale }) {
-  const [content, faqs, pressArchiveItemsSorted, eventGalleries, campaigns] = await Promise.all([
+  const [content, faqs, pressArchiveItemsSorted, eventGalleries, photoGalleries, campaigns] = await Promise.all([
     getActivismContent(locale),
     getActivismFaqs(locale),
     getPressArchiveItems(),
     getEvents(locale),
-    getCampaigns(locale),
+    getGalleries(locale, 'gatherings'),
+    getGalleries(locale, 'campaigns'),
   ])
 
   return (
@@ -376,10 +378,13 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
             <p className="mb-6 max-w-[620px] text-[15px] leading-[1.7] text-neutral-800">
               {t(locale, galleriesSectionText.lead)}
             </p>
-            {eventGalleries.length > 0 ? (
+            {eventGalleries.length > 0 || photoGalleries.length > 0 ? (
               <div className="grid grid-cols-1 gap-7 min-[560px]:grid-cols-2 min-[861px]:grid-cols-3">
                 {eventGalleries.map((gallery) => (
                   <EventGalleryCard key={gallery.slug} gallery={gallery} locale={locale} />
+                ))}
+                {photoGalleries.map((gallery) => (
+                  <GalleryPhotoCard key={gallery.id} gallery={gallery} locale={locale} />
                 ))}
               </div>
             ) : (

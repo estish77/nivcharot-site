@@ -1181,50 +1181,66 @@ export async function getEvents(locale: Locale): Promise<EventGalleryContent[]> 
   }
 }
 
-export type CampaignPost = {
+export type GalleryType = 'campaigns' | 'gatherings'
+export type GalleryContent = {
   id: string
-  image: { url: string; alt: string } | null
-  caption: string
-  postedAt: string
-  instagramUrl?: string
+  title: string
+  images: { url: string; alt: string }[]
+  caption?: string
+  date: string
+  link?: string
 }
 
 /**
- * "קמפיינים" Instagram-post-card gallery on the Activism page. Reads the
- * `campaigns` global's single `posts` array (2026-09-01: switched from a
- * collection to a global specifically so the admin is one array-field
- * screen, "add post" as many times as needed, one save — see
- * src/payload/globals/Campaigns.ts's own doc comment for why). Sorted here
- * in JS, newest first: `findGlobal` has no server-side `sort`, unlike
- * `find` on a real collection.
+ * Bulk-image galleries (2026-09-06 brief: "רכיב גלריה שיהיה מחובר למדיה,
+ * ואוכל להוסיף כמה תמונות בבת אחת... תהיה גלריית כנסים, קמפיינים, ועוד").
+ * Reads the `galleries` collection (src/payload/collections/Galleries.ts),
+ * one document per gallery, each with a `hasMany` upload field so an editor
+ * multi-selects every photo for that gallery in one action instead of the
+ * old `array`-of-one-upload-per-row pattern (Campaigns used to work this
+ * way as a global; replaced by this collection so the same mechanism also
+ * covers gatherings and any future gallery kind, per `type`).
  *
  * Same honesty rule as `getEvents()` above: no Instagram scraping API
  * exists here, so there's nothing to fabricate a fallback from. An empty
  * array (rendered as an empty state on the page) is correct until real
- * posts are added through the admin.
+ * galleries are added through the admin.
  */
-export async function getCampaigns(locale: Locale): Promise<CampaignPost[]> {
+export async function getGalleries(locale: Locale, type: GalleryType): Promise<GalleryContent[]> {
   const payload = await getPayloadInstance()
   if (!payload) return []
 
   try {
-    const doc = await cachedPayloadRead('campaigns', [locale], () => payload.findGlobal({ slug: 'campaigns', locale, depth: 1 }))
-    const rawPosts = Array.isArray(doc?.posts) ? (doc.posts as Record<string, unknown>[]) : []
+    const res = await cachedPayloadRead('galleries', [locale, type], () =>
+      payload.find({
+        collection: 'galleries',
+        locale,
+        where: { type: { equals: type } },
+        sort: '-date',
+        limit: 100,
+        depth: 1,
+      }),
+    )
 
-    const posts: CampaignPost[] = rawPosts.map((p, i) => {
-      const image = p.image && typeof p.image === 'object' ? (p.image as Record<string, unknown>) : null
-      const caption = typeof p.caption === 'string' ? p.caption : ''
+    return res.docs.map((doc) => {
+      const d = doc as unknown as Record<string, unknown>
+      const title = typeof d.title === 'string' ? d.title : ''
+      const rawImages = Array.isArray(d.images) ? (d.images as Record<string, unknown>[]) : []
 
       return {
-        id: String(p.id ?? `campaign-${i}`),
-        image: image?.url ? { url: String(image.url), alt: caption } : null,
-        caption,
-        postedAt: String(p.postedAt ?? '').slice(0, 10),
-        instagramUrl: typeof p.instagramUrl === 'string' && p.instagramUrl ? p.instagramUrl : undefined,
+        id: String(d.id ?? ''),
+        title,
+        images: rawImages
+          .filter((img): img is Record<string, unknown> => Boolean(img) && typeof img === 'object' && typeof img.url === 'string')
+          .map((img) => ({
+            url: String(img.url),
+            alt: typeof img.alt === 'string' && img.alt ? img.alt : title,
+          })),
+        caption: typeof d.caption === 'string' && d.caption ? d.caption : undefined,
+        date: String(d.date ?? '').slice(0, 10),
+        link: typeof d.link === 'string' && d.link ? d.link : undefined,
       }
     })
-
-    return posts.sort((a, b) => (a.postedAt < b.postedAt ? 1 : a.postedAt > b.postedAt ? -1 : 0))
   } catch {
     return []
   }

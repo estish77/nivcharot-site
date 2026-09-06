@@ -2,7 +2,6 @@ import type { GlobalConfig } from 'payload'
 
 import { About } from './About'
 import { Activism } from './Activism'
-import { Campaigns } from './Campaigns'
 import { Donate } from './Donate'
 import { Halacha } from './Halacha'
 import { Hanivcheret } from './Hanivcheret'
@@ -17,6 +16,11 @@ import { Story } from './Story'
 /**
  * Barrel for Payload globals (SiteSettings, Navigation, and the editable
  * page-copy globals for every public route).
+ *
+ * `Campaigns` lived here as a global (2026-09-01 to 2026-09-06), replaced
+ * by the `galleries` collection (src/payload/collections/Galleries.ts,
+ * `type: 'campaigns'`), which bulk-selects images instead of one upload
+ * row per post.
  */
 export const globals: GlobalConfig[] = [
   SiteSettings,
@@ -25,7 +29,6 @@ export const globals: GlobalConfig[] = [
   About,
   Story,
   Activism,
-  Campaigns,
   Halacha,
   Mishpat,
   Podcast,

@@ -5,6 +5,7 @@ import { Categories } from './Categories'
 import { ElsewhereMedia } from './ElsewhereMedia'
 import { Events } from './Events'
 import { Faqs } from './Faqs'
+import { Galleries } from './Galleries'
 import { Inquiries } from './Inquiries'
 import { Media } from './Media'
 import { NewsletterSubscribers } from './NewsletterSubscribers'
@@ -33,14 +34,15 @@ import { TimelineMilestones } from './TimelineMilestones'
  * "הנבחרת" leadership programme's own sign-up form.
  *
  * A `Campaigns` collection briefly lived here (2026-08-31), one document
- * per post. Replaced same-day by a `Campaigns` GLOBAL with an array field
- * instead (see src/payload/globals/Campaigns.ts): "אני רוצה שתסדר לי
- * במערכת אפשרות להעלות כמה תמונות ולתת לכל אחת כיתוב וכותרת... לא בא לי
- * כל אחת בנפרד". She wants to add several posts in one sitting, on one
- * screen, with one save, not repeat Payload's whole "create new document"
- * flow per photo. An array field inside a single document is exactly that
- * screen; a collection's per-document create flow is exactly what she
- * didn't want.
+ * per post, replaced next by a `Campaigns` GLOBAL with an array field
+ * (2026-09-01): "אני רוצה שתסדר לי במערכת אפשרות להעלות כמה תמונות ולתת
+ * לכל אחת כיתוב וכותרת... לא בא לי כל אחת בנפרד". That solved "one save for
+ * several posts" but each post's own image was still a one-at-a-time
+ * upload row. `Galleries` (2026-09-06) replaces it again: one document per
+ * gallery, with a single `hasMany` upload field so every photo in that
+ * gallery is multi-selected from Media in one action, and `type` extends
+ * the same mechanism to gatherings and future gallery kinds, not just
+ * campaigns.
  */
 export const collections: CollectionConfig[] = [
   TeamAppreciations,
@@ -50,6 +52,7 @@ export const collections: CollectionConfig[] = [
   PressArchive,
   ElsewhereMedia,
   Events,
+  Galleries,
   PodcastEpisodes,
   TeamMembers,
   TimelineMilestones,
