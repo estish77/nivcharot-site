@@ -75,7 +75,7 @@ export const halachaIntro: Localized<string[]> = {
     '"קונטרס בירור הלכתי בעניין בחירת נשים למשרות ציבוריות" (טבת תשע"ה) נכתב בידי רב שביקש לשמור על עילום שמו, ודן בשאלה באופן רחב; לצדו מצורף קטע נפרד של תשובות שקיבל המחבר בעל פה ובכתב ממרן הגר"ח קניבסקי זצ"ל. תשובתו של הרב רפאל קרויזר (י"ח תמוז תשפ"ה), "בדין בחירת נשים לכהן כחברות כנסת", ממוקדת יותר בשאלת חברות הכנסת, ובנויה כתשובה הלכתית מסודרת בשמונה סימנים.',
   ],
   en: [
-    'One halakhic question stands at the base of both works: is there a halakhic prohibition on appointing or electing a woman to public office — a member of Knesset, a director of a public company, the head of an institution, and the like. Each work approaches the question in its own way, but they arrive at a largely similar conclusion: there is no sweeping halakhic prohibition on appointing women to offices of this kind, and in many cases it should even be encouraged.',
+    'One halakhic question stands at the base of both works: is there a halakhic prohibition on appointing or electing a woman to public office, such as a member of Knesset, a director of a public company, or the head of an institution. Each work approaches the question in its own way, but they arrive at a largely similar conclusion: there is no sweeping halakhic prohibition on appointing women to offices of this kind, and in many cases it should even be encouraged.',
     '"A Halakhic Clarification Concerning the Election of Women to Public Office" (Tevet 5775) was written by a rabbi who chose to remain anonymous, and treats the question broadly; appended to it is a separate section of answers the author received, orally and in writing, from Rabbi Chaim Kanievsky zt"l. Rabbi Refael Kroizer\'s responsum (18 Tammuz 5785), "On the Election of Women to Serve as Members of Knesset", is focused more narrowly on membership of the Knesset, and is built as an ordered halakhic responsum in eight sections.',
   ],
 }
@@ -93,14 +93,14 @@ export const halachaSections: HalachaSection[] = [
         'שני החיבורים פותחים מאותה נקודת מוצא: פסיקת הרמב"ם (הלכות מלכים פ"א ה"ה): "אין מעמידין אשה במלכות, שנאמר: עליך מלך ולא מלכה. וכן כל משימות שבישראל אין ממנים בהם אלא איש". מקורה בספרי (דברים פרשת שופטים). שני הכותבים תוהים מהו מקורו של הרמב"ם להרחיב את האיסור מ"מלכות" בלבד אל "כל משימות שבישראל", ומציינים שהדבר אינו מוסכם על כלל הראשונים.',
       ],
       en: [
-        'Both works open from the same starting point: the Rambam\'s ruling (Laws of Kings 1:5): "A woman is not appointed to kingship, as it says: \'set a king over you\' — a king and not a queen. And likewise all appointments in Israel are filled only by a man." Its source is the Sifrei (Deuteronomy, Shoftim). Both authors ask what the Rambam\'s source is for extending the prohibition from "kingship" alone to "all appointments in Israel", and note that this is not agreed upon by all the Rishonim.',
+        'Both works open from the same starting point: the Rambam\'s ruling (Laws of Kings 1:5): "A woman is not appointed to kingship, as it says: \'set a king over you\' (a king and not a queen). And likewise all appointments in Israel are filled only by a man." Its source is the Sifrei (Deuteronomy, Shoftim). Both authors ask what the Rambam\'s source is for extending the prohibition from "kingship" alone to "all appointments in Israel", and note that this is not agreed upon by all the Rishonim.',
       ],
     },
     quotes: [
       {
         text: {
           he: 'רבים תמהו מהו מקור הרמב"ם להלכה זו, ואף מגדולי הראשונים חלקו על הרמב"ם (רש"י, תוס\', הרא"ש, הר"ן, הרמב"ן ולדעת הגאון ר\' משה פיינשטיין גם הרשב"א, עיין שו"ת אגרות משה יורה דעה חלק ב סימן מה).',
-          en: 'Many have wondered what the Rambam\'s source for this ruling is, and leading Rishonim disagreed with him (Rashi, Tosafot, the Rosh, the Ran, the Ramban — and in the view of Rabbi Moshe Feinstein, the Rashba as well; see Responsa Igrot Moshe, Yoreh De\'ah II:45).',
+          en: 'Many have wondered what the Rambam\'s source for this ruling is, and leading Rishonim disagreed with him (Rashi, Tosafot, the Rosh, the Ran, the Ramban, and in the view of Rabbi Moshe Feinstein, the Rashba as well; see Responsa Igrot Moshe, Yoreh De\'ah II:45).',
         },
         source: 'pamphlet2015',
         attribution: {
@@ -140,7 +140,7 @@ export const halachaSections: HalachaSection[] = [
       {
         text: {
           he: 'קבלה, שעל ידי הבחירות מכריע רוב הקהל את דעתו הסכמתו ואמונו לאותם הנבחרים, שהם יהיו באי כחו לפקח על כל עניניהם הצבוריים, ועל זה אפילו הרמב"ם מודה שאין כאן שום שמץ של אסור.',
-          en: 'Acceptance — whereby through the elections the majority of the public gives its judgement, its consent and its trust to those elected, so that they act as its representatives in overseeing all its public affairs. On this even the Rambam concedes that there is not the slightest trace of a prohibition.',
+          en: 'Acceptance: whereby through the elections the majority of the public gives its judgement, its consent and its trust to those elected, so that they act as its representatives in overseeing all its public affairs. On this even the Rambam concedes that there is not the slightest trace of a prohibition.',
         },
         source: 'pamphlet2015',
         attribution: {
@@ -162,7 +162,7 @@ export const halachaSections: HalachaSection[] = [
       {
         text: {
           he: 'דלא שייכא שימה ודבר של שררה דכתיב שום תשים עליך מלך (דברים יז) אלא בכפייה... ולפי זה יש לדון כיוון שחבר כנסת אין לו כוח כפייה שכוח הכפייה אינו אלא לבית הדין ולמלך... אבל חבר כנסת כיוון שאינו בכלל כפייה אינו בכלל כל משימות שאתה משים... והוא הדין למינוי אשה.',
-          en: 'Appointment and matters of serarah — as it is written, "you shall surely set a king over you" (Deuteronomy 17) — apply only where there is coercion... On this basis one may argue that since a member of Knesset holds no coercive power, coercive power belonging only to the court and to the king... a member of Knesset, not falling under coercion, does not fall under "all appointments that you make"... and the same applies to appointing a woman.',
+          en: 'Appointment and matters of serarah, as it is written, "you shall surely set a king over you" (Deuteronomy 17), apply only where there is coercion... On this basis one may argue that since a member of Knesset holds no coercive power, coercive power belonging only to the court and to the king... a member of Knesset, not falling under coercion, does not fall under "all appointments that you make"... and the same applies to appointing a woman.',
         },
         source: 'kroizer',
         attribution: {
@@ -173,7 +173,7 @@ export const halachaSections: HalachaSection[] = [
       {
         text: {
           he: 'אף להרמב"ם הסובר שאין למנות אשה לשאר שררות, הרי גדר שררה הוא שיכול לצוות על אחרים לעשות רצונו ואינו כפוף להם, ולפי זה חברת כנסת כיוון שכפופה לרצון הבוחרים וצריכה לפעול לפי הסמכות שנתנו לה הבוחרים ואין לה כח שררה לצוות על אחרים הרי אין זה בכלל שררות.',
-          en: 'Even according to the Rambam, who holds that a woman may not be appointed to other positions of serarah, the definition of serarah is one who can command others to carry out his will and is not subordinate to them. On this basis, a woman member of Knesset — being subordinate to the will of the voters, obliged to act within the authority the voters gave her, and holding no power of serarah to command others — does not fall within the category of serarah at all.',
+          en: 'Even according to the Rambam, who holds that a woman may not be appointed to other positions of serarah, the definition of serarah is one who can command others to carry out his will and is not subordinate to them. On this basis, a woman member of Knesset (being subordinate to the will of the voters, obliged to act within the authority the voters gave her, and holding no power of serarah to command others) does not fall within the category of serarah at all.',
         },
         source: 'kroizer',
         attribution: {
@@ -195,14 +195,14 @@ export const halachaSections: HalachaSection[] = [
         'הרב קרויזר מוסיף יסוד עצמאי, המבוסס על שיטת הגר"ש ישראלי (שו"ת חוות בנימין סימן יב), ולפיו "שררה" במובנה ההלכתי הקלאסי היא מעמד העובר בירושה דווקא, ומסיק מכך במפורש לגבי חברות כנסת.',
       ],
       en: [
-        'Rabbi Kroizer adds an independent element, resting on the position of Rabbi Shaul Yisraeli (Responsa Chavot Binyamin §12), according to which "serarah" in its classical halakhic sense is specifically a status passed on by inheritance — and he draws an explicit conclusion from this regarding women members of Knesset.',
+        'Rabbi Kroizer adds an independent element, resting on the position of Rabbi Shaul Yisraeli (Responsa Chavot Binyamin §12), according to which "serarah" in its classical halakhic sense is specifically a status passed on by inheritance, and he draws an explicit conclusion from this regarding women members of Knesset.',
       ],
     },
     quotes: [
       {
         text: {
           he: 'מלכות – פירושה הקניית מעמד של זרע המלוכה למשפחה זו. שמשום כך כשמת המלך, ממלא מקומו אחר מבני המשפחה הזאת, ולא זולתה... רק זו שעוברת בירושה תורת שררה עליה... מינוי שאינו בירושה, מכל שכן שאינו אלא לזמן מוגבל, וניתן גם לסילוק ברצון הציבור, אינו בכלל זה.',
-          en: 'Kingship means conferring on a particular family the standing of royal lineage. That is why, when the king dies, another of that family — and no one else — takes his place... Only a position passed on by inheritance carries the law of serarah... An appointment that is not inherited, all the more so one that runs for a limited term and can be removed at the will of the public, is not included in it.',
+          en: 'Kingship means conferring on a particular family the standing of royal lineage. That is why, when the king dies, another of that family (and no one else) takes his place... Only a position passed on by inheritance carries the law of serarah... An appointment that is not inherited, all the more so one that runs for a limited term and can be removed at the will of the public, is not included in it.',
         },
         source: 'kroizer',
         attribution: {
@@ -213,7 +213,7 @@ export const halachaSections: HalachaSection[] = [
       {
         text: {
           he: 'הוא הדין במינוי נשים לחברות כנסת שאינו דומה כלל לשררה, הן מחמת שאין זה עובר בירושה ואם כן אינו דומה לשררות ולמינויים שבהם אין למנות נשים. ועוד שכל גדר נבחרי ציבור כחברי כנסת שאינם בעלי שררה ויכולת אלא משועבדים לרצון הציבור.',
-          en: 'The same applies to appointing women as members of Knesset, which bears no resemblance to serarah at all — both because it is not passed on by inheritance, and so is unlike those positions and appointments to which women are not appointed; and further, because the whole category of public representatives such as members of Knesset is one of people who hold no serarah or power of their own but are bound to the will of the public.',
+          en: 'The same applies to appointing women as members of Knesset, which bears no resemblance to serarah at all: both because it is not passed on by inheritance, and so is unlike those positions and appointments to which women are not appointed; and further, because the whole category of public representatives such as members of Knesset is one of people who hold no serarah or power of their own but are bound to the will of the public.',
         },
         source: 'kroizer',
         attribution: {
@@ -227,7 +227,7 @@ export const halachaSections: HalachaSection[] = [
         'לכך מצרף הרב קרויזר גם את דברי הגר"מ שטרנבוך (תשובות והנהגות א, סימן תתלח; ג, סימן שה), שתפקיד שאינו עובר בירושה ואינו "מינוי של כבוד" (כגון ניהול מוסד) אינו בכלל שררה, ולכן מותר למנות לו גם אשה או גר.',
       ],
       en: [
-        'To this Rabbi Kroizer adds the words of Rabbi Moshe Sternbuch (Teshuvot veHanhagot I §838; III §305), that a role which is not inherited and is not "an appointment of honour" — running an institution, for instance — is not included in serarah, and so a woman or a convert may be appointed to it.',
+        'To this Rabbi Kroizer adds the words of Rabbi Moshe Sternbuch (Teshuvot veHanhagot I §838; III §305), that a role which is not inherited and is not "an appointment of honour" (running an institution, for instance) is not included in serarah, and so a woman or a convert may be appointed to it.',
       ],
     },
   },
@@ -261,7 +261,7 @@ export const halachaSections: HalachaSection[] = [
       {
         text: {
           he: 'כן היה מנהג קהילות ישראל למנות נשים כגבאיות צדקה, כמו שמסופר המעשה על אשת רבינו הגר"א שהייתה גבאית צדקה, והביא מעשה זה הגראמ"ש שך במכתבים ומאמרים... וכן במצבות עתיקות נמצא כינוי שבח לאשה שהייתה גבאית צדקה.',
-          en: 'It was likewise the practice of Jewish communities to appoint women as gabba\'ot of charity, as is recounted of the wife of the Vilna Gaon, who was a gabbait of charity — an account Rabbi Elazar Menachem Man Shach brought in Michtavim uMa\'amarim... and on old gravestones one finds a woman praised with the title of gabbait of charity.',
+          en: 'It was likewise the practice of Jewish communities to appoint women as gabba\'ot of charity, as is recounted of the wife of the Vilna Gaon, who was a gabbait of charity; an account Rabbi Elazar Menachem Man Shach brought in Michtavim uMa\'amarim... and on old gravestones one finds a woman praised with the title of gabbait of charity.',
         },
         source: 'kroizer',
         attribution: {
@@ -328,7 +328,7 @@ export const halachaSections: HalachaSection[] = [
         'הקונטרס מקדיש לכך פרק שלם, ומביא את קביעתו העקרונית של הרב עוזיאל שדיני צניעות תלויים בזמן ובמקום, ושאין בעצם המפגש הענייני בין המינים משום פריצות. הרב קרויזר, המתמקד יותר בשאלת השררה, נוגע בשיקול הצניעות רק לקראת הסיום, אך דווקא כטיעון מסייע.',
       ],
       en: [
-        'The kuntres devotes a full chapter to this, citing Rabbi Uziel\'s principle that the laws of modesty depend on time and place, and that a businesslike encounter between the sexes is not in itself immodesty. Rabbi Kroizer, more focused on the question of serarah, turns to modesty only towards the end — and there as an argument in support.',
+        'The kuntres devotes a full chapter to this, citing Rabbi Uziel\'s principle that the laws of modesty depend on time and place, and that a businesslike encounter between the sexes is not in itself immodesty. Rabbi Kroizer, more focused on the question of serarah, turns to modesty only towards the end, and there as an argument in support.',
       ],
     },
     quotes: [
@@ -346,7 +346,7 @@ export const halachaSections: HalachaSection[] = [
       {
         text: {
           he: 'אפשר שיש בבחירת נשים לתפקידים אלו השפעה על עזרה לנשים וצרכיהן... ומדרכי הצניעות יהיה להן אוזן קשבת אצל חברות כנסת ולא יצטרכו לבוא בקשר עם ממונים גברים ויכול להיות בזה תועלת מרובה.',
-          en: 'It may be that electing women to these roles bears on help for women and their needs... and it would be more in keeping with modesty for them to find a listening ear with women members of Knesset, without having to approach male officials — and there may be great benefit in this.',
+          en: 'It may be that electing women to these roles bears on help for women and their needs... and it would be more in keeping with modesty for them to find a listening ear with women members of Knesset, without having to approach male officials, and there may be great benefit in this.',
         },
         source: 'kroizer',
         attribution: {
@@ -452,7 +452,7 @@ export const halachaSections: HalachaSection[] = [
         '2. Even for those who rule with the Rambam, the serarah that is forbidden is independent coercive authority not subject to the will of others; an elected role that is subject to the will of the public is not "serarah" in that sense.',
         '3. "Serarah" in its classical sense is a status passed on by inheritance; an elected role, limited in time and revocable by the public, does not fall within that definition.',
         '4. Acceptance by the public ("they accepted it upon themselves") validates an appointment that would otherwise be in doubt, particularly where the appointee acts together with others rather than alone.',
-        '5. Practical considerations — preventing unsuitable candidates from being elected in place of fit ones, strengthening the standing of Torah, and avoiding desecration of God\'s name — also weigh towards permitting it.',
+        '5. Practical considerations (preventing unsuitable candidates from being elected in place of fit ones, strengthening the standing of Torah, and avoiding desecration of God\'s name) also weigh towards permitting it.',
         'Both authors nevertheless keep a careful and self-aware tone: the kuntres recommends proceeding in this matter "according to the instruction of our teachers", and Rabbi Kroizer\'s responsum closes by recommending that one act "after consulting the leading rabbis of Israel and following their instruction". The permission in principle is presented alongside an explicit call for the practical decision to rest with the leading rabbis of the generation in each given case.',
       ],
     },

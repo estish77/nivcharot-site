@@ -78,7 +78,7 @@ export function SiteNotice({ locale }: SiteNoticeProps) {
       >
         {t(locale, {
           he: 'אתר חדש באוויר, עדיין בבנייה, התוכן מתעדכן, הישארו עמנו.',
-          en: 'A new site is live and still being built. Content is updating — stay with us.',
+          en: 'A new site is live and still being built. Content is updating, stay with us.',
         })}
       </motion.span>
     </div>

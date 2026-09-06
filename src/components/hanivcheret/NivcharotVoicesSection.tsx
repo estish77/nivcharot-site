@@ -134,7 +134,7 @@ export async function NivcharotVoicesSection({ locale }: { locale: Locale }) {
             <Cell key={voice.videoId} className="gap-3">
               <div className="aspect-video w-full border-2 border-niv-slate bg-[#141210]">
                 <iframe
-                  title={`${t(locale, voice.name)} — ${t(locale, voice.topic)}`}
+                  title={`${t(locale, voice.name)}: ${t(locale, voice.topic)}`}
                   src={`https://www.youtube.com/embed/${voice.videoId}?rel=0`}
                   loading="lazy"
                   className="block h-full w-full border-0"

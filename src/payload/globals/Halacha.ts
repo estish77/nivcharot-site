@@ -32,13 +32,13 @@ export const Halacha: GlobalConfig = {
       name: 'kroizerRulingDocument',
       type: 'upload',
       relationTo: 'media',
-      admin: { description: "Rabbi Raphael Kreuzer's responsum (PDF), 18 Tammuz 5785 — offered as a download on the page." },
+      admin: { description: "Rabbi Raphael Kreuzer's responsum (PDF), 18 Tammuz 5785, offered as a download on the page." },
     },
     {
       name: 'pamphletDocument2015',
       type: 'upload',
       relationTo: 'media',
-      admin: { description: 'The 2015 pamphlet ("קונטרס בירור הלכתי") on women\'s eligibility for public office — offered as a download on the page.' },
+      admin: { description: 'The 2015 pamphlet ("קונטרס בירור הלכתי") on women\'s eligibility for public office, offered as a download on the page.' },
     },
   ],
 }

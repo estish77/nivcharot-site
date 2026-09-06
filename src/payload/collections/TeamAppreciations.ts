@@ -75,7 +75,7 @@ export const TeamAppreciations: CollectionConfig = {
       index: true,
       admin: {
         description:
-          'Salted hash of visitor IP + member. Not an address, and not reversible — used only to cap votes per shared address, see APPRECIATIONS_PER_IP.',
+          'Salted hash of visitor IP + member. Not an address, and not reversible, used only to cap votes per shared address, see APPRECIATIONS_PER_IP.',
       },
     },
     {

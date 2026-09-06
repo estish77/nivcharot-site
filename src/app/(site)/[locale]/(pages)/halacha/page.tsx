@@ -48,7 +48,7 @@ function QuoteBlock({ quote, locale }: { quote: HalachaQuote; locale: Locale }) 
         </p>
       ) : null}
       <footer className="text-[12.5px] text-neutral-600">
-        — {t(locale, quote.attribution)} <span className="text-neutral-400">·</span> {t(locale, meta.name)}
+        {t(locale, quote.attribution)} <span className="text-neutral-400">·</span> {t(locale, meta.name)}
       </footer>
     </blockquote>
   )
