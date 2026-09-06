@@ -204,6 +204,32 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
           </span>
         </div>
       ) : null}
+      {variant === 'cornerTabFused' ? (
+        /*
+         * 2026-09-06, second fix: `absolute` + `translateY(-100%)` computes
+         * its offset from the tab's own RENDERED height, which isn't
+         * guaranteed to be a whole number of pixels (font metrics/line-height
+         * can land on a fraction). That fraction was still landing the tab a
+         * hair off the bar's actual border line, so its own left/right
+         * border kept "גולש" (leaking) a sliver past the seam at real zoom
+         * levels, no matter how the +Npx fudge factor was tuned — the bug
+         * was in relying on a computed, non-integer offset at all, not in
+         * which offset was picked.
+         *
+         * Normal document flow removes the guess entirely: the tab is a
+         * plain sibling directly above the bar, and `-mb-[2px]` is a literal
+         * integer-pixel value (matching the bar's own `border-y-2`), not a
+         * fraction of anything computed at render time. `justify-start`
+         * keeps the row from stretching so only the tab itself, not a full
+         * bar-width strip, sits above the ticker.
+         */
+        <div className="flex justify-start ps-5">
+          <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md border-2 border-b-0 border-divider bg-tint-cream px-3 py-1.5">
+            <PodcastIcon className="h-[13px] w-[13px] text-accent-700" />
+            <span className="font-heading text-[11.5px] font-extrabold leading-none text-niv-slate">{t(locale, text.headline)}</span>
+          </div>
+        </div>
+      ) : null}
       <div
         className={cn('relative border-y-2 border-divider bg-tint-cream', className)}
         onPointerEnter={() => setPaused(true)}
@@ -234,34 +260,15 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
          * 2026-09-06 second follow-up: "צריך לשפר את העיצוב שייראה ממש כמו
          * טאב, כרטיסיה" — the original cornerTab used the page's own
          * background (not the bar's), so it read as a separate floating
-         * label rather than a tab growing out of the box beneath it. All
-         * three of these fuse the tab to the box (same bg-tint-cream, no
-         * border where they meet, a couple of px of deliberate overlap so
-         * the two borders merge into one line instead of leaving a seam).
+         * label rather than a tab growing out of the box beneath it.
+         * `cornerTabFused` itself now renders as a normal-flow sibling
+         * above this box (see just above the box's own opening tag) rather
+         * than an absolutely-positioned child in here, so its border can't
+         * land on a sub-pixel offset and leak past the seam; folder/browser
+         * below keep the original absolute approach, since neither one
+         * tries to fuse its bottom edge flush against the bar's border the
+         * way the fused variant does.
          */}
-        {variant === 'cornerTabFused' ? (
-          /*
-           * `translateY` instead of a guessed `-top-[Npx]`: the tab's exact
-           * rendered height depends on font metrics this file doesn't
-           * control precisely, and a fixed px guess either leaves a gap or
-           * (2026-09-06 bug: "פסי הכרטיסייה שגלשו פנימה למבזקון") overshoots,
-           * dangling its own left/right border lines down into the ticker
-           * past where the box's top border ends. `translateY(-100%)` moves
-           * the tab up by exactly its own height regardless of that, so its
-           * bottom edge always lands precisely on the box's top border; the
-           * `+2px` then overlaps by exactly that border's own thickness, so
-           * the tab's borderless bottom edge covers the seam instead of
-           * sitting a hair short of it.
-           */
-          <div
-            className="absolute start-5 top-0 z-30 flex items-center gap-1.5 rounded-t-md border-2 border-b-0 border-divider bg-tint-cream px-3 py-1.5"
-            style={{ transform: 'translateY(calc(-100% + 2px))' }}
-          >
-            <PodcastIcon className="h-[13px] w-[13px] text-accent-700" />
-            <span className="font-heading text-[11.5px] font-extrabold leading-none text-niv-slate">{t(locale, text.headline)}</span>
-          </div>
-        ) : null}
-
         {variant === 'cornerTabFolder' ? (
           <div
             className="absolute -top-[24px] z-30 flex items-center gap-1.5 border-2 border-b-0 border-divider bg-tint-cream px-6 py-2 start-5"
