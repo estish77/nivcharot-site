@@ -22,7 +22,17 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
   return (
     <Reveal
       as="section"
-      className="relative grid grid-cols-[minmax(320px,44%)_1fr] items-center gap-6 border-b-2 border-divider bg-bg max-[860px]:grid-cols-1"
+      /*
+       * No border-b here on purpose (2026-09-07: "הקו המיותר שמרחף מעליה").
+       * This section's `minHeight: 78vh` almost always leaves blank space
+       * below the actual content, so a border here used to render as a
+       * second line floating well above Mivzakon's own top border once that
+       * component's corner tab (a normal-flow sibling, not absolutely
+       * positioned — see Mivzakon.tsx) started taking up its own slice of
+       * vertical space above the ticker box. One border, on the ticker
+       * itself, is enough to divide the two sections.
+       */
+      className="relative grid grid-cols-[minmax(320px,44%)_1fr] items-center gap-6 bg-bg max-[860px]:grid-cols-1"
       style={{ minHeight: '78vh', paddingInline: '40px', paddingBlockStart: '56px', paddingBlockEnd: '48px' }}
     >
       <motion.div
