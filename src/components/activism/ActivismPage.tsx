@@ -406,7 +406,7 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
             lead={t(locale, campaignsSectionText.lead)}
           />
           {campaigns.length > 0 ? (
-            <div className="mt-6 grid grid-cols-1 gap-7 min-[560px]:grid-cols-2 min-[861px]:grid-cols-3">
+            <div className="mt-6 flex flex-col gap-10">
               {campaigns.map((post) => (
                 <CampaignCard key={post.id} post={post} locale={locale} />
               ))}

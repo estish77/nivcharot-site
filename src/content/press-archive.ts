@@ -1626,6 +1626,25 @@ export const pressArchiveItems: PressArchiveItem[] = [
     outlet: { he: 'מגזין פורטפוליו', en: 'Portfolio Magazine' },
     link: { kind: 'external', url: 'https://www.prtfl.co.il/archives/152020' },
   },
+  {
+    slug: 'ynet-bnei-brak-campaign-2019',
+    type: 'press-mention',
+    category: 'controversy',
+    sourceLanguage: 'he',
+    title: {
+      he: 'קמפיין נגד אלימות במשפחה? לא בבני ברק',
+      en: 'A Campaign Against Domestic Violence? Not in Bnei Brak',
+    },
+    summary: {
+      he: 'כתבה מאת קובי נחשוני (נובמבר 2019) על קמפיין מודעות רחוב ביידיש שביקשה נבחרות להציב ברחבי בני ברק לקראת היום הבינלאומי למיגור האלימות נגד נשים, בעיצוב אסתי שושן ותרצה בלוך אסתרזון ובשיתוף ארגוני הסיוע תה"ל, באשר תלכי ובת מלך: שולחן שבת עם גביע קידוש הפוך וכתם יין על מפה לבנה, תחת הכותרת "זה לא שלום בית אם את מפחדת". עיריית בני ברק סירבה לאשר את הצבת המודעות, בנימוק כי "כל פרסום בנושא נדרש להיות בתיאום מול הרבנים".',
+      en: 'A Kobi Nahshoni article (November 2019) on a Yiddish-language street-poster campaign Nivcharot sought to put up around Bnei Brak ahead of the International Day for the Elimination of Violence Against Women, designed by Esty Shushan and Tirtza Bloch Esterzohn with the aid organizations Tahel, Ba\'asher Telchi and Bat Melech: a Shabbat table with an overturned kiddush cup staining a white cloth with wine, under the line "It\'s not shalom bayit if you\'re afraid." The Bnei Brak municipality refused to approve the posters, saying "any publication on this matter requires coordination with the rabbis."',
+    },
+    dateLabel: { he: '25.11.2019', en: 'Nov 25, 2019' },
+    sortDate: '2019-11-25',
+    year: 2019,
+    outlet: { he: 'Ynet', en: 'Ynet' },
+    link: { kind: 'external', url: 'https://www.ynet.co.il/articles/0,7340,L-5631436,00.html' },
+  },
 ]
 
 export function findPressItemBySlug(slug: string): PressArchiveItem | undefined {
