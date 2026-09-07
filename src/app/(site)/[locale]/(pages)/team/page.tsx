@@ -31,7 +31,7 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: '/team',
-    title: t(locale, { he: 'הצוות', en: 'Team' }),
+    title: t(locale, { he: 'מי אנחנו', en: 'Who we are' }),
     description: t(locale, teamHero.lead),
   })
 }

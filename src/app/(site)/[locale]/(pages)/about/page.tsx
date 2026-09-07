@@ -68,7 +68,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const tabs: TabBarItem[] = [
     { label: t(locale, { he: 'אודות', en: 'About' }), href: `/${locale}/about` },
     { label: t(locale, { he: 'הסיפור שלנו', en: 'Our story' }), href: `/${locale}/story` },
-    { label: t(locale, { he: 'הצוות', en: 'Team' }), href: `/${locale}/team` },
+    { label: t(locale, { he: 'מי אנחנו', en: 'Who we are' }), href: `/${locale}/team` },
   ]
 
   return (

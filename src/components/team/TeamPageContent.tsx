@@ -26,7 +26,7 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
   const tabItems = [
     { label: t(locale, { he: 'אודות', en: 'About' }), href: `/${locale}/about` },
     { label: t(locale, { he: 'הסיפור שלנו', en: 'Our story' }), href: `/${locale}/story` },
-    { label: t(locale, { he: 'הצוות', en: 'Team' }), href: `/${locale}/team` },
+    { label: t(locale, { he: 'מי אנחנו', en: 'Who we are' }), href: `/${locale}/team` },
   ]
 
   const [teamMembers, pageContent] = await Promise.all([getTeamMembers(), getTeamPageContent(locale)])

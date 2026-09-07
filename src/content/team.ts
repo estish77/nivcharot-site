@@ -73,7 +73,7 @@ export type TeamMember = {
 }
 
 export const teamHero: { eyebrow: Localized; title: Localized; lead: Localized } = {
-  eyebrow: { he: 'אודות · הצוות', en: 'ABOUT · TEAM' },
+  eyebrow: { he: 'אודות · מי אנחנו', en: 'ABOUT · WHO WE ARE' },
   title: {
     he: 'מי אנחנו',
     en: 'Who we are',
@@ -86,7 +86,7 @@ export const teamHero: { eyebrow: Localized; title: Localized; lead: Localized }
 
 export const teamSectionIntro: { eyebrow: Localized; title: Localized } = {
   eyebrow: { he: 'מי אנחנו', en: 'WHO WE ARE' },
-  title: { he: 'הצוות', en: 'The team' },
+  title: { he: 'מי אנחנו', en: 'Who we are' },
 }
 
 export const teamMembers: TeamMember[] = [

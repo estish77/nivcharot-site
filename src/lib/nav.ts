@@ -37,7 +37,7 @@ export function navLinksFor(locale: Locale): NavLink[] {
       href: `/${locale}/about`,
       children: [
         { label: { he: 'הסיפור שלנו', en: 'Our story' }, href: `/${locale}/story` },
-        { label: { he: 'הצוות', en: 'Team' }, href: `/${locale}/team` },
+        { label: { he: 'מי אנחנו', en: 'Who we are' }, href: `/${locale}/team` },
       ],
     },
     { label: { he: 'הנבחרת', en: 'HaNivcheret' }, href: `/${locale}/hanivcheret` },
