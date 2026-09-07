@@ -209,18 +209,18 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
          * 2026-09-07: the bar itself carries no border at all anymore
          * ("תוריד לגמרי את הקו שעל הבאנר, שיהיה בלי קו" — remove the line on
          * the banner entirely). The tab still has none of its own either,
-         * just `bg-tint-cream` and rounded top corners, so it reads as a
-         * plain bump of the same material rising out of the bar.
+         * just the bar's own background and rounded top corners, so it
+         * reads as a plain bump of the same material rising out of the bar.
          */
         <div className="flex justify-start ps-5">
-          <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md bg-tint-cream px-3 py-1.5">
+          <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md bg-tint-cream-deep px-3 py-1.5">
             <PodcastIcon className="h-[13px] w-[13px] text-accent-700" />
             <span className="font-heading text-[11.5px] font-extrabold leading-none text-niv-slate">{t(locale, text.headline)}</span>
           </div>
         </div>
       ) : null}
       <div
-        className={cn('relative bg-tint-cream', className)}
+        className={cn('relative bg-tint-cream-deep', className)}
         onPointerEnter={() => setPaused(true)}
         onPointerLeave={() => setPaused(false)}
         onFocusCapture={() => setPaused(true)}
@@ -327,7 +327,7 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
         </div>
 
         {/* Arrows get their own cell at the far end, opaque so headlines vanish behind it too. */}
-        <div className="absolute inset-y-0 z-20 flex items-center gap-0.5 border-s border-divider bg-tint-cream px-2 end-0 max-[860px]:px-1.5">
+        <div className="absolute inset-y-0 z-20 flex items-center gap-0.5 border-s border-divider bg-tint-cream-deep px-2 end-0 max-[860px]:px-1.5">
         <button type="button" aria-label={t(locale, text.prev)} onClick={() => step(-1)} className={arrowClass}>
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="block rtl:hidden">
             <path d="m15 5-7 7 7 7" />

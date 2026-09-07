@@ -30,6 +30,13 @@
    */
   --niv-slate: #314451;
   --tint-cream: #fbf0e3;
+  /*
+   * A few tones darker than --tint-cream (2026-09-07: "תכהה בכמה טונים את
+   * הרקע" — darken the background by a few tones, on the Mivzakon ticker).
+   * Same ~8% per-channel darkening --niv-cream-deep already uses relative
+   * to --niv-cream, not a fresh/arbitrary value.
+   */
+  --tint-cream-deep: #e7ddd1;
   --tint-slate: #eef1f2;
 }
 
@@ -94,6 +101,7 @@
   --color-niv-cream-deep: var(--niv-cream-deep);
   --color-niv-slate: var(--niv-slate);
   --color-tint-cream: var(--tint-cream);
+  --color-tint-cream-deep: var(--tint-cream-deep);
   --color-tint-slate: var(--tint-slate);
 }
 
