@@ -75,11 +75,19 @@ export function CampaignCarousel({ images, title, locale }: CampaignCarouselProp
     <div className="relative">
       <div
         ref={trackRef}
-        className="flex aspect-square overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{ scrollSnapType: 'x mandatory' }}
       >
         {images.map((image, i) => (
-          <div key={image.url} className="relative w-full flex-none overflow-hidden" style={{ scrollSnapAlign: 'start' }}>
+          // `aspect-square` lives on the slide itself, not the track: a
+          // slide's height used to come only from the track's own
+          // `aspect-square` via flex-stretch, and Chromium was found to
+          // drop that stretched height to 0 after a scroll-triggered
+          // layout (the image would vanish mid-swipe). Self-sizing each
+          // slide matches how `Figure` is used everywhere else in this
+          // codebase (aspect ratio directly on the positioned element, not
+          // inherited from a flex-stretched ancestor).
+          <div key={image.url} className="relative aspect-square w-full flex-none overflow-hidden" style={{ scrollSnapAlign: 'start' }}>
             <Figure
               className="absolute inset-0 h-full w-full"
               src={image.url}

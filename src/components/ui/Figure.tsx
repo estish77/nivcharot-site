@@ -32,7 +32,20 @@ export function Figure(props: FigureProps) {
 
   return (
     <figure className={cn('m-0 group', grayscale && 'grayscale', className)}>
-      <div className="transition-transform duration-[600ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:scale-[1.03] group-focus-within:scale-[1.03]">
+      {/*
+       * `h-full` here matters once this div actually has a live `scale(...)`
+       * transform applied (on hover/focus-within): a CSS transform makes an
+       * element a new containing block for absolutely positioned
+       * descendants, so `mediaClassName`'s `absolute inset-0 h-full` media
+       * (used whenever a caller fills a sized wrapper instead of letting the
+       * image set its own height) would otherwise resolve its height
+       * against THIS div's own auto height, which is 0 (its only child is
+       * itself absolutely positioned, contributing no intrinsic size) — the
+       * media would vanish for as long as the hover/focus lasted. `h-full`
+       * gives this div the same real height as `<figure>` itself, so that
+       * switch of containing block doesn't change the resolved height.
+       */}
+      <div className="h-full transition-transform duration-[600ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:scale-[1.03] group-focus-within:scale-[1.03]">
         {props.src ? (
           // eslint-disable-next-line @next/next/no-img-element -- placeholder/CMS-driven source, dimensions unknown until Payload media wiring lands
           <img
