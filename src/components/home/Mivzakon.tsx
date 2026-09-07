@@ -206,19 +206,11 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
       ) : null}
       {variant === 'cornerTabFused' ? (
         /*
-         * 2026-09-06, fourth fix: the previous two attempts each traded one
-         * problem for another — dropping the bar's own border-t left the
-         * tab's OWN border as an orphaned line with no bar-frame around it
-         * to belong to ("הקו שתוחם את המבזקון העלמת אותו... הקו המיותר
-         * שתקוע למעלה על הכרטיסייה"), and matching backgrounds instead
-         * removed the bar's real frame entirely, which was never the ask.
-         *
-         * The actual fix: keep the bar's real border+background exactly as
-         * they were (see the box below, unconditional again). The tab
-         * itself carries NO border of its own at all, just the bar's own
-         * `bg-tint-cream` and rounded top corners, so it reads as a plain
-         * bump of the same material rising out of the bar's real frame,
-         * not as a second, separately-outlined shape stacked on top of it.
+         * 2026-09-07: the bar itself carries no border at all anymore
+         * ("תוריד לגמרי את הקו שעל הבאנר, שיהיה בלי קו" — remove the line on
+         * the banner entirely). The tab still has none of its own either,
+         * just `bg-tint-cream` and rounded top corners, so it reads as a
+         * plain bump of the same material rising out of the bar.
          */
         <div className="flex justify-start ps-5">
           <div className="z-30 -mb-[2px] flex items-center gap-1.5 rounded-t-md bg-tint-cream px-3 py-1.5">
@@ -228,7 +220,7 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
         </div>
       ) : null}
       <div
-        className={cn('relative border-y-2 border-divider bg-tint-cream', className)}
+        className={cn('relative bg-tint-cream', className)}
         onPointerEnter={() => setPaused(true)}
         onPointerLeave={() => setPaused(false)}
         onFocusCapture={() => setPaused(true)}

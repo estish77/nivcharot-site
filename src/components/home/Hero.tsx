@@ -26,11 +26,12 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
        * No border-b here on purpose (2026-09-07: "הקו המיותר שמרחף מעליה").
        * This section's `minHeight: 78vh` almost always leaves blank space
        * below the actual content, so a border here used to render as a
-       * second line floating well above Mivzakon's own top border once that
+       * second line floating well above Mivzakon's own top edge once that
        * component's corner tab (a normal-flow sibling, not absolutely
        * positioned — see Mivzakon.tsx) started taking up its own slice of
-       * vertical space above the ticker box. One border, on the ticker
-       * itself, is enough to divide the two sections.
+       * vertical space above the ticker box. Mivzakon itself now carries no
+       * border either (same 2026-09-07 brief), so this section needs none
+       * to hand off to it.
        */
       className="relative grid grid-cols-[minmax(320px,44%)_1fr] items-center gap-6 bg-bg max-[860px]:grid-cols-1"
       style={{ minHeight: '78vh', paddingInline: '40px', paddingBlockStart: '56px', paddingBlockEnd: '48px' }}
