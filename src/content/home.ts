@@ -78,14 +78,16 @@ export type StatTile = { value: string; description: string }
 
 /**
  * 2026-09-09 update: 6 tiles, order fixed right-to-left in the Hebrew (RTL)
- * grid — 78, 18, 13, 250, 2, 1. The "13"/"250"/"2" tiles replaced an earlier
- * "350,000 voting-age women" / "2 on local councils" pair per the brief; the
- * last tile reflects Nechumi Yaffe's second-place placement (see the Story
- * timeline's own entry on the same news). Written for real via
- * scripts/update-home-stats.mjs against the `home` global, which is what the
- * live site actually reads (see getHomeContent's fallback-only-when-empty
- * note) — this fixture is kept in sync for local dev and as the ultimate
- * fallback.
+ * grid — 78, 18, 13, 250, 2, 2. The "13"/"250"/"2" (councils) tiles replaced
+ * an earlier "350,000 voting-age women" / "2 on local councils" pair per the
+ * brief; the last tile was corrected from "1 woman placed second" to "2
+ * Haredi women on the Haredi Public party's list" (see the Story timeline's
+ * own entry on the same news, which as of this edit still describes only
+ * Nechumi Yaffe — flagged to the client, not yet reconciled). Written for
+ * real via scripts/update-home-stats.mjs against the `home` global, which is
+ * what the live site actually reads (see getHomeContent's
+ * fallback-only-when-empty note) — this fixture is kept in sync for local
+ * dev and as the ultimate fallback.
  */
 export const statTiles: Record<Locale, StatTile[]> = {
   he: [
@@ -94,7 +96,7 @@ export const statTiles: Record<Locale, StatTile[]> = {
     { value: '13', description: 'שנות מאבק ציבורי, משפטי ותודעתי למען נשים חרדיות במוקדי קבלת החלטות' },
     { value: '250', description: 'נשים שעוברות הכשרה בתוכניות המנהיגות של נבחרות לאורך 9 שנים' },
     { value: '2', description: 'נשים חרדיות מכהנות כחברות מועצת ערים מתוך 14 נשים שרצו בבחירות 2024' },
-    { value: '1', description: 'שובצה בימים אלה במקום השני ברשימה של מפלגה חרדית' },
+    { value: '2', description: 'נשים חרדיות במפלגת "הציבור החרדי" שרצה בימים אלה לכנסת' },
   ],
   en: [
     {
@@ -108,7 +110,7 @@ export const statTiles: Record<Locale, StatTile[]> = {
     },
     { value: '250', description: "Women trained through Nivcharot's leadership programs over 9 years" },
     { value: '2', description: 'Haredi women serving as city council members, out of 14 women who ran in the 2024 elections' },
-    { value: '1', description: "Woman placed second on a Haredi party's list this week" },
+    { value: '2', description: 'Haredi women on the "Haredi Public" party list, running for Knesset these days' },
   ],
 }
 
