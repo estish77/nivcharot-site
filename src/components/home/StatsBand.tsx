@@ -16,17 +16,22 @@ const WIDE_VALUE = '350,000'
  * the one color swapped — see this agent's final report for the full note.
  */
 const GRID_CSS = `
-.niv-stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.niv-stats-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
 .niv-stats-grid>.niv-stat-cell{border-inline-end:2px solid rgba(249,218,187,0.28)}
-.niv-stats-grid>.niv-stat-cell:nth-child(4n){border-inline-end:0}
+.niv-stats-grid>.niv-stat-cell:nth-child(5n){border-inline-end:0}
 .niv-stats-grid>.niv-stat-cell:hover{animation:nivCellBreathe 2.6s ease-in-out infinite}
 @media (prefers-reduced-motion: reduce){.niv-stats-grid>.niv-stat-cell:hover{animation:none!important}}
 @media (max-width:860px){
+  .niv-stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .niv-stats-grid>.niv-stat-cell{border-inline-end:2px solid rgba(249,218,187,0.28)}
+  .niv-stats-grid>.niv-stat-cell:nth-child(3n){border-inline-end:0}
+}
+@media (max-width:560px){
   .niv-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .niv-stats-grid>.niv-stat-cell{border-inline-end:2px solid rgba(249,218,187,0.28)}
   .niv-stats-grid>.niv-stat-cell:nth-child(2n){border-inline-end:0}
 }
-@media (max-width:560px){
+@media (max-width:400px){
   .niv-stats-grid{grid-template-columns:minmax(0,1fr)}
   .niv-stats-grid>.niv-stat-cell{border-inline-end:0}
 }

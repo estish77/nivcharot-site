@@ -39,6 +39,8 @@ export function TimelineLabPage({ locale, milestones }: TimelineLabPageProps) {
         </p>
       </div>
 
+      <ReducedMotionDiagnostic locale={locale} />
+
       <LabSection
         letter={isHe ? 'ה' : 'E'}
         title={isHe ? 'קו מתפתל שמצטייר תוך כדי גלילה' : 'A winding line, drawn as you scroll'}
@@ -134,6 +136,33 @@ export function TimelineLabPage({ locale, milestones }: TimelineLabPageProps) {
   )
 }
 
+/**
+ * Visible diagnostic, not a real product element: shows whether THIS browser's
+ * "prefers reduced motion" setting is on, since that setting silently collapses
+ * variants C/D/E/F/G into the plain rail (A) with zero animation. Answers the
+ * "is that why it doesn't move for me" question without needing to ask.
+ */
+function ReducedMotionDiagnostic({ locale }: { locale: Locale }) {
+  const isHe = locale === 'he'
+  const reduced = useReducedMotion()
+  return (
+    <div
+      className={`mb-10 flex items-center gap-2 border-2 p-3 text-[13px] font-semibold ${
+        reduced ? 'border-red-600 bg-red-50 text-red-800' : 'border-green-700 bg-green-50 text-green-800'
+      }`}
+    >
+      <span aria-hidden="true">{reduced ? '⚠' : '✓'}</span>
+      {reduced
+        ? isHe
+          ? 'הדפדפן/מערכת ההפעלה שלך מוגדרים על "צמצום תנועה": כל הגרסאות מתחת (חוץ מא׳ ו-ב׳) יוצגו בכוונה כפס פשוט וסטטי, בלי אנימציה. זו הגדרת נגישות במחשב/בדפדפן, לא באג באתר. כדי לראות את הגרסאות המונפשות יש לכבות אותה זמנית (בוינדוס: הגדרות > נגישות > אפקטים חזותיים > אנימציות).'
+          : 'Your OS/browser is set to "reduce motion": every variant below except A/B intentionally shows the plain static rail, no animation. This is an accessibility setting, not a site bug. Turn it off temporarily to see the animated versions.'
+        : isHe
+          ? '"צמצום תנועה" כבוי אצלך: כל הגרסאות מתחת אמורות להיות מונפשות במלואן.'
+          : '"Reduce motion" is off for you: every variant below should be fully animated.'}
+    </div>
+  )
+}
+
 function LabSection({
   letter,
   title,
@@ -190,8 +219,12 @@ function MilestoneCardBody({ locale, item }: { locale: Locale; item: TimelineMil
 
 function RailTimeline({ locale, milestones }: { locale: Locale; milestones: TimelineMilestone[] }) {
   const trackRef = useRef<HTMLDivElement>(null)
+  const isRtl = locale === 'he'
   const scrollBy = (dir: 1 | -1) => {
-    trackRef.current?.scrollBy({ left: dir * 320, behavior: 'smooth' })
+    // RTL containers count scrollLeft from 0 down to negative as content advances,
+    // the opposite of LTR — without this flip, "next" hits the 0 boundary immediately
+    // and never moves; only "previous" would do anything.
+    trackRef.current?.scrollBy({ left: dir * 320 * (isRtl ? -1 : 1), behavior: 'smooth' })
   }
   return (
     <div className="relative">
@@ -244,6 +277,7 @@ function RailArrow({ dir, onClick }: { dir: 1 | -1; onClick: () => void }) {
 
 function RailWithProgressTimeline({ locale, milestones }: { locale: Locale; milestones: TimelineMilestone[] }) {
   const trackRef = useRef<HTMLDivElement>(null)
+  const isRtl = locale === 'he'
   const [progress, setProgress] = useState(0)
 
   const onScroll = useCallback(() => {
@@ -257,6 +291,11 @@ function RailWithProgressTimeline({ locale, milestones }: { locale: Locale; mile
   useEffect(() => {
     onScroll()
   }, [onScroll])
+
+  const scrollBy = (dir: 1 | -1) => {
+    // Same RTL scrollLeft-sign flip as variant A's rail — see its comment.
+    trackRef.current?.scrollBy({ left: dir * 320 * (isRtl ? -1 : 1), behavior: 'smooth' })
+  }
 
   return (
     <div>
@@ -278,6 +317,10 @@ function RailWithProgressTimeline({ locale, milestones }: { locale: Locale; mile
             <MilestoneCardBody locale={locale} item={item} />
           </div>
         ))}
+      </div>
+      <div className="mt-3 flex justify-end gap-2">
+        <RailArrow dir={-1} onClick={() => scrollBy(-1)} />
+        <RailArrow dir={1} onClick={() => scrollBy(1)} />
       </div>
     </div>
   )
@@ -458,22 +501,39 @@ function VelocitySkewMarquee({ locale, milestones }: { locale: Locale; milestone
   const skew = useTransform(velocity, [-2500, 0, 2500], [10, 0, -10], { clamp: true })
   const smoothSkew = useSpring(skew, { stiffness: 260, damping: 32 })
 
+  const isHe = locale === 'he'
+  const scrollBy = (dir: 1 | -1) => {
+    // Same RTL scrollLeft-sign flip as variant A's rail — see its comment.
+    trackRef.current?.scrollBy({ left: dir * 600 * (isHe ? -1 : 1), behavior: 'smooth' })
+  }
+
   if (shouldReduceMotion) {
     return <RailTimeline locale={locale} milestones={milestones} />
   }
 
   return (
-    <div
-      ref={trackRef}
-      className="select-none overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-    >
-      <motion.div className="flex w-max gap-4" style={{ skewX: smoothSkew }}>
-        {milestones.map((item) => (
-          <div key={item.id} className="w-[260px] flex-none border-2 border-divider bg-bg p-4">
-            <MilestoneCardBody locale={locale} item={item} />
-          </div>
-        ))}
-      </motion.div>
+    <div>
+      <div
+        ref={trackRef}
+        className="select-none overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        <motion.div className="flex w-max gap-4" style={{ skewX: smoothSkew }}>
+          {milestones.map((item) => (
+            <div key={item.id} className="w-[260px] flex-none border-2 border-divider bg-bg p-4">
+              <MilestoneCardBody locale={locale} item={item} />
+            </div>
+          ))}
+        </motion.div>
+      </div>
+      <div className="mt-3 flex items-center justify-between gap-3">
+        <p className="m-0 text-[12px] text-neutral-600">
+          {isHe ? 'לחיצה מהירה וחוזרת על החץ מדגישה את ההטיה' : 'Click the arrow fast and repeatedly to see the tilt'}
+        </p>
+        <div className="flex gap-2">
+          <RailArrow dir={-1} onClick={() => scrollBy(-1)} />
+          <RailArrow dir={1} onClick={() => scrollBy(1)} />
+        </div>
+      </div>
     </div>
   )
 }

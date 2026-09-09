@@ -77,35 +77,31 @@ export const hallAriaLabel: Localized = {
 export type StatTile = { value: string; description: string }
 
 /**
- * The mockup deliberately orders these 4 facts differently per locale (the
- * Hebrew branch opens on "78 years", the English branch opens on "0 women
- * in the Haredi parties") — preserved verbatim rather than normalized to a
- * single shared order.
+ * 2026-09-09 update: replaced the previous 4-tile set with these 5, matching
+ * the brief verbatim — the 5th tile reflects Nechumi Yaffe's second-place
+ * placement (see the Story timeline's own entry on the same news). Written
+ * for real via scripts/update-home-stats.mjs against the `home` global,
+ * which is what the live site actually reads (see getHomeContent's
+ * fallback-only-when-empty note) — this fixture is kept in sync for local
+ * dev and as the ultimate fallback.
  */
 export const statTiles: Record<Locale, StatTile[]> = {
   he: [
-    { value: '78', description: 'שנים שבהן לא נבחרה אף אישה לכנסת מטעם מפלגה חרדית - מ־1948 ועד היום' },
-    {
-      value: '350,000',
-      description: 'נשים חרדיות בעלות זכות בחירה - ולאף אחת מהן אין נציגה במפלגה שהיא מצביעה לה',
-    },
-    { value: '18', description: 'מנדטים למפלגות החרדיות בכנסת ה־25 - כולם גברים' },
-    { value: '0', description: 'נשים חרדיות במפלגות החרדיות .' },
+    { value: '78', description: 'שנים בלי אישה חרדית אחת בכנסת מטעם מפלגה חרדית, מ־1948 ועד היום' },
+    { value: '350,000', description: 'נשים חרדיות בעלות זכות בחירה' },
+    { value: '18', description: 'מנדטים למפלגות החרדיות בכנסת ה־25' },
+    { value: '2', description: 'נשים חרדיות מכהנות היום במועצות מקומיות' },
+    { value: '1', description: 'שובצה בימים אלה במקום השני ברשימה של מפלגה חרדית' },
   ],
   en: [
     {
-      value: '0',
-      description: "Haredi women in the Haredi parties - not in the Knesset, and not on local councils",
-    },
-    {
       value: '78',
-      description: 'Years without a single woman elected to the Knesset on a Haredi party list - 1948 to today',
+      description: 'Years without a single Haredi woman in the Knesset from a Haredi party, 1948 to today',
     },
-    {
-      value: '350,000',
-      description: "Haredi women of voting age - none of them has a woman representing her in the party she votes for",
-    },
-    { value: '18', description: 'Knesset seats held by the Haredi parties in the 25th Knesset - all of them men' },
+    { value: '350,000', description: 'Haredi women of voting age' },
+    { value: '18', description: 'Knesset seats held by the Haredi parties in the 25th Knesset' },
+    { value: '2', description: 'Haredi women currently serving on local councils' },
+    { value: '1', description: "Woman placed second on a Haredi party's list this week" },
   ],
 }
 
