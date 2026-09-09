@@ -19,17 +19,17 @@ const payload = await getPayload({ config })
 
 const heTiles = [
   { value: '78', label: 'שנים בלי אישה חרדית אחת בכנסת מטעם מפלגה חרדית, מ־1948 ועד היום' },
-  { value: '350,000', label: 'נשים חרדיות בעלות זכות בחירה' },
   { value: '18', label: 'מנדטים למפלגות החרדיות בכנסת ה־25' },
-  { value: '2', label: 'נשים חרדיות מכהנות היום במועצות מקומיות' },
+  { value: '13', label: 'שנות מאבק ציבורי, משפטי ותודעתי למען נשים חרדיות במוקדי קבלת החלטות' },
+  { value: '250', label: 'נשים שעוברות הכשרה בתוכניות המנהיגות של נבחרות לאורך 9 שנים' },
   { value: '1', label: 'שובצה בימים אלה במקום השני ברשימה של מפלגה חרדית' },
 ]
 
 const enTiles = [
   { value: '78', label: 'Years without a single Haredi woman in the Knesset from a Haredi party, 1948 to today' },
-  { value: '350,000', label: 'Haredi women of voting age' },
   { value: '18', label: 'Knesset seats held by the Haredi parties in the 25th Knesset' },
-  { value: '2', label: 'Haredi women currently serving on local councils' },
+  { value: '13', label: 'Years of public, legal, and awareness-raising struggle for Haredi women in decision-making positions' },
+  { value: '250', label: "Women trained through Nivcharot's leadership programs over 9 years" },
   { value: '1', label: "Woman placed second on a Haredi party's list this week" },
 ]
 

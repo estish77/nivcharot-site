@@ -77,20 +77,22 @@ export const hallAriaLabel: Localized = {
 export type StatTile = { value: string; description: string }
 
 /**
- * 2026-09-09 update: replaced the previous 4-tile set with these 5, matching
- * the brief verbatim — the 5th tile reflects Nechumi Yaffe's second-place
- * placement (see the Story timeline's own entry on the same news). Written
- * for real via scripts/update-home-stats.mjs against the `home` global,
- * which is what the live site actually reads (see getHomeContent's
- * fallback-only-when-empty note) — this fixture is kept in sync for local
- * dev and as the ultimate fallback.
+ * 2026-09-09 update: 5 tiles, order fixed right-to-left in the Hebrew (RTL)
+ * grid — 78, 18, 13, 250, 1. The "13" and "250" tiles replaced an earlier
+ * "350,000 voting-age women" / "2 on local councils" pair per the brief; the
+ * last tile reflects Nechumi Yaffe's second-place placement (see the Story
+ * timeline's own entry on the same news). Written for real via
+ * scripts/update-home-stats.mjs against the `home` global, which is what the
+ * live site actually reads (see getHomeContent's fallback-only-when-empty
+ * note) — this fixture is kept in sync for local dev and as the ultimate
+ * fallback.
  */
 export const statTiles: Record<Locale, StatTile[]> = {
   he: [
     { value: '78', description: 'שנים בלי אישה חרדית אחת בכנסת מטעם מפלגה חרדית, מ־1948 ועד היום' },
-    { value: '350,000', description: 'נשים חרדיות בעלות זכות בחירה' },
     { value: '18', description: 'מנדטים למפלגות החרדיות בכנסת ה־25' },
-    { value: '2', description: 'נשים חרדיות מכהנות היום במועצות מקומיות' },
+    { value: '13', description: 'שנות מאבק ציבורי, משפטי ותודעתי למען נשים חרדיות במוקדי קבלת החלטות' },
+    { value: '250', description: 'נשים שעוברות הכשרה בתוכניות המנהיגות של נבחרות לאורך 9 שנים' },
     { value: '1', description: 'שובצה בימים אלה במקום השני ברשימה של מפלגה חרדית' },
   ],
   en: [
@@ -98,9 +100,12 @@ export const statTiles: Record<Locale, StatTile[]> = {
       value: '78',
       description: 'Years without a single Haredi woman in the Knesset from a Haredi party, 1948 to today',
     },
-    { value: '350,000', description: 'Haredi women of voting age' },
     { value: '18', description: 'Knesset seats held by the Haredi parties in the 25th Knesset' },
-    { value: '2', description: 'Haredi women currently serving on local councils' },
+    {
+      value: '13',
+      description: 'Years of public, legal, and awareness-raising struggle for Haredi women in decision-making positions',
+    },
+    { value: '250', description: "Women trained through Nivcharot's leadership programs over 9 years" },
     { value: '1', description: "Woman placed second on a Haredi party's list this week" },
   ],
 }

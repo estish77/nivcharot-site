@@ -1,9 +1,12 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import { animate, useInView } from 'motion/react'
+
 import { Reveal, Section } from '@/components/ui'
+import { useReducedMotion } from '@/lib/useReducedMotion'
 import type { Locale } from '@/lib/i18n'
 import { statTiles } from '@/content/home'
-
-/** The "350,000" tile alone renders at a smaller clamp so the longer number doesn't overflow its cell, and never wraps. */
-const WIDE_VALUE = '350,000'
 
 /**
  * A bespoke responsive grid (not the shared `CellGrid`): the divider here is
@@ -11,9 +14,9 @@ const WIDE_VALUE = '350,000'
  * background, not the shared `--color-divider` tan that `CellGrid` always
  * renders — `--color-divider` would read as a near-invisible, low-contrast
  * line on this background. `CellGrid` has no per-instance border-color
- * override, so this mirrors its exact 4→2→1 responsive technique (a scoped
+ * override, so this mirrors its exact responsive technique (a scoped
  * `<style>` with real `@media` queries + `nth-child` divider rules) with
- * the one color swapped — see this agent's final report for the full note.
+ * the one color swapped, scaled to 5 tiles (5→3→2→1 columns).
  */
 const GRID_CSS = `
 .niv-stats-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
@@ -37,6 +40,37 @@ const GRID_CSS = `
 }
 `
 
+/**
+ * Counts up from 0 to the tile's value once it scrolls into view. Every
+ * current tile is a plain integer string ("78", "13"...); anything that
+ * isn't (a future "%" or "+" suffix) just renders as-is, unanimated, rather
+ * than mangling text mid-count.
+ */
+function AnimatedStatValue({ value }: { value: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
+  const shouldReduceMotion = useReducedMotion()
+  const target = Number(value)
+  const isPlainInteger = Number.isInteger(target) && String(target) === value
+  const [display, setDisplay] = useState(isPlainInteger ? '0' : value)
+
+  useEffect(() => {
+    if (!isPlainInteger || shouldReduceMotion) {
+      setDisplay(value)
+      return
+    }
+    if (!isInView) return
+    const controls = animate(0, target, {
+      duration: 1.3,
+      ease: [0.22, 0.61, 0.36, 1],
+      onUpdate: (v) => setDisplay(String(Math.round(v))),
+    })
+    return () => controls.stop()
+  }, [isInView, isPlainInteger, shouldReduceMotion, target, value])
+
+  return <div ref={ref}>{display}</div>
+}
+
 export function StatsBand({
   locale,
   tiles = statTiles[locale],
@@ -52,19 +86,16 @@ export function StatsBand({
           {tiles.map((tile) => (
             <div
               key={tile.description}
-              className="niv-stat-cell transition-colors duration-[250ms] ease-out"
+              className="niv-stat-cell flex flex-col items-center text-center transition-colors duration-[250ms] ease-out"
               style={{ paddingInline: '22px', paddingBlock: '6px' }}
             >
               <div
                 className="font-heading font-extrabold leading-none text-niv-cream"
-                style={{
-                  fontSize: tile.value === WIDE_VALUE ? 'clamp(26px, 2.5vw, 36px)' : 'clamp(34px, 3.4vw, 48px)',
-                  whiteSpace: tile.value === WIDE_VALUE ? 'nowrap' : undefined,
-                }}
+                style={{ fontSize: 'clamp(34px, 3.4vw, 48px)', fontVariantNumeric: 'tabular-nums' }}
               >
-                {tile.value}
+                <AnimatedStatValue value={tile.value} />
               </div>
-              <p className="mt-3 text-[13.5px] leading-[1.6]" style={{ color: '#e3ded7' }}>
+              <p className="mt-3 max-w-[220px] text-[13.5px] leading-[1.6]" style={{ color: '#e3ded7' }}>
                 {tile.description}
               </p>
             </div>
