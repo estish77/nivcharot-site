@@ -16,12 +16,13 @@ import { statTiles } from '@/content/home'
  * line on this background. `CellGrid` has no per-instance border-color
  * override, so this mirrors its exact responsive technique (a scoped
  * `<style>` with real `@media` queries + `nth-child` divider rules) with
- * the one color swapped, scaled to 5 tiles (5→3→2→1 columns).
+ * the one color swapped, scaled to 6 tiles (6→3→2→1 columns — each divides
+ * evenly into 6, so every row fills with no orphaned trailing cell).
  */
 const GRID_CSS = `
-.niv-stats-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.niv-stats-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
 .niv-stats-grid>.niv-stat-cell{border-inline-end:2px solid rgba(249,218,187,0.28)}
-.niv-stats-grid>.niv-stat-cell:nth-child(5n){border-inline-end:0}
+.niv-stats-grid>.niv-stat-cell:nth-child(6n){border-inline-end:0}
 .niv-stats-grid>.niv-stat-cell:hover{animation:nivCellBreathe 2.6s ease-in-out infinite}
 @media (prefers-reduced-motion: reduce){.niv-stats-grid>.niv-stat-cell:hover{animation:none!important}}
 @media (max-width:860px){

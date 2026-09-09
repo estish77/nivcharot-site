@@ -22,6 +22,7 @@ const heTiles = [
   { value: '18', label: 'מנדטים למפלגות החרדיות בכנסת ה־25' },
   { value: '13', label: 'שנות מאבק ציבורי, משפטי ותודעתי למען נשים חרדיות במוקדי קבלת החלטות' },
   { value: '250', label: 'נשים שעוברות הכשרה בתוכניות המנהיגות של נבחרות לאורך 9 שנים' },
+  { value: '2', label: 'נשים חרדיות מכהנות כחברות מועצת ערים מתוך 14 נשים שרצו בבחירות 2024' },
   { value: '1', label: 'שובצה בימים אלה במקום השני ברשימה של מפלגה חרדית' },
 ]
 
@@ -30,6 +31,7 @@ const enTiles = [
   { value: '18', label: 'Knesset seats held by the Haredi parties in the 25th Knesset' },
   { value: '13', label: 'Years of public, legal, and awareness-raising struggle for Haredi women in decision-making positions' },
   { value: '250', label: "Women trained through Nivcharot's leadership programs over 9 years" },
+  { value: '2', label: 'Haredi women serving as city council members, out of 14 women who ran in the 2024 elections' },
   { value: '1', label: "Woman placed second on a Haredi party's list this week" },
 ]
 
