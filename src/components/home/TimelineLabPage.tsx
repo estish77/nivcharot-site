@@ -1,7 +1,7 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
-import { motion, useScroll, useTransform } from 'motion/react'
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent, type ReactNode } from 'react'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform, useVelocity } from 'motion/react'
 
 import { useReducedMotion } from '@/lib/useReducedMotion'
 import { t, type Locale } from '@/lib/i18n'
@@ -23,6 +23,7 @@ export function TimelineLabPage({ locale, milestones }: TimelineLabPageProps) {
   // of C would just use every milestone; a real build of D likely needs
   // several rings rather than one, see the note under it).
   const short = milestones.slice(0, 9)
+  const medium = milestones.slice(0, 12)
 
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-14">
@@ -30,11 +31,55 @@ export function TimelineLabPage({ locale, milestones }: TimelineLabPageProps) {
         <p className="mb-2 font-heading text-[12px] font-extrabold uppercase tracking-[0.1em] text-accent-700">
           {isHe ? 'מעבדת עיצוב · לא לפרסום' : 'Design lab · not for publishing'}
         </p>
-        <h1 className="mb-3">{isHe ? 'ציר זמן אינטראקטיבי, ארבע גרסאות' : 'Interactive timeline, four takes'}</h1>
+        <h1 className="mb-3">{isHe ? 'ציר זמן אינטראקטיבי' : 'Interactive timeline'}</h1>
         <p className="text-[15.5px] leading-[1.7] text-neutral-800">
           {isHe
             ? 'כל הכרטיסים מתחת הם תוכן אמיתי מציר הזמן הקיים. גללו/גררו כל גרסה ותשוו.'
             : 'Every card below is real content from the existing timeline. Scroll/drag each version and compare.'}
+        </p>
+      </div>
+
+      <LabSection
+        letter={isHe ? 'ה' : 'E'}
+        title={isHe ? 'קו מתפתל שמצטייר תוך כדי גלילה' : 'A winding line, drawn as you scroll'}
+        note={
+          isHe
+            ? `קו אמיתי (SVG) מצטייר עם הגלילה, לא רק כרטיסים זזים: התרגום הכי מילולי ל"הזזת המחט". ${short.length} אירועים לדוגמה.`
+            : `A real drawn SVG line, not just moving cards: the most literal version of "moving the needle." ${short.length} sample milestones.`
+        }
+      >
+        <WindingPathTimeline locale={locale} milestones={short} />
+      </LabSection>
+
+      <LabSection
+        letter={isHe ? 'ו' : 'F'}
+        title={isHe ? 'מסלול עם הטיה לפי מהירות הגלילה' : 'Track that skews with scroll speed'}
+        note={
+          isHe
+            ? 'גררו מהר או לאט: הכרטיסים נוטים לפי המהירות, כמו באתרים "קופצניים" עם תחושת אנרגיה אמיתית.'
+            : 'Drag fast or slow: the cards tilt with your speed, the kinetic "energetic" feel from flashier award-style sites.'
+        }
+      >
+        <VelocitySkewMarquee locale={locale} milestones={milestones} />
+      </LabSection>
+
+      <LabSection
+        letter={isHe ? 'ז' : 'G'}
+        title={isHe ? 'מספר שנה ענק שמוצמד למסך' : 'A giant pinned year number'}
+        note={
+          isHe
+            ? `הדפוס של כתבות "עיתונות ארוכה" (NYT וכו׳): מספר השנה נשאר צמוד ומתחלף, הפרטים גולשים לצידו. ${medium.length} אירועים לדוגמה.`
+            : `The long-form journalism pattern (NYT etc.): the year number stays pinned and swaps, details slide beside it. ${medium.length} sample milestones.`
+        }
+      >
+        <PinnedNumberTimeline locale={locale} milestones={medium} />
+      </LabSection>
+
+      <div className="mb-14 mt-24 max-w-[760px] border-t-2 border-divider pt-8">
+        <p className="text-[13.5px] leading-[1.6] text-neutral-600">
+          {isHe
+            ? 'הגרסאות הבאות מהסבב הקודם, פשוטות יותר, נשארות כאן להשוואה:'
+            : "Earlier, plainer options from the last round, kept here for comparison:"}
         </p>
       </div>
 
@@ -339,6 +384,170 @@ function WheelTimeline({ locale, milestones }: { locale: Locale; milestones: Tim
       <p className="mt-2 text-center text-[12.5px] text-neutral-600">
         {activeItem ? `${t(locale, activeItem.year)}: ${t(locale, activeItem.title)}` : null}
       </p>
+    </div>
+  )
+}
+
+/* ---------------------------------- E ---------------------------------- */
+
+const WINDING_ROW_HEIGHT = 230
+const WINDING_VIEWBOX_WIDTH = 600
+
+function WindingPathTimeline({ locale, milestones }: { locale: Locale; milestones: TimelineMilestone[] }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const shouldReduceMotion = useReducedMotion()
+  const height = milestones.length * WINDING_ROW_HEIGHT + 60
+
+  const points = useMemo(
+    () => milestones.map((_, i) => ({ x: i % 2 === 0 ? 150 : WINDING_VIEWBOX_WIDTH - 150, y: i * WINDING_ROW_HEIGHT + 60 })),
+    [milestones],
+  )
+
+  const pathD = useMemo(() => {
+    if (points.length === 0) return ''
+    let d = `M ${points[0].x} ${points[0].y}`
+    for (let i = 1; i < points.length; i++) {
+      const prev = points[i - 1]
+      const cur = points[i]
+      const midY = (prev.y + cur.y) / 2
+      d += ` C ${prev.x} ${midY}, ${cur.x} ${midY}, ${cur.x} ${cur.y}`
+    }
+    return d
+  }, [points])
+
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start 0.75', 'end 0.4'] })
+  const pathLength = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.4 })
+
+  if (shouldReduceMotion) {
+    return <RailTimeline locale={locale} milestones={milestones} />
+  }
+
+  return (
+    <div ref={containerRef} className="relative" style={{ height }}>
+      <svg viewBox={`0 0 ${WINDING_VIEWBOX_WIDTH} ${height}`} className="absolute inset-0 h-full w-full" preserveAspectRatio="none" aria-hidden="true">
+        <motion.path d={pathD} fill="none" stroke="var(--color-accent)" strokeWidth={3} strokeLinecap="round" style={{ pathLength }} />
+      </svg>
+      {milestones.map((item, i) => (
+        <motion.div
+          key={item.id}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-35% 0px -35% 0px' }}
+          transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+          className="absolute w-[240px] border-2 border-divider bg-bg p-4"
+          style={{
+            top: points[i].y - 70,
+            insetInlineStart: `${(points[i].x / WINDING_VIEWBOX_WIDTH) * 100}%`,
+            transform: 'translateX(-50%)',
+          }}
+        >
+          <MilestoneCardBody locale={locale} item={item} />
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+/* ---------------------------------- F ---------------------------------- */
+
+function VelocitySkewMarquee({ locale, milestones }: { locale: Locale; milestones: TimelineMilestone[] }) {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const shouldReduceMotion = useReducedMotion()
+  const { scrollX } = useScroll({ container: trackRef })
+  const velocity = useVelocity(scrollX)
+  const skew = useTransform(velocity, [-2500, 0, 2500], [10, 0, -10], { clamp: true })
+  const smoothSkew = useSpring(skew, { stiffness: 260, damping: 32 })
+
+  if (shouldReduceMotion) {
+    return <RailTimeline locale={locale} milestones={milestones} />
+  }
+
+  return (
+    <div
+      ref={trackRef}
+      className="select-none overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
+      <motion.div className="flex w-max gap-4" style={{ skewX: smoothSkew }}>
+        {milestones.map((item) => (
+          <div key={item.id} className="w-[260px] flex-none border-2 border-divider bg-bg p-4">
+            <MilestoneCardBody locale={locale} item={item} />
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  )
+}
+
+/* ---------------------------------- G ---------------------------------- */
+
+function PinnedNumberTimeline({ locale, milestones }: { locale: Locale; milestones: TimelineMilestone[] }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const shouldReduceMotion = useReducedMotion()
+  const isRtl = locale === 'he'
+  const total = milestones.length
+
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end end'] })
+  const indexMV = useTransform(scrollYProgress, (v) => Math.min(total - 1, Math.max(0, Math.floor(v * total))))
+  const [activeIndex, setActiveIndex] = useState(0)
+  useMotionValueEvent(indexMV, 'change', (v) => setActiveIndex(v))
+
+  const activeItem = milestones[activeIndex]
+
+  if (shouldReduceMotion) {
+    return <RailTimeline locale={locale} milestones={milestones} />
+  }
+
+  return (
+    <div ref={containerRef} className="relative" style={{ height: `${total * 70}vh` }}>
+      <div className="sticky top-24 grid grid-cols-1 gap-8 overflow-hidden border-2 border-divider bg-tint-cream p-8 min-[720px]:grid-cols-[1fr_1.3fr] min-[720px]:p-10" style={{ height: 420 }}>
+        <div className="relative flex items-center justify-center overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeItem.id}
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -50, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
+              className="font-heading font-extrabold leading-none text-accent-700"
+              style={{ fontSize: 'clamp(56px, 8vw, 120px)' }}
+            >
+              {t(locale, activeItem.year)}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        <div className="relative overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeItem.id}
+              initial={{ x: isRtl ? -36 : 36, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: isRtl ? 36 : -36, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
+            >
+              <h3 className="mb-2 text-[19px]">{t(locale, activeItem.title)}</h3>
+              <p className="m-0 text-[14px] leading-[1.6] text-neutral-800">{t(locale, activeItem.body)}</p>
+              {activeItem.externalArticles && activeItem.externalArticles.length > 0 ? (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {activeItem.externalArticles.map((a) => (
+                    <a
+                      key={a.url}
+                      href={a.url}
+                      target="_blank"
+                      rel="noopener"
+                      className="rounded-full border border-divider bg-bg px-2 py-0.5 text-[10.5px] font-semibold text-neutral-700 no-underline transition-colors hover:text-accent-700"
+                    >
+                      {a.outlet}
+                    </a>
+                  ))}
+                </div>
+              ) : null}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        <span dir="ltr" className="absolute bottom-4 end-4 font-heading text-[12px] font-extrabold tracking-wide text-neutral-600">
+          {activeIndex + 1} / {total}
+        </span>
+      </div>
     </div>
   )
 }
