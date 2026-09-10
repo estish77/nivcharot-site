@@ -62,7 +62,7 @@ function AnimatedStatValue({ value }: { value: string }) {
     }
     if (!isInView) return
     const controls = animate(0, target, {
-      duration: 1.3,
+      duration: 2.2,
       ease: [0.22, 0.61, 0.36, 1],
       onUpdate: (v) => setDisplay(String(Math.round(v))),
     })
