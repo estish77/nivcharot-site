@@ -14,7 +14,7 @@ import { revalidateCollection } from '../hooks/revalidate'
 export const TeamMembers: CollectionConfig = {
   slug: 'team-members',
   admin: {
-    group: 'People',
+    group: 'אנשים',
     useAsTitle: 'name',
     defaultColumns: ['name', 'role', 'category', 'active', 'order', 'appreciations'],
   },

@@ -23,7 +23,7 @@ export const ProgramApplications: CollectionConfig = {
     useAsTitle: 'fullName',
     defaultColumns: ['fullName', 'email', 'phone', 'status', 'createdAt'],
     description: 'Applications to join the next "הנבחרת" leadership cycle.',
-    group: 'Settings',
+    group: 'פניות',
   },
   access: {
     read: isAdminOrEditor,

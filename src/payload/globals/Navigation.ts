@@ -13,7 +13,7 @@ import { revalidateGlobal } from '../hooks/revalidate'
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
   admin: {
-    group: 'Settings',
+    group: 'הגדרות',
   },
   access: {
     read: () => true,

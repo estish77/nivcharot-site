@@ -11,7 +11,7 @@ import { revalidateGlobal } from '../hooks/revalidate'
  */
 export const Story: GlobalConfig = {
   slug: 'story',
-  admin: { group: 'Pages' },
+  admin: { group: 'עמודים' },
   access: {
     read: () => true,
     update: isAdminOrEditor,

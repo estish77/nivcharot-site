@@ -32,6 +32,7 @@ const MEDIA_CATEGORIES = [
 export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
+    group: 'תוכן',
     useAsTitle: 'alt',
     defaultColumns: ['filename', 'alt', 'category', 'updatedAt'],
     // Payload's own upload-collection admin already renders a thumbnail

@@ -12,7 +12,7 @@ import { revalidateGlobal } from '../hooks/revalidate'
  */
 export const Join: GlobalConfig = {
   slug: 'join',
-  admin: { group: 'Pages' },
+  admin: { group: 'עמודים' },
   access: {
     read: () => true,
     update: isAdminOrEditor,

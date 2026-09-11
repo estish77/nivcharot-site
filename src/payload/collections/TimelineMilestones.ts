@@ -22,6 +22,7 @@ import { revalidateCollection } from '../hooks/revalidate'
 export const TimelineMilestones: CollectionConfig = {
   slug: 'timeline-milestones',
   admin: {
+    group: 'תוכן',
     useAsTitle: 'title',
     defaultColumns: ['year', 'title', 'order'],
   },

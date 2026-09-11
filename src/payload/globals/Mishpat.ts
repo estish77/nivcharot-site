@@ -15,7 +15,7 @@ import { revalidateGlobal } from '../hooks/revalidate'
  */
 export const Mishpat: GlobalConfig = {
   slug: 'mishpat',
-  admin: { group: 'Pages' },
+  admin: { group: 'עמודים' },
   access: {
     read: () => true,
     update: isAdminOrEditor,

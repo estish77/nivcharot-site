@@ -13,6 +13,7 @@ import { revalidateCollection } from '../hooks/revalidate'
 export const AlumnaeQuotes: CollectionConfig = {
   slug: 'alumnae-quotes',
   admin: {
+    group: 'תוכן',
     useAsTitle: 'name',
     defaultColumns: ['name', 'cohort', 'order'],
   },

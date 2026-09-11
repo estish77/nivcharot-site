@@ -23,6 +23,7 @@ export const PressArchive: CollectionConfig = {
   slug: 'press-archive',
   labels: { singular: 'Press Item', plural: 'Press Archive' },
   admin: {
+    group: 'ארכיון',
     useAsTitle: 'title',
     defaultColumns: ['title', 'outlet', 'sortDate', 'category', 'featured', 'reviewStatus'],
     description: 'Real, externally-verified press coverage of Nivcharot, the "בתקשורת" section on /media.',

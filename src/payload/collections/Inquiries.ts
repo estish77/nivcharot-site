@@ -27,11 +27,17 @@ import { isAdminOrEditor } from '../access/isAdminOrEditor'
  * this is no longer a page editors are actively steering visitors to.
  * Grouped under its own admin sidebar section for that reason, rather than
  * removed — the data (and the collection itself) isn't going anywhere.
+ *
+ * That section was originally named "דפים לא בשימוש" ("unused pages"),
+ * describing the *page* that stopped being promoted rather than the data
+ * in it. Renamed to "פניות" ("inquiries") on 2026-09-11: real messages
+ * from real visitors still arrive here, and filing them under a heading
+ * that reads as dead weight is a good way for one to go unanswered.
  */
 export const Inquiries: CollectionConfig = {
   slug: 'inquiries',
   admin: {
-    group: 'דפים לא בשימוש',
+    group: 'פניות',
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'status', 'createdAt'],
     description: 'Messages submitted through the site contact form.',

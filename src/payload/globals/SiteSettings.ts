@@ -16,7 +16,7 @@ import { revalidateGlobal } from '../hooks/revalidate'
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   admin: {
-    group: 'Settings',
+    group: 'הגדרות',
   },
   access: {
     read: () => true,

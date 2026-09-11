@@ -19,6 +19,7 @@ export const ElsewhereMedia: CollectionConfig = {
   slug: 'elsewhere-media',
   labels: { singular: 'Elsewhere Media Item', plural: 'Elsewhere Media' },
   admin: {
+    group: 'ארכיון',
     useAsTitle: 'title',
     defaultColumns: ['title', 'host', 'kind', 'sortDate', 'reviewStatus'],
     description: 'Podcasts, video/TV, and talks featuring Nivcharot on OTHER shows, the "עוד ברשת" section on /media.',
