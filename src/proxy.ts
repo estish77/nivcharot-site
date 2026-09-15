@@ -40,9 +40,14 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   // Excludes: /he, /en (real locale routes), /admin + /api (the (payload)
-  // route group), /_next (framework internals), and the handful of
-  // root-level static/metadata routes under src/app (icon.png,
-  // apple-icon.png, robots.ts → robots.txt, sitemap.ts → sitemap.xml) plus
-  // public/assets.
-  matcher: ['/((?!(?:he|en|admin|api|_next|assets|icon\\.png|apple-icon\\.png|robots\\.txt|sitemap\\.xml)(?:/|$)).*)'],
+  // route group), /_next (framework internals), the handful of root-level
+  // static/metadata routes under src/app (icon.png, apple-icon.png,
+  // robots.ts → robots.txt, sitemap.ts → sitemap.xml) plus public/assets,
+  // and the Google Search Console site-verification file (public/, 2026-09-
+  // 15 brief) — Search Console fetches that exact root URL expecting a 200
+  // with its literal content, so a redirect into /he/... (404, branded page)
+  // would fail verification.
+  matcher: [
+    '/((?!(?:he|en|admin|api|_next|assets|icon\\.png|apple-icon\\.png|robots\\.txt|sitemap\\.xml|google032866074f084a44\\.html)(?:/|$)).*)',
+  ],
 }
