@@ -8,7 +8,7 @@ import { revalidateGlobal } from '../hooks/revalidate'
 /** Editable copy for the home page (docs/Home copy.dc.html). */
 export const Home: GlobalConfig = {
   slug: 'home',
-  admin: { group: 'Pages' },
+  admin: { group: 'עמודים' },
   access: {
     read: () => true,
     update: isAdminOrEditor,

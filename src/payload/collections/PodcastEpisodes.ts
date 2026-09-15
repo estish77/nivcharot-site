@@ -22,6 +22,7 @@ import { revalidateCollection } from '../hooks/revalidate'
 export const PodcastEpisodes: CollectionConfig = {
   slug: 'podcast-episodes',
   admin: {
+    group: 'תוכן',
     useAsTitle: 'title',
     defaultColumns: ['number', 'title', 'publishedAt', 'featured'],
   },

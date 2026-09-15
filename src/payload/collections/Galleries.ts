@@ -27,6 +27,7 @@ const GALLERY_TYPES = [
 export const Galleries: CollectionConfig = {
   slug: 'galleries',
   admin: {
+    group: 'תוכן',
     useAsTitle: 'title',
     defaultColumns: ['title', 'type', 'date'],
   },

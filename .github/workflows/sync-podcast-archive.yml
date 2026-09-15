@@ -10,7 +10,10 @@ name: Sync podcast archive
 #
 # Needs no real Payload/DB credentials: this script never calls Payload's
 # local API, only `payload run` to execute it — a placeholder sqlite path
-# and secret are enough for that command to boot.
+# and secret are enough for that command to boot. It DOES need a real
+# ANTHROPIC_API_KEY (repo secret) to translate any newly-synced episode into
+# src/content/podcastTranslations.ts — without it the sync still runs, it
+# just leaves new episodes untranslated for the next run to pick up.
 on:
   schedule:
     # 06:17 UTC every Sunday. Off the hour on purpose (not 06:00) so this
@@ -38,16 +41,17 @@ jobs:
         env:
           DATABASE_URI: file:./ci-sync.db
           PAYLOAD_SECRET: ci-sync-placeholder-secret
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: npm run sync-podcast-archive
 
-      - name: Commit and push if the archive changed
+      - name: Commit and push if the archive or its translations changed
         run: |
-          if git diff --quiet -- src/content/podcast-archive.json; then
+          if git diff --quiet -- src/content/podcast-archive.json src/content/podcastTranslations.ts; then
             echo "No changes — channel has nothing new since the last sync."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/content/podcast-archive.json
+          git add src/content/podcast-archive.json src/content/podcastTranslations.ts
           git commit -m "Weekly podcast archive sync"
           git push

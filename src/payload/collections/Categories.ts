@@ -14,6 +14,7 @@ import { revalidateCollection } from '../hooks/revalidate'
 export const Categories: CollectionConfig = {
   slug: 'categories',
   admin: {
+    group: 'ארכיון',
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug'],
   },

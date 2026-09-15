@@ -19,6 +19,7 @@ import { revalidateCollection } from '../hooks/revalidate'
 export const Events: CollectionConfig = {
   slug: 'events',
   admin: {
+    group: 'תוכן',
     useAsTitle: 'title',
     defaultColumns: ['title', 'year', 'reviewStatus'],
   },

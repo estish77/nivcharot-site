@@ -237,7 +237,7 @@ export const podcastEpisodes: PodcastEpisode[] = RAW_EPISODES.map((raw, i) =>
  * doc comment) — still the channel's real words, just not the trailing
  * boilerplate every entry repeats.
  */
-function firstParagraph(text: string): string {
+export function firstParagraph(text: string): string {
   const [lead] = text.split(/\n\s*\n/)
   return (lead ?? text).trim()
 }

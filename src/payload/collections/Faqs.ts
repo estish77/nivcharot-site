@@ -17,6 +17,7 @@ import { revalidateCollection } from '../hooks/revalidate'
 export const Faqs: CollectionConfig = {
   slug: 'faqs',
   admin: {
+    group: 'תוכן',
     useAsTitle: 'question',
     defaultColumns: ['question', 'page', 'order'],
   },

@@ -13,7 +13,7 @@ import { revalidateGlobal } from '../hooks/revalidate'
  */
 export const Activism: GlobalConfig = {
   slug: 'activism',
-  admin: { group: 'Pages' },
+  admin: { group: 'עמודים' },
   access: {
     read: () => true,
     update: isAdminOrEditor,

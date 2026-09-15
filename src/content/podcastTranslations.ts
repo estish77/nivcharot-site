@@ -18,8 +18,17 @@ import type { Localized } from '@/lib/i18n'
  * Deliberately its own file, not baked into `podcast-archive.json` itself:
  * `npm run sync-podcast-archive` REWRITES that file wholesale from a fresh
  * YouTube walk (scripts/sync-podcast-archive.mjs), which would silently
- * discard any `en` field added there. A separate, hand-maintained table
- * survives that resync intact.
+ * discard any `en` field added there. A separate table survives that resync
+ * intact.
+ *
+ * No longer purely hand-maintained: since the 2026-09-15 follow-up (English
+ * showing raw Hebrew for episodes synced after this table's last manual
+ * edit), `sync-podcast-archive.mjs` itself appends a row here — via
+ * `translateBatch` (src/payload/utils/translate.ts), the same Claude-backed
+ * translator `autoTranslate.ts` uses for the Payload dashboard — for any
+ * archive episode missing from this table, right after every weekly sync.
+ * A row can still be edited or added by hand at any time; the sync only
+ * ever appends new ones, never touches existing rows.
  *
  * `description` here is the ENGLISH translation of the same first
  * paragraph `firstParagraph()` (src/content/podcast.ts) extracts from the
@@ -30,7 +39,9 @@ import type { Localized } from '@/lib/i18n'
  * A future episode not yet in this table simply has no entry here;
  * `toLiveEpisode()`/`toEpisode()` fall back to the Hebrew text for `en` in
  * that case, exactly like before this table existed. Never a broken page,
- * just an untranslated one until this table is next updated by hand.
+ * just an untranslated one until the next sync (or a manual edit) fills it
+ * in — the only way that gap outlives one sync cycle is a sync run with no
+ * `ANTHROPIC_API_KEY` in the environment.
  */
 export const podcastTranslations: Record<string, { title: string; description: string }> = {
   "eakRf41F85U": { title: "A Conversation That Might Annoy Some Men :( | Esty Shushan Hosts Shelly Rapoport", description: "Yes, that risk is real, but we still thought these topics were worth talking about, because one day you might pass them on the street, in your neighborhood, or under a streetlamp, and think: how did I never notice?" },
@@ -143,6 +154,8 @@ export const podcastTranslations: Record<string, { title: string; description: s
   "1000776445006": { title: "A Women's Section in Academia", description: "On the bill that would extend gender-segregated study to advanced degrees too. Esty Shushan and Malka Rotner take back a debate that's always been held over the heads of Haredi women." },
   "1000775503560": { title: "Believers in Disagreement", description: "What separates Haredim from religious Zionism, and where the messianic ideas shaping both of them come from. A conversation with Rabbi Sefi Gladzahler, head of the \"HaRuach HaGedola\" study hall." },
   "1000774532131": { title: "A Route Around Beit Yaakov", description: "Yehudit Yifrach didn't study at Beit Yaakov, and she isn't a ba'alat teshuva either. A conversation about identity, culture, and love that wins out, about her life's journey within Haredi society, and the questions the war brought with it." },
+  "WNBER7F6a2Q": { title: "Questions You're Not Allowed to Ask | Esty Shushan Hosts Prof. Shalom Sadik – Part 1", description: "Where does faith begin and reason end? Well, some would beg to differ. In this episode of Haredit Meduberet, Esty Shushan hosts Prof. Shalom Sadik of Ben-Gurion University, a scholar of medieval Jewish philosophy and author of \"A Call for the Revival of Religious Philosophy\", whose ideas and statements are stirring up study halls on the right and the left alike." },
+  "8icJ9sqjimE": { title: "More Questions You're Not Allowed to Ask | Esty Shushan Hosts Professor Shalom Sadik, Part 2", description: "Tensions rise between Esty and Professor Sadik around the status of women and the price of conservatism inside closed communities. In this second part of the conversation, they take on questions of family, relationships, and sexual harm, in the context of the widespread ideals of faithfulness and holiness. Later, the professor explains why he calls Kabbalah \"the monster of the sefirot\" and denies its literal truth, and whether a life of religious faith can really be built on reason alone, while shutting out emotion." },
 }
 
 export function translatedTitle(id: string, heTitle: string): Localized<string> {

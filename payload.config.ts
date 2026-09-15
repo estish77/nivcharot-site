@@ -6,6 +6,8 @@ import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildConfig } from 'payload'
+import { en } from '@payloadcms/translations/languages/en'
+import { he } from '@payloadcms/translations/languages/he'
 import sharp from 'sharp'
 
 import { collections } from './src/payload/collections'
@@ -89,6 +91,26 @@ export default buildConfig({
     locales: ['he', 'en'],
     defaultLocale: 'he',
     fallback: true,
+  },
+  /**
+   * The DASHBOARD'S OWN language — distinct from `localization` above,
+   * which is about the bilingual content the dashboard edits. These are
+   * two different things and were configured inconsistently: the site has
+   * been Hebrew-first since day one, but every button, menu, validation
+   * message and date picker in /admin rendered in English, left-to-right,
+   * for editors who work in Hebrew. The 2026-08-16 brief asked for a
+   * dashboard that is "נגיש ונעים לעבודה" — accessible and pleasant to
+   * work in — and Payload ships a complete Hebrew translation that was
+   * simply never switched on.
+   *
+   * Hebrew is the default; English stays available because Payload lets
+   * each user pick her own admin language in her account settings, so this
+   * sets the starting point rather than forcing anyone. Payload flips the
+   * whole admin UI to RTL on its own when the active language is Hebrew.
+   */
+  i18n: {
+    supportedLanguages: { he, en },
+    fallbackLanguage: 'he',
   },
   db,
   /**

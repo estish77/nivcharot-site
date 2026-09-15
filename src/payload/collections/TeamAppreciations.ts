@@ -38,7 +38,7 @@ import { isAdminOrEditor } from '../access/isAdminOrEditor'
 export const TeamAppreciations: CollectionConfig = {
   slug: 'team-appreciations',
   admin: {
-    group: 'People',
+    group: 'אנשים',
     useAsTitle: 'id',
     defaultColumns: ['member', 'location', 'createdAt'],
     description: 'Individual "שכוייח" clicks. The per-person total is on the team member record.',

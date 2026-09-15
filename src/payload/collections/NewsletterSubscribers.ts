@@ -20,6 +20,7 @@ export const NewsletterSubscribers: CollectionConfig = {
   slug: 'newsletter-subscribers',
   labels: { singular: 'Newsletter Subscriber', plural: 'Newsletter Subscribers' },
   admin: {
+    group: 'פניות',
     useAsTitle: 'email',
     defaultColumns: ['email', 'status', 'locale', 'createdAt'],
     description: 'Email signups from the home page newsletter form.',
