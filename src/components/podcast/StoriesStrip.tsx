@@ -58,12 +58,16 @@ function guestNameFrom(title: string): string | null {
 }
 
 function captionFor(short: PodcastShort, locale: Locale = 'he'): string {
-  const guestName = guestNameFrom(short.title)
+  // Guest-name extraction only ever runs against the raw Hebrew title
+  // (the regexes in guestNameFrom are Hebrew-specific) — never the
+  // localized value.
+  const guestName = guestNameFrom(short.title.he)
   // Transliterated for English: the caption is cut out of a Hebrew YouTube
   // title, so without this the English page printed Hebrew names. A name
   // with no known spelling stays Hebrew rather than being invented.
   if (guestName) return localizedName(guestName, locale)
-  return short.title.length > 26 ? `${short.title.slice(0, 26).trim()}…` : short.title
+  const title = t(locale, short.title)
+  return title.length > 26 ? `${title.slice(0, 26).trim()}…` : title
 }
 
 /** Matches the widest column count below, so the row is always exactly full. */
@@ -130,7 +134,7 @@ function pickStories(shorts: PodcastShort[]): PodcastShort[] {
     .sort((a, b) => (b.viewCount ?? -1) - (a.viewCount ?? -1))
 
   for (const short of byViews) {
-    const name = guestNameFrom(short.title)?.trim()
+    const name = guestNameFrom(short.title.he)?.trim()
     if (!name || usedNames.has(name)) continue
     usedNames.add(name)
     picked.push(short)
@@ -140,7 +144,7 @@ function pickStories(shorts: PodcastShort[]): PodcastShort[] {
   const usedCaptions = new Set(picked.map((s) => captionFor(s)))
   for (const short of byViews) {
     if (picked.includes(short)) continue
-    if ([...usedNames].some((name) => short.title.includes(name))) continue
+    if ([...usedNames].some((name) => short.title.he.includes(name))) continue
     const caption = captionFor(short).trim()
     if (!caption || usedCaptions.has(caption)) continue
     usedCaptions.add(caption)
@@ -181,10 +185,7 @@ export function StoriesStrip({ shorts, locale }: { shorts: PodcastShort[]; local
     id: short.id,
     videoId: short.videoId,
     caption: captionFor(short, locale),
-    // Real text scraped from the channel's own YouTube description — never
-    // translated (see joinAlumnaeQuotes/AlumnaeQuoteBanner for the same
-    // reasoning), so it only shows on the Hebrew page.
-    summary: locale === 'he' ? short.summary || undefined : undefined,
+    summary: t(locale, short.summary) || undefined,
   }))
 
   return (

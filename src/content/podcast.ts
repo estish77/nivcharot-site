@@ -323,9 +323,10 @@ export async function getPodcastEpisodes(): Promise<PodcastEpisode[]> {
 export type PodcastShort = {
   id: string
   videoId: string
-  title: string
-  /** First paragraph of the Short's own description, real text from the channel (see `firstParagraph()`). */
-  summary: string
+  /** `he` is the raw YouTube title, unchanged — callers that parse it (e.g. `guestNameFrom` in StoriesStrip.tsx) must read `.he`, never the localized value. */
+  title: Localized<string>
+  /** First paragraph of the Short's own description, real text from the channel (see `firstParagraph()`), translated the same way `PodcastEpisode.description` is (./podcastTranslations). */
+  summary: Localized<string>
   publishedAt: string
   thumbnailUrl: string
   videoUrl: string
@@ -365,8 +366,8 @@ export async function getPodcastShorts(): Promise<PodcastShort[]> {
   return newestFirst.map((entry) => ({
     id: `yt-short-${entry.videoId}`,
     videoId: entry.videoId,
-    title: entry.title,
-    summary: firstParagraph(entry.description),
+    title: translatedTitle(entry.videoId, entry.title),
+    summary: translatedDescription(entry.videoId, firstParagraph(entry.description)),
     publishedAt: entry.publishedDate,
     thumbnailUrl: entry.thumbnailUrl,
     videoUrl: entry.videoUrl,

@@ -1,11 +1,13 @@
 import type { Localized } from '@/lib/i18n'
 
 /**
- * English translations for "חרדית מדוברת" (Haredit Meduberet) episode
- * titles and descriptions, keyed by the same id `toEpisode()`/
- * `toLiveEpisode()` (src/content/podcast.ts) already use: a YouTube
- * `videoId` for live/archive episodes, the fixture's own numeric `id` for
- * the last-resort `RAW_EPISODES` fallback.
+ * English translations for "חרדית מדוברת" (Haredit Meduberet) content,
+ * keyed by YouTube `videoId` (the fixture's own numeric `id` for the
+ * last-resort `RAW_EPISODES` fallback). One shared table for both full
+ * episodes (`toEpisode()`/`toLiveEpisode()`) AND Shorts (`getPodcastShorts()`,
+ * since 2026-09-15) — Shorts and episodes are different videos on the same
+ * channel, so their videoIds can never collide, and both just want the same
+ * `{ title, description }` shape looked up by id.
  *
  * 2026-08-31 brief: "אני רוצה לתרגם את התוכן של חרדית מדוברת, כי גם אם
  * הקורא לא יקשיב, הוא יראה אלו סוגיות אני מכסה, זה חשוב בעיקר לתורמים".
