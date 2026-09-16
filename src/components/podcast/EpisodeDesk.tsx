@@ -90,7 +90,12 @@ export function EpisodeDesk({
   const filteredShorts = useMemo(() => {
     const q = query.trim().toLowerCase()
     const matched = q
-      ? shorts.filter((short) => `${short.title} \n ${short.summary}`.toLowerCase().includes(q))
+      ? shorts.filter((short) =>
+          [short.title.he, short.title.en, short.summary.he, short.summary.en]
+            .join(' \n ')
+            .toLowerCase()
+            .includes(q),
+        )
       : shorts
     return [...matched].sort((a, b) =>
       sort === 'oldest' ? a.publishedAt.localeCompare(b.publishedAt) : b.publishedAt.localeCompare(a.publishedAt),
@@ -111,7 +116,7 @@ export function EpisodeDesk({
   const storyItems: StoryViewerItem[] = shortsPage.map((short) => ({
     id: short.id,
     videoId: short.videoId,
-    caption: short.title,
+    caption: t(locale, short.title),
   }))
 
   function scrollToResults() {
@@ -218,6 +223,7 @@ export function EpisodeDesk({
                   <ShortCard
                     key={short.id}
                     short={short}
+                    locale={locale}
                     label={t(locale, episodeDeskText.playShort)}
                     onPlay={() => setOpenShort(i)}
                   />
@@ -445,12 +451,22 @@ function EpisodeCard({ episode, locale }: { episode: PodcastEpisode; locale: Loc
   )
 }
 
-function ShortCard({ short, label, onPlay }: { short: PodcastShort; label: string; onPlay: () => void }) {
+function ShortCard({
+  short,
+  locale,
+  label,
+  onPlay,
+}: {
+  short: PodcastShort
+  locale: Locale
+  label: string
+  onPlay: () => void
+}) {
   return (
     <button
       type="button"
       onClick={onPlay}
-      aria-label={`${label}: ${short.title}`}
+      aria-label={`${label}: ${t(locale, short.title)}`}
       className="group flex flex-col gap-3 border-2 border-divider bg-white p-3 text-start transition-colors duration-200 ease-out hover:border-accent focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       <span className="relative block aspect-[9/16] w-full overflow-hidden bg-tint-cream">
@@ -474,8 +490,8 @@ function ShortCard({ short, label, onPlay }: { short: PodcastShort; label: strin
           </span>
         </span>
       </span>
-      <span className="block font-heading text-[14px] font-extrabold leading-[1.35]">{short.title}</span>
-      <span className="line-clamp-3 block text-[12.5px] leading-[1.6] text-neutral-700">{short.summary}</span>
+      <span className="block font-heading text-[14px] font-extrabold leading-[1.35]">{t(locale, short.title)}</span>
+      <span className="line-clamp-3 block text-[12.5px] leading-[1.6] text-neutral-700">{t(locale, short.summary)}</span>
     </button>
   )
 }

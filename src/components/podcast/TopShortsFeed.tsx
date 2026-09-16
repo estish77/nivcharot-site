@@ -51,7 +51,7 @@ export function TopShortsFeed({ shorts, locale }: { shorts: PodcastShort[]; loca
   const storyItems: StoryViewerItem[] = shorts.map((short) => ({
     id: short.id,
     videoId: short.videoId,
-    caption: short.title,
+    caption: t(locale, short.title),
   }))
 
   return (
@@ -62,7 +62,7 @@ export function TopShortsFeed({ shorts, locale }: { shorts: PodcastShort[]; loca
             <button
               type="button"
               onClick={() => setOpenIndex(i)}
-              aria-label={`${t(locale, episodeDeskText.playShort)}: ${short.title}`}
+              aria-label={`${t(locale, episodeDeskText.playShort)}: ${t(locale, short.title)}`}
               className={cn(
                 'group relative block w-full overflow-hidden border-2 border-divider bg-tint-cream',
                 'aspect-[9/16] transition-colors duration-200 ease-out hover:border-accent',
