@@ -1,7 +1,28 @@
 import type { NextConfig } from 'next'
 import { withPayload } from '@payloadcms/next/withPayload'
 
+import { ARCHIVED_POST_REDIRECTS, STATIC_PAGE_REDIRECTS } from './src/legacyRedirects'
+
 const nextConfig: NextConfig = {
+  // Runs BEFORE src/proxy.ts in Next's routing order (config redirects,
+  // then middleware) — see src/legacyRedirects.ts's doc comment for why
+  // these exist and can't just rely on proxy's generic locale-prefix
+  // redirect.
+  async redirects() {
+    return [
+      ...STATIC_PAGE_REDIRECTS.map((r) => ({ ...r, permanent: true })),
+      ...ARCHIVED_POST_REDIRECTS.map((r) => ({ ...r, permanent: true })),
+      // Catch-all for every other old WordPress post permalink
+      // (`/YYYY/MM/DD/<hebrew-slug>/`) that has no specific match above —
+      // the archive listing is a far better landing than a 404 for a
+      // visitor following an old link or bookmark.
+      {
+        source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug*',
+        destination: '/he/media',
+        permanent: true,
+      },
+    ]
+  },
   // Lets the dev server serve JS chunks/HMR to devices on the local network
   // (e.g. a real phone at `http://192.168.1.187:3000`) — without this,
   // Next 16 403s every `_next/static` request whose origin isn't `localhost`,
