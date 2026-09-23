@@ -5,8 +5,9 @@ import { EpisodeDeskSection } from '@/components/podcast/EpisodeDeskSection'
 import { TopShortsSection } from '@/components/podcast/TopShortsSection'
 import { PodcastHeroSection } from '@/components/podcast/PodcastHeroSection'
 import { StoriesSection } from '@/components/podcast/StoriesSection'
+import { getPodcastEpisodes, PODCAST_APPLE_SHOW_ID } from '@/content/podcast'
 import { isLocale, locales, t } from '@/lib/i18n'
-import { pageMetadata } from '@/lib/seo'
+import { pageMetadata, urlFor } from '@/lib/seo'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -66,8 +67,39 @@ export default async function PodcastPage({ params }: { params: Promise<{ locale
 
   const locale = rawLocale
 
+  /*
+   * PodcastSeries structured data — 2026-09-23 SEO audit item. Capped at
+   * the newest 30 episodes (of what can be a ~100-episode catalogue, see
+   * getPodcastEpisodes()'s doc comment) to keep the payload reasonable;
+   * Google only needs enough to understand this page IS a podcast and
+   * surface it as one, not a complete catalogue duplicate of the sitemap.
+   * Second call to getPodcastEpisodes() in this same request — deduped by
+   * Next's fetch cache, not a second live fetch.
+   */
+  const episodes = await getPodcastEpisodes()
+  const podcastJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'PodcastSeries',
+    name: t(locale, { he: 'חרדית מדוברת', en: 'Haredit Meduberet' }),
+    url: urlFor(locale, '/podcast'),
+    webFeed: `https://podcasts.apple.com/il/podcast/id${PODCAST_APPLE_SHOW_ID}`,
+    publisher: { '@type': 'Organization', name: 'נבחרות | Nivcharot', url: urlFor(locale, '') },
+    ...(episodes.length
+      ? {
+          hasPart: episodes.slice(0, 30).map((ep) => ({
+            '@type': 'PodcastEpisode',
+            name: t(locale, ep.title),
+            url: ep.youtubeUrl,
+            datePublished: ep.publishedAt,
+            associatedMedia: { '@type': 'MediaObject', contentUrl: ep.youtubeUrl },
+          })),
+        }
+      : {}),
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(podcastJsonLd) }} />
       <StoriesSection locale={locale} />
       <PodcastHeroSection locale={locale} />
       <EpisodeDeskSection locale={locale} />

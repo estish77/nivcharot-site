@@ -186,8 +186,35 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
     getGalleries(locale, 'campaigns'),
   ])
 
+  /*
+   * FAQPage structured data for the accordion below — 2026-09-23 SEO audit
+   * item: this is real, already-written Q&A content (activism halakha/legal
+   * questions), a cheap addition with a real shot at a "People also ask"
+   * rich result for search terms this org actually wants to rank for.
+   * `answerParagraphs` may include a trailing source-citation line (see
+   * `getActivismFaqs`'s doc comment in lib/cms.ts) — joined into one answer
+   * text, same content a sighted visitor reads in the accordion panel.
+   */
+  const faqJsonLd = faqs.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answerParagraphs.join(' ') },
+        })),
+      }
+    : null
+
   return (
     <>
+      {faqJsonLd ? (
+        // Same dangerouslySetInnerHTML(JSON.stringify(...)) pattern as the
+        // press/[slug] and media/[slug] detail pages — content is
+        // server-built from Payload CMS data, never raw visitor input.
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      ) : null}
       {/* Hero */}
       <Reveal as="section">
         <Section as="div" maxWidth={1080} paddingBlockStart="64px" paddingBlockEnd="40px">

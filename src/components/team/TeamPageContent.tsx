@@ -5,6 +5,7 @@ import { TabBar } from '@/components/ui/TabBar'
 import { t, type Locale } from '@/lib/i18n'
 import { teamMemberCategoryLabels, type TeamMember, type TeamMemberCategory } from '@/content/team'
 import { getTeamMembers, getTeamPageContent } from '@/lib/cms'
+import { urlFor } from '@/lib/seo'
 import { EqualizerDots } from './EqualizerDots'
 import { TeamMemberCard } from './TeamMemberCard'
 
@@ -41,8 +42,35 @@ export async function TeamPageContent({ locale }: TeamPageContentProps) {
     .map((category): [TeamMemberCategory, TeamMember[]] => [category, membersIn(category)])
     .filter(([, members]) => members.length > 0)
 
+  /*
+   * Person structured data for the roster — 2026-09-23 SEO audit item.
+   * `jobTitle` uses each person's own role text, not the category label
+   * (staff/central-team/...), since that's the actual title a search
+   * result should show, matching what a visitor reads on the card itself.
+   */
+  const teamJsonLd = visibleMembers.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        itemListElement: visibleMembers.map((member, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Person',
+            name: t(locale, member.name),
+            jobTitle: t(locale, member.role),
+            image: member.photo?.src,
+            memberOf: { '@type': 'Organization', name: 'נבחרות | Nivcharot', url: urlFor(locale, '') },
+          },
+        })),
+      }
+    : null
+
   return (
     <>
+      {teamJsonLd ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(teamJsonLd) }} />
+      ) : null}
       <Reveal as="section" className="mx-auto max-w-[1080px] px-8 pb-10 pt-16 max-[860px]:px-[18px] max-[860px]:pb-6 max-[860px]:pt-9">
         <Eyebrow className="mb-[14px]">{pageContent.hero.eyebrow}</Eyebrow>
         <h1 className="mb-[18px] text-[clamp(34px,4.6vw,52px)] leading-[1.08] max-[860px]:text-[clamp(30px,9vw,46px)]">

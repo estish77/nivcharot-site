@@ -7,7 +7,7 @@ import { PhotoGrid } from '@/components/media/PhotoGrid'
 import { Eyebrow, Reveal, Section } from '@/components/ui'
 import { getEvents } from '@/lib/cms'
 import { arrowBack, isLocale, locales, t, type Locale } from '@/lib/i18n'
-import { pageMetadata } from '@/lib/seo'
+import { pageMetadata, urlFor } from '@/lib/seo'
 
 type Params = { locale: string; slug: string }
 
@@ -58,8 +58,29 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
 
   const others = events.filter((e) => e.slug !== gallery.slug).slice(0, 3)
 
+  /*
+   * ImageGallery structured data — 2026-09-23 SEO audit item. `ImageGallery`,
+   * not `Event`: every gallery here is a RETROSPECTIVE of a past conference/
+   * gathering (photos only, no time/RSVP info), and Google's Event rich
+   * result is specifically meant for upcoming/current events — marking a
+   * finished one up as `Event` wouldn't earn a rich result and misuses the
+   * type. `ImageGallery` matches what this page actually is.
+   */
+  const galleryJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    name: gallery.title,
+    description: gallery.summary,
+    url: urlFor(locale, `/events/${gallery.slug}`),
+    dateCreated: `${gallery.year}`,
+    associatedMedia: gallery.photos
+      .filter((photo) => photo.url)
+      .map((photo) => ({ '@type': 'ImageObject', contentUrl: photo.url, name: photo.alt })),
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(galleryJsonLd) }} />
       <Reveal as="section">
         <Section as="div" paddingBlockStart="52px" paddingBlockEnd="32px">
           <a
