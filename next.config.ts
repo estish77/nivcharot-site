@@ -1,7 +1,12 @@
 import type { NextConfig } from 'next'
 import { withPayload } from '@payloadcms/next/withPayload'
 
-import { ARCHIVED_POST_REDIRECTS, STATIC_PAGE_REDIRECTS } from './src/legacyRedirects'
+import {
+  ARCHIVED_POST_REDIRECTS,
+  STATIC_PAGE_REDIRECTS,
+  WIX_POST_REDIRECTS,
+  WIX_STATIC_PAGE_REDIRECTS,
+} from './src/legacyRedirects'
 
 const nextConfig: NextConfig = {
   // Runs BEFORE src/proxy.ts in Next's routing order (config redirects,
@@ -12,6 +17,8 @@ const nextConfig: NextConfig = {
     return [
       ...STATIC_PAGE_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...ARCHIVED_POST_REDIRECTS.map((r) => ({ ...r, permanent: true })),
+      ...WIX_STATIC_PAGE_REDIRECTS.map((r) => ({ ...r, permanent: true })),
+      ...WIX_POST_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       // Catch-all for every other old WordPress post permalink
       // (`/YYYY/MM/DD/<hebrew-slug>/`) that has no specific match above —
       // the archive listing is a far better landing than a 404 for a
@@ -19,6 +26,13 @@ const nextConfig: NextConfig = {
       {
         source: '/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug*',
         destination: '/he/media',
+        permanent: true,
+      },
+      // Same idea for the old Wix site's blog posts (nivcharot.com/post/*,
+      // see WIX_POST_REDIRECTS's doc comment) with no specific match above.
+      {
+        source: '/post/:slug*',
+        destination: '/en/media',
         permanent: true,
       },
     ]
