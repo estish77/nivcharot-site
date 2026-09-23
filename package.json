@@ -28,7 +28,8 @@
     "sync-podcast-archive": "payload run scripts/sync-podcast-archive.mjs",
     "sync-nivcharot-channel": "payload run scripts/sync-nivcharot-channel.mjs",
     "sync-team-members": "payload run scripts/sync-team-members.mjs",
-    "seed-legacy-posts": "payload run scripts/seed-legacy-posts.mjs"
+    "seed-legacy-posts": "payload run scripts/seed-legacy-posts.mjs",
+    "check-search-console": "node scripts/check-search-console.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^16.3.0",
