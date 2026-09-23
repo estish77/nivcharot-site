@@ -39,8 +39,13 @@ const STATIC_ENTRIES: StaticEntry[] = [
  * routes exist; the dynamic sections below are built from the same
  * fixtures those routes prerender from (`src/content/media.ts`) so this
  * can't drift out of sync with the actual build output.
+ *
+ * Exported (not just the default `sitemap()` below) so
+ * `[locale]/sitemap.xml/route.ts` can filter this same list down to one
+ * locale — see that file's doc comment for why a locale-scoped copy exists
+ * at all.
  */
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = []
   // Hidden from the site (src/content/media-visibility.ts) means hidden
   // from the sitemap too - listing URLs that 404 is worse than omitting them.
@@ -110,4 +115,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   return entries
+}
+
+export default function sitemap(): Promise<MetadataRoute.Sitemap> {
+  return buildSitemapEntries()
 }

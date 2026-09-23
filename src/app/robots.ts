@@ -12,6 +12,10 @@ export default function robots(): MetadataRoute.Robots {
       // to change the moment it lands.
       disallow: ['/admin'],
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
+    // The root sitemap covers everything; the /he and /en copies
+    // ([locale]/sitemap.xml/route.ts) exist for Search Console properties
+    // scoped to one locale's path — listing all three here costs nothing
+    // and helps any crawler find whichever one it's looking for.
+    sitemap: [`${siteUrl}/sitemap.xml`, `${siteUrl}/he/sitemap.xml`, `${siteUrl}/en/sitemap.xml`],
   }
 }
