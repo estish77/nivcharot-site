@@ -22,7 +22,10 @@ export async function generateMetadata({
     locale: rawLocale,
     path: '/hanivcheret',
     title: t(rawLocale, hanivcheretHero.title),
-    description: t(rawLocale, hanivcheretHero.bodyPrimary),
+    description: t(rawLocale, {
+      he: 'תוכנית ההכשרה של נבחרות: מסע שנתי של ידע, כלים וקהילה לנשים חרדיות שרוצות להוביל שינוי בשכונה, ברשות המקומית ובחברה האזרחית.',
+      en: "Nivcharot's year-long leadership program: knowledge, tools and community for Haredi women who want to lead change in their neighborhood, municipality and civil society.",
+    }),
   })
 }
 

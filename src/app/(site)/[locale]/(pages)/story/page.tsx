@@ -29,7 +29,10 @@ export async function generateMetadata({
     locale,
     path: '/story',
     title: t(locale, { he: 'הסיפור שלנו', en: 'Our story' }),
-    description: t(locale, storyContent.hero.kicker),
+    description: t(locale, {
+      he: 'סיפורן של הסופרג\'יסטיות האחרונות: איך תנועת מחאה של נשים חרדיות, שהחלה ב-2012, הפכה למאבק על ייצוג בפוליטיקה הישראלית.',
+      en: 'The story of the last suffragettes: how a protest movement of Haredi women, begun in 2012, became a fight for representation in Israeli politics.',
+    }),
   })
 }
 
