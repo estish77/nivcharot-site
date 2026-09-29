@@ -43,11 +43,11 @@ function QuoteBlock({ quote, locale }: { quote: HalachaQuote; locale: Locale }) 
         means the English rendering can never be mistaken for the ruling.
       */}
       {locale === 'en' ? (
-        <p dir="rtl" lang="he" className="m-0 mb-2 text-[13.5px] leading-[1.9] text-neutral-600">
+        <p dir="rtl" lang="he" className="m-0 mb-2 text-[13.5px] leading-[1.9] text-neutral-700">
           {quote.text.he}
         </p>
       ) : null}
-      <footer className="text-[12.5px] text-neutral-600">
+      <footer className="text-[12.5px] text-neutral-700">
         {t(locale, quote.attribution)} <span className="text-neutral-400">·</span> {t(locale, meta.name)}
       </footer>
     </blockquote>

@@ -97,6 +97,11 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
       {/* Timeline + closing archive photos */}
       <Reveal as="section">
         <Section as="div" maxWidth={1080} paddingBlockStart="0px" paddingBlockEnd="72px">
+          {/* Visually hidden: the visible "ציר הזמן"/TIMELINE label inside
+              `Timeline` is styled as a small sidebar tag, not a heading, so
+              without this a screen reader jumps straight from the page's
+              h1 to each milestone's h3 with no h2 landmark in between. */}
+          <h2 className="sr-only">{t(locale, storyContent.sidebarLabel)}</h2>
           <Timeline locale={locale} milestones={timelineMilestones} sidebarLabel={t(locale, storyContent.sidebarLabel)} />
 
           <div className="mt-7 grid grid-cols-1 gap-5 border-t-2 border-divider pt-7 min-[861px]:grid-cols-3">

@@ -178,7 +178,7 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
                       className="flex items-baseline gap-2.5 font-heading text-[15px] font-extrabold no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <span>{link.label}</span>
-                      <span className="text-xs font-semibold text-neutral-600">
+                      <span className="text-xs font-semibold text-neutral-700">
                         {host} ↗
                       </span>
                     </a>

@@ -368,7 +368,7 @@ function EpisodeRow({
           {!open && (guest || views) ? (
             <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] leading-[1.5] text-neutral-700">
               {guest ? <span className="font-semibold">{guest}</span> : null}
-              {views ? <span className="tabular-nums text-neutral-600">{views}</span> : null}
+              {views ? <span className="tabular-nums text-neutral-700">{views}</span> : null}
             </span>
           ) : null}
         </span>
@@ -403,7 +403,7 @@ function EpisodeRow({
                 {guest || views ? (
                   <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] text-neutral-700">
                     {guest ? <span className="font-semibold">{guest}</span> : null}
-                    {views ? <span className="tabular-nums text-neutral-600">{views}</span> : null}
+                    {views ? <span className="tabular-nums text-neutral-700">{views}</span> : null}
                   </p>
                 ) : null}
                 <p className="m-0 max-w-[760px] text-[14.5px] leading-[1.75] text-neutral-800">
@@ -442,7 +442,7 @@ function EpisodeCard({ episode, locale }: { episode: PodcastEpisode; locale: Loc
       {guest ? <div className="text-[13px] font-semibold text-neutral-700">{guest}</div> : null}
       <p className="m-0 line-clamp-3 text-[14px] leading-[1.65] text-neutral-800">{t(locale, episode.description)}</p>
       {views ? (
-        <span className="font-heading text-[11.5px] font-extrabold tabular-nums text-neutral-600">{views}</span>
+        <span className="font-heading text-[11.5px] font-extrabold tabular-nums text-neutral-700">{views}</span>
       ) : null}
       <div className="mt-auto pt-1">
         <PlatformLinks episode={episode} locale={locale} />

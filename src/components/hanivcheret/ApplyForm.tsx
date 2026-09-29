@@ -120,6 +120,8 @@ export function ApplyForm({ locale, contactEmail }: ApplyFormProps) {
             setFullName(event.target.value)
             if (error) setError(null)
           }}
+          aria-invalid={error === 'required'}
+          aria-describedby={error === 'required' ? 'niv-apply-error' : undefined}
           className={fieldClass}
         />
       </div>
@@ -139,7 +141,8 @@ export function ApplyForm({ locale, contactEmail }: ApplyFormProps) {
             setEmail(event.target.value)
             if (error) setError(null)
           }}
-          aria-invalid={error === 'email'}
+          aria-invalid={error === 'email' || error === 'required'}
+          aria-describedby={error === 'email' || error === 'required' ? 'niv-apply-error' : undefined}
           className={cn(fieldClass, 'text-start')}
         />
       </div>
@@ -159,7 +162,8 @@ export function ApplyForm({ locale, contactEmail }: ApplyFormProps) {
             setPhone(event.target.value)
             if (error) setError(null)
           }}
-          aria-invalid={error === 'phone'}
+          aria-invalid={error === 'phone' || error === 'required'}
+          aria-describedby={error === 'phone' || error === 'required' ? 'niv-apply-error' : undefined}
           className={cn(fieldClass, 'text-start')}
         />
       </div>
@@ -176,12 +180,14 @@ export function ApplyForm({ locale, contactEmail }: ApplyFormProps) {
             setMotivation(event.target.value)
             if (error) setError(null)
           }}
+          aria-invalid={error === 'required'}
+          aria-describedby={error === 'required' ? 'niv-apply-error' : undefined}
           className={cn(fieldClass, 'resize-y leading-[1.6]')}
         />
       </div>
 
       {error && error !== 'submit' ? (
-        <p role="alert" className="m-0 text-[13px] font-semibold text-accent-700">
+        <p id="niv-apply-error" role="alert" className="m-0 text-[13px] font-semibold text-accent-700">
           {t(locale, hanivcheretApply[`${error}Error`])}
         </p>
       ) : null}
