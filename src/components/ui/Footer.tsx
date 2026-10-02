@@ -114,6 +114,12 @@ export function Footer({ locale, donateHref, contactEmail, social, className }: 
         </div>
         <div className="flex flex-wrap items-center justify-end gap-4 text-end text-xs tracking-[0.01em] text-neutral-700 max-[720px]:justify-center max-[720px]:text-center">
           <Link
+            href={`/${locale}/accessibility`}
+            className="-mx-2 -mt-3 -mb-[14px] block border-b border-divider px-2 pt-3 pb-[14px] font-semibold no-underline hover:text-accent-700 focus-visible:text-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            {t(locale, { he: 'הצהרת נגישות', en: 'Accessibility statement' })}
+          </Link>
+          <Link
             href={donateHref ?? `/${locale}/donate`}
             // pt/pb + matching negative -mt/-mb grows the tap target to a
             // comfortable ~44px height (up from ~19px) without shifting the
