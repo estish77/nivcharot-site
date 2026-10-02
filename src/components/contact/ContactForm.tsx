@@ -93,6 +93,8 @@ export function ContactForm({ locale }: ContactFormProps) {
             setName(event.target.value)
             if (error) setError(null)
           }}
+          aria-invalid={error === 'required'}
+          aria-describedby={error === 'required' ? 'niv-contact-error' : undefined}
           className="w-full border-2 border-divider bg-white px-4 py-[11px] text-[15px] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
       </div>
@@ -113,6 +115,7 @@ export function ContactForm({ locale }: ContactFormProps) {
             if (error) setError(null)
           }}
           aria-invalid={error === 'email'}
+          aria-describedby={error === 'email' ? 'niv-contact-error' : undefined}
           className="w-full border-2 border-divider bg-white px-4 py-[11px] text-[15px] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
       </div>
@@ -129,12 +132,14 @@ export function ContactForm({ locale }: ContactFormProps) {
             setMessage(event.target.value)
             if (error) setError(null)
           }}
+          aria-invalid={error === 'required'}
+          aria-describedby={error === 'required' ? 'niv-contact-error' : undefined}
           className="w-full resize-y border-2 border-divider bg-white px-4 py-[11px] text-[15px] leading-[1.6] text-text focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         />
       </div>
 
       {error === 'required' || error === 'email' ? (
-        <p role="alert" className="m-0 text-[13px] font-semibold text-accent-700">
+        <p id="niv-contact-error" role="alert" className="m-0 text-[13px] font-semibold text-accent-700">
           {error === 'required' ? t(locale, contactForm.requiredError) : t(locale, contactForm.emailError)}
         </p>
       ) : null}

@@ -219,7 +219,7 @@ function TimelineRow({ item, locale, active }: { item: TimelineMilestone; locale
                 className="inline-flex min-w-0 max-w-full items-baseline gap-1.5 text-[12.5px] font-semibold text-neutral-700 no-underline transition-colors duration-200 ease-out hover:text-accent-700 focus-visible:rounded-sm focus-visible:text-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 <span className="min-w-0 max-w-[280px] truncate">{t(locale, article.label)}</span>
-                <span className="flex-none whitespace-nowrap text-neutral-600">· {article.outlet} ↗</span>
+                <span className="flex-none whitespace-nowrap text-neutral-700">· {article.outlet} ↗</span>
               </a>
             ))}
           </div>

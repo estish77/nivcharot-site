@@ -142,7 +142,7 @@ export function MediaEntryRow({ entry, ordinal, open, onToggle, locale }: MediaE
                   </p>
                 ))}
                 {entry.note ? (
-                  <p className="m-0 max-w-[760px] border-s-2 border-divider ps-3 text-[12.5px] leading-[1.65] text-neutral-600">
+                  <p className="m-0 max-w-[760px] border-s-2 border-divider ps-3 text-[12.5px] leading-[1.65] text-neutral-700">
                     {entry.note}
                   </p>
                 ) : null}

@@ -42,24 +42,50 @@ const NEXT_LABEL = { he: 'הבא', en: 'Next' }
 export function StoryViewer({ items, openIndex, onClose, onNavigate, locale }: StoryViewerProps) {
   const shouldReduceMotion = useReducedMotion()
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
   const isOpen = openIndex !== null
   const current = isOpen ? items[openIndex] : null
 
   useEffect(() => {
     if (!isOpen) return
+    // Remember whatever had focus (the thumbnail that opened this story) so
+    // closing can return it there instead of dropping focus to <body>.
+    const previouslyFocused = document.activeElement as HTMLElement | null
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     closeButtonRef.current?.focus()
 
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        onClose()
+        return
+      }
       if (e.key === 'ArrowRight') onNavigate(locale === 'he' ? (openIndex! - 1 + items.length) % items.length : (openIndex! + 1) % items.length)
       if (e.key === 'ArrowLeft') onNavigate(locale === 'he' ? (openIndex! + 1) % items.length : (openIndex! - 1 + items.length) % items.length)
+      // Trap Tab inside the dialog — it's `aria-modal="true"`, so focus
+      // reaching the page behind it (as it could before this) would break
+      // that contract for keyboard/screen-reader users.
+      if (e.key === 'Tab') {
+        const dialog = dialogRef.current
+        if (!dialog) return
+        const focusables = dialog.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+        if (focusables.length === 0) return
+        const first = focusables[0]
+        const last = focusables[focusables.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
     }
     document.addEventListener('keydown', onKeyDown)
     return () => {
       document.body.style.overflow = previousOverflow
       document.removeEventListener('keydown', onKeyDown)
+      previouslyFocused?.focus()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, openIndex])
@@ -68,6 +94,7 @@ export function StoryViewer({ items, openIndex, onClose, onNavigate, locale }: S
     <AnimatePresence>
       {isOpen && current ? (
         <motion.div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={current.caption}

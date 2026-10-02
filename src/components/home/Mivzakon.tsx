@@ -279,7 +279,7 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
           <div className="absolute inset-y-0 z-20 flex w-[112px] flex-none flex-col items-start justify-center gap-0.5 border-e border-divider bg-tint-cream px-3.5 start-0 max-[640px]:w-[86px] max-[640px]:px-2.5">
             <PodcastIcon className="mb-0.5 h-[15px] w-[15px] text-accent-700" />
             <span className="font-heading text-[12px] font-extrabold leading-[1.2] text-niv-slate">{t(locale, text.label)}</span>
-            <span className="text-[9.5px] font-semibold leading-[1.3] text-neutral-600">{t(locale, text.sub)}</span>
+            <span className="text-[9.5px] font-semibold leading-[1.3] text-neutral-700">{t(locale, text.sub)}</span>
           </div>
         ) : null}
 

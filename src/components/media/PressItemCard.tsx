@@ -38,7 +38,7 @@ export function PressItemCard({ item, locale }: PressItemCardProps) {
       <h3 className="m-0 text-[19px] leading-[1.3]">{t(locale, item.title)}</h3>
       <p className="m-0 max-w-[760px] text-[14.5px] leading-[1.7] text-neutral-800">{t(locale, item.summary)}</p>
       {item.note ? (
-        <p className="m-0 max-w-[760px] text-[12.5px] leading-[1.6] text-neutral-600">{t(locale, item.note)}</p>
+        <p className="m-0 max-w-[760px] text-[12.5px] leading-[1.6] text-neutral-700">{t(locale, item.note)}</p>
       ) : null}
       <div className="mt-1 flex flex-wrap items-center gap-3">
         <Tag variant="outline" className="pointer-events-none">
