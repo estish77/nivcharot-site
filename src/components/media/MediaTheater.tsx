@@ -96,7 +96,7 @@ export function MediaTheater({ entries, locale }: { entries: MediaEntry[]; local
             {selected.kindLabel}
           </span>
           {selected.langBadge ? (
-            <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-600">
+            <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-700">
               {selected.langBadge}
             </span>
           ) : null}
@@ -105,7 +105,7 @@ export function MediaTheater({ entries, locale }: { entries: MediaEntry[]; local
         <h3 className="mb-2 text-[22px] leading-[1.28]">{selected.title}</h3>
         <p className="m-0 mb-3 max-w-[720px] text-[14.5px] leading-[1.75] text-neutral-800">{selected.summary}</p>
         {selected.note ? (
-          <p className="m-0 mb-3 max-w-[720px] border-s-2 border-divider ps-3 text-[12.5px] leading-[1.65] text-neutral-600">
+          <p className="m-0 mb-3 max-w-[720px] border-s-2 border-divider ps-3 text-[12.5px] leading-[1.65] text-neutral-700">
             {selected.note}
           </p>
         ) : null}
@@ -171,11 +171,11 @@ export function MediaTheater({ entries, locale }: { entries: MediaEntry[]; local
                     >
                       {entry.title}
                     </span>
-                    <span className="line-clamp-1 text-[12px] leading-[1.5] text-neutral-600">{entry.outlet}</span>
+                    <span className="line-clamp-1 text-[12px] leading-[1.5] text-neutral-700">{entry.outlet}</span>
                   </span>
                   <span
                     aria-hidden="true"
-                    className="mt-[3px] font-heading text-[11px] font-extrabold tabular-nums text-neutral-600"
+                    className="mt-[3px] font-heading text-[11px] font-extrabold tabular-nums text-neutral-700"
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>

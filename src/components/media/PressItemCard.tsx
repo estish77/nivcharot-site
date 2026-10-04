@@ -30,7 +30,7 @@ export function PressItemCard({ item, locale }: PressItemCardProps) {
           {t(locale, pressArchiveText.categoryLabel[item.category])}
         </span>
         {isTranslated ? (
-          <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-600">
+          <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-700">
             {t(locale, pressArchiveText.originalLanguageBadge[item.sourceLanguage])}
           </span>
         ) : null}
