@@ -349,7 +349,7 @@ function EpisodeRow({
       >
         <span
           aria-hidden="true"
-          className="pt-[3px] font-heading text-[12px] font-extrabold tabular-nums text-neutral-600 max-[720px]:pt-0"
+          className="pt-[3px] font-heading text-[12px] font-extrabold tabular-nums text-neutral-700 max-[720px]:pt-0"
         >
           {String(ordinal).padStart(2, '0')}
         </span>

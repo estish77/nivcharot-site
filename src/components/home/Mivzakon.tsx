@@ -200,7 +200,7 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
         <div className="flex items-center gap-2 bg-tint-cream px-8 pt-3 max-[640px]:px-4">
           <PodcastIcon className="h-[16px] w-[16px] text-accent-700" />
           <span className="font-heading text-[12px] font-extrabold tracking-wide text-niv-slate">
-            {t(locale, text.label)} <span className="text-neutral-600">· {t(locale, text.sub)}</span>
+            {t(locale, text.label)} <span className="text-neutral-700">· {t(locale, text.sub)}</span>
           </span>
         </div>
       ) : null}
@@ -304,23 +304,33 @@ export function Mivzakon({ locale, items, className, variant = 'none' }: Mivzako
           >
             {[0, 1].map((copy) =>
               items.map((item) => (
-                <a
+                // `role="listitem"` has to sit on this wrapper, not the `<a>`
+                // itself — axe's aria-allowed-role flagged the anchor version:
+                // `listitem` isn't an allowed role for `<a href>` per the ARIA
+                // spec, only for elements like <li>/<div> with no native
+                // semantics of their own.
+                <div
                   key={`${copy}-${item.videoId}`}
-                  href={item.videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   role="listitem"
-                  {...(copy === 1 ? { 'aria-hidden': true, tabIndex: -1 } : {})}
-                  className="flex w-[306px] flex-none items-center border-s border-divider px-5 py-3.5 text-text no-underline transition-colors duration-200 ease-out hover:bg-white focus-visible:bg-white focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent max-[860px]:w-[236px] max-[860px]:px-4"
+                  {...(copy === 1 ? { 'aria-hidden': true } : {})}
+                  className="flex w-[306px] flex-none border-s border-divider max-[860px]:w-[236px]"
                 >
-                  <span className="line-clamp-3 block font-heading text-[14.5px] font-extrabold leading-[1.35] text-niv-slate">
-                    {variant === 'inlineBadge' ? (
-                      <PodcastIcon className="me-1 inline-block h-[12px] w-[12px] align-middle text-accent-700" />
-                    ) : null}
-                    <span className="text-accent-700">{t(locale, item.speaker)}: </span>
-                    {t(locale, item.headline)}
-                  </span>
-                </a>
+                  <a
+                    href={item.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    {...(copy === 1 ? { tabIndex: -1 } : {})}
+                    className="flex w-full items-center px-5 py-3.5 text-text no-underline transition-colors duration-200 ease-out hover:bg-white focus-visible:bg-white focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent max-[860px]:px-4"
+                  >
+                    <span className="line-clamp-3 block font-heading text-[14.5px] font-extrabold leading-[1.35] text-niv-slate">
+                      {variant === 'inlineBadge' ? (
+                        <PodcastIcon className="me-1 inline-block h-[12px] w-[12px] align-middle text-accent-700" />
+                      ) : null}
+                      <span className="text-accent-700">{t(locale, item.speaker)}: </span>
+                      {t(locale, item.headline)}
+                    </span>
+                  </a>
+                </div>
               )),
             )}
           </div>

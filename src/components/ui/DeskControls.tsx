@@ -80,7 +80,11 @@ export function DeskTabs({
               <span
                 className={cn(
                   'font-heading text-[12px] font-extrabold tabular-nums',
-                  selected ? 'text-white/80' : 'text-neutral-700',
+                  // Solid white, not a translucent text-white/80 — that
+                  // blended against `bg-accent` (#d8252f) into a color
+                  // measuring well under WCAG AA's 4.5:1 (caught by an
+                  // axe-core sweep), even though it read fine by eye.
+                  selected ? 'text-white' : 'text-neutral-700',
                 )}
               >
                 {item.count}

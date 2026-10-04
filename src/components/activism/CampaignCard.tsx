@@ -47,7 +47,7 @@ export function CampaignCard({ post, locale }: CampaignCardProps) {
             <span className="font-heading font-extrabold text-text">nivcharot</span> {post.caption}
           </p>
         ) : null}
-        <span className="text-[11.5px] font-semibold uppercase tracking-wide text-neutral-600">
+        <span className="text-[11.5px] font-semibold uppercase tracking-wide text-neutral-700">
           {shortDateLabel(post.date, locale)}
         </span>
         {post.link ? (

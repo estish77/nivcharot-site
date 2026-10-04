@@ -60,7 +60,7 @@ export function MediaEntryRow({ entry, ordinal, open, onToggle, locale }: MediaE
       >
         <span
           aria-hidden="true"
-          className="pt-[3px] font-heading text-[12px] font-extrabold tabular-nums text-neutral-600 max-[720px]:pt-0"
+          className="pt-[3px] font-heading text-[12px] font-extrabold tabular-nums text-neutral-700 max-[720px]:pt-0"
         >
           {String(ordinal).padStart(2, '0')}
         </span>
@@ -91,12 +91,12 @@ export function MediaEntryRow({ entry, ordinal, open, onToggle, locale }: MediaE
           {!open && (entry.outlet || entry.langBadge) ? (
             <span className="mt-0.5 flex flex-wrap items-center gap-2.5">
               {entry.outlet ? (
-                <span className="font-heading text-[11.5px] font-extrabold tracking-[0.04em] text-neutral-600">
+                <span className="font-heading text-[11.5px] font-extrabold tracking-[0.04em] text-neutral-700">
                   {entry.outlet}
                 </span>
               ) : null}
               {entry.langBadge ? (
-                <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-600">
+                <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-700">
                   {entry.langBadge}
                 </span>
               ) : null}
@@ -165,7 +165,7 @@ export function MediaEntryRow({ entry, ordinal, open, onToggle, locale }: MediaE
                     </Tag>
                   ) : null}
                   {entry.langBadge ? (
-                    <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-600">
+                    <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-700">
                       {entry.langBadge}
                     </span>
                   ) : null}

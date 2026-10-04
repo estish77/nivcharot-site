@@ -23,7 +23,7 @@ export function MediaEntryCard({ entry, ordinal }: { entry: MediaEntry; ordinal:
         <span className="font-heading text-[11px] font-extrabold tracking-[0.1em] text-neutral-700">
           {entry.dateLabel}
         </span>
-        <span aria-hidden="true" className="ms-auto font-heading text-[11px] font-extrabold tabular-nums text-neutral-600">
+        <span aria-hidden="true" className="ms-auto font-heading text-[11px] font-extrabold tabular-nums text-neutral-700">
           {String(ordinal).padStart(2, '0')}
         </span>
       </div>
@@ -43,7 +43,7 @@ export function MediaEntryCard({ entry, ordinal }: { entry: MediaEntry; ordinal:
           </Tag>
         ) : null}
         {entry.langBadge ? (
-          <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-600">
+          <span className="border border-divider px-1.5 py-0.5 font-heading text-[10px] font-extrabold tracking-[0.06em] text-neutral-700">
             {entry.langBadge}
           </span>
         ) : null}

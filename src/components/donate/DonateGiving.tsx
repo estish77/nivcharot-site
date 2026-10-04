@@ -132,7 +132,10 @@ export function DonateGiving({ locale, donationLinks, receiptEmail, children }: 
                   <span
                     className={cn(
                       'font-heading text-[10.5px] font-extrabold tracking-[0.12em]',
-                      active ? 'text-white/85' : 'text-neutral-700',
+                      // Solid white, not text-white/85 — translucent white
+                      // on `bg-accent` measured under WCAG AA's 4.5:1 (same
+                      // issue as the tab counts in DeskControls.tsx).
+                      active ? 'text-white' : 'text-neutral-700',
                     )}
                   >
                     {t(locale, givingText.perMonth)}

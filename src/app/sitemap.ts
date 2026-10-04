@@ -31,6 +31,7 @@ const STATIC_ENTRIES: StaticEntry[] = [
   { path: '/media', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/donate', changeFrequency: 'monthly', priority: 0.9 },
   { path: '/contact', changeFrequency: 'yearly', priority: 0.5 },
+  { path: '/accessibility', changeFrequency: 'yearly', priority: 0.3 },
 ]
 
 /**

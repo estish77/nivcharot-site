@@ -47,6 +47,8 @@ export function SiteNotice({ locale }: SiteNoticeProps) {
   return (
     <div
       ref={ref}
+      role="region"
+      aria-label={t(locale, { he: 'הודעת אתר', en: 'Site notice' })}
       className="sticky top-0 z-[35] flex items-center justify-center gap-2.5 bg-niv-slate px-8 py-2.5 text-center text-[13px] font-semibold leading-snug text-white"
     >
       <motion.span

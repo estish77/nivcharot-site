@@ -41,6 +41,11 @@ export async function JoinPageContent({ locale }: JoinPageContentProps) {
       </Reveal>
 
       <Reveal as="section" className="mx-auto max-w-[1080px] px-8 pb-14 max-[860px]:px-[18px] max-[860px]:pb-8">
+        {/* Visually hidden: each `JoinCard` renders its own h3 (axe's
+            heading-order rule caught this), and without a real h2 for this
+            section, a screen reader goes straight from the hero's h1 to
+            those h3s, skipping a level. */}
+        <h2 className="sr-only">{t(locale, { he: 'דרכים להצטרף', en: 'Ways to get involved' })}</h2>
         <CellGrid cols={3} bottomDivider className="border-2 border-divider">
           {joinCards.map((card) => (
             <JoinCard key={card.id} card={card} locale={locale} />
