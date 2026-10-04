@@ -88,17 +88,8 @@ export const accessibilityLimitations = {
 export const accessibilityContact = {
   heading: { he: 'פנייה בנושא נגישות', en: 'Accessibility contact' } satisfies Localized,
   body: {
-    he: 'נתקלתן/תם בבעיית נגישות באתר, או שיש לכן/ם הצעה לשיפור? נשמח שתפנו לרכזת הנגישות של העמותה:',
-    en: "Did you run into an accessibility problem on this site, or have a suggestion? We'd welcome you contacting the organization's accessibility coordinator:",
+    he: 'נתקלתן/תם בבעיית נגישות באתר, או שיש לכן/ם הצעה לשיפור? נשמח שתפנו אלינו למייל, זה יעזור לנו להשתפר.',
+    en: "Did you run into an accessibility problem on this site, or have a suggestion? We'd love for you to reach us by email — it helps us improve.",
   } satisfies Localized,
-  coordinatorName: { he: 'אסתי שושן, רכזת הנגישות', en: 'Esty Shushan, Accessibility Coordinator' } satisfies Localized,
   coordinatorEmail: 'estish@nivcharot.com',
-}
-
-export const accessibilityEscalation = {
-  heading: { he: 'פנייה לנציבות שוויון זכויות לאנשים עם מוגבלות', en: 'Appealing to the Commission for Equal Rights of Persons with Disabilities' } satisfies Localized,
-  body: {
-    he: 'אם פנייתכן/ם לרכזת הנגישות לא הניבה מענה הולם, ניתן לפנות גם לנציבות שוויון זכויות לאנשים עם מוגבלות במשרד המשפטים.',
-    en: "If your request to the accessibility coordinator didn't get an adequate response, you can also contact the Commission for Equal Rights of Persons with Disabilities at the Ministry of Justice.",
-  } satisfies Localized,
 }

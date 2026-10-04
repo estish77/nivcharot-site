@@ -5,7 +5,6 @@ import { Eyebrow, Reveal } from '@/components/ui'
 import {
   accessibilityAccommodations,
   accessibilityContact,
-  accessibilityEscalation,
   accessibilityHero,
   accessibilityIntro,
   accessibilityLimitations,
@@ -71,12 +70,10 @@ export default async function AccessibilityPage({ params }: { params: Promise<Pa
           </ul>
         </section>
 
-        <section className="mb-9 border-t-2 border-divider pt-8">
+        <section className="border-t-2 border-divider pt-8">
           <h2 className="m-0 mb-3 text-[20px] leading-[1.3]">{t(locale, accessibilityContact.heading)}</h2>
           <p className="m-0 mb-2 text-[15.5px] leading-[1.7] text-text">{t(locale, accessibilityContact.body)}</p>
           <p className="m-0 text-[15.5px] font-semibold leading-[1.7] text-text">
-            {t(locale, accessibilityContact.coordinatorName)}
-            <br />
             <a
               href={`mailto:${accessibilityContact.coordinatorEmail}`}
               dir="ltr"
@@ -85,11 +82,6 @@ export default async function AccessibilityPage({ params }: { params: Promise<Pa
               {accessibilityContact.coordinatorEmail}
             </a>
           </p>
-        </section>
-
-        <section className="border-t-2 border-divider pt-8">
-          <h2 className="m-0 mb-3 text-[20px] leading-[1.3]">{t(locale, accessibilityEscalation.heading)}</h2>
-          <p className="m-0 text-[15.5px] leading-[1.7] text-text">{t(locale, accessibilityEscalation.body)}</p>
         </section>
       </article>
     </Reveal>
