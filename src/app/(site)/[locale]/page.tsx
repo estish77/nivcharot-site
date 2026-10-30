@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 import { DonateBand, GoalSection, Hero, MediaArchive, Mivzakon, StatsBand, Timeline } from '@/components/home'
+import { GrainBand, PageFx, SmoothScroll, SpotlightScope, StackSection } from '@/components/home-v2'
 import { Footer } from '@/components/ui/Footer'
 import { Header } from '@/components/ui/Header'
 import { getMivzakonItems } from '@/content/mivzakon'
@@ -50,28 +51,41 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <>
+      <SmoothScroll />
+      <PageFx />
       {/* Home is the one mockup page with no divider under the header — see `Header`'s `bordered` doc comment. */}
       <Header locale={locale} navLinks={navLinks} bordered={false} />
+      {/*
+        Each band is a `StackSection`: it stays pinned while the next band
+        slides up and covers it (the layered-strips scroll effect). Content
+        and order are unchanged — only the wrappers are new. The seat-hall
+        section (`Mivzakon`) still sits directly under the hero, and the
+        donate band directly under "המטרה והאמצעים" (2026-08-28 briefs).
+      */}
       <main id="main-content" className="flex-1">
-        <Hero locale={locale} content={homeContent.hero} />
-        {/*
-          Directly under the hero — the section with the seat-hall animation
-          (2026-08-28 follow-up: moved down from above the header). It reads
-          as the first thing after the headline act rather than as chrome
-          stacked on top of the site notice.
-        */}
-        <Mivzakon locale={locale} items={getMivzakonItems()} variant="cornerTabFused" />
-        <StatsBand locale={locale} tiles={homeContent.statTiles} />
-        <GoalSection locale={locale} section={homeContent.goalSection ?? undefined} cards={homeContent.pillarCards} />
-        {/*
-          The donate band sits directly under "המטרה והאמצעים" (2026-08-28
-          brief) rather than after the timeline: the ask lands while the
-          reader has just been told what the work is and why, instead of
-          after a long scroll through the movement's history.
-        */}
-        <DonateBand locale={locale} />
-        <Timeline locale={locale} />
-        <MediaArchive locale={locale} />
+        <StackSection z={1} shadow={false}>
+          <Hero locale={locale} content={homeContent.hero} />
+          <Mivzakon locale={locale} items={getMivzakonItems()} variant="cornerTabFused" />
+        </StackSection>
+        <StackSection z={2}>
+          <GrainBand>
+            <StatsBand locale={locale} tiles={homeContent.statTiles} />
+          </GrainBand>
+        </StackSection>
+        <StackSection z={3}>
+          <SpotlightScope>
+            <GoalSection locale={locale} section={homeContent.goalSection ?? undefined} cards={homeContent.pillarCards} />
+          </SpotlightScope>
+          <GrainBand>
+            <DonateBand locale={locale} />
+          </GrainBand>
+        </StackSection>
+        <StackSection z={4}>
+          <Timeline locale={locale} />
+        </StackSection>
+        <StackSection z={5} last>
+          <MediaArchive locale={locale} />
+        </StackSection>
       </main>
       <Footer locale={locale} donateHref={`/${locale}/donate`} contactEmail={siteSettings.contactEmail} social={siteSettings.social} />
     </>
