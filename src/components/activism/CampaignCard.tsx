@@ -57,7 +57,7 @@ export function CampaignCard({ post, locale }: CampaignCardProps) {
             rel="noopener"
             className="self-start text-[12.5px] font-semibold text-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            {t(locale, { he: 'לצפייה באינסטגרם', en: 'View on Instagram' })}
+            {t(locale, { he: 'לפרסום המקורי', en: 'View the original post or article' })}
           </a>
         ) : null}
       </div>

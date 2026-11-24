@@ -8,11 +8,8 @@ import {
   activismArchiveSection,
   activismFaqSection,
   activismHalachaCards,
-  activismImageSlots,
   activismPillars,
   activismPositionPapers,
-  activismPositionPapersEyebrow,
-  activismPositionPapersPlaceholder,
   type ActivismPillar,
 } from '@/content/activism'
 import { getActivismContent, getActivismFaqs, getEvents, getGalleries, getPressArchiveItems } from '@/lib/cms'
@@ -28,7 +25,7 @@ function withLineBreaks(text: string): ReactNode {
     </Fragment>
   ))
 }
-import { Accordion, Button, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SectionHead, Tag } from '@/components/ui'
+import { Accordion, Button, Cell, CellGrid, Eyebrow, Figure, Reveal, Section, SectionHead, Tag } from '@/components/ui'
 import { EqualizerDots } from './EqualizerDots'
 
 /**
@@ -39,7 +36,7 @@ import { EqualizerDots } from './EqualizerDots'
  */
 const heroJumpLinks = [
   { href: '#legal', label: { he: 'למשפט והלכה ↓', en: 'Law & Halakha ↓' } satisfies Localized },
-  { href: '#gatherings', label: { he: 'לכנסים ולגלריות ↓', en: 'Gatherings & galleries ↓' } satisfies Localized },
+  { href: '#gatherings', label: { he: 'לפעילות בשטח ↓', en: 'Community action ↓' } satisfies Localized },
   { href: '#campaigns', label: { he: 'לקמפיינים ↓', en: 'Campaigns ↓' } satisfies Localized },
   { href: '#archive', label: { he: 'לארכיון ↓', en: 'Archive ↓' } satisfies Localized },
 ] as const
@@ -54,12 +51,12 @@ const campaignsSectionText = {
   eyebrow: { he: 'קמפיינים', en: 'CAMPAIGNS' } satisfies Localized,
   title: { he: 'הקמפיינים שלנו', en: 'Our campaigns' } satisfies Localized,
   lead: {
-    he: 'פוסטים נבחרים מהעמוד שלנו באינסטגרם.',
-    en: 'Selected posts from our Instagram page.',
+    he: 'פרסומים ותיעוד מהקמפיינים של נבחרות.',
+    en: 'Posts and coverage from Nivcharot’s campaigns.',
   } satisfies Localized,
   empty: {
-    he: 'קמפיינים יתווספו כאן בקרוב.',
-    en: 'Campaigns will be added here soon.',
+    he: 'הקמפיין ״לא נבחרות, לא בוחרות״ קרא לנשים חרדיות לדרוש ייצוג ברשימות לכנסת.',
+    en: 'The No Voice, No Vote campaign called on Haredi women to demand representation on Knesset candidate lists.',
   } satisfies Localized,
   instagramCta: { he: 'לעמוד שלנו באינסטגרם', en: 'Visit our Instagram' } satisfies Localized,
 }
@@ -136,8 +133,8 @@ const activismSectionGroups = {
 const activismPositionPapersSection = {
   title: { he: 'ניירות עמדה', en: 'Position papers' } satisfies Localized,
   lead: {
-    he: 'המסמכים והקישורים הקיימים באתר, כפי שהם, ללא השלמת תוכן שלא קיים.',
-    en: 'The documents and links already available on the site, without filling in missing material.',
+    he: 'פעילות נבחרות מביאות לוועדות הכנסת עדויות מהקהילה על ייצוג פוליטי, רווחה וביטחון אישי.',
+    en: 'Nivcharot activists bring testimony from their communities to Knesset committees on political representation, welfare and personal safety.',
   } satisfies Localized,
 }
 
@@ -165,14 +162,6 @@ function PillarText({ pillar, locale }: { pillar: ActivismPillar; locale: Locale
       <h3 className="mb-2.5 text-[24px] leading-[1.2]">{t(locale, pillar.title)}</h3>
       <p className="text-[15px] leading-[1.7] text-neutral-800">{t(locale, pillar.body)}</p>
     </div>
-  )
-}
-
-function PillarImage({ label }: { label: string }) {
-  return (
-    <Figure grayscale>
-      <ImageSlot shape="rect" label={label} className="w-full" style={{ height: 260 }} />
-    </Figure>
   )
 }
 
@@ -251,40 +240,22 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
                 </ArrowLabel>
               </a>
             </div>
-            <PillarImage label={t(locale, activismImageSlots.bagatz.label)} />
+            <Figure src="/assets/legal/high-court-july-2018.webp"
+              alt={t(locale, { he: 'משתתפות הדיון עומדות יחד במסדרון בית המשפט העליון', en: 'Participants standing together in a Supreme Court corridor' })}
+              caption={t(locale, { he: 'ביום הדיון בבג״ץ, 31 ביולי 2018. ארכיון נבחרות.', en: 'At the High Court hearing, 31 July 2018. Nivcharot archive.' })} />
           </div>
           <div className="border-t-2 border-divider pt-8">
-            <Eyebrow className="mb-4">{t(locale, activismPositionPapersEyebrow)}</Eyebrow>
             <h3 className="mb-3">{t(locale, activismPositionPapersSection.title)}</h3>
             <p className="mb-5 max-w-[640px] text-[15px] leading-[1.7] text-neutral-800">
               {t(locale, activismPositionPapersSection.lead)}
             </p>
             <div className="flex max-w-[720px] flex-col gap-3">
-              {activismPositionPapers.map((link) =>
-                link.href ? (
-                  <a
-                    key={t(locale, link.label)}
-                    href={link.href.startsWith('/') ? `/${locale}${link.href}` : link.href}
-                    className={`text-[15px] font-semibold ${FOCUS_RING}`}
-                  >
-                    <ArrowLabel locale={locale}>{t(locale, link.label)}</ArrowLabel>
-                  </a>
-                ) : (
-                  /*
-                   * The old nivcharot.co.il pages these pointed to are going
-                   * offline (2026-08-13 brief, item 33) and have no new home
-                   * yet — same "no link, dotted placeholder" treatment as
-                   * activismHalachaCards.second below, rather than linking to
-                   * a domain that's about to 404.
-                   */
-                  <span key={t(locale, link.label)} className="flex flex-wrap items-baseline gap-2 text-[15px] font-semibold text-neutral-700">
-                    {t(locale, link.label)}
-                    <span className="border-b border-dotted border-accent text-[12.5px] text-accent-700">
-                      {t(locale, activismPositionPapersPlaceholder)}
-                    </span>
-                  </span>
-                ),
-              )}
+              {activismPositionPapers.map(link => (
+                <a key={link.href} href={link.href.startsWith('/') ? `/${locale}${link.href}` : link.href}
+                  className={`text-[15px] font-semibold ${FOCUS_RING}`}>
+                  <ArrowLabel locale={locale}>{t(locale, link.label)}</ArrowLabel>
+                </a>
+              ))}
             </div>
           </div>
         </Section>
@@ -398,21 +369,20 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
             title={t(locale, activismSectionGroups.gatherings.title)}
             lead={t(locale, activismSectionGroups.gatherings.lead)}
           />
-          <div className="grid grid-cols-1 items-center gap-10 py-8 min-[861px]:grid-cols-2">
-            <PillarImage label={t(locale, activismImageSlots.chairs.label)} />
+          <div className="max-w-[660px] py-8">
             <PillarText pillar={activismPillars.chairs} locale={locale} />
           </div>
           <div className="grid grid-cols-1 gap-10 py-8 min-[861px]:grid-cols-2">
             <PillarText pillar={activismPillars.knesset} locale={locale} />
             <PillarText pillar={activismPillars.community} locale={locale} />
           </div>
-          <div className="mt-4 border-t-2 border-divider pt-8">
-            <Eyebrow className="mb-2.5">{t(locale, galleriesSectionText.eyebrow)}</Eyebrow>
-            <h4 className="mb-2 text-[22px] leading-[1.25]">{t(locale, galleriesSectionText.title)}</h4>
-            <p className="mb-6 max-w-[620px] text-[15px] leading-[1.7] text-neutral-800">
-              {t(locale, galleriesSectionText.lead)}
-            </p>
-            {eventGalleries.length > 0 || photoGalleries.length > 0 ? (
+          {(eventGalleries.length > 0 || photoGalleries.length > 0) && (
+            <div className="mt-4 border-t-2 border-divider pt-8">
+              <Eyebrow className="mb-2.5">{t(locale, galleriesSectionText.eyebrow)}</Eyebrow>
+              <h4 className="mb-2 text-[22px] leading-[1.25]">{t(locale, galleriesSectionText.title)}</h4>
+              <p className="mb-6 max-w-[620px] text-[15px] leading-[1.7] text-neutral-800">
+                {t(locale, galleriesSectionText.lead)}
+              </p>
               <div className="grid grid-cols-1 gap-7 min-[560px]:grid-cols-2 min-[861px]:grid-cols-3">
                 {eventGalleries.map((gallery) => (
                   <EventGalleryCard key={gallery.slug} gallery={gallery} locale={locale} />
@@ -421,12 +391,8 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
                   <GalleryPhotoCard key={gallery.id} gallery={gallery} locale={locale} />
                 ))}
               </div>
-            ) : (
-              <p className="text-[14px] text-neutral-700">
-                {t(locale, { he: 'גלריות תתווספנה כאן בקרוב.', en: 'Galleries will be added here soon.' })}
-              </p>
-            )}
-          </div>
+            </div>
+          )}
         </Section>
       </Reveal>
 

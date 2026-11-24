@@ -52,8 +52,8 @@ export const activismPillars: {
     eyebrow: { he: 'בג"ץ', en: 'SUPREME COURT' },
     title: { he: 'המאבק בתקנוני המפלגות', en: 'The battle over party bylaws' },
     body: {
-      he: 'מ־2015 היינו שותפות למאבק המשפטי נגד סעיפי התקנון שמנעו מנשים להתמודד במפלגות החרדיות. אחרי ארבע שנים, ב־2019, הורה בית המשפט העליון לאגודת ישראל לבטל כל מניעה לקבלת אישה כחברה במפלגה. "יש שופטים בירושלים והם אומרים: אין יותר שלט \'אין כניסה לנשים\'".',
-      en: 'From 2015 we were partners in the legal battle against bylaw clauses barring women from Haredi parties. After four years, in 2019, the Supreme Court ordered Agudat Yisrael to remove every barrier to women\'s membership. No more "No entry for women" sign.',
+      he: 'ב־2019 נתן בג״ץ תוקף להתחייבות אגודת ישראל למחוק את המילה ״איש״ מסעיף החברות בתקנון. ב־2021 יזמה נבחרות הגשת בקשות התפקדות בהשתתפות בוגרות ״הנבחרת״ ופעילות חברתיות. בעקבות הבקשות הוגשו שתי תביעות אזרחיות, בירושלים נגד ש״ס ובתל אביב נגד אגודת ישראל.',
+      en: 'In 2019 the High Court gave legal force to Agudat Yisrael’s commitment to remove the word “man” from its membership clause. In 2021 Nivcharot organised a membership drive with programme graduates and community activists. Their applications led to civil claims against Shas in Jerusalem and Agudat Yisrael in Tel Aviv.',
     },
   },
   chairs: {
@@ -82,52 +82,13 @@ export const activismPillars: {
   },
 }
 
-/** The two unfilled `<image-slot>` placeholders next to the bagatz/chairs blocks. */
-export const activismImageSlots = {
-  bagatz: {
-    id: 'act-bagatz',
-    label: { he: 'תמונה, מחוץ לבית המשפט העליון', en: 'Image, outside the Supreme Court' } satisfies Localized,
-  },
-  chairs: {
-    id: 'act-chairs',
-    label: { he: 'תמונה, מחאת הכסאות', en: 'Image, the Empty Chairs protest' } satisfies Localized,
-  },
-}
-
-/**
- * `href` is optional by design, same convention as
- * `activismHalachaCards.second`'s placeholder: the two entries below
- * originally linked to pages on the old nivcharot.co.il site, which is
- * being taken offline (2026-08-13 brief, item 33 — no link anywhere may
- * point at the old site). Neither document has a new home yet, so rather
- * than link to a domain that's about to 404, these render as plain
- * dotted-underline "not yet linked" labels until the real files/pages are
- * re-hosted and a real `href` can be filled back in.
- */
-export type ActivismLink = { label: Localized; href?: string }
-
-export const activismPositionPapersEyebrow = {
-  he: 'ניירות עמדה נבחרים',
-  en: 'Selected position papers',
-} satisfies Localized
-
-export const activismPositionPapersPlaceholder = {
-  he: 'הקישור יתעדכן',
-  en: 'link coming soon',
-} satisfies Localized
-
-export const activismPositionPapers: ActivismLink[] = [
+export const activismPositionPapers = [
   {
-    label: {
-      he: 'הזכות לשירותי רווחה, על הקשיים והתפקוד הלקוי במערכת הרווחה (2024)',
-      en: 'The right to welfare services, failures of Israel\'s welfare system (2024, Hebrew)',
-    },
+    label: { he: 'אלימות במשפחה החרדית בזמן הסגר, נייר עמדה מאפריל 2020 (PDF)', en: 'Domestic violence in Haredi families during lockdown, April 2020 (Hebrew PDF)' },
+    href: 'https://fs.knesset.gov.il/23/Committees/23_cs_bg_568253.pdf',
   },
   {
-    label: {
-      he: 'פעילות נבחרות בכנסת וניירות העמדה',
-      en: 'Knesset advocacy and position papers',
-    },
+    label: { he: 'פעילות נבחרות בכנסת וניירות העמדה', en: 'Knesset advocacy and position papers' },
     href: '/knesset',
   },
 ]
@@ -237,8 +198,8 @@ export const activismFaqs: ActivismFaqItem[] = [
       en: 'The Court ruled in your favour in 2019. Why are there still no women?',
     },
     answer: {
-      he: 'כי תיקון התקנון לא הפך להתפקדות בפועל. המפלגות החרדיות טרם נפתחו לנשים, ושתי עתירות מתנהלות בימים אלה מול ש"ס ומול אגודת ישראל כדי לאפשר התפקדות.',
-      en: 'Because amending the bylaws did not translate into actual membership. The Haredi parties have not opened to women in practice, and two petitions are now pending against Shas and Agudat Yisrael to allow women to join.',
+      he: 'פסק הדין של 2019 עסק בנוסח התקנון. כשהנשים הגישו בקשות התפקדות ב־2021 בהובלת נבחרות, הן נתקלו בסירוב או נותרו ללא מענה. בדצמבר 2025 הורה בית המשפט לש״ס ליצור את התנאים לקבלת חברות וחברים. באוקטובר 2026 הקציב בית המשפט לאגודת ישראל 12 חודשים להקמת מנגנון למפקד. ההחלטה בכל בקשת חברות נשארה בידי המפלגה.',
+      en: 'The 2019 ruling concerned the wording of the charter. When women applied in the 2021 membership drive led by Nivcharot, their applications were refused or went unanswered. In December 2025 the court ordered Shas to put an admissions process in place. In October 2026 Agudat Yisrael was given 12 months to establish a membership drive. Each party remains responsible for deciding individual applications.',
     },
   },
   {
@@ -276,8 +237,8 @@ export const activismFaqs: ActivismFaqItem[] = [
  */
 export const activismArchiveSection = {
   title: {
-    he: 'מהארכיון · ניירות עמדה וחקיקה',
-    en: 'From the archive · position papers and legislation',
+    he: 'נבחרות בתקשורת',
+    en: 'Nivcharot in the press',
   } satisfies Localized,
   linkLabel: { he: 'לארכיון המלא', en: 'Full archive' } satisfies Localized,
   href: '/media#in-the-media',
