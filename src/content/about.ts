@@ -22,24 +22,13 @@ export type AboutPillar = {
   hrefSlug: string
 }
 
-/**
- * One "By the numbers" stat tile. `sourcePrefix` is the full citation line;
- * `sourcePlaceholder`, when present for a given locale, is an additional
- * dotted-underline "to be completed" fragment appended after " · ".
- *
- * The mockup's placeholder markers are NOT symmetric between locales: 3
- * appear in Hebrew (tiles 2, 5, 6 — 1-indexed) but only 2 survive in the
- * English copy (tiles 2, 6) — the Hebrew "committee name" TODO on tile 5
- * was apparently resolved before translation. Modeled exactly as authored,
- * not assumed symmetric.
- */
 export type AboutStatTile = {
   value: number
   suffix: string
   decimals?: number
   label: Localized<string>
   sourcePrefix: Localized<string>
-  sourcePlaceholder?: { he?: string; en?: string }
+  sourceUrl: string
 }
 
 export const aboutContent = {
@@ -152,76 +141,55 @@ export const aboutContent = {
 
   stats: {
     eyebrow: { he: `במספרים`, en: `By the numbers` } satisfies Localized,
-    leadPrefix: {
-      he: `הנתונים שמאחורי המאבק, מתוך ניירות העמדה שהגשנו ומתוך העתירות. לכל נתון מצוין המקור וגוף היעד שאליו הוגש; פרטים שטרם אומתו מסומנים ב`,
-      en: `The figures behind the struggle, from the position papers we submitted and from the petitions. Each figure carries its source and the body it was submitted to; details not yet verified are marked with a`,
-    } satisfies Localized,
-    leadDotted: { he: `קו מקווקו`, en: `dotted underline` } satisfies Localized,
-    leadSuffix: { he: `.`, en: `.` } satisfies Localized,
+    lead: { he: 'ייצוג פוליטי, תעסוקה ופעילות נבחרות. לצד כל נתון מופיעים השנה והמקור.', en: 'Political representation, employment and Nivcharot’s work, with the year and source for each figure.' } satisfies Localized,
     tiles: [
       {
-        value: 0,
-        suffix: ``,
-        label: { he: `נשים חרדיות שכיהנו בכנסת מאז 1948`, en: `Haredi women who have served in the Knesset since 1948` },
-        sourcePrefix: {
-          he: `נייר עמדה נבחרות, 2017 · הוגש לבג"ץ, לכנסת ולמשרדי ממשלה`,
-          en: `Nivcharot position paper, 2017 · submitted to the Supreme Court, the Knesset and government ministries`,
-        },
+        value: 0, suffix: '',
+        label: { he: 'נשים ברשימות ש״ס ויהדות התורה בבחירות לכנסת ה־26 (2026)', en: 'Women on the Shas and United Torah Judaism lists in the 2026 Knesset election' },
+        sourcePrefix: { he: 'מרכז המחקר והמידע של הכנסת, הבחירות לכנסת ה־26', en: 'Knesset Research and Information Center, 26th Knesset election' },
+        sourceUrl: 'https://fs.knesset.gov.il/globaldocs/MMM/c64c8a00-d5d6-f111-a140-005056aa7c52/2_c64c8a00-d5d6-f111-a140-005056aa7c52_11_21831.pdf',
       },
       {
-        value: 16,
-        suffix: ``,
-        label: { he: `חברי כנסת חרדים, כולם גברים`, en: `Haredi members of Knesset, all of them men` },
-        sourcePrefix: { he: `אסתי שושן, 2021`, en: `Esty Shushan, 2021` },
-        sourcePlaceholder: { he: `מקור הציטוט להשלמה`, en: `citation to be completed` },
+        value: 16, suffix: '',
+        label: { he: 'מנדטים לש״ס וליהדות התורה יחד בבחירות לכנסת ה־24 (2021). בשתי הרשימות התמודדו גברים בלבד.', en: 'Seats won by Shas and United Torah Judaism together in the 2021 election. Both lists consisted entirely of men.' },
+        sourcePrefix: { he: 'מרכז המחקר והמידע של הכנסת, נשים בכנסת ה־24', en: 'Knesset Research and Information Center, women in the 24th Knesset' },
+        sourceUrl: 'https://fs.knesset.gov.il/globaldocs/MMM/2b2cfb9f-e074-eb11-810c-00155d0aee38/2_2b2cfb9f-e074-eb11-810c-00155d0aee38_11_17823.pdf',
       },
       {
-        value: 30,
-        suffix: `%`,
-        label: { he: `פער השכר בין אישה חרדית לאישה ישראלית ממוצעת`, en: `Pay gap between a Haredi woman and an average Israeli woman` },
-        sourcePrefix: {
-          he: `מסמך נבחרות, "סיפורן של הסופרג'יסטיות האחרונות"`,
-          en: `From "The story of the last suffragettes"`,
-        },
+        value: 67, suffix: '%',
+        label: { he: 'שכרן החודשי הממוצע של שכירות חרדיות ביחס לשכרן של שכירות יהודיות שאינן חרדיות ב־2023', en: 'Average monthly earnings of Haredi women employees as a share of those of other Jewish women employees in 2023' },
+        sourcePrefix: { he: 'המכון הישראלי לדמוקרטיה, שנתון החברה החרדית 2025', en: 'Israel Democracy Institute, 2025 Statistical Report on Haredi Society' },
+        sourceUrl: 'https://www.idi.org.il/haredi/2025/?chapter=62171',
       },
       {
-        value: 79.5,
-        suffix: `%`,
-        decimals: 1,
-        label: { he: `שיעור התעסוקה בקרב נשים חרדיות`, en: `Employment rate among Haredi women` },
-        sourcePrefix: {
-          he: `נייר עמדה נבחרות, 2017 · הוגש לבג"ץ, לכנסת ולמשרדי ממשלה`,
-          en: `Nivcharot position paper, 2017 · submitted to the Supreme Court, the Knesset and government ministries`,
-        },
+        value: 81, suffix: '%',
+        label: { he: 'שיעור התעסוקה של נשים חרדיות בגילי 25–66 ב־2024', en: 'Employment rate among Haredi women aged 25–66 in 2024' },
+        sourcePrefix: { he: 'המכון הישראלי לדמוקרטיה, שנתון החברה החרדית 2025', en: 'Israel Democracy Institute, 2025 Statistical Report on Haredi Society' },
+        sourceUrl: 'https://www.idi.org.il/haredi/2025/?chapter=62171',
       },
       {
-        value: 6,
-        suffix: `%`,
-        label: { he: `חלקן של נשים חרדיות בחברה הישראלית`, en: `Haredi women's share of Israeli society` },
-        sourcePrefix: { he: `הדר לינר, פרוטוקול דיון בכנסת, 2023`, en: `Hadar Leiner, Knesset committee 2023` },
-        sourcePlaceholder: { he: `שם הוועדה להשלמה` },
+        value: 6, suffix: '%',
+        label: { he: 'חלקן של נשים חרדיות בחברה הישראלית לפי עדותה של הדר ליינר ב־2023', en: 'Share of Israeli society represented by Haredi women, as estimated by Hadar Leiner in her 2023 testimony' },
+        sourcePrefix: { he: 'הוועדה לקידום מעמד האישה ולשוויון מגדרי, פרוטוקול 13, 20.2.2023 (Word)', en: 'Committee on the Status of Women and Gender Equality, minutes no. 13, 20 February 2023 (Word)' },
+        sourceUrl: 'https://fs.knesset.gov.il/25/Committees/25_ptv_2032325.doc',
       },
       {
-        value: 7,
-        suffix: ``,
-        label: { he: `מתוך 114 מקלטים לנשים מיועדים למשפחות חרדיות`, en: `Of 114 women's shelters are designated for Haredi families` },
-        sourcePrefix: { he: `נייר עמדה נבחרות, 2020`, en: `Nivcharot position paper, 2020` },
-        sourcePlaceholder: { he: `יעד ההגשה להשלמה`, en: `recipient to be completed` },
+        value: 7, suffix: '',
+        label: { he: 'מתוך 114 מקלטים יועדו למשפחות חרדיות לפי נייר עמדה שפרסמה נבחרות באפריל 2020', en: 'Of 114 shelters were designated for Haredi families, according to Nivcharot’s April 2020 position paper' },
+        sourcePrefix: { he: 'נבחרות, אלימות במשפחה בחברה החרדית בתקופת משבר הקורונה, עמ׳ 1', en: 'Nivcharot, domestic violence in Haredi society during the pandemic, p. 1' },
+        sourceUrl: 'https://fs.knesset.gov.il/23/Committees/23_cs_bg_568253.pdf',
       },
       {
-        value: 22,
-        suffix: ``,
-        label: { he: `נשים שביקשו להצטרף למפלגות החרדיות וסורבו`, en: `Women who asked to join the Haredi parties and were refused` },
-        sourcePrefix: { he: `מתוך העתירה לבג"ץ נגד ש"ס, 2022`, en: `From the Supreme Court petition against Shas, 2022` },
+        value: 22, suffix: '',
+        label: { he: 'נשים שביקשו להתפקד למפלגות החרדיות לפי נייר העמדה שהגישה נבחרות לכנסת ב־2023', en: 'Women who applied to join Haredi parties, according to Nivcharot’s 2023 paper to the Knesset' },
+        sourcePrefix: { he: 'נבחרות, נייר עמדה על הרפורמה המשפטית, 19.2.2023', en: 'Nivcharot, position paper on judicial reform, 19 February 2023' },
+        sourceUrl: 'https://fs.knesset.gov.il/25/Committees/25_cs_bg_1839151.pdf',
       },
       {
-        value: 9,
-        suffix: ``,
-        label: {
-          he: `מחזורים של "הנבחרת" מאז 2018, כ־20 אקטיביסטיות בכל מחזור`,
-          en: `HaNivcheret cohorts since 2018, about 20 activists in each`,
-        },
-        sourcePrefix: { he: `נתוני תוכנית "הנבחרת", נבחרות`, en: `HaNivcheret program data, Nivcharot` },
+        value: 9, suffix: '',
+        label: { he: 'מחזורים של תוכנית המנהיגות ״הנבחרת״ מאז פתיחתה ב־2018 ועד 2026', en: 'HaNivcheret leadership cohorts from the launch in 2018 through 2026' },
+        sourcePrefix: { he: 'נבחרות, תוכנית המנהיגות ״הנבחרת״', en: 'Nivcharot, HaNivcheret leadership programme' },
+        sourceUrl: '/hanivcheret',
       },
     ] satisfies AboutStatTile[],
   },

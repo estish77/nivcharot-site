@@ -7,15 +7,7 @@ export type StatTileProps = {
   locale: Locale
 }
 
-/**
- * One "By the numbers" cell: the big count-up figure (`StatCounter`), its
- * label, and a citation line that may end in a dotted-underline "to be
- * completed" placeholder — kept exactly as authored per locale (see the
- * type comment on `AboutStatTile`: the mockup's 3 Hebrew / 2 English
- * placeholders don't line up 1:1 across languages).
- */
 export function StatTile({ tile, locale }: StatTileProps) {
-  const placeholder = tile.sourcePlaceholder?.[locale]
 
   return (
     <div>
@@ -24,13 +16,9 @@ export function StatTile({ tile, locale }: StatTileProps) {
       </div>
       <p className="m-0 mt-3 text-[15.5px] font-semibold leading-[1.55]">{t(locale, tile.label)}</p>
       <p className="m-0 mt-1.5 text-[12.5px] leading-[1.5] text-neutral-700">
-        {t(locale, tile.sourcePrefix)}
-        {placeholder ? (
-          <>
-            {' · '}
-            <span className="border-b border-dotted border-accent text-accent-700">{placeholder}</span>
-          </>
-        ) : null}
+        <a className="underline underline-offset-2" href={tile.sourceUrl.startsWith('/') ? `/${locale}${tile.sourceUrl}` : tile.sourceUrl}>
+          {t(locale, tile.sourcePrefix)}
+        </a>
       </p>
     </div>
   )

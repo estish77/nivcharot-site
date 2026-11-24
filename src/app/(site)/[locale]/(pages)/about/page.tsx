@@ -171,12 +171,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <Section as="div" maxWidth={1080} paddingBlockStart="48px" paddingBlockEnd="24px">
           <Eyebrow className="mb-2.5">{t(locale, aboutContent.stats.eyebrow)}</Eyebrow>
           <p className="m-0 mb-[30px] max-w-[620px] text-[15px] leading-[1.7] text-neutral-800">
-            {t(locale, aboutContent.stats.leadPrefix)}
-            {/* he: "מסומנים ב" is a prefix letter glued to the next word, no
-                space; en: "marked with a" is a standalone word and needs one. */}
-            {locale === 'en' ? ' ' : ''}
-            <span className="border-b border-dotted border-accent text-accent-700">{t(locale, aboutContent.stats.leadDotted)}</span>
-            {t(locale, aboutContent.stats.leadSuffix)}
+            {t(locale, aboutContent.stats.lead)}
           </p>
           <CellGrid cols={4} bottomDivider>
             {aboutContent.stats.tiles.map((tile, i) => (

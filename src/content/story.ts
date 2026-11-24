@@ -359,8 +359,11 @@ export const storyContent = {
 
   images: {
     he: [
-      { id: `story-1`, label: `תמונה, ימי המחאה הראשונים` },
-      { id: `story-2`, label: `תמונה, מחוץ לבית המשפט / מחאת הכסאות` },
+      {
+        id: 'story-2', src: '/assets/legal/district-court-august-2022.webp',
+        label: 'משתתפות ומשתתפי הדיון עומדים יחד בבית המשפט המחוזי בירושלים.',
+        caption: 'בבית המשפט המחוזי בירושלים ביום הדיון, 24 באוגוסט 2022. ארכיון נבחרות.',
+      },
       {
         id: 'story-3', src: '/assets/story/adina-bar-shalom-may-2024.webp',
         label: 'הרבנית עדינה בר שלום עומדת ומשוחחת עם משתתפות הנבחרת היושבות סביבה.',
@@ -368,15 +371,18 @@ export const storyContent = {
       },
     ],
     en: [
-      { id: `story-1`, label: `Image, early protest days` },
-      { id: `story-2`, label: `Image, outside the court / Empty Chairs` },
+      {
+        id: 'story-2', src: '/assets/legal/district-court-august-2022.webp',
+        label: 'Participants standing together at the Jerusalem District Court.',
+        caption: 'At the Jerusalem District Court on the day of the hearing, 24 August 2022. Nivcharot archive.',
+      },
       {
         id: 'story-3', src: '/assets/story/adina-bar-shalom-may-2024.webp',
         label: 'Rabbanit Adina Bar-Shalom speaking to HaNivcheret participants seated around her.',
         caption: 'Adina Bar-Shalom with the seventh HaNivcheret cohort, 8 May 2024. Nivcharot archive.',
       },
     ],
-  } satisfies Localized<{ id: string; label: string; src?: string; caption?: string }[]>,
+  } satisfies Localized<{ id: string; label: string; src: string; caption: string }[]>,
 
   sidebarLabel: { he: `ציר הזמן`, en: `TIMELINE` } satisfies Localized,
 

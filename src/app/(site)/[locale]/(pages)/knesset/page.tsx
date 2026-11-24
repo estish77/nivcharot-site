@@ -86,9 +86,11 @@ export default async function KnessetPage({ params }: { params: Params }) {
       </ul>
     </section>
     <section className="max-w-[760px] border-s-4 border-accent bg-tint-cream p-6">
-      <h2 className="mb-3 text-2xl">{t(locale, { he: 'עדות בוועדה לקידום מעמד האישה', en: 'Testimony before the Committee on the Status of Women' })}</h2>
+      <h2 className="mb-3 text-2xl">{t(locale, { he: 'עדויות בוועדה לקידום מעמד האישה', en: 'Testimony before the Committee on the Status of Women' })}</h2>
       <p className="leading-relaxed">{t(locale, { he: 'ב־6 בינואר 2021 השתתפה אסתי שושן בדיון על חוקיותן של רשימות מועמדים ללא נשים. היא תיארה בפני הוועדה את המחיר האישי ששילמה כשדרשה ייצוג פוליטי לנשים חרדיות.', en: 'On 6 January 2021, Esty Shushan spoke at the hearing on the legality of all-male candidate lists. She described the personal cost of calling for political representation for Haredi women.' })}</p>
       <a className="mt-3 inline-block font-semibold underline" href="https://main.knesset.gov.il/News/PressReleases/pages/press06012021d.aspx">{t(locale, { he: 'לסיקור הדיון באתר הכנסת', en: 'Read the Knesset’s account of the hearing (Hebrew)' })}</a>
+      <p className="mt-5 leading-relaxed">{t(locale, { he: 'ב־20 בפברואר 2023 הופיעה הדר ליינר מטעם נבחרות באותה ועדה, בדיון על השלכות הרפורמה המשפטית. היא תיארה כיצד נשים בקהילה ביקשו ממנה לדבר בשמן על היעדר הייצוג בכנסת וברשויות המקומיות.', en: 'On 20 February 2023, Hadar Leiner spoke for Nivcharot before the same committee during its debate on judicial reform. She described how women in her community asked her to speak for them about their lack of representation in the Knesset and on local councils.' })}</p>
+      <a className="mt-3 inline-block font-semibold underline" href="https://fs.knesset.gov.il/25/Committees/25_ptv_2032325.doc">{t(locale, { he: 'לדברי הדר ליינר בפרוטוקול 13 של הוועדה (Word)', en: 'Read Hadar Leiner’s testimony in committee minutes no. 13 (Hebrew Word document)' })}</a>
     </section>
     <Link className="mt-6 inline-block font-semibold underline" href={`/${locale}/mishpat`}>{t(locale, { he: 'לציר הזמן של המאבק המשפטי', en: 'Explore the legal campaign timeline' })}</Link>
   </article>

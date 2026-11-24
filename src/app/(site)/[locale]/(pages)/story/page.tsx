@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Fragment, type ReactNode } from 'react'
 
-import { Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, TabBar } from '@/components/ui'
+import { Cell, CellGrid, Eyebrow, Figure, Reveal, Section, TabBar } from '@/components/ui'
 import type { TabBarItem } from '@/components/ui'
 import { EqualizerDots } from '@/components/story/EqualizerDots'
 import { Timeline } from '@/components/story/Timeline'
@@ -104,11 +104,9 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
           <h2 className="sr-only">{t(locale, storyContent.sidebarLabel)}</h2>
           <Timeline locale={locale} milestones={timelineMilestones} sidebarLabel={t(locale, storyContent.sidebarLabel)} />
 
-          <div className="mt-7 grid grid-cols-1 gap-5 border-t-2 border-divider pt-7 min-[861px]:grid-cols-3">
+          <div className="mt-7 grid grid-cols-1 gap-5 border-t-2 border-divider pt-7 min-[861px]:grid-cols-2">
             {images.map((image) => (
-              image.src ? <Figure key={image.id} src={image.src} alt={image.label} caption={image.caption} /> : <Figure key={image.id} grayscale>
-                <ImageSlot label={image.label} className="w-full" style={{ height: 220 }} />
-              </Figure>
+              <Figure key={image.id} src={image.src} alt={image.label} caption={image.caption} mediaClassName="max-h-[26rem] object-contain" />
             ))}
           </div>
         </Section>
