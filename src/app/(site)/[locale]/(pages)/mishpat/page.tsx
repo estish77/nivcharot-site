@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { hasRichText, RichText } from '@/components/ui'
-import { knessetPaper, legalCases, legalLead, legalTitle } from '@/content/legal-cases'
+import { LegalHistory } from '@/components/mishpat/LegalHistory'
+import { legalCases, legalLead, legalTitle } from '@/content/legal-cases'
 import { getMishpatContent } from '@/lib/cms'
 import { isLocale, locales, t } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
@@ -35,6 +36,7 @@ export default async function MishpatPage({ params }: { params: Params }) {
           <p className="max-w-[64ch] text-lg leading-relaxed">{t(locale, legalLead)}</p>
         </div>
       </header>
+      <LegalHistory locale={locale} />
       <section className="mx-auto max-w-[1080px] px-6 py-10">
         <h2 className="mb-6 text-3xl">{t(locale, { he: 'ההליכים בבתי המשפט', en: 'The court cases' })}</h2>
         <div className="grid gap-8 sm:grid-cols-2">
@@ -46,14 +48,6 @@ export default async function MishpatPage({ params }: { params: Params }) {
             </article>
           ))}
         </div>
-      </section>
-      <section className="mx-auto max-w-[1080px] border-t-2 border-divider px-6 py-8">
-        <h2 className="mb-3 text-2xl">{t(locale, { he: 'מהעתירה לכנסת', en: 'From the courts to the Knesset' })}</h2>
-        <p className="mb-3 max-w-[68ch] leading-relaxed">{t(locale, {
-          he: 'במסמך שהגישה לכנסת ב־2023 תיארה נבחרות את הקשר בין בקשותיהן של נשים להצטרף למפלגות לבין העבודה הפרלמנטרית לקידום ייצוג נשים ברשימות המועמדים. המסמך מביא את עמדת התנועה בזמן שההליכים האזרחיים עדיין התנהלו.',
-          en: 'In a 2023 paper submitted to the Knesset, Nivcharot connected women’s membership applications with its parliamentary work on representation on candidate lists. The paper records the movement’s position while the civil cases were under way.',
-        })}</p>
-        <a href={knessetPaper} className="font-semibold text-accent-700 underline">{t(locale, { he: 'קריאת נייר העמדה באתר הכנסת (PDF)', en: 'Read the position paper in the Knesset archive (Hebrew PDF)' })}</a>
       </section>
       {hasRichText(content.bodyRich) && (
         <section className="mx-auto max-w-[1080px] border-t-2 border-divider px-6 py-8">
