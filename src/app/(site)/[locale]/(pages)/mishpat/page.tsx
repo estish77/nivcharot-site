@@ -51,7 +51,7 @@ export default async function MishpatPage({ params }: { params: Params }) {
       </section>
       {hasRichText(content.bodyRich) && (
         <section className="mx-auto max-w-[1080px] border-t-2 border-divider px-6 py-8">
-          <details className="max-w-[760px]">
+          <details open className="max-w-[760px]">
             <summary className="cursor-pointer text-xl font-bold">{t(locale, { he: 'מאמר הרקע של נבחרות', en: 'Background from Nivcharot' })} — {content.hero.title}</summary>
             <p className="my-4 leading-relaxed">{content.hero.body}</p>
             <RichText value={content.bodyRich} />

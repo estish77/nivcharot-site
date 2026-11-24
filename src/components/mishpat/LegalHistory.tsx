@@ -69,6 +69,8 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         en: 'Before a party draws up its list of candidates, who can join it? Lawyer Tamar Ben-Porat challenged the Registrar of Parties and Agudat Yisrael over charter provisions that included the word “man” in the membership clause. Nivcharot worked alongside the petitioner and other women’s organisations.',
       },
       quote: {
+        id: 'quote-children',
+        title: { he: 'טיעון הילדים', en: 'The comparison with children' },
         lead: { he: 'בתגובתה בכתב השוותה אגודת ישראל בין תנועת הנשים שלה לתנועת הנוער של המפלגה. כך נימקה את ההשוואה:', en: 'In its written response, Agudat Yisrael compared its separate women’s organisation with its youth movement. The party argued:' },
         words: { he: '״כפי שהעותרת אינה טוענת כי אי צירופם של ילדים למפלגה, והקמת ארגון לילדים החוסה תחת כנפי המפלגה, מהווה אפליה פסולה, והדרת ילדים, כך אין מקום לטעון זאת לעניין נשים.״', en: '“Just as the petitioner does not claim that excluding children from the party and establishing a children’s organisation under its wing constitutes unlawful discrimination and the exclusion of children, there is no basis for making that claim regarding women.”' },
         credit: { he: 'אגודת ישראל, תגובת המשיבה 2 בבג״ץ 1823/15, עמ׳ 10, סעיף 53.', en: 'Agudat Yisrael, second respondent’s brief in HCJ 1823/15, p. 10, para. 53. Translated from Hebrew.' },
@@ -82,6 +84,8 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         en: 'At the February hearing, Ben-Porat described the choice facing a woman who wanted to represent her own community. In October, Justice Uzi Vogelman asked her to identify exactly what the petition challenged. Was it the registrar’s decision, the party charter itself, or both? These exchanges record the argument while the court was still considering how it could intervene.',
       },
       quote: {
+        id: 'quote-weight',
+        title: { he: 'טיעון ״מפלגת השמנים״', en: 'The party’s weight analogy' },
         lead: { he: 'לקראת הדיון באוקטובר העלתה אגודת ישראל את הטיעון שנודע כ״מפלגת השמנים״. היא ביקשה מן השופטים לדמיין מפלגה שתגביל את ההצטרפות אליה לפי משקל:', en: 'Ahead of the October hearing, Agudat Yisrael asked the court to imagine a party that limited membership by weight. Its written submission began:' },
         words: { he: '״נניח כי המאותגרים במשקלם, בעלי משקל היתר (ובלשון העם: השמנים) יבקשו להקים לעצמם מפלגה״', en: '“Suppose that people who struggle with their weight, those who are overweight (in common parlance: fat people), wish to establish a party of their own.”' },
         credit: { he: 'אגודת ישראל, תגובה לקראת הדיון מ־27 באוקטובר 2016, בג״ץ 1823/15, עמ׳ 5, סעיפים 36–38.', en: 'Agudat Yisrael, submission for the hearing of 27 October 2016, HCJ 1823/15, p. 5, paras. 36–38. Translated from Hebrew.' },
@@ -101,6 +105,8 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         en: 'At the hearing on 31 July, the justices asked Agudat Yisrael to reconsider the clauses governing women’s membership. The question went back to the party. A recurring issue was how far a party could go in defining who could belong to it.',
       },
       quote: {
+        id: 'quote-reply',
+        title: { he: 'תשובת השופטת בעדות אסתי שושן', en: 'The judge’s reply as recalled by Esty Shushan' },
         lead: { he: 'אסתי שושן תיארה לימים את דוגמת ״מפלגת השמנים״ שהעלתה אגודת ישראל. לפי הטיעון, מפלגה שקמה כדי לייצג אנשים שמנים רשאית לסרב לצרף אנשים רזים. שושן זכרה גם את תשובתה של השופטת דפנה ברק־ארז:', en: 'Esty Shushan later recalled the party’s analogy of a political party for fat people that could turn away thin applicants. In Shushan’s account, Justice Daphne Barak-Erez replied:' },
         words: { he: '״יצטרכו במפלגת השמנים לקבל גם שמנות״', en: '“The party for fat people would have to admit fat women too.”' },
         credit: { he: 'מתוך עדותה של אסתי שושן במאמר ״הן בסוף ירצו להיות בכנסת״.', en: 'From Esty Shushan’s published recollection of the proceedings. Translated from Hebrew.' },
@@ -169,10 +175,20 @@ export function LegalHistory({ locale }: { locale: Locale }) {
 
   return (
     <article aria-label={t(locale, { he: 'סיפור המאבק המשפטי', en: 'The legal campaign' })} className="mx-auto max-w-[1080px] px-6">
-      <nav className="border-b border-divider py-6" aria-label={t(locale, { he: 'דילוג לשנה בציר הזמן', en: 'Jump to a year' })}>
+      <nav className="border-b border-divider py-6" aria-label={t(locale, { he: 'ניווט לפי שנה או ציטוט', en: 'Jump to a year or quotation' })}>
         <p className="mb-3 font-semibold">{t(locale, { he: 'ציר הזמן של המאבק', en: 'Campaign timeline' })}</p>
         <div className="flex flex-wrap gap-2">
           {chapters.map(({ date }) => <a key={date} href={`#year-${date}`} className="rounded-full border border-divider px-3 py-1 text-sm font-bold text-accent-700 hover:underline">{date}</a>)}
+        </div>
+        <div id="quotes" className="mt-5 scroll-mt-28">
+          <h2 className="mb-2 text-lg font-bold">{t(locale, { he: 'הציטוטים מתוך המאבק', en: 'Quotations from the case' })}</h2>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            {chapters.map(({ quote }) => quote && (
+              <li key={quote.id}>
+                <a href={`#${quote.id}`} className="font-semibold text-accent-700 underline underline-offset-4">{t(locale, quote.title)}</a>
+              </li>
+            ))}
+          </ul>
         </div>
       </nav>
       <ol className="ms-2 my-8 border-s-2 border-divider">
@@ -183,7 +199,8 @@ export function LegalHistory({ locale }: { locale: Locale }) {
               <time dateTime={chapter.date} className="font-heading text-xl font-bold tabular-nums text-accent-700">{chapter.date}</time>
               <h2 id={`heading-${chapter.date}`} className="mb-3 mt-1 text-[clamp(24px,3vw,36px)] leading-tight">{t(locale, chapter.title)}</h2>
               <p className="text-[17px] leading-[1.8]">{t(locale, chapter.body)}</p>
-              {chapter.quote && <aside className="my-4 border-s-4 border-accent bg-tint-cream p-5">
+              {chapter.quote && <aside id={chapter.quote.id} className="my-4 scroll-mt-28 border-s-4 border-accent bg-tint-cream p-5">
+                <h3 className="mb-2 text-lg font-bold">{t(locale, chapter.quote.title)}</h3>
                 <p className="text-base leading-relaxed">{t(locale, chapter.quote.lead)}</p>
                 <blockquote className="my-3 text-xl font-semibold leading-relaxed">{t(locale, chapter.quote.words)}</blockquote>
                 <p className="text-sm">{chapter.quote.href ? <a href={chapter.quote.href} className="underline">{t(locale, chapter.quote.credit)}</a> : t(locale, chapter.quote.credit)}</p>
@@ -192,10 +209,10 @@ export function LegalHistory({ locale }: { locale: Locale }) {
                 <Image src={`/assets/legal/${chapter.photo.file}.webp`} width={chapter.photo.width} height={chapter.photo.height} sizes="(max-width: 650px) 88vw, 600px" alt={t(locale, chapter.photo.alt)} className="block max-h-[36rem] w-auto max-w-full" />
                 <figcaption className="mt-2 text-sm leading-relaxed">{t(locale, chapter.photo.caption)} {t(locale, { he: 'ארכיון נבחרות.', en: 'Nivcharot archive.' })}</figcaption>
               </figure>}
-              {chapter.documents && <details className="mt-4">
-                <summary className="cursor-pointer font-semibold text-accent-700 underline">{t(locale, { he: 'לעיון בקטעים מהמסמכים המקוריים', en: 'View excerpts from the original records' })}</summary>
+              {chapter.documents && <div className="mt-4">
+                <h3 className="font-semibold">{t(locale, { he: 'מתוך המסמכים המקוריים', en: 'From the original records' })}</h3>
                 {chapter.documents.map(document => <Excerpt key={document.file} document={document} locale={locale} />)}
-              </details>}
+              </div>}
               {chapter.link && <Link href={chapter.link.href} className="mt-4 inline-block font-semibold text-accent-700 underline">{t(locale, chapter.link.label)}</Link>}
             </section>
           </li>
