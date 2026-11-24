@@ -30,6 +30,9 @@ export default async function CasePage({ params }: { params: Params }) {
       <p className="mt-9 text-sm font-bold text-accent-700">{t(locale, entry.reference)}</p>
       <h1 className="my-4 text-[clamp(32px,5vw,56px)] leading-tight">{t(locale, entry.title)}</h1>
       <p className="mb-10 max-w-[65ch] text-lg leading-relaxed">{t(locale, entry.summary)}</p>
+      {entry.slug === 'agudat-yisrael' && <Link href={`/${locale}/mishpat#quotes`} className="mb-6 inline-block font-semibold text-accent-700 underline">
+        {t(locale, { he: 'לטיעון הילדים, ל״מפלגת השמנים״ ולתשובת השופטת', en: 'Read the party’s comparisons and the judge’s reply' })}
+      </Link>}
       {entry.sections.map(section => (
         <section key={section.heading.en} className="border-t-2 border-divider py-7">
           <h2 className="mb-3 text-2xl">{t(locale, section.heading)}</h2>
