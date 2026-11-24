@@ -125,9 +125,10 @@ export const activismPositionPapers: ActivismLink[] = [
   },
   {
     label: {
-      he: 'לכל ניירות העמדה באתר הארכיון',
-      en: 'All position papers (archive site, Hebrew)',
+      he: 'פעילות נבחרות בכנסת וניירות העמדה',
+      en: 'Knesset advocacy and position papers',
     },
+    href: '/knesset',
   },
 ]
 

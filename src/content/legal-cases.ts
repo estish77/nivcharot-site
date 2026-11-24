@@ -2,8 +2,8 @@ import type { Localized } from '@/lib/i18n'
 
 export const legalTitle = { he: 'הערוץ המשפטי של נבחרות', en: 'Nivcharot’s legal advocacy' }
 export const legalLead = {
-  he: 'מה קורה כשאישה חרדית מבקשת להתפקד למפלגה? נבחרות מלווה נשים שפנו לבתי המשפט כדי שיוכלו להגיש בקשת חברות ולקבל עליה תשובה. כאן מרוכזים ההליכים, ההכרעות והמסמכים.',
-  en: 'What happens when a Haredi woman applies to join a political party? Nivcharot has supported women who went to court for a way to submit a membership application and have it considered. Explore their cases and read the judgments.',
+  he: 'מה קורה כשאישה חרדית מבקשת להתפקד למפלגה? מהמחאה ב־2012, דרך בג״ץ אגודת ישראל וההתפקדות שיזמה נבחרות ב־2021, ועד לפסקי הדין בש״ס ובאגודת ישראל.',
+  en: 'What happens when a Haredi woman applies to join a political party? Follow the campaign from the 2012 protest through the High Court petition, the 2021 Nivcharot membership drive and the district court judgments.',
 }
 export const knessetPaper = 'https://fs.knesset.gov.il/25/Committees/25_cs_bg_1839151.pdf'
 

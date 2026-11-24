@@ -264,7 +264,7 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
                 link.href ? (
                   <a
                     key={t(locale, link.label)}
-                    href={link.href}
+                    href={link.href.startsWith('/') ? `/${locale}${link.href}` : link.href}
                     className={`text-[15px] font-semibold ${FOCUS_RING}`}
                   >
                     <ArrowLabel locale={locale}>{t(locale, link.label)}</ArrowLabel>
