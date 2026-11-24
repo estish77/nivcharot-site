@@ -361,14 +361,22 @@ export const storyContent = {
     he: [
       { id: `story-1`, label: `תמונה, ימי המחאה הראשונים` },
       { id: `story-2`, label: `תמונה, מחוץ לבית המשפט / מחאת הכסאות` },
-      { id: `story-3`, label: `תמונה, מפגש הנבחרת` },
+      {
+        id: 'story-3', src: '/assets/story/adina-bar-shalom-may-2024.webp',
+        label: 'הרבנית עדינה בר שלום עומדת ומשוחחת עם משתתפות הנבחרת היושבות סביבה.',
+        caption: 'הרבנית עדינה בר שלום במפגש מחזור ז׳ של ״הנבחרת״, 8 במאי 2024. ארכיון נבחרות.',
+      },
     ],
     en: [
       { id: `story-1`, label: `Image, early protest days` },
       { id: `story-2`, label: `Image, outside the court / Empty Chairs` },
-      { id: `story-3`, label: `Image, a HaNivcheret session` },
+      {
+        id: 'story-3', src: '/assets/story/adina-bar-shalom-may-2024.webp',
+        label: 'Rabbanit Adina Bar-Shalom speaking to HaNivcheret participants seated around her.',
+        caption: 'Adina Bar-Shalom with the seventh HaNivcheret cohort, 8 May 2024. Nivcharot archive.',
+      },
     ],
-  } satisfies Localized<{ id: string; label: string }[]>,
+  } satisfies Localized<{ id: string; label: string; src?: string; caption?: string }[]>,
 
   sidebarLabel: { he: `ציר הזמן`, en: `TIMELINE` } satisfies Localized,
 
