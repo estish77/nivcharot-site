@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 
+import { legalCases } from '@/content/legal-cases'
 import { archivePostsVisible } from '@/content/media-visibility'
 import { getArchivePosts, getEvents, getPressArchiveItems } from '@/lib/cms'
 import { defaultLocale, locales } from '@/lib/i18n'
@@ -26,6 +27,7 @@ const STATIC_ENTRIES: StaticEntry[] = [
   { path: '/activism', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/halacha', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/mishpat', changeFrequency: 'monthly', priority: 0.6 },
+  ...legalCases.map(entry => ({ path: `/mishpat/${entry.slug}`, changeFrequency: 'monthly' as const, priority: 0.6 })),
   { path: '/hanivcheret', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/join', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/media', changeFrequency: 'weekly', priority: 0.7 },

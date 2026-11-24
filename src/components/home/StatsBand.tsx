@@ -53,7 +53,7 @@ function AnimatedStatValue({ value }: { value: string }) {
   const shouldReduceMotion = useReducedMotion()
   const target = Number(value)
   const isPlainInteger = Number.isInteger(target) && String(target) === value
-  const [display, setDisplay] = useState(isPlainInteger ? '0' : value)
+  const [display, setDisplay] = useState(value)
 
   useEffect(() => {
     if (!isPlainInteger || shouldReduceMotion) {

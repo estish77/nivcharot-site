@@ -27,7 +27,7 @@ export type StatCounterProps = {
 export function StatCounter({ value, suffix = '', decimals, duration = 1300, className }: StatCounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
   const startedRef = useRef(false)
-  const [display, setDisplay] = useState(0)
+  const [display, setDisplay] = useState(value)
   const shouldReduceMotion = useReducedMotion()
   const dec = decimals ?? (Number.isInteger(value) ? 0 : 1)
 

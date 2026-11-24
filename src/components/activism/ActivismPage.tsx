@@ -243,7 +243,14 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
             lead={t(locale, activismSectionGroups.legal.lead)}
           />
           <div className="grid grid-cols-1 items-center gap-10 py-8 min-[861px]:grid-cols-2">
-            <PillarText pillar={activismPillars.bagatz} locale={locale} />
+            <div>
+              <PillarText pillar={activismPillars.bagatz} locale={locale} />
+              <a href={`/${locale}/mishpat`} className={`mt-4 inline-block text-sm font-semibold ${FOCUS_RING}`}>
+                <ArrowLabel locale={locale}>
+                  {t(locale, { he: 'העתירות והמאבק המשפטי לייצוג נשים חרדיות', en: 'Court petitions for Haredi women’s representation' })}
+                </ArrowLabel>
+              </a>
+            </div>
             <PillarImage label={t(locale, activismImageSlots.bagatz.label)} />
           </div>
           <div className="border-t-2 border-divider pt-8">

@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   return pageMetadata({
     locale,
     path: '/media',
-    title: t(locale, { he: 'נבחרות בתקשורת', en: 'Nivcharot in the Media' }),
+    title: t(locale, { he: 'ארכיון התקשורת – כתבות, ראיונות והרצאות', en: 'Media archive – coverage, interviews and talks' }),
     description: t(locale, {
       he: 'נבחרות בתקשורת: כתבות וריאיונות מהארכיון של נבחרות ומהעיתונות.',
       en: "Nivcharot in the media: articles and interviews from Nivcharot's own archive and outside press.",

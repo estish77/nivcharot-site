@@ -21,7 +21,7 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: '/join',
-    title: t(locale, { he: 'דברו איתנו', en: 'Talk to us' }),
+    title: t(locale, { he: 'הצטרפות לפעילות ולתוכנית המנהיגות', en: 'Get involved in advocacy and leadership training' }),
     description: t(locale, {
       he: 'יש הרבה דרכים להיות חלק מנבחרות: להצטרף לתוכנית המנהיגות, לתמוך בפעילות, להישאר בקשר, או פשוט לדבר איתנו.',
       en: 'There are many ways to be part of Nivcharot: join the leadership program, support the work, stay in touch, or just talk to us.',

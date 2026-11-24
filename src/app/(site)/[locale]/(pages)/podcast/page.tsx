@@ -5,7 +5,7 @@ import { EpisodeDeskSection } from '@/components/podcast/EpisodeDeskSection'
 import { TopShortsSection } from '@/components/podcast/TopShortsSection'
 import { PodcastHeroSection } from '@/components/podcast/PodcastHeroSection'
 import { StoriesSection } from '@/components/podcast/StoriesSection'
-import { getPodcastEpisodes, PODCAST_APPLE_SHOW_ID } from '@/content/podcast'
+import { getPodcastEpisodes } from '@/content/podcast'
 import { isLocale, locales, t } from '@/lib/i18n'
 import { pageMetadata, urlFor } from '@/lib/seo'
 
@@ -26,8 +26,8 @@ export async function generateMetadata({
     locale,
     path: '/podcast',
     title: t(locale, {
-      he: 'חרדית מדוברת - הפודקאסט של נבחרות',
-      en: 'Haredit Meduberet - The Nivcharot Podcast',
+      he: 'חרדית מדוברת – הפודקאסט עם אסתי שושן',
+      en: 'Haredit Meduberet – a podcast with Esty Shushan',
     }),
     description: t(locale, {
       he: 'אסתי שושן בשיחות בגובה העיניים, בלי צנזורה, על העולם החרדי, דת ומדינה, אקטיביזם, תקשורת ותרבות.',
@@ -82,16 +82,15 @@ export default async function PodcastPage({ params }: { params: Promise<{ locale
     '@type': 'PodcastSeries',
     name: t(locale, { he: 'חרדית מדוברת', en: 'Haredit Meduberet' }),
     url: urlFor(locale, '/podcast'),
-    webFeed: `https://podcasts.apple.com/il/podcast/id${PODCAST_APPLE_SHOW_ID}`,
+    webFeed: 'https://anchor.fm/s/fad606a0/podcast/rss',
     publisher: { '@type': 'Organization', name: 'נבחרות | Nivcharot', url: urlFor(locale, '') },
     ...(episodes.length
       ? {
           hasPart: episodes.slice(0, 30).map((ep) => ({
             '@type': 'PodcastEpisode',
             name: t(locale, ep.title),
-            url: ep.youtubeUrl,
+            url: ep.appleUrl.includes('?i=') ? ep.appleUrl : ep.youtubeUrl,
             datePublished: ep.publishedAt,
-            associatedMedia: { '@type': 'MediaObject', contentUrl: ep.youtubeUrl },
           })),
         }
       : {}),

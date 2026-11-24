@@ -27,7 +27,7 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: '',
-    title: t(locale, { he: 'נבחרות | ייצוג, שוויון וקול לנשים חרדיות', en: 'Nivcharot | Representation, equality and voice for Haredi women' }),
+    title: t(locale, { he: 'נבחרות | ייצוג נשים חרדיות בפוליטיקה ובחברה', en: 'Nivcharot | Political representation for Haredi women' }),
     description: t(locale, {
       he: 'נבחרות היא תנועת נשים חרדיות הפועלת לייצוג פוליטי הוגן: הכשרת מנהיגות, פעילות משפטית וחקיקתית, והעלאת מודעות ציבורית מאז 2012.',
       en: 'Nivcharot is a movement of Haredi women working for fair political representation: leadership training, legal and legislative advocacy, and public awareness since 2012.',

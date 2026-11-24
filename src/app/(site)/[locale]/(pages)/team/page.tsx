@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 import { TeamPageContent } from '@/components/team/TeamPageContent'
-import { teamHero } from '@/content/team'
 import { isLocale, locales, t } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
 
@@ -31,8 +30,11 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: '/team',
-    title: t(locale, { he: 'מי אנחנו', en: 'Who we are' }),
-    description: t(locale, teamHero.lead),
+    title: t(locale, { he: 'צוות העמותה והנשים שמאחורי התנועה', en: 'Our team and the women behind the movement' }),
+    description: t(locale, {
+      he: 'הכירו את אסתי שושן, מייסדת נבחרות, ואת חברות הצוות והפעילות לאורך השנים. קראו על הרקע שלהן ועל תפקידן בתנועה.',
+      en: 'Meet founder Esty Shushan and the staff and activists who have shaped Nivcharot. Read their biographies and learn about their roles in the movement.',
+    }),
   })
 }
 

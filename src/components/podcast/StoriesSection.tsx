@@ -4,6 +4,7 @@ import { getPodcastShorts, podcastText } from '@/content/podcast'
 import type { Locale } from '@/lib/i18n'
 import { arrowForward, t } from '@/lib/i18n'
 
+import { pickStories } from './storySelection'
 import { StoriesStrip } from './StoriesStrip'
 
 /**
@@ -58,7 +59,7 @@ export async function StoriesSection({
             )}
           </a>
         </div>
-        <StoriesStrip shorts={shorts} locale={locale} />
+        <StoriesStrip shorts={pickStories(shorts)} locale={locale} />
       </Section>
     </Reveal>
   )

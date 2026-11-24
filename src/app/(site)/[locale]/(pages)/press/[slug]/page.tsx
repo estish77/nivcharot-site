@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-import { EmptyState } from '@/components/media/EmptyState'
 import { PressTypeIcon } from '@/components/media/PressTypeIcon'
 import { Eyebrow, Reveal, Section } from '@/components/ui'
 import { pressArchiveText } from '@/content/press-archive'
@@ -41,8 +40,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) return {}
   const items = await getPressArchiveItems()
-  const item = items.find((i) => i.slug === slug)
-  if (!item) return {}
+  const item = items.find((i) => i.slug === slug && i.link.kind === 'internal')
+  if (!item) notFound()
 
   return pageMetadata({
     locale: rawLocale,
@@ -60,21 +59,9 @@ export default async function PressDetailPage({ params }: { params: Promise<Para
   }
   const locale: Locale = rawLocale
   const items = await getPressArchiveItems()
-  const item = items.find((i) => i.slug === slug)
+  const item = items.find((i) => i.slug === slug && i.link.kind === 'internal')
 
-  if (!item) {
-    return (
-      <EmptyState
-        title={t(locale, { he: 'הפריט הזה לא נמצא', en: "This item wasn't found" })}
-        body={t(locale, {
-          he: 'אולי הקישור נשבר. ה"בתקשורת" המלא נמצא בעמוד תקשורת ומדיה.',
-          en: 'The link may be broken. The full "In the Media" archive lives on the media page.',
-        })}
-        ctaLabel={t(locale, pressArchiveText.backToArchive)}
-        ctaHref={`/${locale}/media#in-the-media`}
-      />
-    )
-  }
+  if (!item) notFound()
 
   const body = item.body ? t(locale, item.body) : []
 

@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-import { EmptyState } from '@/components/media/EmptyState'
 import { OtherGalleries } from '@/components/media/OtherGalleries'
 import { PhotoGrid } from '@/components/media/PhotoGrid'
 import { Eyebrow, Reveal, Section } from '@/components/ui'
@@ -22,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!isLocale(rawLocale)) return {}
   const events = await getEvents(rawLocale)
   const gallery = events.find((e) => e.slug === slug)
-  if (!gallery) return {}
+  if (!gallery) notFound()
 
   return pageMetadata({
     locale: rawLocale,
@@ -42,19 +41,7 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
   const events = await getEvents(locale)
   const gallery = events.find((e) => e.slug === slug)
 
-  if (!gallery) {
-    return (
-      <EmptyState
-        title={t(locale, { he: 'הגלריה הזו לא נמצאה', en: "This gallery wasn't found" })}
-        body={t(locale, {
-          he: 'כל הכנסים והאירועים מרוכזים בעמוד הפעילות.',
-          en: 'Every conference and event lives on the advocacy page.',
-        })}
-        ctaLabel={t(locale, { he: 'לכל הגלריות', en: 'View all galleries' })}
-        ctaHref={`/${locale}/activism#gatherings`}
-      />
-    )
-  }
+  if (!gallery) notFound()
 
   const others = events.filter((e) => e.slug !== gallery.slug).slice(0, 3)
 

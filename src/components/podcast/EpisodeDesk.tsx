@@ -12,54 +12,35 @@ import {
   SegmentedControl,
 } from '@/components/ui'
 import { episodeDeskText, mediaDeskText } from '@/content/media-desk'
-import type { PodcastEpisode, PodcastShort } from '@/content/podcast'
+import type { PodcastEpisode } from '@/content/podcast'
 import { podcastText } from '@/content/podcast'
 import { arrowBack, arrowForward, dict, t, type Locale } from '@/lib/i18n'
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
 import { episodeLabel, guestLine, hebrewCalendarLabel, numericDateLabel, shortDateLabel } from './podcastUtils'
-import { StoryViewer, type StoryViewerItem } from './StoryViewer'
 
-type TabKey = 'episodes' | 'shorts'
 type SortKey = 'newest' | 'oldest'
 type ViewKey = 'list' | 'grid'
 
 const EPISODE_PAGE_SIZE = 12
-const SHORTS_PAGE_SIZE = 10
 const EASE = [0.22, 0.61, 0.36, 1] as const
 
 const LINK_CLASS =
   'border-2 border-divider px-[13px] py-[7px] font-heading text-[12.5px] font-extrabold text-text no-underline transition-colors duration-200 ease-out hover:border-accent hover:text-accent-700 focus-visible:border-accent focus-visible:text-accent-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
 
-/**
- * `/podcast`'s single episode workspace.
- *
- * 2026-08-27 brief. This replaces three separate sections that each showed
- * a slice of the same channel — `RecentEpisodesSection` (the newest three,
- * on a dark band), `EpisodeArchiveSection` (the paginated full archive) and
- * `ShortsSection` (a ten-card Shorts grid) — with one desk holding all of
- * it: both catalogues behind two tabs, a search box, real sort orders, a
- * list/card view toggle and pagination.
- *
- * Nothing is dropped. The "recently" trio is simply the first page under
- * the default sort; every per-episode field those sections rendered (date,
- * Hebrew calendar date, guest, description, thumbnail, view count, all
- * three platform links) is still shown, and Shorts still open in the same
- * in-page `StoryViewer` lightbox rather than linking out.
- */
+/** Searchable episode catalogue. The Shorts tab scrolls to the separate video feed. */
 export function EpisodeDesk({
   episodes,
-  shorts,
+  shortCount,
   locale,
 }: {
   episodes: PodcastEpisode[]
-  shorts: PodcastShort[]
+  shortCount: number
   locale: Locale
 }) {
   const shouldReduceMotion = useReducedMotion()
   const resultsRef = useRef<HTMLDivElement>(null)
 
-  const [tab, setTab] = useState<TabKey>('episodes')
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortKey>('newest')
   // Cards by default (2026-08-27 brief): every episode has a real thumbnail,
@@ -68,7 +49,6 @@ export function EpisodeDesk({
   const [view, setView] = useState<ViewKey>('grid')
   const [openId, setOpenId] = useState<string | null>(null)
   const [page, setPage] = useState(0)
-  const [openShort, setOpenShort] = useState<number | null>(null)
 
   const filteredEpisodes = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -87,37 +67,13 @@ export function EpisodeDesk({
     )
   }, [episodes, query, sort])
 
-  const filteredShorts = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    const matched = q
-      ? shorts.filter((short) =>
-          [short.title.he, short.title.en, short.summary.he, short.summary.en]
-            .join(' \n ')
-            .toLowerCase()
-            .includes(q),
-        )
-      : shorts
-    return [...matched].sort((a, b) =>
-      sort === 'oldest' ? a.publishedAt.localeCompare(b.publishedAt) : b.publishedAt.localeCompare(a.publishedAt),
-    )
-  }, [shorts, query, sort])
-
-  const pageSize = tab === 'episodes' ? EPISODE_PAGE_SIZE : SHORTS_PAGE_SIZE
-  const total = tab === 'episodes' ? filteredEpisodes.length : filteredShorts.length
+  const pageSize = EPISODE_PAGE_SIZE
+  const total = filteredEpisodes.length
   const pageCount = Math.max(1, Math.ceil(total / pageSize))
   const safePage = Math.min(page, pageCount - 1)
   const episodePage = filteredEpisodes.slice(safePage * pageSize, safePage * pageSize + pageSize)
-  const shortsPage = filteredShorts.slice(safePage * pageSize, safePage * pageSize + pageSize)
   const rangeStart = total === 0 ? 0 : safePage * pageSize + 1
-  const rangeEnd = safePage * pageSize + (tab === 'episodes' ? episodePage.length : shortsPage.length)
-
-  // The viewer indexes into the visible page, so its own prev/next stays in
-  // step with what the visitor is actually looking at.
-  const storyItems: StoryViewerItem[] = shortsPage.map((short) => ({
-    id: short.id,
-    videoId: short.videoId,
-    caption: t(locale, short.title),
-  }))
+  const rangeEnd = safePage * pageSize + episodePage.length
 
   function scrollToResults() {
     const node = resultsRef.current
@@ -136,11 +92,11 @@ export function EpisodeDesk({
           // empty when that request fails (there is no fallback fixture for
           // it) — in that case the tab isn't offered at all rather than
           // opening onto nothing.
-          ...(shorts.length > 0
-            ? [{ key: 'shorts', label: t(locale, episodeDeskText.tabShorts), count: shorts.length }]
+          ...(shortCount > 0
+            ? [{ key: 'shorts', label: t(locale, episodeDeskText.tabShorts), count: shortCount }]
             : []),
         ]}
-        active={tab}
+        active="episodes"
         onSelect={(next) => {
           /*
            * "שורטס" is a jump, not a bucket (2026-08-28 brief): the Shorts
@@ -156,7 +112,6 @@ export function EpisodeDesk({
             })
             return
           }
-          setTab(next as TabKey)
           setOpenId(null)
           setPage(0)
         }}
@@ -188,17 +143,15 @@ export function EpisodeDesk({
               { value: 'oldest', label: t(locale, episodeDeskText.sortOldest) },
             ]}
           />
-          {tab === 'episodes' ? (
-            <SegmentedControl<ViewKey>
-              label={t(locale, mediaDeskText.viewLabel)}
-              value={view}
-              onChange={setView}
-              options={[
-                { value: 'list', label: t(locale, mediaDeskText.viewList) },
-                { value: 'grid', label: t(locale, mediaDeskText.viewGrid) },
-              ]}
-            />
-          ) : null}
+          <SegmentedControl<ViewKey>
+            label={t(locale, mediaDeskText.viewLabel)}
+            value={view}
+            onChange={setView}
+            options={[
+              { value: 'list', label: t(locale, mediaDeskText.viewList) },
+              { value: 'grid', label: t(locale, mediaDeskText.viewGrid) },
+            ]}
+          />
         </div>
       </div>
 
@@ -209,7 +162,7 @@ export function EpisodeDesk({
 
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            key={`${tab}:${sort}:${view}:${safePage}:${query.trim().toLowerCase()}`}
+            key={`${sort}:${view}:${safePage}:${query.trim().toLowerCase()}`}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
@@ -217,18 +170,6 @@ export function EpisodeDesk({
           >
             {total === 0 ? (
               <p className="py-12 text-center text-[15px] text-neutral-700">{t(locale, episodeDeskText.empty)}</p>
-            ) : tab === 'shorts' ? (
-              <div className="grid grid-cols-2 gap-4 pt-5 min-[640px]:grid-cols-3 min-[960px]:grid-cols-5">
-                {shortsPage.map((short, i) => (
-                  <ShortCard
-                    key={short.id}
-                    short={short}
-                    locale={locale}
-                    label={t(locale, episodeDeskText.playShort)}
-                    onPlay={() => setOpenShort(i)}
-                  />
-                ))}
-              </div>
             ) : view === 'grid' ? (
               <div className="grid grid-cols-3 gap-x-6 gap-y-8 pt-6 max-[860px]:grid-cols-2 max-[560px]:grid-cols-1">
                 {episodePage.map((episode) => (
@@ -274,13 +215,6 @@ export function EpisodeDesk({
         />
       </div>
 
-      <StoryViewer
-        items={storyItems}
-        openIndex={openShort}
-        onClose={() => setOpenShort(null)}
-        onNavigate={setOpenShort}
-        locale={locale}
-      />
     </div>
   )
 }
@@ -448,50 +382,5 @@ function EpisodeCard({ episode, locale }: { episode: PodcastEpisode; locale: Loc
         <PlatformLinks episode={episode} locale={locale} />
       </div>
     </article>
-  )
-}
-
-function ShortCard({
-  short,
-  locale,
-  label,
-  onPlay,
-}: {
-  short: PodcastShort
-  locale: Locale
-  label: string
-  onPlay: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onPlay}
-      aria-label={`${label}: ${t(locale, short.title)}`}
-      className="group flex flex-col gap-3 border-2 border-divider bg-white p-3 text-start transition-colors duration-200 ease-out hover:border-accent focus-visible:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-    >
-      <span className="relative block aspect-[9/16] w-full overflow-hidden bg-tint-cream">
-        {short.thumbnailUrl ? (
-          <Image
-            src={short.thumbnailUrl}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 960px) 33vw, 20vw"
-            className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
-          />
-        ) : null}
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100"
-        >
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-accent">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-              <path d="M6 4.5v15l14-7.5-14-7.5Z" />
-            </svg>
-          </span>
-        </span>
-      </span>
-      <span className="block font-heading text-[14px] font-extrabold leading-[1.35]">{t(locale, short.title)}</span>
-      <span className="line-clamp-3 block text-[12.5px] leading-[1.6] text-neutral-700">{t(locale, short.summary)}</span>
-    </button>
   )
 }
