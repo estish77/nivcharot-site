@@ -59,14 +59,13 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         he: 'לקראת הבחירות לכנסת ה־19 פתחה אסתי שושן דף פייסבוק בשם ״לא נבחרות, לא בוחרות״. נשים חרדיות התבקשו להצביע למפלגות שייצגו את הקהילה שלהן, בעוד ברשימות המועמדים של אותן מפלגות לכנסת הופיעו גברים בלבד.',
         en: 'Ahead of the election for the 19th Knesset, Esty Shushan launched the “No Voice, No Vote” campaign on Facebook. Haredi women were asked to vote for parties that represented their communities, yet those parties put forward only men for election.',
       },
-      link: { href: `/${locale}/story`, label: { he: 'לסיפור המחאה', en: 'Read how the campaign began' } },
     },
     {
       date: '2015',
       title: { he: 'תמר בן־פורת עותרת לבג״ץ', en: 'Tamar Ben-Porat petitions the High Court' },
       body: {
-        he: 'עוד לפני השאלה מי תופיע ברשימה לכנסת, עמדה שאלה פשוטה יותר. האם אישה יכולה להיות חברה באגודת ישראל? עו״ד תמר בן־פורת עתרה נגד רשם המפלגות ואגודת ישראל בעניין הוראות התקנון, ובהן המילה ״איש״ בסעיף החברות. נבחרות פעלה לצד העותרת וארגוני נשים נוספים.',
-        en: 'Before a party draws up its list of candidates, who can join it? Lawyer Tamar Ben-Porat challenged the Registrar of Parties and Agudat Yisrael over charter provisions that included the word “man” in the membership clause. Nivcharot worked alongside the petitioner and other women’s organisations.',
+        he: 'עוד לפני השאלה מי תופיע ברשימה לכנסת, עמדה שאלה פשוטה יותר. האם אישה יכולה להיות חברה באגודת ישראל? עו״ד תמר בן־פורת עתרה נגד רשם המפלגות ואגודת ישראל בעניין הוראות התקנון, ובהן המילה ״איש״ בסעיף החברות. תנועת נבחרות, שצמחה באותה שנה מתוך המחאה, הגישה נייר עמדה ליועץ המשפטי לממשלה ופעלה לצד העותרת וארגוני נשים נוספים.',
+        en: 'Before a party draws up its list of candidates, who can join it? Lawyer Tamar Ben-Porat challenged the Registrar of Parties and Agudat Yisrael over charter provisions that included the word “man” in the membership clause. Nivcharot, which grew out of the campaign that year, submitted a position paper to the Attorney General and worked alongside the petitioner and other women’s organisations.',
       },
       quote: {
         id: 'quote-children',
@@ -80,9 +79,10 @@ export function LegalHistory({ locale }: { locale: Locale }) {
       date: '2016',
       title: { he: 'באולם הדיונים, שאלה על שייכות ועל סמכות', en: 'In the courtroom, a question of belonging and authority' },
       body: {
-        he: 'בדיון בפברואר הציגה בן־פורת את הבחירה שניצבת בפני אישה המבקשת לייצג את הקהילה שלה. בדיון באוקטובר ביקש השופט עוזי פוגלמן לדייק כלפי מי מכוונת העתירה. האם היא מבקשת לבקר את החלטת רשם המפלגות, לתקוף את התקנון עצמו, או לפעול בשני המסלולים? שני הקטעים שלהלן מתעדים את השיחה באולם, בשלב שבו הצדדים עוד התווכחו על הדרך שבה בית המשפט יכול להתערב.',
-        en: 'At the February hearing, Ben-Porat described the choice facing a woman who wanted to represent her own community. In October, Justice Uzi Vogelman asked her to identify exactly what the petition challenged. Was it the registrar’s decision, the party charter itself, or both? These exchanges record the argument while the court was still considering how it could intervene.',
+        he: 'ב־8 בפברואר הסבירה בן־פורת לשופטים מה עומד על הפרק מבחינת אישה חרדית המבקשת להיבחר. האפשרות להצטרף למפלגה אחרת משאירה אותה בפני בחירה בין ייצוג הקהילה שלה לבין מימוש זכותה להיבחר.',
+        en: 'On 8 February, Ben-Porat explained what was at stake for a Haredi woman who wanted to stand for election. Joining a different party would force her to choose between representing her own community and exercising her right to stand.',
       },
+      openingExcerpt: february,
       quote: {
         id: 'quote-weight',
         title: { he: 'טיעון ״מפלגת השמנים״', en: 'The party’s weight analogy' },
@@ -90,7 +90,11 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         words: { he: '״נניח כי המאותגרים במשקלם, בעלי משקל היתר (ובלשון העם: השמנים) יבקשו להקים לעצמם מפלגה״', en: '“Suppose that people who struggle with their weight, those who are overweight (in common parlance: fat people), wish to establish a party of their own.”' },
         credit: { he: 'אגודת ישראל, תגובה לקראת הדיון מ־27 באוקטובר 2016, בג״ץ 1823/15, עמ׳ 5, סעיפים 36–38.', en: 'Agudat Yisrael, submission for the hearing of 27 October 2016, HCJ 1823/15, p. 5, paras. 36–38. Translated from Hebrew.' },
       },
-      documents: [february, october],
+      nextEvent: {
+        he: 'בדיון ב־27 באוקטובר ביקשה בן־פורת מבית המשפט להורות למפלגה לשנות את דרך פעולתה. השופט עוזי פוגלמן ביקש לברר מה בדיוק התבקש בית המשפט לבחון. האם העתירה מכוונת להחלטת רשם המפלגות, לתקנון המפלגה עצמו, או לשניהם?',
+        en: 'At the hearing on 27 October, Ben-Porat asked the court to require the party to change its practice. Justice Uzi Vogelman asked precisely what the court was being asked to review. Was it the registrar’s decision, the charter itself, or both?',
+      },
+      document: october,
     },
     {
       date: '2018',
@@ -120,7 +124,14 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         he: 'ב־10 בינואר נתן בג״ץ תוקף להתחייבות אגודת ישראל למחוק את המילה „איש” מסעיף החברות בתוך 21 יום. המפלגה גם הצהירה שהסעיף על תנועת „נשי אגודת ישראל” אינו חוסם חברות של אישה במפלגה עצמה. בפסק הדין השאיר בית המשפט פתח להליך נוסף אם אישה שתבקש להצטרף תיתקל בסירוב. השאלה הזאת נעשתה ממשית כשנשים הגישו בקשות חברות.',
         en: 'On 10 January the High Court gave legal force to Agudat Yisrael’s undertaking to remove the word “man” from its membership clause within 21 days. The party also declared that its separate women’s organisation posed no barrier to party membership. The court left open the possibility of a new case if an applicant was turned away. That question became concrete when women applied.',
       },
-      documents: [highCourt],
+      document: highCourt,
+      quote: {
+        id: 'quote-knesset',
+        title: { he: '״הכנסת איננה בית כנסת״', en: '“The Knesset is not a synagogue”' },
+        lead: { he: 'כך סיכמה נבחרות במאמר הרקע שלה את הוויכוח בבג״ץ על הציבור שאגודת ישראל מייצגת.', en: 'In its account of the High Court proceedings, Nivcharot summed up the dispute over whom Agudat Yisrael represents.' },
+        words: { he: '״הכנסת איננה בית כנסת, ואגודת ישראל איננה מפלגה של חרדים בלבד – אלא של חרדים וחרדיות.״', en: '“The Knesset is not a synagogue, and Agudat Yisrael is not a party of Haredi men alone — but of Haredi men and Haredi women.”' },
+        credit: { he: 'מתוך מאמר נבחרות ״מהפייסבוק ועד לבג״ץ: המסע המשפטי והציבורי של נשים חרדיות למוקדי הכוח״.', en: 'From Nivcharot’s background article on the public and legal campaign. Translated from Hebrew.' },
+      },
     },
     {
       date: '2021',
@@ -129,7 +140,6 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         he: 'בסוף 2021 יזמה נבחרות הגשה משותפת של בקשות התפקדות. בהובלת התנועה הגישו נשים חרדיות, ובהן בוגרות תוכנית ״הנבחרת״ ופעילות חברתיות, בקשות להצטרף למפלגות. הפעם היה על המפלגות לתת תשובה לנשים מסוימות שביקשו להיות חברות מן המניין.',
         en: 'In late 2021 Nivcharot organised a membership drive. Under its leadership, Haredi women, including graduates of its HaNivcheret programme and community activists, applied to join the parties. The parties now had to answer individual women seeking membership in their own names.',
       },
-      link: { href: `/${locale}/hanivcheret`, label: { he: 'על תוכנית המנהיגות ״הנבחרת״', en: 'About the HaNivcheret leadership programme' } },
     },
     {
       date: '2022',
@@ -160,16 +170,19 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         he: 'ב־24 בדצמבר קיבלה השופטת תמר בזק־רפפורט את התביעה בחלקה. בנקודה המכריעה של פסק הדין היא הורתה לש״ס ליצור את התנאים הדרושים לקבלת חברות וחברים לפי התקנון שלה. את הבקשה לצרף מיד את התובעות למפלגה דחתה. מבחינת אישה שרוצה להתפקד, משמעות ההכרעה הייתה שהנהלת המפלגה נדרשת לאפשר לה להגיש בקשה שאפשר לדון בה.',
         en: 'On 24 December Judge Tamar Bezek-Rappaport partly upheld the claim. The operative paragraph required Shas to establish the conditions for admitting members under its charter. The court declined the request to enrol the claimants immediately. For a woman seeking membership, the ruling required the party leadership to make it possible to submit an application for consideration.',
       },
-      documents: [districtCourt],
+      document: districtCourt,
     },
     {
       date: '2026',
-      title: { he: 'בתל אביב נקבע מועד להקמת מנגנון המפקד', en: 'Tel Aviv sets a deadline for a membership process' },
+      title: { he: 'נבחרות מבקשת ליישם את פסק הדין בש״ס, ובית המשפט מכריע בתיק אגודת ישראל', en: 'Nivcharot pursues implementation at Shas, and the court rules on Agudat Yisrael' },
       body: {
-        he: 'ב־29 באוקטובר הכריע בית המשפט המחוזי בתל אביב–יפו בתביעה נגד אגודת ישראל. השופטת רחל ברקאי קבעה שהמפלגה הפרה את תקנונה ואת סעיף 14 לחוק המפלגות כאשר לא יצרה את התנאים לעריכת מפקד. היא הקציבה למפלגה 12 חודשים מיום פסק הדין להקמת התשתית הנדרשת. ההכרעה משאירה למוסדות המפלגה את ההחלטה בכל בקשת חברות. כך הגיעה השאלה שהחלה בפתק בקלפי אל המקום שבו מתקבלת הבקשה הראשונה להצטרף.',
-        en: 'On 29 October the Tel Aviv–Jaffa District Court ruled on the claim against Agudat Yisrael. Judge Rachel Barkai found that by failing to establish the conditions for a membership drive, the party had breached its charter and section 14 of the Parties Law. She gave it 12 months from judgment to put that process in place. The party’s institutions retained responsibility for individual decisions. A question that began at the ballot box had reached the point where a prospective member first asks to join.',
+        he: 'באוגוסט דיווחה נבחרות כי פנתה לבית המשפט בבקשה לקבוע לוחות זמנים ליישום פסק הדין נגד ש״ס.',
+        en: 'In August, Nivcharot reported that it had asked the court to set deadlines for Shas to implement the judgment.',
       },
-      link: { href: `/${locale}/mishpat/agudat-yisrael`, label: { he: 'לתיק אגודת ישראל ולפסק הדין מאוקטובר 2026', en: 'Read the Agudat Yisrael case and the October 2026 judgment' } },
+      nextEvent: {
+        he: 'ב־29 באוקטובר הכריע בית המשפט המחוזי בתל אביב–יפו בתביעה נגד אגודת ישראל. השופטת רחל ברקאי קבעה שהמפלגה הפרה את תקנונה ואת סעיף 14 לחוק המפלגות כאשר לא יצרה את התנאים לעריכת מפקד. היא הקציבה למפלגה 12 חודשים מיום פסק הדין להקמת התשתית הנדרשת. ההכרעה משאירה למוסדות המפלגה את ההחלטה בכל בקשת חברות.',
+        en: 'On 29 October the Tel Aviv–Jaffa District Court ruled on the claim against Agudat Yisrael. Judge Rachel Barkai found that by failing to establish the conditions for a membership drive, the party had breached its charter and section 14 of the Parties Law. She gave it 12 months from judgment to put that process in place. The party’s institutions retained responsibility for individual decisions.',
+      },
     },
   ]
 
@@ -199,6 +212,7 @@ export function LegalHistory({ locale }: { locale: Locale }) {
               <time dateTime={chapter.date} className="font-heading text-xl font-bold tabular-nums text-accent-700">{chapter.date}</time>
               <h2 id={`heading-${chapter.date}`} className="mb-3 mt-1 text-[clamp(24px,3vw,36px)] leading-tight">{t(locale, chapter.title)}</h2>
               <p className="text-[17px] leading-[1.8]">{t(locale, chapter.body)}</p>
+              {chapter.openingExcerpt && <Excerpt document={chapter.openingExcerpt} locale={locale} />}
               {chapter.quote && <aside id={chapter.quote.id} className="my-4 scroll-mt-28 border-s-4 border-accent bg-tint-cream p-5">
                 <h3 className="mb-2 text-lg font-bold">{t(locale, chapter.quote.title)}</h3>
                 <p className="text-base leading-relaxed">{t(locale, chapter.quote.lead)}</p>
@@ -209,10 +223,8 @@ export function LegalHistory({ locale }: { locale: Locale }) {
                 <Image src={`/assets/legal/${chapter.photo.file}.webp`} width={chapter.photo.width} height={chapter.photo.height} sizes="(max-width: 650px) 88vw, 600px" alt={t(locale, chapter.photo.alt)} className="block max-h-[36rem] w-auto max-w-full" />
                 <figcaption className="mt-2 text-sm leading-relaxed">{t(locale, chapter.photo.caption)} {t(locale, { he: 'ארכיון נבחרות.', en: 'Nivcharot archive.' })}</figcaption>
               </figure>}
-              {chapter.documents && <div className="mt-4">
-                <h3 className="font-semibold">{t(locale, { he: 'מתוך המסמכים המקוריים', en: 'From the original records' })}</h3>
-                {chapter.documents.map(document => <Excerpt key={document.file} document={document} locale={locale} />)}
-              </div>}
+              {chapter.nextEvent && <p className="mt-4 text-[17px] leading-[1.8]">{t(locale, chapter.nextEvent)}</p>}
+              {chapter.document && <Excerpt document={chapter.document} locale={locale} />}
               {chapter.link && <Link href={chapter.link.href} className="mt-4 inline-block font-semibold text-accent-700 underline">{t(locale, chapter.link.label)}</Link>}
             </section>
           </li>
