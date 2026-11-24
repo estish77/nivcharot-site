@@ -50,6 +50,6 @@ export const config = {
   // with its literal content, so a redirect into /he/... (404, branded page)
   // would fail verification.
   matcher: [
-    '/((?!(?:he|en|admin|api|_next|assets|icon\\.png|apple-icon\\.png|robots\\.txt|sitemap\\.xml|google032866074f084a44\\.html)(?:/|$)).*)',
+    '/((?!(?:he|en|admin|api|_next|assets|icon\\.png|apple-icon\\.png|robots\\.txt|f2c0929ae6724fd49e6142a8dc55503e\\.txt|sitemap\\.xml|google032866074f084a44\\.html)(?:/|$)).*)',
   ],
 }

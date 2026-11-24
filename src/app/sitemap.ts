@@ -20,6 +20,7 @@ type StaticEntry = {
  */
 const STATIC_ENTRIES: StaticEntry[] = [
   { path: '', changeFrequency: 'weekly', priority: 1 },
+  { path: '/knesset', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/about', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/story', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/team', changeFrequency: 'monthly', priority: 0.6 },
@@ -61,10 +62,8 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     for (const locale of locales) {
       entries.push({
         url: urlFor(locale, path),
-        // No real "last modified" date exists for these static marketing
-        // pages — `new Date()` here would just mean "now, every single
-        // request", which is worse than omitting it (Next's sitemap type
-        // makes this field optional).
+        // Record a real editorial revision date for the two updated hubs.
+        ...(['/mishpat', '/knesset'].includes(path) && { lastModified: '2026-11-24' }),
         changeFrequency,
         priority,
         alternates: { languages },

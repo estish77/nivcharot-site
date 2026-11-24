@@ -53,13 +53,26 @@ const districtCourt: DocumentExcerpt = {
 export function LegalHistory({ locale }: { locale: Locale }) {
   const chapters = [
     {
-      date: '2012–2015',
-      title: { he: 'המחאה מתחילה בפתק בקלפי', en: 'It began with a ballot' },
+      date: '2012',
+      title: { he: '״לא נבחרות, לא בוחרות״', en: 'No Voice, No Vote' },
       body: {
-        he: 'לקראת הבחירות לכנסת ה־19 פתחה אסתי שושן דף פייסבוק בשם „לא נבחרות, לא בוחרות”. נשים חרדיות הצביעו למפלגות שייצגו את הקהילה שלהן, אבל שמות של נשים נעדרו מרשימות המועמדים שלהן. כדי להבין היכן מתחיל החסם, היה צריך לחזור שלב אחד אחורה, עוד לפני הרכבת הרשימה לכנסת. מי בכלל יכולה להיות חברה במפלגה? ב־2015 הביאה עו״ד תמר בן־פורת את השאלה לבג״ץ. בתקנון של אגודת ישראל, בסעיף שקבע מי יכול להצטרף, הופיעה המילה „איש”.',
-        en: 'Ahead of the election for the 19th Knesset, Esty Shushan opened a Facebook page called “No Voice, No Vote”. Haredi women voted for parties that spoke for their communities, yet women’s names were absent from their candidate lists. That raised an earlier question. Before a list is drawn up, who can join the party at all? In 2015 Tamar Ben-Porat took that question to the High Court. The membership clause in Agudat Yisrael’s charter used the word “man”.',
+        he: 'לקראת הבחירות לכנסת ה־19 פתחה אסתי שושן דף פייסבוק בשם ״לא נבחרות, לא בוחרות״. נשים חרדיות התבקשו להצביע למפלגות שייצגו את הקהילה שלהן, בעוד ברשימות המועמדים של אותן מפלגות לכנסת הופיעו גברים בלבד.',
+        en: 'Ahead of the election for the 19th Knesset, Esty Shushan launched the “No Voice, No Vote” campaign on Facebook. Haredi women were asked to vote for parties that represented their communities, yet those parties put forward only men for election.',
       },
-      link: { href: `/${locale}/story`, label: { he: 'איך נולדה מחאת „לא נבחרות, לא בוחרות”', en: 'Read the history of No Voice, No Vote' } },
+      link: { href: `/${locale}/story`, label: { he: 'לסיפור המחאה', en: 'Read how the campaign began' } },
+    },
+    {
+      date: '2015',
+      title: { he: 'תמר בן־פורת עותרת לבג״ץ', en: 'Tamar Ben-Porat petitions the High Court' },
+      body: {
+        he: 'עוד לפני השאלה מי תופיע ברשימה לכנסת, עמדה שאלה פשוטה יותר. האם אישה יכולה להיות חברה באגודת ישראל? עו״ד תמר בן־פורת עתרה נגד רשם המפלגות ואגודת ישראל בעניין הוראות התקנון, ובהן המילה ״איש״ בסעיף החברות. נבחרות פעלה לצד העותרת וארגוני נשים נוספים.',
+        en: 'Before a party draws up its list of candidates, who can join it? Lawyer Tamar Ben-Porat challenged the Registrar of Parties and Agudat Yisrael over charter provisions that included the word “man” in the membership clause. Nivcharot worked alongside the petitioner and other women’s organisations.',
+      },
+      quote: {
+        lead: { he: 'בתגובתה בכתב השוותה אגודת ישראל בין תנועת הנשים שלה לתנועת הנוער של המפלגה. כך נימקה את ההשוואה:', en: 'In its written response, Agudat Yisrael compared its separate women’s organisation with its youth movement. The party argued:' },
+        words: { he: '״כפי שהעותרת אינה טוענת כי אי צירופם של ילדים למפלגה, והקמת ארגון לילדים החוסה תחת כנפי המפלגה, מהווה אפליה פסולה, והדרת ילדים, כך אין מקום לטעון זאת לעניין נשים.״', en: '“Just as the petitioner does not claim that excluding children from the party and establishing a children’s organisation under its wing constitutes unlawful discrimination and the exclusion of children, there is no basis for making that claim regarding women.”' },
+        credit: { he: 'אגודת ישראל, תגובת המשיבה 2 בבג״ץ 1823/15, עמ׳ 10, סעיף 53.', en: 'Agudat Yisrael, second respondent’s brief in HCJ 1823/15, p. 10, para. 53. Translated from Hebrew.' },
+      },
     },
     {
       date: '2016',
@@ -68,7 +81,31 @@ export function LegalHistory({ locale }: { locale: Locale }) {
         he: 'בדיון בפברואר הציגה בן־פורת את הבחירה שניצבת בפני אישה המבקשת לייצג את הקהילה שלה. בדיון באוקטובר ביקש השופט עוזי פוגלמן לדייק כלפי מי מכוונת העתירה. האם היא מבקשת לבקר את החלטת רשם המפלגות, לתקוף את התקנון עצמו, או לפעול בשני המסלולים? שני הקטעים שלהלן מתעדים את השיחה באולם, בשלב שבו הצדדים עוד התווכחו על הדרך שבה בית המשפט יכול להתערב.',
         en: 'At the February hearing, Ben-Porat described the choice facing a woman who wanted to represent her own community. In October, Justice Uzi Vogelman asked her to identify exactly what the petition challenged. Was it the registrar’s decision, the party charter itself, or both? These exchanges record the argument while the court was still considering how it could intervene.',
       },
+      quote: {
+        lead: { he: 'לקראת הדיון באוקטובר העלתה אגודת ישראל את הטיעון שנודע כ״מפלגת השמנים״. היא ביקשה מן השופטים לדמיין מפלגה שתגביל את ההצטרפות אליה לפי משקל:', en: 'Ahead of the October hearing, Agudat Yisrael asked the court to imagine a party that limited membership by weight. Its written submission began:' },
+        words: { he: '״נניח כי המאותגרים במשקלם, בעלי משקל היתר (ובלשון העם: השמנים) יבקשו להקים לעצמם מפלגה״', en: '“Suppose that people who struggle with their weight, those who are overweight (in common parlance: fat people), wish to establish a party of their own.”' },
+        credit: { he: 'אגודת ישראל, תגובה לקראת הדיון מ־27 באוקטובר 2016, בג״ץ 1823/15, עמ׳ 5, סעיפים 36–38.', en: 'Agudat Yisrael, submission for the hearing of 27 October 2016, HCJ 1823/15, p. 5, paras. 36–38. Translated from Hebrew.' },
+      },
       documents: [february, october],
+    },
+    {
+      date: '2018',
+      photo: {
+        file: 'high-court-july-2018', width: 600, height: 450,
+        caption: { he: 'משתתפות הדיון בבג״ץ בבית המשפט העליון, 31 ביולי 2018.', en: 'Participants at the Supreme Court on the day of the High Court hearing, 31 July 2018.' },
+        alt: { he: 'המשתתפות עומדות יחד במסדרון האבן של בית המשפט העליון.', en: 'A group of participants standing in a stone-lined corridor of the Supreme Court.' },
+      },
+      title: { he: 'אגודת ישראל מתבקשת לשקול שינוי בתקנון', en: 'The court asks the party to reconsider its charter' },
+      body: {
+        he: 'בדיון ב־31 ביולי ביקשו השופטים מאגודת ישראל לשקול מחדש את הסעיפים הנוגעים לחברות נשים. ההחלטה עברה למוסדות המפלגה. אחת השאלות שהתחדדו לאורך ההליך הייתה עד היכן רשאית מפלגה להגדיר את ציבור החברים שלה.',
+        en: 'At the hearing on 31 July, the justices asked Agudat Yisrael to reconsider the clauses governing women’s membership. The question went back to the party. A recurring issue was how far a party could go in defining who could belong to it.',
+      },
+      quote: {
+        lead: { he: 'אסתי שושן תיארה לימים את דוגמת ״מפלגת השמנים״ שהעלתה אגודת ישראל. לפי הטיעון, מפלגה שקמה כדי לייצג אנשים שמנים רשאית לסרב לצרף אנשים רזים. שושן זכרה גם את תשובתה של השופטת דפנה ברק־ארז:', en: 'Esty Shushan later recalled the party’s analogy of a political party for fat people that could turn away thin applicants. In Shushan’s account, Justice Daphne Barak-Erez replied:' },
+        words: { he: '״יצטרכו במפלגת השמנים לקבל גם שמנות״', en: '“The party for fat people would have to admit fat women too.”' },
+        credit: { he: 'מתוך עדותה של אסתי שושן במאמר ״הן בסוף ירצו להיות בכנסת״.', en: 'From Esty Shushan’s published recollection of the proceedings. Translated from Hebrew.' },
+        href: 'https://www.estymedia.co.il/single-post/נשיםבמפלגותהחרדיות',
+      },
     },
     {
       date: '2019',
@@ -80,13 +117,35 @@ export function LegalHistory({ locale }: { locale: Locale }) {
       documents: [highCourt],
     },
     {
-      date: '2021–2023',
-      title: { he: 'נשים מגישות בקשות בשמן', en: 'Women apply in their own names' },
+      date: '2021',
+      title: { he: 'נבחרות יוזמת את מהלך ההתפקדות', en: 'Nivcharot organises the membership applications' },
       body: {
-        he: 'בסוף 2021 ביקשו נשים חרדיות להצטרף לש״ס ולאגודת ישראל. כעת היו למאבק בקשות מסוימות ונשים שחיכו לתשובה. ב־2022 פנו נשים עם נבחרות לבתי המשפט המחוזיים בירושלים ובתל אביב. בנייר עמדה שהגישה לכנסת ב־2023 תיארה נבחרות את שני ההליכים והסבירה כיצד חברות במפלגה קשורה למאבק הרחב יותר על ייצוג ברשימות לכנסת.',
-        en: 'In late 2021 Haredi women applied to join Shas and Agudat Yisrael. There were now individual applications, and women waiting for answers. In 2022, women and Nivcharot took the matter to the district courts in Jerusalem and Tel Aviv. In a 2023 paper for the Knesset, Nivcharot described both cases and explained how membership related to the broader struggle for a place on electoral lists.',
+        he: 'בסוף 2021 יזמה נבחרות הגשה משותפת של בקשות התפקדות. בהובלת התנועה הגישו נשים חרדיות, ובהן בוגרות תוכנית ״הנבחרת״ ופעילות חברתיות, בקשות להצטרף למפלגות. הפעם היה על המפלגות לתת תשובה לנשים מסוימות שביקשו להיות חברות מן המניין.',
+        en: 'In late 2021 Nivcharot organised a membership drive. Under its leadership, Haredi women, including graduates of its HaNivcheret programme and community activists, applied to join the parties. The parties now had to answer individual women seeking membership in their own names.',
       },
-      link: { href: knessetPaper, label: { he: 'נייר העמדה של נבחרות באתר הכנסת (PDF)', en: 'Nivcharot’s Knesset position paper (Hebrew PDF)' } },
+      link: { href: `/${locale}/hanivcheret`, label: { he: 'על תוכנית המנהיגות ״הנבחרת״', en: 'About the HaNivcheret leadership programme' } },
+    },
+    {
+      date: '2022',
+      photo: {
+        file: 'district-court-august-2022', width: 1125, height: 1500,
+        caption: { he: 'משתתפות ומשתתפי הדיון בבית המשפט המחוזי בירושלים, 24 באוגוסט 2022.', en: 'Participants at the Jerusalem District Court, 24 August 2022.' },
+        alt: { he: 'תצלום קבוצתי של המשתתפות והמשתתפים עומדים מול הספסלים באולם בית המשפט.', en: 'The group stands together in front of the benches in the courtroom.' },
+      },
+      title: { he: 'שתי תביעות מגיעות לבתי המשפט המחוזיים', en: 'Two claims reach the district courts' },
+      body: {
+        he: 'לאחר שבקשות התפקדות נענו בסירוב או נותרו ללא מענה, פנו נשים ונבחרות לשני בתי משפט. בירושלים התנהלה התביעה נגד ש״ס, ובתל אביב–יפו התביעה נגד אגודת ישראל. בשני ההליכים התבקשו המפלגות לאפשר דרך מעשית להצטרף.',
+        en: 'After applications were refused or went unanswered, women and Nivcharot took two cases to court. The claim against Shas was heard in Jerusalem, and the claim against Agudat Yisrael in Tel Aviv–Jaffa. Both concerned a practical route to membership.',
+      },
+    },
+    {
+      date: '2023',
+      title: { he: 'נבחרות מביאה את ההליכים לדיון הציבורי בכנסת', en: 'Nivcharot brings the cases to the Knesset' },
+      body: {
+        he: 'ב־19 בפברואר הציגה נבחרות בנייר עמדה לכנסת את סיפורן של 22 נשים שביקשו להתפקד. התנועה הסבירה מדוע הגישה לבתי המשפט חשובה לנשים שהמפלגות שלהן אינן משתפות אותן בהחלטות.',
+        en: 'In a position paper dated 19 February, Nivcharot told the Knesset about 22 women who had applied for membership. The movement explained why access to the courts mattered when the parties excluded women from their decisions.',
+      },
+      link: { href: knessetPaper, label: { he: 'לנייר העמדה באתר הכנסת', en: 'Read the paper on the Knesset website (Hebrew)' } },
     },
     {
       date: '2025',
@@ -110,17 +169,38 @@ export function LegalHistory({ locale }: { locale: Locale }) {
 
   return (
     <article aria-label={t(locale, { he: 'סיפור המאבק המשפטי', en: 'The legal campaign' })} className="mx-auto max-w-[1080px] px-6">
-      {chapters.map(chapter => (
-        <section key={chapter.date} className="grid gap-x-9 border-b border-divider py-9 md:grid-cols-[9rem_1fr] md:py-12">
-          <p dir="ltr" className="mb-2 text-start font-heading text-xl font-bold tabular-nums text-accent-700">{chapter.date}</p>
-          <div className="min-w-0 max-w-[760px]">
-            <h2 className="mb-4 text-[clamp(25px,3vw,38px)] leading-tight">{t(locale, chapter.title)}</h2>
-            <p className="text-[17px] leading-[1.8]">{t(locale, chapter.body)}</p>
-            {chapter.documents?.map(document => <Excerpt key={document.file} document={document} locale={locale} />)}
-            {chapter.link && <Link href={chapter.link.href} className="mt-4 inline-block font-semibold text-accent-700 underline">{t(locale, chapter.link.label)}</Link>}
-          </div>
-        </section>
-      ))}
+      <nav className="border-b border-divider py-6" aria-label={t(locale, { he: 'דילוג לשנה בציר הזמן', en: 'Jump to a year' })}>
+        <p className="mb-3 font-semibold">{t(locale, { he: 'ציר הזמן של המאבק', en: 'Campaign timeline' })}</p>
+        <div className="flex flex-wrap gap-2">
+          {chapters.map(({ date }) => <a key={date} href={`#year-${date}`} className="rounded-full border border-divider px-3 py-1 text-sm font-bold text-accent-700 hover:underline">{date}</a>)}
+        </div>
+      </nav>
+      <ol className="ms-2 my-8 border-s-2 border-divider">
+        {chapters.map(chapter => (
+          <li key={chapter.date} className="relative ps-6 sm:ps-10">
+            <span aria-hidden="true" className="absolute -start-2 top-8 h-3.5 w-3.5 rounded-full border-2 border-white bg-accent-700" />
+            <section id={`year-${chapter.date}`} aria-labelledby={`heading-${chapter.date}`} className="max-w-[760px] scroll-mt-28 border-b border-divider py-6 sm:py-8">
+              <time dateTime={chapter.date} className="font-heading text-xl font-bold tabular-nums text-accent-700">{chapter.date}</time>
+              <h2 id={`heading-${chapter.date}`} className="mb-3 mt-1 text-[clamp(24px,3vw,36px)] leading-tight">{t(locale, chapter.title)}</h2>
+              <p className="text-[17px] leading-[1.8]">{t(locale, chapter.body)}</p>
+              {chapter.quote && <aside className="my-4 border-s-4 border-accent bg-tint-cream p-5">
+                <p className="text-base leading-relaxed">{t(locale, chapter.quote.lead)}</p>
+                <blockquote className="my-3 text-xl font-semibold leading-relaxed">{t(locale, chapter.quote.words)}</blockquote>
+                <p className="text-sm">{chapter.quote.href ? <a href={chapter.quote.href} className="underline">{t(locale, chapter.quote.credit)}</a> : t(locale, chapter.quote.credit)}</p>
+              </aside>}
+              {chapter.photo && <figure className="my-5">
+                <Image src={`/assets/legal/${chapter.photo.file}.webp`} width={chapter.photo.width} height={chapter.photo.height} sizes="(max-width: 650px) 88vw, 600px" alt={t(locale, chapter.photo.alt)} className="block max-h-[36rem] w-auto max-w-full" />
+                <figcaption className="mt-2 text-sm leading-relaxed">{t(locale, chapter.photo.caption)} {t(locale, { he: 'ארכיון נבחרות.', en: 'Nivcharot archive.' })}</figcaption>
+              </figure>}
+              {chapter.documents && <details className="mt-4">
+                <summary className="cursor-pointer font-semibold text-accent-700 underline">{t(locale, { he: 'לעיון בקטעים מהמסמכים המקוריים', en: 'View excerpts from the original records' })}</summary>
+                {chapter.documents.map(document => <Excerpt key={document.file} document={document} locale={locale} />)}
+              </details>}
+              {chapter.link && <Link href={chapter.link.href} className="mt-4 inline-block font-semibold text-accent-700 underline">{t(locale, chapter.link.label)}</Link>}
+            </section>
+          </li>
+        ))}
+      </ol>
     </article>
   )
 }
