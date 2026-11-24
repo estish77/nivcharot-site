@@ -106,7 +106,7 @@ export default async function StoryPage({ params }: { params: Promise<{ locale: 
 
           <div className="mt-7 grid grid-cols-1 gap-5 border-t-2 border-divider pt-7 min-[861px]:grid-cols-3">
             {images.map((image) => (
-              <Figure key={image.id} grayscale>
+              image.src ? <Figure key={image.id} src={image.src} alt={image.label} caption={image.caption} /> : <Figure key={image.id} grayscale>
                 <ImageSlot label={image.label} className="w-full" style={{ height: 220 }} />
               </Figure>
             ))}

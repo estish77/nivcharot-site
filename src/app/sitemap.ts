@@ -62,8 +62,8 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     for (const locale of locales) {
       entries.push({
         url: urlFor(locale, path),
-        // Record a real editorial revision date for the two updated hubs.
-        ...(['/mishpat', '/knesset'].includes(path) && { lastModified: '2026-11-24' }),
+        // Record a real editorial revision date for these updated pages.
+        ...(['/mishpat', '/knesset', '/story'].includes(path) && { lastModified: '2026-11-24' }),
         changeFrequency,
         priority,
         alternates: { languages },
