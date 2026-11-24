@@ -47,7 +47,7 @@ export function navLinksFor(locale: Locale): NavLink[] {
       href: `/${locale}/activism`,
       children: [
         { label: { he: 'הלכה', en: 'Halakha' }, href: `/${locale}/halacha` },
-        { label: { he: 'משפט', en: 'Law' }, href: `/${locale}/mishpat` },
+        { label: { he: 'הערוץ המשפטי', en: 'Legal advocacy' }, href: `/${locale}/mishpat` },
       ],
     },
     { label: { he: 'תקשורת ומדיה', en: 'Media & Archive' }, href: `/${locale}/media` },

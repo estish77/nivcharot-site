@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-import { EmptyState } from '@/components/media/EmptyState'
 import { PostPrevNext } from '@/components/media/PostPrevNext'
 import { Figure, ImageSlot, Reveal, Section, Eyebrow } from '@/components/ui'
 import { archiveCategories, formatArchiveDate, sortPostsByDateDesc, type ArchivePost } from '@/content/media'
@@ -51,10 +50,10 @@ function findAdjacent(posts: ArchivePost[], slug: string): { prev?: ArchivePost;
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { locale: rawLocale, slug } = await params
-  if (!isLocale(rawLocale)) return {}
+  if (!isLocale(rawLocale) || !archivePostsVisible) notFound()
   const posts = await getArchivePosts()
   const post = posts.find((p) => p.slug === slug)
-  if (!post) return {}
+  if (!post) notFound()
 
   return pageMetadata({
     locale: rawLocale,
@@ -80,19 +79,7 @@ export default async function PostDetailPage({ params }: { params: Promise<Param
   const posts = await getArchivePosts()
   const post = posts.find((p) => p.slug === slug)
 
-  if (!post) {
-    return (
-      <EmptyState
-        title={t(locale, { he: 'הרשומה הזו לא נמצאה', en: "This entry wasn't found" })}
-        body={t(locale, {
-          he: 'אולי הקישור נשבר. הארכיון המלא נמצא בעמוד תקשורת ומדיה.',
-          en: 'The link may be broken. The full archive lives on the media page.',
-        })}
-        ctaLabel={t(locale, { he: 'לארכיון המלא', en: 'View the full archive' })}
-        ctaHref={`/${locale}/media#desk`}
-      />
-    )
-  }
+  if (!post) notFound()
 
   const { prev, next } = findAdjacent(posts, post.slug)
 

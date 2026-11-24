@@ -6,7 +6,7 @@ import { motion } from 'motion/react'
 
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
-import { Button, PodcastIcon, Reveal, SeatHall } from '@/components/ui'
+import { Button, PodcastIcon, SeatHall } from '@/components/ui'
 import { dict, t, type Locale } from '@/lib/i18n'
 import { hallAriaLabel, hallSentence, heroContent } from '@/content/home'
 
@@ -20,8 +20,7 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
   const titleLines = content.title[locale].split('\n')
 
   return (
-    <Reveal
-      as="section"
+    <section
       /*
        * No border-b here on purpose (2026-09-07: "הקו המיותר שמרחף מעליה").
        * This section's `minHeight: 78vh` almost always leaves blank space
@@ -36,12 +35,7 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
       className="relative grid grid-cols-[minmax(320px,44%)_1fr] items-center gap-6 bg-bg max-[860px]:grid-cols-1"
       style={{ minHeight: '78vh', paddingInline: '40px', paddingBlockStart: '56px', paddingBlockEnd: '48px' }}
     >
-      <motion.div
-        style={{ maxWidth: 620 }}
-        initial={shouldReduceMotion ? false : { opacity: 0, x: 26 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.85, ease: EASE, delay: 0.22 }}
-      >
+      <div style={{ maxWidth: 620 }}>
         <div className="mb-4 flex items-center gap-3">
           <span aria-hidden="true" className="block h-[3px] w-[34px] bg-accent" />
           <span className="font-heading text-[13px] font-extrabold tracking-[0.08em] text-neutral-700">
@@ -112,7 +106,7 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
         >
           {t(locale, dict.scrollCue)} ↓
         </motion.div>
-      </motion.div>
+      </div>
       <motion.div
         className="flex min-w-0 items-center justify-center"
         initial={shouldReduceMotion ? false : { opacity: 0 }}
@@ -129,6 +123,6 @@ export function Hero({ locale, content = heroContent }: { locale: Locale; conten
         {/* The hall's own seats fly in from scattered points and converge into shape (`SeatHall`'s `entrance`) — this wrapper just fades in alongside them rather than adding its own competing scale/rotate. */}
         <SeatHall locale={locale} ariaLabel={hallAriaLabel} sentence={hallSentence} />
       </motion.div>
-    </Reveal>
+    </section>
   )
 }

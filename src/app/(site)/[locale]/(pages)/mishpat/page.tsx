@@ -1,60 +1,73 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import type { Metadata } from 'next'
-
-import { Eyebrow, hasRichText, Reveal, RichText } from '@/components/ui'
+import { hasRichText, RichText } from '@/components/ui'
+import { knessetPaper, legalCases, legalLead, legalTitle } from '@/content/legal-cases'
 import { getMishpatContent } from '@/lib/cms'
-import { isLocale, locales, type Locale } from '@/lib/i18n'
+import { isLocale, locales, t } from '@/lib/i18n'
 import { pageMetadata } from '@/lib/seo'
 
-type Params = { locale: string }
+type Params = Promise<{ locale: string }>
 
-/**
- * `/mishpat` — a placeholder overview of Nivcharot's legal tools, meant to
- * be expanded from `/admin` later (the `Mishpat` Payload global's `body`
- * richText field). Unlike `/halacha`, there's no hardcoded write-up here —
- * everything below the hero comes straight from Payload (or the fallback
- * paragraphs in `src/content/mishpat.ts` if unset).
- */
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+  return locales.map(locale => ({ locale }))
 }
 
-export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
-  const { locale: rawLocale } = await params
-  const locale: Locale = isLocale(rawLocale) ? rawLocale : 'he'
-  const content = await getMishpatContent(locale)
-  return pageMetadata({ locale, path: '/mishpat', title: content.hero.title, description: content.hero.body })
+export async function generateMetadata({ params }: { params: Params }) {
+  const { locale } = await params
+  if (!isLocale(locale)) notFound()
+  return pageMetadata({
+    locale, path: '/mishpat',
+    title: t(locale, { he: 'הערוץ המשפטי – חברות נשים בש״ס ובאגודת ישראל', en: 'Legal advocacy for women’s membership in Shas and Agudat Yisrael' }),
+    description: t(locale, legalLead),
+  })
 }
 
-export default async function MishpatPage({ params }: { params: Promise<Params> }) {
-  const { locale: rawLocale } = await params
-  if (!isLocale(rawLocale)) notFound()
-  const locale: Locale = rawLocale
+export default async function MishpatPage({ params }: { params: Params }) {
+  const { locale } = await params
+  if (!isLocale(locale)) notFound()
   const content = await getMishpatContent(locale)
 
   return (
-    <Reveal as="section">
-      <article className="mx-auto max-w-[760px] px-8 pb-16 pt-14 max-[640px]:px-5">
-        <Eyebrow className="mb-3.5">{content.hero.eyebrow}</Eyebrow>
-        <h1 className="m-0 mb-4 text-[clamp(28px,4vw,44px)] leading-[1.15]">{content.hero.title}</h1>
-        <p className="m-0 mb-8 text-[16px] leading-[1.7] text-neutral-800">{content.hero.body}</p>
-        <div className="border-t-2 border-divider pt-8">
-          {/*
-            Rich text when the dashboard has any, so an article written in
-            /admin keeps its links, headings, quotes and emphasis. The plain
-            paragraph list stays as the fallback for the static fixture.
-          */}
-          {hasRichText(content.bodyRich) ? (
-            <RichText value={content.bodyRich} />
-          ) : (
-            content.body.map((paragraph, i) => (
-              <p key={i} className="mb-5 text-[15.5px] leading-[1.8] text-text">
-                {paragraph}
-              </p>
-            ))
-          )}
+    <div>
+      <header className="border-b-2 border-divider bg-tint-cream">
+        <div className="mx-auto max-w-[1080px] px-6 py-12 md:py-16">
+          <h1 className="mb-5 max-w-[20ch] text-[clamp(36px,5.5vw,68px)] leading-[1.08]">{t(locale, legalTitle)}</h1>
+          <p className="max-w-[64ch] text-lg leading-relaxed">{t(locale, legalLead)}</p>
         </div>
-      </article>
-    </Reveal>
+      </header>
+      <section className="mx-auto max-w-[1080px] px-6 py-10">
+        <h2 className="mb-6 text-3xl">{t(locale, { he: 'ההליכים בבתי המשפט', en: 'The court cases' })}</h2>
+        <div className="grid gap-8 sm:grid-cols-2">
+          {legalCases.map(entry => (
+            <article key={entry.slug} className="border-t-2 border-divider pt-5">
+              <p className="mb-2 text-sm font-bold text-accent-700">{t(locale, entry.reference)}</p>
+              <h3 className="mb-3 text-2xl"><Link className="underline decoration-1 underline-offset-4" href={`/${locale}/mishpat/${entry.slug}`}>{t(locale, entry.title)}</Link></h3>
+              <p className="leading-relaxed">{t(locale, entry.summary)}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="mx-auto max-w-[1080px] border-t-2 border-divider px-6 py-8">
+        <h2 className="mb-3 text-2xl">{t(locale, { he: 'מהעתירה לכנסת', en: 'From the courts to the Knesset' })}</h2>
+        <p className="mb-3 max-w-[68ch] leading-relaxed">{t(locale, {
+          he: 'במסמך שהגישה לכנסת ב־2023 תיארה נבחרות את הקשר בין בקשותיהן של נשים להצטרף למפלגות לבין העבודה הפרלמנטרית לקידום ייצוג נשים ברשימות המועמדים. המסמך מביא את עמדת התנועה בזמן שההליכים האזרחיים עדיין התנהלו.',
+          en: 'In a 2023 paper submitted to the Knesset, Nivcharot connected women’s membership applications with its parliamentary work on representation on candidate lists. The paper records the movement’s position while the civil cases were under way.',
+        })}</p>
+        <a href={knessetPaper} className="font-semibold text-accent-700 underline">{t(locale, { he: 'קריאת נייר העמדה באתר הכנסת (PDF)', en: 'Read the position paper in the Knesset archive (Hebrew PDF)' })}</a>
+      </section>
+      {hasRichText(content.bodyRich) && (
+        <section className="mx-auto max-w-[1080px] border-t-2 border-divider px-6 py-8">
+          <details className="max-w-[760px]">
+            <summary className="cursor-pointer text-xl font-bold">{t(locale, { he: 'מאמר הרקע של נבחרות', en: 'Background from Nivcharot' })} — {content.hero.title}</summary>
+            <p className="my-4 leading-relaxed">{content.hero.body}</p>
+            <RichText value={content.bodyRich} />
+          </details>
+        </section>
+      )}
+      <nav aria-label={t(locale, { he: 'קישורים מהערוץ המשפטי', en: 'More from Nivcharot' })} className="mx-auto flex max-w-[1080px] flex-wrap gap-x-8 gap-y-3 px-6 pb-12 font-semibold underline">
+        <Link href={`/${locale}/halacha`}>{t(locale, { he: 'עמדות הלכתיות על בחירת נשים', en: 'Halakhic sources on electing women' })}</Link>
+        <Link href={`/${locale}/contact`}>{t(locale, { he: 'פנייה לנבחרות', en: 'Contact Nivcharot' })}</Link>
+      </nav>
+    </div>
   )
 }

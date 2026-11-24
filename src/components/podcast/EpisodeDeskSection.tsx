@@ -29,7 +29,7 @@ export async function EpisodeDeskSection({ locale }: { locale: Locale }) {
           </h2>
           <p className="mt-4 text-[16px] leading-[1.7] text-neutral-800">{t(locale, episodeDeskText.lead)}</p>
         </div>
-        <EpisodeDesk episodes={episodes} shorts={shorts} locale={locale} />
+        <EpisodeDesk episodes={episodes} shortCount={shorts.length} locale={locale} />
       </Section>
     </Reveal>
   )

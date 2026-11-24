@@ -35,7 +35,9 @@ import { defaultLocale } from '@/lib/i18n'
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const suffix = pathname === '/' ? '' : pathname
-  return NextResponse.redirect(new URL(`/${defaultLocale}${suffix}`, request.url))
+  const target = request.nextUrl.clone()
+  target.pathname = `/${defaultLocale}${suffix}`
+  return NextResponse.redirect(target, pathname === '/' ? 308 : 307)
 }
 
 export const config = {

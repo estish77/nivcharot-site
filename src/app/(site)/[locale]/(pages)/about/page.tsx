@@ -27,7 +27,7 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: '/about',
-    title: t(locale, { he: 'אודות', en: 'About' }),
+    title: t(locale, { he: 'התנועה לייצוג נשים חרדיות בפוליטיקה', en: 'The movement for Haredi women’s political representation' }),
     description: t(locale, {
       he: 'נבחרות הוקמה כתנועת מחאה ופועלת מאז 2012 לייצוג נשים חרדיות במוקדי קבלת ההחלטות, להעלאת תודעת זכויות ולהכשרת מנהיגות נשית.',
       en: 'Nivcharot began as the protest movement "No Voice, No Vote" and has worked since 2012 for Haredi women\'s representation and leadership.',

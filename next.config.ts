@@ -15,6 +15,22 @@ const nextConfig: NextConfig = {
   // redirect.
   async redirects() {
     return [
+      // These retired archive entries have current equivalents in both languages.
+      {
+        source: '/:locale(he|en)/media/:slug(kuntres-halachi|halachic-pamphlet-women-elected-2017)',
+        destination: '/:locale/halacha',
+        permanent: true,
+      },
+      {
+        source: '/:locale(he|en)/media/nivcharot-leadership-program-intro-2021',
+        destination: '/:locale/hanivcheret',
+        permanent: true,
+      },
+      {
+        source: '/:locale(he|en)/media/court-petition-update-2023',
+        destination: '/:locale/mishpat',
+        permanent: true,
+      },
       ...STATIC_PAGE_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...ARCHIVED_POST_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...WIX_STATIC_PAGE_REDIRECTS.map((r) => ({ ...r, permanent: true })),

@@ -45,13 +45,6 @@ export function generateStaticParams() {
  * template now follows the active locale, matching the bilingual default
  * this already used for the untitled/root case.
  */
-/**
- * These `description`/`openGraph`/`twitter` defaults only ever surface on a
- * soft-not-found content page (e.g. `/media/[slug]` for a slug that isn't
- * found — it renders an `EmptyState`, not `notFound()`, so its own
- * `generateMetadata` returns `{}` and Next falls back to this layout). Every
- * real page overrides all of this via `pageMetadata()` in `@/lib/seo`.
- */
 export async function generateMetadata({
   params,
 }: {
