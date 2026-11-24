@@ -90,11 +90,6 @@ export function LegalHistory({ locale }: { locale: Locale }) {
     },
     {
       date: '2018',
-      photo: {
-        file: 'high-court-july-2018', width: 600, height: 450,
-        caption: { he: 'משתתפות הדיון בבג״ץ בבית המשפט העליון, 31 ביולי 2018.', en: 'Participants at the Supreme Court on the day of the High Court hearing, 31 July 2018.' },
-        alt: { he: 'המשתתפות עומדות יחד במסדרון האבן של בית המשפט העליון.', en: 'A group of participants standing in a stone-lined corridor of the Supreme Court.' },
-      },
       title: { he: 'אגודת ישראל מתבקשת לשקול שינוי בתקנון', en: 'The court asks the party to reconsider its charter' },
       body: {
         he: 'בדיון ב־31 ביולי ביקשו השופטים מאגודת ישראל לשקול מחדש את הסעיפים הנוגעים לחברות נשים. ההחלטה עברה למוסדות המפלגה. אחת השאלות שהתחדדו לאורך ההליך הייתה עד היכן רשאית מפלגה להגדיר את ציבור החברים שלה.',
@@ -127,11 +122,6 @@ export function LegalHistory({ locale }: { locale: Locale }) {
     },
     {
       date: '2022',
-      photo: {
-        file: 'district-court-august-2022', width: 1125, height: 1500,
-        caption: { he: 'משתתפות ומשתתפי הדיון בבית המשפט המחוזי בירושלים, 24 באוגוסט 2022.', en: 'Participants at the Jerusalem District Court, 24 August 2022.' },
-        alt: { he: 'תצלום קבוצתי של המשתתפות והמשתתפים עומדים מול הספסלים באולם בית המשפט.', en: 'The group stands together in front of the benches in the courtroom.' },
-      },
       title: { he: 'שתי תביעות מגיעות לבתי המשפט המחוזיים', en: 'Two claims reach the district courts' },
       body: {
         he: 'לאחר שבקשות התפקדות נענו בסירוב או נותרו ללא מענה, פנו נשים ונבחרות לשני בתי משפט. בירושלים התנהלה התביעה נגד ש״ס, ובתל אביב–יפו התביעה נגד אגודת ישראל. בשני ההליכים התבקשו המפלגות לאפשר דרך מעשית להצטרף.',
@@ -188,10 +178,6 @@ export function LegalHistory({ locale }: { locale: Locale }) {
                 <blockquote className="my-3 text-xl font-semibold leading-relaxed">{t(locale, chapter.quote.words)}</blockquote>
                 <p className="text-sm">{chapter.quote.href ? <a href={chapter.quote.href} className="underline">{t(locale, chapter.quote.credit)}</a> : t(locale, chapter.quote.credit)}</p>
               </aside>}
-              {chapter.photo && <figure className="my-5">
-                <Image src={`/assets/legal/${chapter.photo.file}.webp`} width={chapter.photo.width} height={chapter.photo.height} sizes="(max-width: 650px) 88vw, 600px" alt={t(locale, chapter.photo.alt)} className="block max-h-[36rem] w-auto max-w-full" />
-                <figcaption className="mt-2 text-sm leading-relaxed">{t(locale, chapter.photo.caption)} {t(locale, { he: 'ארכיון נבחרות.', en: 'Nivcharot archive.' })}</figcaption>
-              </figure>}
               {chapter.documents && <details className="mt-4">
                 <summary className="cursor-pointer font-semibold text-accent-700 underline">{t(locale, { he: 'לעיון בקטעים מהמסמכים המקוריים', en: 'View excerpts from the original records' })}</summary>
                 {chapter.documents.map(document => <Excerpt key={document.file} document={document} locale={locale} />)}
