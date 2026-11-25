@@ -140,7 +140,11 @@ export const bankDetails: {
   },
 }
 
-export type TransparencyItem = { title: Localized; body: Localized }
+export type TransparencyItem = {
+  title: Localized
+  body: Localized
+  links?: { href: string; label: Localized }[]
+}
 
 export const transparencyEyebrow: Localized = { he: 'שקיפות', en: 'TRANSPARENCY' }
 export const transparencyHeading: Localized = {
@@ -159,9 +163,13 @@ export const transparencyItems: TransparencyItem[] = [
   {
     title: { he: 'ניהול תקין', en: 'Proper management' },
     body: {
-      he: 'אישור ניהול תקין מרשם העמותות, מתחדש מדי שנה.',
-      en: 'A certificate of proper management from the Registrar of Non-Profits, renewed annually.',
+      he: 'אישורי רשם העמותות לנבחרות לפי שנת תוקף.',
+      en: 'Certificates issued to Nivcharot by the Registrar of Associations, by year of validity.',
     },
+    links: [
+      { href: '/assets/transparency/proper-management-2026.pdf', label: { he: 'אישור לשנת 2026 (PDF)', en: '2026 certificate (PDF, Hebrew)' } },
+      { href: '/assets/transparency/proper-management-2027.pdf', label: { he: 'אישור לשנת 2027 (PDF)', en: '2027 certificate (PDF, Hebrew)' } },
+    ],
   },
   {
     title: { he: 'ניהול ספרים', en: 'Bookkeeping' },
@@ -176,6 +184,9 @@ export const transparencyItems: TransparencyItem[] = [
       he: 'הדוחות הכספיים מוגשים לרשם העמותות ופתוחים לעיון הציבור.',
       en: 'Annual financial statements are filed with the Registrar and open to the public.',
     },
+    links: [
+      { href: 'https://www.guidestar.org.il/organization/580619120', label: { he: 'לכרטיס נבחרות בגיידסטאר', en: 'Nivcharot’s official GuideStar profile' } },
+    ],
   },
 ]
 

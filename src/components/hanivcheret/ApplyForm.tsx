@@ -1,5 +1,7 @@
 'use client'
 
+import { sendGAEvent } from '@next/third-parties/google'
+
 import { useState, type FormEvent } from 'react'
 
 import { cn } from '@/components/ui'
@@ -72,6 +74,7 @@ export function ApplyForm({ locale, contactEmail }: ApplyFormProps) {
         }),
       })
       if (!response.ok) throw new Error(`Request failed: ${response.status}`)
+      if (window.dataLayer) sendGAEvent('event', 'program_interest_submitted', { language: locale })
       setSent(true)
       setFullName('')
       setEmail('')

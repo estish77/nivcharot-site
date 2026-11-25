@@ -52,9 +52,8 @@ export const hanivcheretHero = {
     en: 'The ninth cohort has finished and there is no open registration right now. Leave your details and we will be in touch when the call for the tenth cohort opens. Since the first cohort in 2018, nine cohorts and over two hundred alumnae have passed through the program.',
   } satisfies Localized,
   cta: {
-    label: { he: 'אשמח להצטרף למחזור העשירי', en: 'Join the tenth cohort mailing list' } satisfies Localized,
-    /** "Join.dc.html" in the mockup. */
-    href: '/join',
+    label: { he: 'עדכנו אותי כשתיפתח ההרשמה למחזור העשירי', en: 'Notify me when registration opens for the tenth cohort' } satisfies Localized,
+    href: '#apply',
   },
   seatHallAriaLabel: {
     he: 'מושבי הכנסת, הכיסאות שממתינים לנשים חרדיות',
