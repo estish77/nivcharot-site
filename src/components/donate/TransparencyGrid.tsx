@@ -1,3 +1,4 @@
+import { TrackedLink } from '@/components/TrackedLink'
 import { Reveal, Section, cn } from '@/components/ui'
 import { t, type Locale } from '@/lib/i18n'
 import { transparencyEyebrow, transparencyHeading, transparencyItems } from '@/content/donate'
@@ -15,7 +16,7 @@ export type TransparencyGridProps = { locale: Locale }
 export function TransparencyGrid({ locale }: TransparencyGridProps) {
   return (
     <Reveal as="section">
-      <Section as="div" tint="niv-slate" paddingBlockStart="56px" paddingBlockEnd="60px">
+      <Section as="div" id="transparency" tint="niv-slate" paddingBlockStart="56px" paddingBlockEnd="60px">
         {/*
           A plain styled <p> rather than the shared `Eyebrow`, which hard-
           codes --color-accent-700: that token is the a11y fix for small red
@@ -50,6 +51,12 @@ export function TransparencyGrid({ locale }: TransparencyGridProps) {
               >
                 <h3 className="mb-2 text-[19px] text-niv-cream">{t(locale, item.title)}</h3>
                 <p className="m-0 text-sm leading-[1.7] text-[rgba(227,222,215,0.86)]">{t(locale, item.body)}</p>
+                {item.links?.map((link) => (
+                  <TrackedLink key={link.href} href={link.href} locale={locale} event="transparency_link_click"
+                    className="mt-2 block text-sm font-semibold text-niv-cream underline underline-offset-4">
+                    {t(locale, link.label)}
+                  </TrackedLink>
+                ))}
               </div>
             )
           })}

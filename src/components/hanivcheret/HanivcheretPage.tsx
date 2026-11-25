@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { TrackedLink } from '@/components/TrackedLink'
 
 import {
   hanivcheretCurriculum,
@@ -13,7 +13,7 @@ import {
 import { getHanivcheretContent } from '@/lib/cms'
 import { AlumnaeWall } from './AlumnaeWall'
 import { t, type Locale, type Localized } from '@/lib/i18n'
-import { Button, Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SeatHall, SectionHead, Tag, cn } from '@/components/ui'
+import { Carousel, Cell, CellGrid, Eyebrow, Figure, ImageSlot, Reveal, Section, SeatHall, SectionHead, Tag, cn } from '@/components/ui'
 import { AlumnaeVideosSection } from './AlumnaeVideosSection'
 import { ApplySection } from './ApplySection'
 import { NivcharotVoicesSection } from './NivcharotVoicesSection'
@@ -77,7 +77,13 @@ function HeroMedia({ locale }: { locale: Locale }) {
  */
 export async function HanivcheretPage({ locale }: { locale: Locale }) {
   const isHe = locale === 'he'
-  const ctaHref = `/${locale}${hanivcheretHero.cta.href}`
+  const interestLink = (
+    <TrackedLink href={hanivcheretHero.cta.href} locale={locale} event="program_interest_click"
+      className={cn('inline-block max-w-full px-5 py-3 text-center font-heading text-[15px] font-extrabold', FOCUS_RING,
+        isHe ? 'bg-niv-slate text-niv-cream hover:bg-accent hover:text-white' : 'btn btn-primary whitespace-normal')}>
+      {t(locale, hanivcheretHero.cta.label)}
+    </TrackedLink>
+  )
   const hero = await getHanivcheretContent(locale)
 
   return (
@@ -115,31 +121,7 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
               <p className="mb-7 max-w-[600px] text-[15px] leading-[1.7] text-neutral-700">
                 {t(locale, hanivcheretHero.bodySecondary)}
               </p>
-              <Link
-                href={ctaHref}
-                className={cn(
-                  /*
-                   * Consistency fix (item 12 audit): this was the only
-                   * button/tag/tab hover state in the entire codebase that
-                   * didn't land on the sitewide "hover -> bg-niv-slate,
-                   * text-white" convention (see Button/Tag/TabBar/Carousel/
-                   * globals.css .btn-*) — worse, it used a raw `text-black`
-                   * that isn't one of this project's design tokens at all.
-                   * This button's own DEFAULT is already niv-slate (an
-                   * intentional dark-on-cream look for this hero, see the
-                   * file's own top comment on he/en asymmetry), so hovering
-                   * to niv-slate again would be invisible; hover moves to
-                   * `bg-accent` instead — an approved solid-fill use of the
-                   * brand red — paired with `text-white`, exactly like every
-                   * other accent/niv-slate fill on the site (never black).
-                   */
-                  'inline-block whitespace-nowrap bg-niv-slate px-[26px] py-[13px] font-heading text-[15px] font-extrabold text-niv-cream no-underline transition-colors duration-[250ms] ease-out hover:bg-accent hover:text-white',
-                  'focus-visible:bg-accent focus-visible:text-white',
-                  FOCUS_RING,
-                )}
-              >
-                {t(locale, hanivcheretHero.cta.label)}
-              </Link>
+              {interestLink}
             </div>
             {/*
               Hidden below 640px (2026-08-31 brief: "במובייל, תוותר על
@@ -179,9 +161,7 @@ export async function HanivcheretPage({ locale }: { locale: Locale }) {
               <p className="mb-7 max-w-[600px] text-[15px] leading-[1.7] text-neutral-700">
                 {t(locale, hanivcheretHero.bodySecondary)}
               </p>
-              <Button href={ctaHref} variant="primary" size="md">
-                {t(locale, hanivcheretHero.cta.label)}
-              </Button>
+              {interestLink}
             </div>
             <div>
               <HeroMedia locale={locale} />

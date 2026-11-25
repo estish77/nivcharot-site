@@ -18,6 +18,7 @@ import { arrowBack, arrowForward, dict, t, type Locale } from '@/lib/i18n'
 import type { MediaEntry, MediaGroup } from '@/lib/mediaEntries'
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
+import { TrackedLink } from '@/components/TrackedLink'
 import { MediaEntryCard } from './MediaEntryCard'
 import { MediaEntryRow } from './MediaEntryRow'
 import { MediaTheater } from './MediaTheater'
@@ -372,6 +373,15 @@ export function MediaDesk({ entries, locale }: { entries: MediaEntry[]; locale: 
         </details>
 
         <div ref={resultsRef}>
+          <nav aria-label={t(locale, { he: 'פעילות נבחרות הקשורה לארכיון', en: 'Related Nivcharot activities' })}
+            className="mb-4 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-accent-700 underline underline-offset-4">
+            <TrackedLink href={`/${locale}/knesset`} locale={locale} event="archive_activity_click">
+              {t(locale, { he: 'לדיונים ולניירות העמדה של נבחרות בכנסת', en: 'Knesset hearings and Nivcharot’s position papers' })}
+            </TrackedLink>
+            <TrackedLink href={`/${locale}/activism#no-voice-no-vote`} locale={locale} event="archive_activity_click">
+              {t(locale, { he: 'לסיפור הקמפיין ״לא נבחרות, לא בוחרות״', en: 'The story of the No Voice, No Vote campaign' })}
+            </TrackedLink>
+          </nav>
           <div className="mb-1 flex flex-wrap items-baseline justify-between gap-3 border-b-2 border-divider pb-2.5 max-[560px]:pb-1.5">
             <p className="m-0 font-heading text-[12.5px] font-extrabold tracking-[0.04em] text-neutral-700 max-[560px]:text-[11.5px]">
               {tab === 'watch' ? (

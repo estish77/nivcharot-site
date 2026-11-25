@@ -399,6 +399,28 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
             title={t(locale, campaignsSectionText.title)}
             lead={t(locale, campaignsSectionText.lead)}
           />
+          <article id="no-voice-no-vote" aria-labelledby="founding-campaign-title" className="scroll-mt-40 border-b-2 border-divider py-8">
+            <time dateTime="2012-12" className="text-sm font-semibold text-accent-700">
+              {t(locale, { he: 'דצמבר 2012', en: 'December 2012' })}
+            </time>
+            <h3 id="founding-campaign-title" className="my-3 text-[28px]">
+              {t(locale, { he: 'לא נבחרות, לא בוחרות', en: 'No Voice, No Vote' })}
+            </h3>
+            <p className="max-w-[700px] leading-relaxed">
+              {t(locale, {
+                he: 'לקראת הבחירות לכנסת ה־19 פתחה אסתי שושן דף פייסבוק וקראה לנשים חרדיות להימנע מהצבעה למפלגות שאינן מאפשרות להן להתמודד. בדצמבר הגיעה המחאה ממאה שערים, מאלעד ומבני ברק גם לעיתונות. בטור שפרסמה ב־ynet הסבירה שושן מדוע אישה שהמפלגה מבקשת את קולה זכאית גם לייצג את בוחריה. מהיוזמה הזאת צמחה עמותת נבחרות, שנרשמה ב־2015.',
+                en: 'Ahead of the election for the 19th Knesset, Esty Shushan started a Facebook page calling on Haredi women to withhold their votes from parties that barred them from standing for election. In December, the press reported on the protest in Mea Shearim, Elad and Bnei Brak. Writing in ynet, Shushan argued that a woman whose vote a party sought should also be able to represent its voters. Nivcharot grew out of this campaign and registered as an association in 2015.',
+              })}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-semibold text-accent-700 underline underline-offset-4">
+              <a href="https://www.ynet.co.il/articles/0,7340,L-4326016,00.html">
+                {t(locale, { he: 'הטור של אסתי שושן ב־ynet, 31.12.2012', en: 'Esty Shushan’s ynet column, 31 December 2012 (Hebrew)' })}
+              </a>
+              <a href="https://www.mako.co.il/news-elections-2013/articles/Article-a1e96149751db31006.htm">
+                {t(locale, { he: 'הסיקור ב־mako, 25.12.2012', en: 'Coverage in mako, 25 December 2012 (Hebrew)' })}
+              </a>
+            </div>
+          </article>
           <EmptyChairsCampaign locale={locale} />
           {campaigns.length > 0 && (
             <div className="mt-6 flex flex-col gap-10">
