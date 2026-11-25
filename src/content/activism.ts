@@ -57,11 +57,11 @@ export const activismPillars: {
     },
   },
   chairs: {
-    eyebrow: { he: '#מחאת_הכסאות', en: '#EMPTY_CHAIRS' },
-    title: { he: 'הכיסא הריק', en: 'The empty chair' },
+    eyebrow: { he: 'בחירות 2019', en: '2019 elections' },
+    title: { he: 'מחאת הכיסאות', en: 'The Empty Chairs protest' },
     body: {
-      he: 'סביב סבבי הבחירות הציבה מחאת הכסאות את הכיסא הריק כסמל: הכיסא שבו אמורה לשבת נציגה חרדית, ואין. פעולה חזותית פשוטה שהפכה לאחד הסמלים המזוהים ביותר של המאבק לייצוג.',
-      en: "Around the election rounds, the Empty Chairs protest placed the vacant chair as a symbol: the seat where a Haredi woman representative should sit, and doesn't. A simple visual act that became one of the struggle's most recognizable symbols.",
+      he: 'שלטים על ספסלים ברחוב המחישו מה פירושו של מושב השמור לגברים בלבד ברשימה לכנסת.',
+      en: 'Signs on public benches asked passers-by to consider what it meant to reserve seats on a Knesset candidate list for men.',
     },
   },
   knesset: {
