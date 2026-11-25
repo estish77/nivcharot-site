@@ -1,6 +1,7 @@
 import { Fragment, type ReactNode } from 'react'
 
 import { CampaignCard } from './CampaignCard'
+import { EmptyChairsCampaign } from './EmptyChairsCampaign'
 import { GalleryPhotoCard } from './GalleryPhotoCard'
 import { EventGalleryCard } from '@/components/media/EventGalleryCard'
 import { pressItemHref } from '@/content/press-archive'
@@ -41,22 +42,12 @@ const heroJumpLinks = [
   { href: '#archive', label: { he: 'לארכיון ↓', en: 'Archive ↓' } satisfies Localized },
 ] as const
 
-/**
- * "קמפיינים" (2026-08-31 brief): a gallery of the org's own real Instagram
- * campaign posts, styled like the post cards themselves. Starts empty
- * until real galleries are added through the admin (see `getGalleries()`'s
- * own doc comment in src/lib/cms.ts on why nothing is invented to fill it).
- */
 const campaignsSectionText = {
   eyebrow: { he: 'קמפיינים', en: 'CAMPAIGNS' } satisfies Localized,
   title: { he: 'הקמפיינים שלנו', en: 'Our campaigns' } satisfies Localized,
   lead: {
     he: 'פרסומים ותיעוד מהקמפיינים של נבחרות.',
     en: 'Posts and coverage from Nivcharot’s campaigns.',
-  } satisfies Localized,
-  empty: {
-    he: 'הקמפיין ״לא נבחרות, לא בוחרות״ קרא לנשים חרדיות לדרוש ייצוג ברשימות לכנסת.',
-    en: 'The No Voice, No Vote campaign called on Haredi women to demand representation on Knesset candidate lists.',
   } satisfies Localized,
   instagramCta: { he: 'לעמוד שלנו באינסטגרם', en: 'Visit our Instagram' } satisfies Localized,
 }
@@ -371,6 +362,9 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
           />
           <div className="max-w-[660px] py-8">
             <PillarText pillar={activismPillars.chairs} locale={locale} />
+            <a href="#empty-chairs" className={`mt-2 inline-block font-semibold text-accent-700 underline ${FOCUS_RING}`}>
+              {t(locale, { he: 'לסרטון, לכרזה ולתצלום מהמחאה', en: 'Watch the film and see the campaign poster and photo' })}
+            </a>
           </div>
           <div className="grid grid-cols-1 gap-10 py-8 min-[861px]:grid-cols-2">
             <PillarText pillar={activismPillars.knesset} locale={locale} />
@@ -405,14 +399,13 @@ export async function ActivismPage({ locale }: { locale: Locale }) {
             title={t(locale, campaignsSectionText.title)}
             lead={t(locale, campaignsSectionText.lead)}
           />
-          {campaigns.length > 0 ? (
+          <EmptyChairsCampaign locale={locale} />
+          {campaigns.length > 0 && (
             <div className="mt-6 flex flex-col gap-10">
               {campaigns.map((post) => (
                 <CampaignCard key={post.id} post={post} locale={locale} />
               ))}
             </div>
-          ) : (
-            <p className="mt-6 text-[14px] text-neutral-700">{t(locale, campaignsSectionText.empty)}</p>
           )}
           <a
             href="https://www.instagram.com/nivcharot/"

@@ -26,29 +26,43 @@ export type CampaignCardProps = { post: GalleryContent; locale: Locale }
  * here only to read visually as "a post," not to claim any real count.
  */
 export function CampaignCard({ post, locale }: CampaignCardProps) {
+  const isDomesticViolenceCampaign = post.link === 'https://www.ynet.co.il/articles/0,7340,L-5631436,00.html'
+  const title = isDomesticViolenceCampaign && ['קמפיינים', 'Campaigns'].includes(post.title)
+    ? t(locale, { he: '״זה לא שלום בית אם את מפחדת״', en: '“If you live in fear, your home is not at peace”' })
+    : post.title
   return (
     <article className="mx-auto flex w-full max-w-[520px] flex-col border-2 border-divider bg-bg">
       <div className="flex items-center gap-2.5 border-b-2 border-divider px-3.5 py-2.5">
         <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-niv-slate font-heading text-[13px] font-extrabold text-niv-cream">
           נ
         </span>
-        <span className="font-heading text-[13px] font-extrabold">nivcharot</span>
+        <h3 className="text-[22px] leading-tight">{title}</h3>
       </div>
 
-      <CampaignCarousel images={post.images} title={post.title} locale={locale} />
+      <CampaignCarousel images={post.images} title={title} locale={locale} />
 
       <div className="flex flex-col gap-2.5 px-3.5 pb-4 pt-3">
         <div className="flex items-center gap-3 text-accent-700">
           <HeartOutlineIcon />
           <CommentOutlineIcon />
         </div>
+        {isDomesticViolenceCampaign && !post.caption && (
+          <p className="text-[14px] leading-relaxed">
+            {t(locale, {
+              he: 'בנובמבר 2019 פרסמה נבחרות כרזות שהפנו נשים דתיות וחרדיות שחוות אלימות במשפחה למוקדי סיוע. עיריית בני ברק סירבה לאשר את תליית הכרזות ברחובות העיר.',
+              en: 'In November 2019, Nivcharot shared posters directing religious and Haredi women experiencing domestic violence to helplines. Bnei Brak municipality declined to allow the posters on the city’s streets.',
+            })}
+          </p>
+        )}
         {post.caption ? (
           <p className="m-0 text-[14px] leading-[1.6] text-neutral-800">
             <span className="font-heading font-extrabold text-text">nivcharot</span> {post.caption}
           </p>
         ) : null}
         <span className="text-[11.5px] font-semibold uppercase tracking-wide text-neutral-700">
-          {shortDateLabel(post.date, locale)}
+          {isDomesticViolenceCampaign
+            ? t(locale, { he: 'סיקור ב־ynet · 25 בנובמבר 2019', en: 'Covered by ynet · 25 November 2019' })
+            : shortDateLabel(post.date, locale)}
         </span>
         {post.link ? (
           <a
