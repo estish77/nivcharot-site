@@ -113,8 +113,8 @@ export const teamMembers: TeamMember[] = [
     id: 'hila-yalon',
     name: { he: 'הילה ילון', en: 'Hila Yalon' },
     role: {
-      he: 'אשת חינוך; חברת ועד מנהל',
-      en: 'Educator; board member',
+      he: 'אשת חינוך וחברת עמותה',
+      en: 'Educator and association member',
     },
     bio: {
       he: 'עבדה עם הצוות הישראלי של הפדרציה היהודית של סן פרנסיסקו. למעלה מעשרים שנות עבודת שטח וניהול בתחומי עלייה וקליטה, חינוך ותעסוקה. מנחת תיאטרון קהילתי ובוגרת מדיניות ציבורית.',
@@ -151,8 +151,8 @@ export const teamMembers: TeamMember[] = [
     id: 'tirtza-bloch-esterzon',
     name: { he: 'תרצה בלוך אסתרזון', en: 'Tirtza Bloch Esterzon' },
     role: {
-      he: 'מנהלת קהילה ומנהלת קבוצות "אחותנו את", חברת עמותה וחברת קבוצת ההיגוי',
-      en: 'Community manager and manager of the "Achotenu At" groups, association member and steering-group member',
+      he: 'ניהול קהילות, חברת עמותה וחברת הוועד המנהל',
+      en: 'Community management, association member and board member',
     },
     bio: {
       he: 'אם לחמישה, כתבת תוכן, מתרגמת ומשווקת דיגיטלית. פעילה קהילתית בתחומי בריאות, רווחה ונשים חרדיות, מקדמת יזמות למשפחות חד־הוריות ולנשים בשוק העבודה.',
@@ -170,8 +170,8 @@ export const teamMembers: TeamMember[] = [
     id: 'efrat-shukrun',
     name: { he: 'אפרת שוקרון', en: 'Efrat Shukrun' },
     role: {
-      he: 'מנחת התוכנית, חברת עמותה וחברת קבוצת ההיגוי',
-      en: 'Program facilitator, association member and steering-group member',
+      he: 'מנחת תוכניות, חברת עמותה וחברת הוועד המנהל',
+      en: 'Programme facilitator, association member and board member',
     },
     bio: {
       he: 'אשת תקשורת ופאנליסטית, פמיניסטית חרדית ופעילה חברתית בנושאי הדרה עדתית, לימודי ליבה וייצוג נשים חרדיות במוקדי קבלת ההחלטות.',
